@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.core.TeamUtils;
 
 public interface ITeamTalon extends MotorController, IMotorControllerEnhanced {
   public static boolean isPidControlMode(ControlMode mode) {

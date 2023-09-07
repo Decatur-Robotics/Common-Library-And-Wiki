@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.lib.core.RobotState;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +20,14 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private static RobotState robotState;
+  /**
+   * Returns what mode the robot is in.
+   */
+  public static RobotState getRobotState() {
+    return robotState;
+  }
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +37,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    robotState = RobotState.Disabled;
   }
 
   /**
@@ -48,7 +59,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    robotState = RobotState.Disabled;
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -62,6 +75,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    
+    robotState = RobotState.Autonomous;
   }
 
   /** This function is called periodically during autonomous. */
@@ -77,6 +92,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    robotState = RobotState.Teleop;
   }
 
   /** This function is called periodically during operator control. */
@@ -87,6 +104,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
+    robotState = RobotState.Test;
   }
 
   /** This function is called periodically during test mode. */
@@ -95,7 +114,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    robotState = RobotState.Simulation;
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
