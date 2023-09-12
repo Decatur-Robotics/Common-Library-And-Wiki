@@ -1,4 +1,4 @@
-package frc.lib.core;
+package frc.lib.core.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
-import frc.robot.Scalar;
 
 public class TeamUtils {
   public static double getCurrentTime() {

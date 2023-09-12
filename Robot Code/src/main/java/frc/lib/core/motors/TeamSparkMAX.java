@@ -1,7 +1,8 @@
-package frc.robot;
+package frc.lib.core.motors;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.core.TeamUtils;
+import frc.lib.core.util.PidParameters;
+import frc.lib.core.util.TeamUtils;
 
 import com.revrobotics.CANSparkMax;
 

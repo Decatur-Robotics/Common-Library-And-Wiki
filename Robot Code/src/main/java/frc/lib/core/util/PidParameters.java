@@ -1,8 +1,8 @@
-package frc.robot;
+package frc.lib.core.util;
 
 import java.util.Objects;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.core.TeamUtils;
+import frc.lib.core.motors.*;
 
 public class PidParameters {
   public static double telemetryUpdateInterval_secs = 0.5;

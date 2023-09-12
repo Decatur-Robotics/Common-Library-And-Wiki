@@ -1,9 +1,11 @@
-package frc.robot;
+package frc.lib.core.motors;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import frc.lib.core.util.PidParameters;
 
 /**
  * A wrapper class for Motors that helps to consistently and easily perform the following functions:

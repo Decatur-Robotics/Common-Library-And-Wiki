@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.lib.core.motors;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -7,7 +7,8 @@ import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.core.TeamUtils;
+import frc.lib.core.util.PidParameters;
+import frc.lib.core.util.TeamUtils;
 
 public interface ITeamTalon extends MotorController, IMotorControllerEnhanced {
   public static boolean isPidControlMode(ControlMode mode) {
