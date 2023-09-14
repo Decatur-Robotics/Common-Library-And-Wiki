@@ -1,4 +1,4 @@
-package frc.lib.core.util;
+package frc.lib.core;
 
 public class LogitechControllerButtons {
     public static final int a = 2;

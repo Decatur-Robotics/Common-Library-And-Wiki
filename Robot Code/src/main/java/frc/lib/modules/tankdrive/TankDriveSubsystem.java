@@ -2,16 +2,16 @@ package frc.lib.modules.tankdrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.ITeamTalon;
 import frc.lib.core.motors.TeamTalonFX;
-import frc.robot.Ports;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Ports;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 
 
-public class TankDriveSubsystem extends SubsystemBase 
-{
+public class TankDriveSubsystem extends SubsystemBase {
     ITeamTalon rightDriveFalconMain;
     ITeamTalon leftDriveFalconMain;
     ITeamTalon rightDriveFalconSub;
@@ -20,14 +20,10 @@ public class TankDriveSubsystem extends SubsystemBase
     public double speedMod;
 
     public TankDriveSubsystem(int rightMainPort, int leftMainPort, int rightSubPort, int leftSubPort) {
-        rightDriveFalconMain =
-                new TeamTalonFX("Subsystems.DriveTrain.RightMain", Ports.RightDriveFalconMainCAN);
-        leftDriveFalconMain =
-                new TeamTalonFX("Subsystems.DriveTrain.LeftMain", Ports.LeftDriveFalconMainCAN);
-        rightDriveFalconSub =
-                new TeamTalonFX("Subsystems.DriveTrain.RightSub", Ports.RightDriveFalconSubCAN);
-        leftDriveFalconSub =
-                new TeamTalonFX("Subsystems.DriveTrain.LeftSub", Ports.LeftDriveFalconSubCAN);
+        rightDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.RightMain", TankDriveConstants.RIGHT_DRIVE_FALCON_MAIN);
+        leftDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.LeftMain", TankDriveConstants.LEFT_DRIVE_FALCON_MAIN);
+        rightDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.RightSub", TankDriveConstants.RIGHT_DRIVE_FALCON_SUB);
+        leftDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.LeftSub", TankDriveConstants.LEFT_DRIVE_FALCON_SUB);
         
         // This configures the falcons to use their internal encoders
         TalonFXConfiguration configs = new TalonFXConfiguration();
@@ -48,6 +44,10 @@ public class TankDriveSubsystem extends SubsystemBase
         rightDriveFalconMain.setNeutralMode(NeutralMode.Brake);
     }
 
+    public void setSpeedMod(double newSpeedMod) {
+        speedMod = newSpeedMod;
+    }
+
     private double getCappedPower(double powerDesired) {
         return Math.max(Math.min(1, powerDesired), -1);
     }
@@ -62,31 +62,21 @@ public class TankDriveSubsystem extends SubsystemBase
         return powerDesired;
     }
 
-    public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) 
-    {
-        speedMod = RobotContainer.driveSpeedEntry.getDouble(RobotContainer.driveSpeed);
+    public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) {
+        double rightPowerCurrent = rightDriveFalconMain.get();
+        double leftPowerCurrent = leftDriveFalconMain.get();
 
-        if (Robot.isTestMode)
-        {
-            double rightPowerCurrent = rightDriveFalconMain.get();
-            double leftPowerCurrent = leftDriveFalconMain.get();
+        leftPowerDesired *= speedMod;
+        rightPowerDesired *= speedMod;
 
-            leftPowerDesired *= speedMod;
-            rightPowerDesired *= speedMod;
+        leftPowerDesired = getRampedPower(leftPowerDesired, leftPowerCurrent);
+        rightPowerDesired = getRampedPower(rightPowerDesired, rightPowerCurrent);
 
-            leftPowerDesired = getRampedPower(leftPowerDesired, leftPowerCurrent);
-            rightPowerDesired = getRampedPower(rightPowerDesired, rightPowerCurrent);
+        leftPowerDesired = getCappedPower(leftPowerDesired);
+        rightPowerDesired = getCappedPower(rightPowerDesired);
 
-            leftPowerDesired = getCappedPower(leftPowerDesired);
-            rightPowerDesired = getCappedPower(rightPowerDesired);
-
-            rightDriveFalconMain.set(rightPowerDesired, reason);
-            leftDriveFalconMain.set(leftPowerDesired, reason);
-        }
-        else if (!Robot.isTestMode)
-        {
-            rightDriveFalconMain.set(0, "Not in test mode!");
-            leftDriveFalconMain.set(0, "Not in test mode!");
-        }
+        rightDriveFalconMain.set(rightPowerDesired, reason);
+        leftDriveFalconMain.set(leftPowerDesired, reason);
+        
     }
 }

@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.core.util.PidParameters;
+import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
 
 public interface ITeamTalon extends MotorController, IMotorControllerEnhanced {

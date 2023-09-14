@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import frc.lib.core.util.PidParameters;
+import frc.lib.core.PidParameters;
 
 /**
  * A wrapper class for Motors that helps to consistently and easily perform the following functions:
