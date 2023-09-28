@@ -1,11 +1,13 @@
-package frc.lib.modules.tankdrive;
+package frc.lib.modules.tankdrivetrain;
 
-public class TankDriveConstants {
+public class TankDrivetrainConstants {
     
     //Constants
     public static final double DEADZONE_AMOUNT = 0.05;
 
     public static final double DRIVETRAIN_MAX_POWER_CHANGE = 0.1;
+
+    public static final int CURRENT_TIMEOUT_MS = 250;
 
     //Ports
     public static final int RIGHT_DRIVE_FALCON_MAIN = 0;
