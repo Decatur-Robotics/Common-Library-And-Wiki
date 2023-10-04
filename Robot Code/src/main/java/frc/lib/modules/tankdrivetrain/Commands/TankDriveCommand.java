@@ -8,8 +8,8 @@ import frc.lib.modules.tankdrivetrain.TankDrivetrainSubsystem;
 
 public class TankDriveCommand extends CommandBase {
 
-    TankDrivetrainSubsystem drivetrain;
-    DoubleSupplier leftInputY, rightInputY;
+    private TankDrivetrainSubsystem drivetrain;
+    private DoubleSupplier leftInputY, rightInputY;
     
     public TankDriveCommand(DoubleSupplier leftInputY, DoubleSupplier rightInputY, TankDrivetrainSubsystem drivetrain) {
         this.leftInputY = leftInputY;

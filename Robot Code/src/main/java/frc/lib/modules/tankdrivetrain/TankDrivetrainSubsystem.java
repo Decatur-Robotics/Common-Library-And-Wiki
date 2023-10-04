@@ -12,19 +12,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 public class TankDrivetrainSubsystem extends SubsystemBase {
 
-    ITeamTalon rightDriveFalconMain;
-    ITeamTalon leftDriveFalconMain;
-    ITeamTalon rightDriveFalconSub;
-    ITeamTalon leftDriveFalconSub;
+    private ITeamTalon rightDriveFalconMain;
+    private ITeamTalon leftDriveFalconMain;
+    private ITeamTalon rightDriveFalconSub;
+    private ITeamTalon leftDriveFalconSub;
 
-    double leftPowerDesired;
-    double rightPowerDesired;
+    private double leftPowerDesired;
+    private double rightPowerDesired;
 
-    String reason;
+    private String reason;
 
-    SlewRateLimiter powerRamping;
+    private SlewRateLimiter powerRamping;
 
-    public double speedMod;
+    private double speedMod;
 
     public TankDrivetrainSubsystem(int rightMainPort, int leftMainPort, int rightSubPort, int leftSubPort) {
         rightDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.RightMain", rightMainPort);
