@@ -9,6 +9,8 @@ public class TankDrivetrainConstants {
 
     public static final int CURRENT_TIMEOUT_MS = 250;
 
+    public static final int DRIVETRAIN_POWER_EXPONENT = 3;
+
     //Ports
     public static final int RIGHT_DRIVE_FALCON_MAIN = 0;
     public static final int RIGHT_DRIVE_FALCON_SUB = 0;

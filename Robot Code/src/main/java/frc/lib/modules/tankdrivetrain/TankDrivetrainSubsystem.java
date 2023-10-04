@@ -11,10 +11,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 
 public class TankDrivetrainSubsystem extends SubsystemBase {
+
     ITeamTalon rightDriveFalconMain;
     ITeamTalon leftDriveFalconMain;
     ITeamTalon rightDriveFalconSub;
     ITeamTalon leftDriveFalconSub;
+
+    double leftPowerDesired;
+    double rightPowerDesired;
+
+    String reason;
 
     SlewRateLimiter powerRamping;
 
@@ -62,17 +68,22 @@ public class TankDrivetrainSubsystem extends SubsystemBase {
         leftDriveFalconSub.setNeutralMode(NeutralMode.Brake);
     }
 
-    public void setSpeedMod(double newSpeedMod) {
+    public void setSpeedMod(double speedMod) {
         // Sets a new speed mod
-        speedMod = newSpeedMod;
+        this.speedMod = speedMod;
     }
 
-    private double getClampedPower(double powerDesired) {
+    public double getSpeedMod() {
+        // Returns the current speed mod
+        return speedMod;
+    }
+
+    private double calculateClampedPower(double powerDesired) {
         // Clamp given power between -1 and 1
         return Math.max(Math.min(1, powerDesired), -1);
     }
 
-    private double getRampedPower(double powerDesired, double powerCurrent) {
+    private double calculateRampedPower(double powerDesired, double powerCurrent) {
         // Check if the power change exceeded the max power change, and limit the power change if so
         if (powerDesired < powerCurrent) {
             return Math.max(powerDesired, powerCurrent - TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
@@ -84,24 +95,39 @@ public class TankDrivetrainSubsystem extends SubsystemBase {
     }
 
     public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) {
+        // Set desired motor powers
+        this.leftPowerDesired = leftPowerDesired;
+        this.rightPowerDesired = rightPowerDesired;
+
+        //Set reason for desiring those motor powers
+        this.reason = reason;
+    }
+
+    @Override
+    public void periodic() {
         // Get the current motor powers
         double rightPowerCurrent = rightDriveFalconMain.get();
         double leftPowerCurrent = leftDriveFalconMain.get();
 
+        // Create final power variables to perform math on
+        double finalLeftPower = leftPowerDesired;
+        double finalRightPower = rightPowerDesired;
+
         // Multiply motor powers by the speed mod
-        leftPowerDesired *= speedMod;
-        rightPowerDesired *= speedMod;
+        finalLeftPower *= speedMod;
+        finalRightPower *= speedMod;
 
-        // Ramp motor powers
-        leftPowerDesired = getRampedPower(leftPowerDesired, leftPowerCurrent);
-        rightPowerDesired = getRampedPower(rightPowerDesired, rightPowerCurrent);
+        // Calculate ramped motor powers
+        finalLeftPower = calculateRampedPower(finalLeftPower, leftPowerCurrent);
+        finalRightPower = calculateRampedPower(finalRightPower, rightPowerCurrent);
 
-        // Clamp motor powers
-        leftPowerDesired = getClampedPower(leftPowerDesired);
-        rightPowerDesired = getClampedPower(rightPowerDesired);
+        // Calculate clamped motor powers
+        finalLeftPower = calculateClampedPower(finalLeftPower);
+        finalRightPower = calculateClampedPower(finalRightPower);
 
         // Set final motor powers
-        rightDriveFalconMain.set(rightPowerDesired, reason);
-        leftDriveFalconMain.set(leftPowerDesired, reason);
+        leftDriveFalconMain.set(finalLeftPower, reason);
+        rightDriveFalconMain.set(finalRightPower, reason);
     }
+
 }

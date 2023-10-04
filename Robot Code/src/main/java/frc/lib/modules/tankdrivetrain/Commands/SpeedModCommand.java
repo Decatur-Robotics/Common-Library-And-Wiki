@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.modules.tankdrivetrain.TankDrivetrainSubsystem;
 
 public class SpeedModCommand extends CommandBase {
+    
     private TankDrivetrainSubsystem drivetrain;
     private double speedMod;
 
@@ -14,13 +15,16 @@ public class SpeedModCommand extends CommandBase {
         addRequirements(drivetrain);
     }
 
+    @Override
     public void initialize() {
         // Set the speed mod in the drivetrain subsystem
         drivetrain.setSpeedMod(speedMod);
     }
 
+    @Override
     public boolean isFinished() {
-        // End the command immediately
+        // End the command immediately after being called
         return true;
     }
+    
 }
