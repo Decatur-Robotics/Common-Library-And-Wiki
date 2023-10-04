@@ -2,7 +2,8 @@
     "java.format.settings.url": ".vscode/java-formatter.xml",
     "editor.defaultFormatter": "redhat.java",
     "java.format.settings.profile": "4026Style",
-    "[java]": {
+    "[java]":
+    {
         "editor.insertSpaces": false,
         "editor.detectIndentation": false
     }
