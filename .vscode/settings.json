@@ -6,5 +6,6 @@
     {
         "editor.insertSpaces": false,
         "editor.detectIndentation": false
-    }
+    },
+    "editor.stickyTabStops": true
 }
