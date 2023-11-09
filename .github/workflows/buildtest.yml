@@ -19,7 +19,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./Robot\ Code
+        working-directory: "./Robot Code"
 
     # This grabs the WPILib docker container
     container: wpilib/roborio-cross-ubuntu:2023-22.04
