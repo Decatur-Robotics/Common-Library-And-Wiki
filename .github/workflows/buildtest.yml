@@ -29,17 +29,15 @@ jobs:
     - name: Add repository to git safe directories
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
-    # Cd into Robot Code
-    - name: Change directory to Robot Code
-      run: cd "./Robot Code/"
-
     - name: List files
       run: ls
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
+      working-directory: Robot Code
       run: chmod +x gradlew
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
+      working-directory: Robot Code
       run: ./gradlew build
