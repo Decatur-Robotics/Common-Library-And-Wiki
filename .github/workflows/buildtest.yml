@@ -30,15 +30,15 @@ jobs:
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
     - name: List files
-      working-directory: Robot Code
+      working-directory: "Robot Code"
       run: ls
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
-      working-directory: Robot Code
+      working-directory: "Robot Code"
       run: chmod +x gradlew
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      working-directory: Robot Code
+      working-directory: "Robot Code"
       run: ./gradlew build
