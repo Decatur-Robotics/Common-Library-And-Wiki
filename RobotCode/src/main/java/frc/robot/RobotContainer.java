@@ -12,44 +12,44 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer
 {
 
-  private final static ShuffleboardTab shuffleboard = Shuffleboard.getTab("Tab 1");
+	private final static ShuffleboardTab shuffleboard = Shuffleboard.getTab("Tab 1");
 
-  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+	private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer()
-  {
-    addAutonomousOptions();
+	/** The container for the robot. Contains subsystems, OI devices, and commands. */
+	public RobotContainer()
+	{
+		addAutonomousOptions();
 
-    // Configure the button bindings
-    configurePrimaryBindings();
-    configureSecondaryBindings();
-  }
+		// Configure the button bindings
+		configurePrimaryBindings();
+		configureSecondaryBindings();
+	}
 
-  private void configurePrimaryBindings()
-  {
+	private void configurePrimaryBindings()
+	{
 
-  }
+	}
 
-  private void configureSecondaryBindings()
-  {
+	private void configureSecondaryBindings()
+	{
 
-  }
+	}
 
-  // Add autonomous options to the SendableChooser
-  public void addAutonomousOptions()
-  {
+	// Add autonomous options to the SendableChooser
+	public void addAutonomousOptions()
+	{
 
-  }
+	}
 
-  public Command getAutonomousCommand()
-  {
-    return autoChooser.getSelected();
-  }
+	public Command getAutonomousCommand()
+	{
+		return autoChooser.getSelected();
+	}
 
-  public static ShuffleboardTab getShuffleboard()
-  {
-    return shuffleboard;
-  }
+	public static ShuffleboardTab getShuffleboard()
+	{
+		return shuffleboard;
+	}
 
 }

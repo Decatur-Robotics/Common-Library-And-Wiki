@@ -10,21 +10,21 @@ import frc.robot.Robot;
 public class TeamSubsystemBase extends SubsystemBase
 {
 
-    public TeamSubsystemBase()
-    {
-        super();
-        Robot.addSubsystem(this);
-    }
+	public TeamSubsystemBase()
+	{
+		super();
+		Robot.addSubsystem(this);
+	}
 
-    public void disabledInit()
-    {}
+	public void disabledInit()
+	{}
 
-    public void teleopInit()
-    {}
+	public void teleopInit()
+	{}
 
-    public void autonomousInit()
-    {}
+	public void autonomousInit()
+	{}
 
-    public void testInit()
-    {}
+	public void testInit()
+	{}
 }
