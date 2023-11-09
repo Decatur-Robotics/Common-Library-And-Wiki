@@ -19,7 +19,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./"Robot Code"
+        working-directory: "Robot Code"
 
     # This grabs the WPILib docker container
     container: wpilib/roborio-cross-ubuntu:2023-22.04
@@ -34,7 +34,6 @@ jobs:
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
     - name: List files
-      working-directory: Robot\ Code
       run: ls
 
     # Grant execute permission for gradlew
