@@ -1,0 +1,11 @@
+{
+    "java.format.settings.url": "https://raw.githubusercontent.com/Decatur-High-GlobalDynamics/Common-Library-And-Wiki/main/.vscode/java-formatter.xml",
+    "editor.defaultFormatter": "redhat.java",
+    "java.format.settings.profile": "4026Style",
+    "[java]":
+    {
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false
+    },
+    "editor.stickyTabStops": true
+}
