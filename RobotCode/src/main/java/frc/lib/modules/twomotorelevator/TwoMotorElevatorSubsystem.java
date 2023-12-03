@@ -39,11 +39,13 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
         elevatorMotorLeft = new TeamTalonFX("Subsystem.Elevator.elevatorMotorLeft",
 				TwoMotorElevatorConstants.LEFT_ELEVATOR_MOTOR);
 
+		// Configure right motor
         elevatorMotorRight.resetEncoder();
         elevatorMotorRight.enableVoltageCompensation(true);
         elevatorMotorRight.setInverted(false);
         elevatorMotorRight.setNeutralMode(NeutralMode.Brake);
 
+		// Configure left motor
         elevatorMotorLeft.resetEncoder();
         elevatorMotorLeft.enableVoltageCompensation(true);
         elevatorMotorLeft.setInverted(true);
@@ -68,15 +70,18 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 		pid = new PIDController(kP, kI, kD);
     }
 
+	// Set a position for elevator to move to
     public void setTargetPosition(double newTargetPosition) {
         targetPosition = newTargetPosition;
     }
 
+	// Directly set the power for the elevator
     public void setPower(double power) {
         this.power = power;
 		reason = "Manual override";
 	}
 
+	// Override the target position to allow manual control
 	public void setTargetOverridden(boolean targetOverridden) {
 		this.targetOverridden = targetOverridden;
 	}
@@ -85,11 +90,13 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 		return targetOverridden;
 	}
 
+	// Ensure elevator does not move faster than its maximum speed
 	private double getCappedPower(double input) {
         return Math.min(maxElevatorMotorPower,
                 Math.max(input, -maxElevatorMotorPower));
     }
 
+	// Ensure elevator power does not change too quickly
 	private double getRampedPower(double input) {
 		double currentPower = elevatorMotorRight.get();
 		
@@ -105,6 +112,7 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 	}
 
     public void periodic() {
+		// If manual control is off and elevator is outside the target position, move elevator to target position
         if (!targetOverridden) {
             if (!isInTarget()) {
                 power = pid.calculate(potentiometer.get(), targetPosition);
@@ -115,12 +123,11 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 
 			reason = "Moving to position";
         }
-		else {
-			power *= maxElevatorMotorPower;
+		power *= maxElevatorMotorPower;
 
-			power = getRampedPower(power);
-		}
+		power = getRampedPower(power);
 
+		// Stop elevator from moving too far down or up
 		if ((potentiometer.get() > maximumElevatorPosition && power > 0) 
 				|| (potentiometer.get() < minimumElevatorPosition && power < 0) 
 				|| (elevatorLimitSwitch.get() && power < 0)) {
