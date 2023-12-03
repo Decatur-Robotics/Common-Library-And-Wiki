@@ -1,4 +1,4 @@
-package frc.lib.modules.tankdrivetrain.Commands;
+package frc.lib.modules.tankdrivetrain.commands;
 
 import java.util.function.DoubleSupplier;
 

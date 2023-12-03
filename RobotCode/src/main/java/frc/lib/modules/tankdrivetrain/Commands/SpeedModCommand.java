@@ -1,4 +1,4 @@
-package frc.lib.modules.tankdrivetrain.Commands;
+package frc.lib.modules.tankdrivetrain.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.modules.tankdrivetrain.TankDrivetrainSubsystem;

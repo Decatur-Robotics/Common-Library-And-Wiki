@@ -7,6 +7,8 @@ public class TankDrivetrainConstants {
 
     public static final double DRIVETRAIN_MAX_POWER_CHANGE = 0.1;
 
+	public static final int CURRENT_LIMIT = 55;
+
     public static final int CURRENT_TIMEOUT_MS = 250;
 
     public static final int DRIVETRAIN_POWER_EXPONENT = 3;
