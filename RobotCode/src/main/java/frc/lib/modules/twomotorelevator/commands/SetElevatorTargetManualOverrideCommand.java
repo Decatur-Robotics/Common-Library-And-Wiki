@@ -18,6 +18,7 @@ public class SetElevatorTargetManualOverrideCommand extends CommandBase {
     public void initialize() {
         elevator.setTargetOverridden(override);
 
+		// Set target position to current position and stop elevator when exiting manual control
         if(!override) {
             elevator.resetTarget();
             elevator.setPower(0);

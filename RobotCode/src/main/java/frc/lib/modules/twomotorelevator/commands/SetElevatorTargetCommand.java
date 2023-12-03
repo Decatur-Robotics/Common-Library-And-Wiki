@@ -27,6 +27,7 @@ public class SetElevatorTargetCommand extends CommandBase {
         elevator.setTargetPosition(targetPosition);
     }
 
+	// End command if not supposed to wait for elevator to reach target or if elevator is in target
     public boolean isFinished() {
         return !wait || elevator.isInTarget();
     }

@@ -17,11 +17,13 @@ public class MoveElevatorManualCommand extends CommandBase {
         addRequirements(elevator);
     }
 
+	// Deadzone the input to prevent drift
 	private double calculateDeadZonedPower(double input) {
 		return Math.abs(input) > TwoMotorElevatorConstants.ELEVATOR_JOYSTICK_DEADBAND ? input : 0;
 	}
 
     public void execute() {
+		// If manual control is on, set elevator power
 		if(elevator.getTargetOverridden()) {
         	elevator.setPower(Math.pow(calculateDeadZonedPower(power.getAsDouble()), TwoMotorElevatorConstants.ELEVATOR_POWER_EXPONENT));
 		}
