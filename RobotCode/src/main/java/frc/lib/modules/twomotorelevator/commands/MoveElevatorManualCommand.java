@@ -7,8 +7,8 @@ import java.util.function.DoubleSupplier;
 
 public class MoveElevatorManualCommand extends CommandBase {
 
-    public TwoMotorElevatorSubsystem elevator;
-    public DoubleSupplier power;
+    private TwoMotorElevatorSubsystem elevator;
+    private DoubleSupplier power;
 
     public MoveElevatorManualCommand(DoubleSupplier power, TwoMotorElevatorSubsystem elevator) {
         this.elevator = elevator;
@@ -22,7 +22,7 @@ public class MoveElevatorManualCommand extends CommandBase {
 	}
 
     public void execute() {
-		if(elevator.targetOverridden) {
+		if(elevator.getTargetOverridden()) {
         	elevator.setPower(Math.pow(calculateDeadZonedPower(power.getAsDouble()), TwoMotorElevatorConstants.ELEVATOR_POWER_EXPONENT));
 		}
 	}

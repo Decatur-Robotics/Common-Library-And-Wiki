@@ -6,8 +6,8 @@ import frc.lib.modules.twomotorelevator.TwoMotorElevatorSubsystem;
 public class SetElevatorTargetCommand extends CommandBase {
     TwoMotorElevatorSubsystem elevator;
 
-    public double targetPosition;
-    public boolean wait;
+    private double targetPosition;
+    private boolean wait;
 
     public SetElevatorTargetCommand(double targetPosition, TwoMotorElevatorSubsystem elevator) {
         this.elevator = elevator;

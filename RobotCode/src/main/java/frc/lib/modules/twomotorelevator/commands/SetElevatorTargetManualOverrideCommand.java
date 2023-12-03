@@ -5,8 +5,8 @@ import frc.lib.modules.twomotorelevator.TwoMotorElevatorSubsystem;
 
 public class SetElevatorTargetManualOverrideCommand extends CommandBase {
 
-    public TwoMotorElevatorSubsystem elevator;
-    public boolean override;
+    private TwoMotorElevatorSubsystem elevator;
+    private boolean override;
 
     public SetElevatorTargetManualOverrideCommand(boolean override, TwoMotorElevatorSubsystem elevator) {
         this.override = override;
@@ -16,7 +16,7 @@ public class SetElevatorTargetManualOverrideCommand extends CommandBase {
     }
 
     public void initialize() {
-        elevator.targetOverridden = override;
+        elevator.setTargetOverridden(override);
 
         if(!override) {
             elevator.resetTarget();

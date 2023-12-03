@@ -11,28 +11,29 @@ import frc.lib.core.motors.TeamTalonFX;
 
 public class TwoMotorElevatorSubsystem extends SubsystemBase {
 
-    public ITeamTalon elevatorMotorRight, elevatorMotorLeft;
-    public double targetPosition = TwoMotorElevatorConstants.MINIMUM_ELEVATOR_POSITION;
+    private ITeamTalon elevatorMotorRight, elevatorMotorLeft;
+    private double targetPosition;
 
-    public AnalogPotentiometer potentiometer;
+	private double minimumElevatorPosition;
+	private double maximumElevatorPosition;
 
-    public boolean clawThresholdOverridden;
+    private AnalogPotentiometer potentiometer;
 
-    public boolean targetOverridden;
+    private boolean targetOverridden;
 
-    public double power;
+    private double power;
 
-	public String reason;
+	private String reason;
 
-    public DigitalInput elevatorLimitSwitch;
+    private DigitalInput elevatorLimitSwitch;
 
-    private static final double kP = 1; 
-    private static final double kI = 0;
-    private static final double kD = 0.01; 
+	private double elevatorDeadband;
+	private double maxElevatorMotorPower;
+	private double maxElevatorPowerChange;
 
-    PIDController pid = new PIDController(kP, kI, kD);
+    private PIDController pid;
 
-    public TwoMotorElevatorSubsystem() {
+    public TwoMotorElevatorSubsystem(double minimumElevatorPosition, double maximumElevatorPosition, double startingElevatorPosition, double kP, double kI, double kD, double elevatorDeadband, double maxElevatorMotorPower, double maxElevatorPowerChange) {
         elevatorMotorRight = new TeamTalonFX("Subsystem.Elevator.elevatorMotorRight",
                 TwoMotorElevatorConstants.RIGHT_ELEVATOR_MOTOR);
         elevatorMotorLeft = new TeamTalonFX("Subsystem.Elevator.elevatorMotorLeft",
@@ -53,7 +54,18 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 
         potentiometer = new AnalogPotentiometer(TwoMotorElevatorConstants.ELEVATOR_POTENTIOMETER, 100);
 
+		this.minimumElevatorPosition = minimumElevatorPosition;
+		this.maximumElevatorPosition = maximumElevatorPosition;
+
+		targetPosition = startingElevatorPosition;
+
 		power = 0;
+
+		this.elevatorDeadband = elevatorDeadband;
+		this.maxElevatorMotorPower = maxElevatorMotorPower;
+		this.maxElevatorPowerChange = maxElevatorPowerChange;
+
+		pid = new PIDController(kP, kI, kD);
     }
 
     public void setTargetPosition(double newTargetPosition) {
@@ -65,45 +77,32 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 		reason = "Manual override";
 	}
 
+	public void setTargetOverridden(boolean targetOverridden) {
+		this.targetOverridden = targetOverridden;
+	}
+
+	public boolean getTargetOverridden() {
+		return targetOverridden;
+	}
+
 	private double getCappedPower(double input) {
-        return Math.min(TwoMotorElevatorConstants.MAX_ELEVATOR_MOTOR_POWER,
-                Math.max(input, -TwoMotorElevatorConstants.MAX_ELEVATOR_MOTOR_POWER));
+        return Math.min(maxElevatorMotorPower,
+                Math.max(input, -maxElevatorMotorPower));
     }
 
 	private double getRampedPower(double input) {
 		double currentPower = elevatorMotorRight.get();
 		
 		if (input < currentPower) {
-            return Math.max(input, currentPower - TwoMotorElevatorConstants.MAX_ELEVATOR_POWER_CHANGE);
+            return Math.max(input, currentPower - maxElevatorPowerChange);
         }
         else if (input > currentPower) {
-            return Math.min(input, currentPower + TwoMotorElevatorConstants.MAX_ELEVATOR_POWER_CHANGE);
+            return Math.min(input, currentPower + maxElevatorPowerChange);
         } 
 		else {
             return input;
         }
 	}
-
-	public void fakeMethod() {
-        power *= TwoMotorElevatorConstants.MAX_ELEVATOR_MOTOR_POWER;
-
-        power = getRampedPower(power);
-
-        if ((potentiometer.get() > TwoMotorElevatorConstants.MAXIMUM_ELEVATOR_POSITION && power > 0) 
-				|| (potentiometer.get() < TwoMotorElevatorConstants.MINIMUM_ELEVATOR_POSITION && power < 0) 
-				|| (elevatorLimitSwitch.get() && power < 0)) {
-            power = 0;
-        }
-
-        if (elevatorLimitSwitch.get() && power < 0) {    
-            power = 0;
-        }
-
-		power = getCappedPower(power);
-
-        elevatorMotorRight.set(power, "Joystick said so");
-        elevatorMotorLeft.set(power, "Joystick said so");
-    }
 
     public void periodic() {
         if (!targetOverridden) {
@@ -117,13 +116,13 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 			reason = "Moving to position";
         }
 		else {
-			power *= TwoMotorElevatorConstants.MAX_ELEVATOR_MOTOR_POWER;
+			power *= maxElevatorMotorPower;
 
 			power = getRampedPower(power);
 		}
 
-		if ((potentiometer.get() > TwoMotorElevatorConstants.MAXIMUM_ELEVATOR_POSITION && power > 0) 
-				|| (potentiometer.get() < TwoMotorElevatorConstants.MINIMUM_ELEVATOR_POSITION && power < 0) 
+		if ((potentiometer.get() > maximumElevatorPosition && power > 0) 
+				|| (potentiometer.get() < minimumElevatorPosition && power < 0) 
 				|| (elevatorLimitSwitch.get() && power < 0)) {
 			power = 0;
 		}
@@ -132,13 +131,11 @@ public class TwoMotorElevatorSubsystem extends SubsystemBase {
 
 		elevatorMotorRight.set(power, reason);
 		elevatorMotorLeft.set(power, reason);
-		
-
     }
 
     public boolean isInTarget() {
         double delta = targetPosition - potentiometer.get();
-        return Math.abs(delta) < TwoMotorElevatorConstants.ELEVATOR_DEADBAND;
+        return Math.abs(delta) < elevatorDeadband;
     }
 
     public void resetTarget() {
