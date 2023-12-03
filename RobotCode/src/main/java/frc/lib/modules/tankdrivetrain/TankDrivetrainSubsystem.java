@@ -1,5 +1,4 @@
 package frc.lib.modules.tankdrivetrain;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.ITeamTalon;
 import frc.lib.core.motors.TeamTalonFX;
@@ -17,12 +16,10 @@ public class TankDrivetrainSubsystem extends SubsystemBase {
     private ITeamTalon rightDriveFalconSub;
     private ITeamTalon leftDriveFalconSub;
 
-    private double leftPowerDesired;
-    private double rightPowerDesired;
+    private double leftPower;
+    private double rightPower;
 
     private String reason;
-
-    private SlewRateLimiter powerRamping;
 
     private double speedMod;
 
@@ -31,13 +28,10 @@ public class TankDrivetrainSubsystem extends SubsystemBase {
         leftDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.LeftMain", leftMainPort);
         rightDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.RightSub", rightSubPort);
         leftDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.LeftSub", leftSubPort);
-        
-        // IMPLEMENT AND TEST A SLEW RATE LIMITER ON THE SHOWBOT BEFORE WE ADD THIS TO COMMON LIB
-        powerRamping = new SlewRateLimiter(TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
         SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration();
-        currentConfig.currentLimit = 55;
+        currentConfig.currentLimit = TankDrivetrainConstants.CURRENT_LIMIT;
 
         // This configures the falcons to use their internal encoders
         rightDriveFalconMain.configBaseAllSettings(config);
@@ -94,10 +88,10 @@ public class TankDrivetrainSubsystem extends SubsystemBase {
         return powerDesired;
     }
 
-    public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) {
+    public void setMotorPowers(double leftPower, double rightPower, String reason) {
         // Set desired motor powers
-        this.leftPowerDesired = leftPowerDesired;
-        this.rightPowerDesired = rightPowerDesired;
+        this.leftPower = leftPower;
+        this.rightPower = rightPower;
 
         //Set reason for desiring those motor powers
         this.reason = reason;
@@ -109,25 +103,21 @@ public class TankDrivetrainSubsystem extends SubsystemBase {
         double rightPowerCurrent = rightDriveFalconMain.get();
         double leftPowerCurrent = leftDriveFalconMain.get();
 
-        // Create final power variables to perform math on
-        double finalLeftPower = leftPowerDesired;
-        double finalRightPower = rightPowerDesired;
-
         // Multiply motor powers by the speed mod
-        finalLeftPower *= speedMod;
-        finalRightPower *= speedMod;
+        leftPower *= speedMod;
+        rightPower *= speedMod;
 
         // Calculate ramped motor powers
-        finalLeftPower = calculateRampedPower(finalLeftPower, leftPowerCurrent);
-        finalRightPower = calculateRampedPower(finalRightPower, rightPowerCurrent);
+        leftPower = calculateRampedPower(leftPower, leftPowerCurrent);
+        rightPower = calculateRampedPower(rightPower, rightPowerCurrent);
 
         // Calculate clamped motor powers
-        finalLeftPower = calculateClampedPower(finalLeftPower);
-        finalRightPower = calculateClampedPower(finalRightPower);
+        leftPower = calculateClampedPower(leftPower);
+        rightPower = calculateClampedPower(rightPower);
 
         // Set final motor powers
-        leftDriveFalconMain.set(finalLeftPower, reason);
-        rightDriveFalconMain.set(finalRightPower, reason);
+        leftDriveFalconMain.set(leftPower, reason);
+        rightDriveFalconMain.set(rightPower, reason);
     }
 
 }
