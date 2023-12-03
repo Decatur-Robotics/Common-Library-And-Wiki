@@ -4,31 +4,32 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.modules.twomotorelevator.TwoMotorElevatorSubsystem;
 
 public class SetElevatorTargetCommand extends CommandBase {
-    TwoMotorElevatorSubsystem elevator;
+	TwoMotorElevatorSubsystem elevator;
 
-    private double targetPosition;
-    private boolean wait;
+	private double targetPosition;
+	private boolean wait;
 
-    public SetElevatorTargetCommand(double targetPosition, TwoMotorElevatorSubsystem elevator) {
-        this.elevator = elevator;
-        this.targetPosition = targetPosition;
-        this.wait = false;
-        addRequirements(elevator);
-    }
+	public SetElevatorTargetCommand(double targetPosition, TwoMotorElevatorSubsystem elevator) {
+		this.elevator = elevator;
+		this.targetPosition = targetPosition;
+		this.wait = false;
+		addRequirements(elevator);
+	}
 
-    public SetElevatorTargetCommand(double targetPosition, boolean wait, TwoMotorElevatorSubsystem elevator) {
-        this.elevator = elevator;
-        this.targetPosition = targetPosition;
-        this.wait = wait;
-        addRequirements(elevator);
-    }
+	public SetElevatorTargetCommand(double targetPosition, boolean wait,
+			TwoMotorElevatorSubsystem elevator) {
+		this.elevator = elevator;
+		this.targetPosition = targetPosition;
+		this.wait = wait;
+		addRequirements(elevator);
+	}
 
-    public void initialize() {
-        elevator.setTargetPosition(targetPosition);
-    }
+	public void initialize() {
+		elevator.setTargetPosition(targetPosition);
+	}
 
 	// End command if not supposed to wait for elevator to reach target or if elevator is in target
-    public boolean isFinished() {
-        return !wait || elevator.isInTarget();
-    }
+	public boolean isFinished() {
+		return !wait || elevator.isInTarget();
+	}
 }

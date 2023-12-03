@@ -7,25 +7,26 @@ import java.util.function.DoubleSupplier;
 
 public class MoveElevatorManualCommand extends CommandBase {
 
-    private TwoMotorElevatorSubsystem elevator;
-    private DoubleSupplier power;
+	private TwoMotorElevatorSubsystem elevator;
+	private DoubleSupplier power;
 
-    public MoveElevatorManualCommand(DoubleSupplier power, TwoMotorElevatorSubsystem elevator) {
-        this.elevator = elevator;
-        this.power = power;
+	public MoveElevatorManualCommand(DoubleSupplier power, TwoMotorElevatorSubsystem elevator) {
+		this.elevator = elevator;
+		this.power = power;
 
-        addRequirements(elevator);
-    }
+		addRequirements(elevator);
+	}
 
 	// Deadzone the input to prevent drift
 	private double calculateDeadZonedPower(double input) {
 		return Math.abs(input) > TwoMotorElevatorConstants.ELEVATOR_JOYSTICK_DEADBAND ? input : 0;
 	}
 
-    public void execute() {
+	public void execute() {
 		// If manual control is on, set elevator power
-		if(elevator.getTargetOverridden()) {
-        	elevator.setPower(Math.pow(calculateDeadZonedPower(power.getAsDouble()), TwoMotorElevatorConstants.ELEVATOR_POWER_EXPONENT));
+		if (elevator.getTargetOverridden()) {
+			elevator.setPower(Math.pow(calculateDeadZonedPower(power.getAsDouble()),
+					TwoMotorElevatorConstants.ELEVATOR_POWER_EXPONENT));
 		}
 	}
 

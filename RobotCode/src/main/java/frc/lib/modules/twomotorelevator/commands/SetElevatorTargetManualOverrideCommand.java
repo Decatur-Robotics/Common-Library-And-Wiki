@@ -5,28 +5,29 @@ import frc.lib.modules.twomotorelevator.TwoMotorElevatorSubsystem;
 
 public class SetElevatorTargetManualOverrideCommand extends CommandBase {
 
-    private TwoMotorElevatorSubsystem elevator;
-    private boolean override;
+	private TwoMotorElevatorSubsystem elevator;
+	private boolean override;
 
-    public SetElevatorTargetManualOverrideCommand(boolean override, TwoMotorElevatorSubsystem elevator) {
-        this.override = override;
-        this.elevator = elevator;
+	public SetElevatorTargetManualOverrideCommand(boolean override,
+			TwoMotorElevatorSubsystem elevator) {
+		this.override = override;
+		this.elevator = elevator;
 
-        addRequirements(elevator);
-    }
+		addRequirements(elevator);
+	}
 
-    public void initialize() {
-        elevator.setTargetOverridden(override);
+	public void initialize() {
+		elevator.setTargetOverridden(override);
 
 		// Set target position to current position and stop elevator when exiting manual control
-        if(!override) {
-            elevator.resetTarget();
-            elevator.setPower(0);
-        }
-    }
+		if (!override) {
+			elevator.resetTarget();
+			elevator.setPower(0);
+		}
+	}
 
-    public boolean isFinished() {
-        return true;
-    }
-    
+	public boolean isFinished() {
+		return true;
+	}
+
 }
