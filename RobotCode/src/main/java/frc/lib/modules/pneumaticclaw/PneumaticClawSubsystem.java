@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PneumaticClawSubsystem extends SubsystemBase
-{
+public class PneumaticClawSubsystem extends SubsystemBase {
 
 	private Compressor mainCompressor;
 
