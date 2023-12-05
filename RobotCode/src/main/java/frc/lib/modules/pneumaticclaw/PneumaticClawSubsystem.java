@@ -29,7 +29,7 @@ public class PneumaticClawSubsystem extends SubsystemBase
 		clawGrabberRight.set(startPosition);
 	}
 
-	// Set 
+	// Set solenoids to a desired value
 	public void setSolenoid(Value mode) {
 		clawGrabberLeft.set(mode);
 		clawGrabberRight.set(mode);
