@@ -2,11 +2,11 @@ package frc.lib.modules.tankdrivetrain.Commands;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.tankdrivetrain.TankDrivetrainConstants;
 import frc.lib.modules.tankdrivetrain.TankDrivetrainSubsystem;
 
-public class TankDriveCommand extends CommandBase {
+public class TankDriveCommand extends Command {
 
     private TankDrivetrainSubsystem drivetrain;
     private DoubleSupplier leftInputY, rightInputY;
