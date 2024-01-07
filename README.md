@@ -1,4 +1,2 @@
-# Common-Library-And-Wiki
-Contains the 4026 common library and wiki.
-
-The wiki can be found in the wiki tab.
+# FRC-2024-Team-4026
+Contains the 4026 code for the 2024 season.
