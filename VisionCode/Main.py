@@ -28,7 +28,7 @@ at_detector = Detector(
 )
 
 # Video capture is 640 pixels by 480 pixels
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 # Desired image size (should be small)
 imgSizeX = 200
@@ -48,7 +48,7 @@ while True:
         exit()
 
     # Read current frame from the camera
-    img = cap.read()
+    _, img = cap.read()
 
     # Resize image to smaller size
     img = cv2.resize(img, (imgSizeX, imgSizeY))
@@ -61,9 +61,11 @@ while True:
     imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # Create object mask
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, ksize=(25, 25))
     objectMask = cv2.inRange(imgHSV, (hueMin, saturationMin, valueMin), (hueMax, saturationMax, valueMax))
     objectMask = cv2.medianBlur(objectMask, 25)
-    objectMask = cv2.erode(objectMask, 25)
+    objectMask = cv2.erode(objectMask, kernel)
+    objectMask = cv2.dilate(objectMask, kernel)
 
     # Find object contours
     objectCnts = cv2.findContours(objectMask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -126,3 +128,8 @@ while True:
         rioComms.send("apriltags", "Tag " + str(apriltags[i].tag_id) + " X", centerXY[0])
         rioComms.send("apriltags", "Tag " + str(apriltags[i].tag_id) + " Y", centerXY[1])
 
+    cv2.imshow("image", img)
+    cv2.imshow("image HSV", imgHSV)
+    cv2.imshow("object mask", objectMask)
+
+    cv2.waitKey(5)
