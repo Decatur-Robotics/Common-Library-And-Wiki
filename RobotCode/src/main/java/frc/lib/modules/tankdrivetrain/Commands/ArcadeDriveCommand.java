@@ -1,7 +1,7 @@
 package frc.lib.modules.tankdrivetrain.Commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class ArcadeDriveCommand extends CommandBase {
+public class ArcadeDriveCommand extends Command {
     
 }
