@@ -43,20 +43,20 @@ public class SwerveModule
 	public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants)
 	{
 		this.moduleNumber = moduleNumber;
-		angleOffset = moduleConstants.angleOffset;
+		angleOffset = moduleConstants.AngleOffset;
 
 		/* Angle Encoder Config */
-		angleEncoder = new CANCoder(moduleConstants.cancoderID);
+		angleEncoder = new CANCoder(moduleConstants.CANCODER_ID);
 		configAngleEncoder();
 
 		/* Angle Motor Config */
-		mAngleMotor = new TeamSparkMAX("AngleMotor", moduleConstants.angleMotorID);
+		mAngleMotor = new TeamSparkMAX("AngleMotor", moduleConstants.ANGLE_MOTOR_ID);
 		integratedAngleEncoder = mAngleMotor.getEncoder();
 		angleController = mAngleMotor.getPIDController();
 		configAngleMotor();
 
 		/* Drive Motor Config */
-		mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
+		mDriveMotor = new TalonFX(moduleConstants.DRIVE_MOTOR_ID);
 		configDriveMotor();
 
 		lastAngle = getState().angle;

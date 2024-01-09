@@ -22,11 +22,11 @@ public class RobotContainer
 
 	private static RobotContainer instance;
 
-	private final ShuffleboardTab shuffleboard;
+	private final ShuffleboardTab ShuffleboardTab;
 
-	private final SendableChooser<Command> autoChooser;
+	private final SendableChooser<Command> AutoChooser;
 
-	private final SwerveDriveSubsystem swerveDriveSubsystem;
+	private final SwerveDriveSubsystem SwerveDriveSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
@@ -35,12 +35,12 @@ public class RobotContainer
 			System.err.println("WARNING: RobotContainer already instantiated!");
 		instance = this;
 
-		shuffleboard = Shuffleboard.getTab("Tab 1");
+		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
 		// Init subsystems
-		swerveDriveSubsystem = new SwerveDriveSubsystem();
+		SwerveDriveSubsystem = new SwerveDriveSubsystem();
 
-		autoChooser = new SendableChooser<>();
+		AutoChooser = new SendableChooser<>();
 		addAutonomousOptions();
 
 		// Configure the button bindings
@@ -71,9 +71,9 @@ public class RobotContainer
 			LogitechControllerButtons.triggerRight);
 
 		// Init swerve
-		swerveDriveSubsystem
+		SwerveDriveSubsystem
 			// vertical axis of left joystick -> translation
-			.setDefaultCommand(new TeleopSwerveCommand(swerveDriveSubsystem,
+			.setDefaultCommand(new TeleopSwerveCommand(SwerveDriveSubsystem,
 				() -> -primaryController.getY(),
 				() -> -primaryController.getX(), // horizontal axis of left joystick->  strafe
 				// we want horizontal of right stick, if not twist, then change
@@ -83,21 +83,21 @@ public class RobotContainer
 			));
 
 		x.onTrue(new InstantCommand(() -> {
-			swerveDriveSubsystem.zeroGyro();
-			swerveDriveSubsystem.setGyroOffset(0);
+			SwerveDriveSubsystem.zeroGyro();
+			SwerveDriveSubsystem.setGyroOffset(0);
 		}));
 		y.onTrue(new InstantCommand(() -> {
-			for (SwerveModule mod : swerveDriveSubsystem.getSwerveMods())
+			for (SwerveModule mod : SwerveDriveSubsystem.getSwerveMods())
 				mod.resetToAbsolute();
 		}));
 
 		a.onTrue(new InstantCommand(() -> {
 			boolean invert = !SmartDashboard.getBoolean("Invert Serve", false);
-			swerveDriveSubsystem.setAngleOffsets(invert);
+			SwerveDriveSubsystem.setAngleOffsets(invert);
 			SmartDashboard.putBoolean("Invert Swerve", invert);
 		}));
 		b.onTrue(new InstantCommand(() -> {
-			swerveDriveSubsystem.setGyro(180);
+			SwerveDriveSubsystem.setGyro(180);
 		}));
 	}
 
@@ -114,12 +114,12 @@ public class RobotContainer
 
 	public Command getAutonomousCommand()
 	{
-		return autoChooser.getSelected();
+		return AutoChooser.getSelected();
 	}
 
-	public static ShuffleboardTab getShuffleboard()
+	public static ShuffleboardTab getShuffleboardTab()
 	{
-		return instance.shuffleboard;
+		return instance.ShuffleboardTab;
 	}
 
 }
