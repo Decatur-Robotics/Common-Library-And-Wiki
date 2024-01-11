@@ -9,15 +9,15 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class TeleopSwerveCommand extends CommandBase
+public class TeleopSwerveCommand extends Command
 {
 	private SwerveDriveSubsystem s_Swerve;
 	private DoubleSupplier translationSup;
 	private DoubleSupplier strafeSup;
 	private DoubleSupplier rotationSup;
-	private BooleanSupplier robotCentricSup, slowSpeedSupplier, fastSpeedSupplier; // used for
+	private BooleanSupplier slowSpeedSupplier, fastSpeedSupplier; // used for
 																					// field
 																					// relative
 

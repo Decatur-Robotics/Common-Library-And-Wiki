@@ -1,17 +1,12 @@
 package frc.lib.modules.swervedrive.Commands;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 
-public class GoodDriveDistanceAuto extends CommandBase
+public class DriveDistanceAuto extends Command
 {
 	private double distance;
 
@@ -21,7 +16,7 @@ public class GoodDriveDistanceAuto extends CommandBase
 
 	private double targetPosition;
 
-	public GoodDriveDistanceAuto(double distance, double speed, SwerveDriveSubsystem s_Swerve)
+	public DriveDistanceAuto(double distance, double speed, SwerveDriveSubsystem s_Swerve)
 	{
 		this.distance = distance;
 		this.speed = speed;
