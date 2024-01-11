@@ -10,6 +10,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.REVLibError;
 import com.revrobotics.SparkPIDController;
 
+/**
+ * Used for NEOs. Provides support for PID control and an encoder.
+ */
 public class TeamSparkMAX extends CANSparkMax
 {
 
@@ -28,12 +31,21 @@ public class TeamSparkMAX extends CANSparkMax
 
   private CANSparkMax.ControlType ctrlType = null;
 
-  public TeamSparkMAX(String smartDashboardPrefix, int deviceID)
+  public TeamSparkMAX(int deviceID)
   {
     super(deviceID, MotorType.kBrushless); // Neos are brushless
     PidProfiles = new PidParameters[4];
     CanPidController = getPIDController();
     CanEncoder = getEncoder();
+  }
+
+  @Deprecated
+  /**
+   * @deprecated Use {@link #TeamSparkMAX(int)} instead.
+   */
+  public TeamSparkMAX(String smartdashboardPrefix, int deviceID)
+  {
+    this(deviceID);
   }
 
   @Override
