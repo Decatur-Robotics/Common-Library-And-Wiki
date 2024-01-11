@@ -19,7 +19,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase;
 
 public class SwerveModule
@@ -34,7 +34,7 @@ public class SwerveModule
 	private TalonFX mDriveMotor;
 
 	private RelativeEncoder integratedAngleEncoder;
-	private SparkMaxPIDController angleController;
+	private SparkPIDController angleController;
 	private CANCoder angleEncoder;
 
 	SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(SwerveConstants.DRIVE_KS,
