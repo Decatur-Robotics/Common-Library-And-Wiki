@@ -50,6 +50,8 @@ public class TeamTalonFX extends WPI_TalonFX
     // assuming quadencoder
     this.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
+    enableVoltageCompensation(true);
+
     pidProfiles = new PidParameters[4];
   }
 
@@ -153,5 +155,4 @@ public class TeamTalonFX extends WPI_TalonFX
     configPeakOutputReverse(-pidParameters.kPeakOutput, 30);
     configAllowableClosedloopError(pidSlotIndex, pidParameters.errorTolerance, 30);
   }
-
 }
