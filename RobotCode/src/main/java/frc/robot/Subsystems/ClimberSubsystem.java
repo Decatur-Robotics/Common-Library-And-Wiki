@@ -9,7 +9,7 @@ import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Ports;
 
 public class ClimberSubsystem extends SubsystemBase {
-    
+
     public ITeamTalon[] extendMotors;
 
     private ITeamTalon extendMotorLeft;
