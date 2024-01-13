@@ -21,13 +21,11 @@ public class TeamTalonFX extends WPI_TalonFX
 
   private double lastTelemetryUpdate = 0;
 
-  protected final String smartDashboardPrefix;
+  private final String smartDashboardPrefix;
 
-  protected int numEStops = 0;
+  private double maxSpeed = Double.MAX_VALUE;
 
-  protected double maxSpeed = Double.MAX_VALUE;
-
-  protected PidParameters pidProfiles[] = new PidParameters[4];
+  private PidParameters[] pidProfiles;
 
   public static boolean isPidControlMode(ControlMode mode)
   {
@@ -48,8 +46,11 @@ public class TeamTalonFX extends WPI_TalonFX
   {
     super(deviceNumber);
     this.smartDashboardPrefix = smartDashboardPrefix;
+
     // assuming quadencoder
     this.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    pidProfiles = new PidParameters[4];
   }
 
   public void periodic()
@@ -104,16 +105,6 @@ public class TeamTalonFX extends WPI_TalonFX
   public String getSmartDashboardPrefix()
   {
     return smartDashboardPrefix;
-  }
-
-  public int getNumEStops()
-  {
-    return numEStops;
-  }
-
-  public void setNumEStops(int val)
-  {
-    numEStops = val;
   }
 
   public double getMaxSpeed()
