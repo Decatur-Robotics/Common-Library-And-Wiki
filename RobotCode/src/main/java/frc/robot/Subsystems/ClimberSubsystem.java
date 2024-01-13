@@ -8,13 +8,11 @@ import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Ports;
 
 public class ClimberSubsystem extends SubsystemBase {
-
-    public TeamTalonFX[] extendMotors;
-
+    
     private TeamTalonFX extendMotorLeft;
     private TeamTalonFX extendMotorRight;
     
-    public ClimberSubsystem(TeamTalonFX motorExtend) {
+    public ClimberSubsystem() {
         // sets extension of left and right motors to given extension length
         extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight", Ports.CLIMBER_EXTEND_RIGHT_MOTOR);
        extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft", Ports.CLIMBER_EXTEND_LEFT_MOTOR);
@@ -24,7 +22,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
      
     }
-       
+     
+    
+  
     public void setPowers(double leftPower, double rightPower, String reason) {
         if(!(leftMotorPowerCheck(leftPower))) {
             leftPower=0;
@@ -39,7 +39,7 @@ public class ClimberSubsystem extends SubsystemBase {
         extendMotorLeft.set(-rightPower/3);
     }
 
-    
+    // checks if the power level is too high or low for both motors.
     public boolean leftMotorPowerCheck(double power) {
         return (extendMotorLeft.getCurrentEncoderValue() > ClimberConstants.MAX_EXTENSION_LEFT && power >= 0) || (extendMotorLeft.getCurrentEncoderValue() < ClimberConstants.MIN_EXTENSION_LEFT && power <= 0);
     }
