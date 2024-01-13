@@ -6,8 +6,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 
+/**
+ * @deprecated Use PathPlanner instead
+ */
+@Deprecated
 public class DriveDistanceAuto extends Command
 {
+	DriveDistanceAuto driveDistanceAuto;
 	private double distance;
 
 	SwerveDriveSubsystem s_Swerve;
