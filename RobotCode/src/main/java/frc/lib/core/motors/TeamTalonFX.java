@@ -51,7 +51,7 @@ public class TeamTalonFX extends WPI_TalonFX
     this.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     enableVoltageCompensation(true);
-    
+
     pidProfiles = new PidParameters[4];
   }
 
@@ -109,16 +109,6 @@ public class TeamTalonFX extends WPI_TalonFX
     return smartDashboardPrefix;
   }
 
-  public int getNumEStops()
-  {
-    return numEStops;
-  }
-
-  public void setNumEStops(int val)
-  {
-    numEStops = val;
-  }
-  
   public double getMaxSpeed()
   {
     return maxSpeed;
