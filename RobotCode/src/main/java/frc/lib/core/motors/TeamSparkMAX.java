@@ -42,6 +42,8 @@ public class TeamSparkMAX extends CANSparkMax
     PidProfiles = new PidParameters[4];
     CanPidController = getPIDController();
     CanEncoder = getEncoder();
+
+    enableVoltageCompensation(12.0);
   }
 
   public String getSmartDashboardPrefix()

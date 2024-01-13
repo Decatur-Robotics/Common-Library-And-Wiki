@@ -12,7 +12,8 @@ import frc.lib.core.PidParameters;
  * -Keep current and max speeds -Get and Reset encoder values -Lots and lots of SmartDashboard
  * information
  */
-public class TeamTalonFX extends WPI_TalonFX implements ITeamTalon {
+public class TeamTalonFX extends WPI_TalonFX implements ITeamTalon
+{
 
   private double lastTelemetryUpdate = 0;
 
@@ -24,56 +25,71 @@ public class TeamTalonFX extends WPI_TalonFX implements ITeamTalon {
 
   protected PidParameters pidProfiles[] = new PidParameters[4];
 
-  public TeamTalonFX(String smartDashboardPrefix, int deviceNumber) {
+  public TeamTalonFX(String smartDashboardPrefix, int deviceNumber)
+  {
     super(deviceNumber);
     this.smartDashboardPrefix = smartDashboardPrefix;
+
     // assuming quadencoder
     this.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    enableVoltageCompensation(true);
   }
 
-  public long getCurrentEncoderValue() {
+  public long getCurrentEncoderValue()
+  {
     // This should be configurable
     return (long) getSensorCollection().getIntegratedSensorPosition();
   }
 
-  public void set(double power, String reason) {
+  public void set(double power, String reason)
+  {
     super.set(power);
-    //Logs.info("Set power to " + power + " REASON: " + reason);
+    // Logs.info("Set power to " + power + " REASON: " + reason);
   }
 
-  public void resetEncoder() {
+  public void resetEncoder()
+  {
     getSensorCollection().setIntegratedSensorPosition(0, 0);
   }
 
-  public double getLastTelemetryUpdate() {
+  public double getLastTelemetryUpdate()
+  {
     return lastTelemetryUpdate;
   }
 
-  public void setLastTelemetryUpdate(double val) {
+  public void setLastTelemetryUpdate(double val)
+  {
     lastTelemetryUpdate = val;
   }
 
-  public String getSmartDashboardPrefix() {
+  public String getSmartDashboardPrefix()
+  {
     return smartDashboardPrefix;
   }
 
-  public int getNumEStops() {
+  public int getNumEStops()
+  {
     return numEStops;
   }
 
-  public void setNumEStops(int val) {
+  public void setNumEStops(int val)
+  {
     numEStops = val;
   }
 
-  public double getMaxSpeed() {
+  public double getMaxSpeed()
+  {
     return maxSpeed;
   }
 
-  public void setMaxSpeed(double val) {
+  public void setMaxSpeed(double val)
+  {
     maxSpeed = val;
   }
 
-  public PidParameters[] getPidProfiles() {
+  public PidParameters[] getPidProfiles()
+  {
     return pidProfiles;
   }
 
@@ -81,9 +97,9 @@ public class TeamTalonFX extends WPI_TalonFX implements ITeamTalon {
   // Use this for configurations which can be shared between SRX and FX
   // Otherwise down cast and use configAllSettings(TalonFXConfiguration allConfigs)
   // if using config settings only available for TalonFX
-  public ErrorCode configBaseAllSettings(BaseTalonConfiguration allConfigs) {
+  public ErrorCode configBaseAllSettings(BaseTalonConfiguration allConfigs)
+  {
     return configAllSettings(allConfigs);
   }
 
-  
 }
