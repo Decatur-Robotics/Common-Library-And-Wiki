@@ -19,6 +19,8 @@ public class TeamSparkMAX extends CANSparkMax
   private static final double TELEMETRY_UPDATE_INTERVAL_SECS = 0.0;
   private double lastTelemetryUpdate = 0;
 
+  private final String smartDashboardPrefix;
+
   private double maxSpeed = Double.MAX_VALUE;
 
   private double smartMotionLoopTarget;
@@ -31,21 +33,20 @@ public class TeamSparkMAX extends CANSparkMax
 
   private CANSparkMax.ControlType ctrlType = null;
 
-  public TeamSparkMAX(int deviceID)
+  public TeamSparkMAX(String smartDashboardPrefix, int deviceID)
   {
     super(deviceID, MotorType.kBrushless); // Neos are brushless
+
+    this.smartDashboardPrefix = smartDashboardPrefix;
+
     PidProfiles = new PidParameters[4];
     CanPidController = getPIDController();
     CanEncoder = getEncoder();
   }
 
-  @Deprecated
-  /**
-   * @deprecated Use {@link #TeamSparkMAX(int)} instead.
-   */
-  public TeamSparkMAX(String smartdashboardPrefix, int deviceID)
+  public String getSmartDashboardPrefix()
   {
-    this(deviceID);
+    return smartDashboardPrefix;
   }
 
   @Override
