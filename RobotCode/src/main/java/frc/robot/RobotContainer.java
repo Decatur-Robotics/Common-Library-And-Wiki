@@ -8,13 +8,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer
 {
 
-	private final static ShuffleboardTab shuffleboard = Shuffleboard.getTab("Tab 1");
+	private static RobotContainer instance;
+
+	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
 	private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
+		instance = this;
+
 		addAutonomousOptions();
 
 		// Configure the button bindings
@@ -45,7 +49,7 @@ public class RobotContainer
 
 	public static ShuffleboardTab getShuffleboard()
 	{
-		return shuffleboard;
+		return instance.ShuffleboardTab;
 	}
 
 }
