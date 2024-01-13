@@ -31,7 +31,8 @@ public class ShooterMountSubsystem extends SubsystemBase {
 
 		mainMotor.enableVoltageCompensation(12);
 		followMotor.enableVoltageCompensation(12);
-
+		
+		//The setPositionConversonFactor is set to 42 because the NEO motors have 42 ticks per rotation 
 		mainMotor.getEncoder().setPositionConversionFactor(42);
 		mainMotor.getEncoder().setPosition(0);
 
@@ -70,10 +71,6 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	}
 
 
-
-	// private static double calcCappedPower(double originalPower) {
-	// 	return Math.max(-1, Math.min(originalPower, 1));
-	// }
 
 
 }
