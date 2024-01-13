@@ -35,12 +35,16 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		mainMotor.getEncoder().setPositionConversionFactor(42);
 		mainMotor.getEncoder().setPosition(0);
 
+		followMotor.getEncoder().setPositionConversionFactor(42);
+		followMotor.getEncoder().setPosition(0);
+
 		mainMotor.set(0);
 	}
 
-	public void update() {
-		double position = goalRotation - currentRotation;
-		setMotors(Math.sin((position * Math.PI)/2), "ShooterMountSubsystem#update | Position: " + position);
+	@Override
+	public void periodic() {
+		double position = Math.max(-1, Math.min(1, (goalRotation - currentRotation)/45));
+		setMotors(position, "ShooterMountSubsystem#update | Position: " + position + " | Difference: " + (goalRotation - currentRotation));
 	}
 
 	public void setGoalRotation(double degrees) {
@@ -50,7 +54,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	}
 
 
-	private static final double CONVERSION_NUMBER = 180/21;
+	private static final double CONVERSION_NUMBER = 360/42;
 	private double degreesToTicks(double degrees) {
 		return degrees / CONVERSION_NUMBER;
 	}
@@ -62,6 +66,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 
 	public void setMotors(double power, String reason) {
 		mainMotor.set(Math.max(-1, Math.min(power, 1)), reason);
+		System.out.println(reason);
 	}
 
 
