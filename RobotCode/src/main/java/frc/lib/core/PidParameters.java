@@ -70,7 +70,7 @@ public class PidParameters
 	}
 
 	/** Use these parameters on a motor */
-	public void configureMotorWithPidParameters(ITeamTalon motor, int pidSlotIndex)
+	public void configureMotorWithPidParameters(TeamTalonFX motor, int pidSlotIndex)
 	{
 		motor.configureWithPidParameters(this, pidSlotIndex);
 	}
@@ -80,7 +80,7 @@ public class PidParameters
 		motor.configureWithPidParameters(this, pidSlotIndex);
 	}
 
-	public void periodic(String prefix, ITeamTalon motor, int pidSlotIndex)
+	public void periodic(String prefix, TeamTalonFX motor, int pidSlotIndex)
 	{
 		double now = TeamUtils.getCurrentTime();
 
@@ -171,7 +171,7 @@ public class PidParameters
 		{
 			kF = new_kF;
 			if (updateMotor)
-				motor.canPidController.setFF(kF, pidSlotIndex);
+				motor.getPIDController().setFF(kF, pidSlotIndex);
 		}
 		SmartDashboard.putNumber(prefix + ".PID.kF", kF);
 
@@ -180,7 +180,7 @@ public class PidParameters
 		{
 			kP = new_kP;
 			if (updateMotor)
-				motor.canPidController.setP(kP, pidSlotIndex);
+				motor.getPIDController().setP(kP, pidSlotIndex);
 		}
 		SmartDashboard.putNumber(prefix + ".PID.kP", kP);
 
@@ -189,7 +189,7 @@ public class PidParameters
 		{
 			kI = new_kI;
 			if (updateMotor)
-				motor.canPidController.setI(kI, pidSlotIndex);
+				motor.getPIDController().setI(kI, pidSlotIndex);
 		}
 		SmartDashboard.putNumber(prefix + ".PID.kI", kI);
 
@@ -198,7 +198,7 @@ public class PidParameters
 		{
 			kD = new_kD;
 			if (updateMotor)
-				motor.canPidController.setD(kD, pidSlotIndex);
+				motor.getPIDController().setD(kD, pidSlotIndex);
 		}
 		SmartDashboard.putNumber(prefix + ".PID.kD", kD);
 
@@ -207,7 +207,7 @@ public class PidParameters
 		{
 			kPeakOutput = new_kPeakOutput;
 			if (updateMotor)
-				motor.canPidController.setOutputRange(-kPeakOutput, kPeakOutput);
+				motor.getPIDController().setOutputRange(-kPeakOutput, kPeakOutput);
 		}
 		SmartDashboard.putNumber(prefix + ".kPeakOutput", kPeakOutput);
 
@@ -217,7 +217,7 @@ public class PidParameters
 		{
 			errorTolerance = new_errorTolerance;
 			if (updateMotor)
-				motor.canPidController.setSmartMotionAllowedClosedLoopError(errorTolerance,
+				motor.getPIDController().setSmartMotionAllowedClosedLoopError(errorTolerance,
 						pidSlotIndex);
 		}
 		SmartDashboard.putNumber(prefix + ".errorTolerance", errorTolerance);
@@ -227,7 +227,7 @@ public class PidParameters
 		{
 			maxAcc = new_maxAcc;
 			if (updateMotor)
-				motor.canPidController.setSmartMotionMaxAccel(maxAcc, pidSlotIndex);
+				motor.getPIDController().setSmartMotionMaxAccel(maxAcc, pidSlotIndex);
 		}
 
 		double new_maxVel = SmartDashboard.getNumber(prefix + ".maxAcc", maxVel);
@@ -235,7 +235,7 @@ public class PidParameters
 		{
 			maxVel = new_maxVel;
 			if (updateMotor)
-				motor.canPidController.setSmartMotionMaxVelocity(maxVel, pidSlotIndex);
+				motor.getPIDController().setSmartMotionMaxVelocity(maxVel, pidSlotIndex);
 		}
 
 		SmartDashboard.putNumber(prefix + ".kPeakOutput", kPeakOutput);
