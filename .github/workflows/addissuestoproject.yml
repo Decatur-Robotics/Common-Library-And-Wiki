@@ -14,6 +14,6 @@ jobs:
        with:
 
         project-url: https://github.com/orgs/Decatur-Robotics/projects/2
-        github-token: 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
+        github-token: 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
 
             
