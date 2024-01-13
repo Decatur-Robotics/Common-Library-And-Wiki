@@ -20,7 +20,7 @@ public class RobotContainer
 	public RobotContainer()
 	{
 		instance = this;
-    
+
 		registerNamedCommands();
 		addAutonomousOptions();
 
@@ -48,7 +48,7 @@ public class RobotContainer
 	private void addAutonomousOptions()
 	{
 		autoChooser = AutoBuilder.buildAutoChooser();
-		shuffleboard.add("Auto Chooser", autoChooser);
+		ShuffleboardTab.add("Auto Chooser", autoChooser);
 	}
 
 	public Command getAutonomousCommand()
