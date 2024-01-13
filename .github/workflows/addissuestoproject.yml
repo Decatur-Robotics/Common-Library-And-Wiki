@@ -13,7 +13,7 @@ jobs:
      - uses: actions/add-to-project@v0.5.0
        with:
 
-       project-url: https://github.com/orgs/Decatur-Robotics/projects/2
-       github-token: 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
-       
+        project-url: https://github.com/orgs/Decatur-Robotics/projects/2
+        github-token: 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
+
             
