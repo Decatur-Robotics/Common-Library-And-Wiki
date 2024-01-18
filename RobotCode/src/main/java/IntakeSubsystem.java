@@ -19,7 +19,7 @@ public class IntakeSubsystem extends TeamSubsystemBase
 
     }
 
-    public String toggleIsntake()
+    public String toggleIntake()
     {
         m_doubleSolenoid.toggle();
 
