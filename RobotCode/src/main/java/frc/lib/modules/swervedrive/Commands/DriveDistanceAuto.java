@@ -1,19 +1,18 @@
 package frc.lib.modules.swervedrive.Commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 
-@Deprecated
+/**
+ * Includes both movement and rotation. Rotation is in degrees for this command.
+ */
 public class DriveDistanceAuto extends Command
 {
 
 	private final SwerveDriveSubsystem Swerve;
-
-	// Rotations are in degrees
 
 	private double speed, distanceX, distanceY, targetPositionX, targetPositionY, rotSpeed,
 			targetRot;
