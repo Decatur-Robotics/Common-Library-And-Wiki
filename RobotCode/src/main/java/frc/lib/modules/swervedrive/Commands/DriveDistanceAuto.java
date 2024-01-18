@@ -1,5 +1,6 @@
 package frc.lib.modules.swervedrive.Commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,42 +11,87 @@ import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 public class DriveDistanceAuto extends Command
 {
 
-	private SwerveDriveSubsystem swerve;
+	private final SwerveDriveSubsystem Swerve;
 
-	private double speed, distanceX, distanceY, targetPositionX, targetPositionY;
+	// Rotations are in degrees
 
-	public DriveDistanceAuto(double distanceX, double distanceY, double speed,
-			SwerveDriveSubsystem swerve)
+	private double speed, distanceX, distanceY, targetPositionX, targetPositionY, rotSpeed,
+			targetRot;
+
+	private final double ROT_DEADBAND = 1;
+
+	public DriveDistanceAuto(double distanceX, double distanceY, double speed, double rotSpeed,
+			double targetRot, SwerveDriveSubsystem swerve)
 	{
 		this.distanceX = distanceX;
 		this.distanceY = distanceY;
 
+		this.rotSpeed = rotSpeed;
+		this.targetRot = targetRot;
+
 		this.speed = speed;
-		this.swerve = swerve;
+		this.Swerve = swerve;
 
 		addRequirements(swerve);
+	}
+
+	public DriveDistanceAuto(double distanceX, double distanceY, double speed,
+			SwerveDriveSubsystem swerve)
+	{
+		this(distanceX, distanceY, speed, 0, 0, swerve);
+	}
+
+	public DriveDistanceAuto(double distanceX, double speed, SwerveDriveSubsystem swerve)
+	{
+		this(distanceX, 0, speed, 0, 0, swerve);
 	}
 
 	@Override
 	public void initialize()
 	{
-		targetPositionX = swerve.getPose().getX() + distanceX;
-		targetPositionY = swerve.getPose().getY() + distanceY;
+		targetPositionX = Swerve.getPose().getX() + distanceX;
+		targetPositionY = Swerve.getPose().getY() + distanceY;
 	}
 
 	@Override
 	public void execute()
 	{
+
+		// Update distanceX & distanceY to reflect the remaining distance
+		distanceX = targetPositionX - Swerve.getPose().getX();
+		distanceY = targetPositionY - Swerve.getPose().getY();
+
+		// Update SmartDashboard
 		SmartDashboard.putString("Auto Drive Target",
 				"(" + targetPositionX + ", " + targetPositionY + ")");
+		SmartDashboard.putString("Auto Drive Distance Remaining",
+				"(" + distanceX + ", " + distanceY + ")");
+		SmartDashboard.putNumber("Auto Drive Rot Target", targetRot);
 		SmartDashboard.putString("Swerve Pose",
-				"(" + swerve.getPose().getX() + ", " + swerve.getPose().getY() + ")");
+				"(" + Swerve.getPose().getX() + ", " + Swerve.getPose().getY() + ")");
 
 		// Calculate speed
-		Translation2d speedVector = new Translation2d(distanceX > 0 ? speed : -speed,
-				distanceY > 0 ? speed : -speed).times(SwerveConstants.AUTO_SPEED);
+		Translation2d speedVector = new Translation2d(
+				distanceX > 0 ? Math.min(speed * SwerveConstants.AUTO_SPEED, distanceX)
+						: Math.max(-speed * SwerveConstants.AUTO_SPEED, distanceX),
+				distanceY > 0 ? Math.min(speed * SwerveConstants.AUTO_SPEED, distanceY)
+						: Math.max(-speed * SwerveConstants.AUTO_SPEED, distanceY));
 
-		swerve.drive(speedVector, 0, true, true);
+		// Calculate rotation
+		double currentRotation = Swerve.getYaw().getDegrees(),
+				rotDiff = targetRot - currentRotation;
+
+		// Make sure the rotation is between -180 and 180
+		if (rotDiff > 180)
+			rotDiff -= 360;
+		else if (rotDiff < -180)
+			rotDiff += 360;
+
+		// Calculate rotation speed
+		double rotSpeed = rotDiff > 0 ? Math.min(this.rotSpeed, rotDiff)
+				: Math.max(-this.rotSpeed, rotDiff);
+
+		Swerve.drive(speedVector, rotSpeed, true, true);
 	}
 
 	@Override
@@ -55,16 +101,18 @@ public class DriveDistanceAuto extends Command
 
 		boolean xFinished = false;
 		if (distanceX > 0)
-			xFinished = swerve.getPose().getX() > targetPositionX;
+			xFinished = Swerve.getPose().getX() > targetPositionX;
 		else
-			xFinished = swerve.getPose().getX() < targetPositionX;
+			xFinished = Swerve.getPose().getX() < targetPositionX;
 
 		boolean yFinished = false;
 		if (distanceY > 0)
-			yFinished = swerve.getPose().getY() > targetPositionY;
+			yFinished = Swerve.getPose().getY() > targetPositionY;
 		else
-			yFinished = swerve.getPose().getY() < targetPositionY;
+			yFinished = Swerve.getPose().getY() < targetPositionY;
 
-		return xFinished && yFinished;
+		boolean rotFinished = Math.abs(targetRot - Swerve.getYaw().getDegrees()) < ROT_DEADBAND;
+
+		return xFinished && yFinished && rotFinished;
 	}
 }
