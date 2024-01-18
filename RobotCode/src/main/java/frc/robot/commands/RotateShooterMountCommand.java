@@ -14,7 +14,7 @@ public class RotateShooterMountCommand extends Command
 
 	public RotateShooterMountCommand(ShooterMountSubsystem subsytem)
 	{
-		shooterMountSubsystem = ShooterMountSubsystem.getInstance();
+		shooterMountSubsystem = subsytem;
 	}
 
 	public void execute()
