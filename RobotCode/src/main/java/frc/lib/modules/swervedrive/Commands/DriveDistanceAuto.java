@@ -6,59 +6,65 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 
-/**
- * @deprecated Use PathPlanner instead
- */
 @Deprecated
 public class DriveDistanceAuto extends Command
 {
-	DriveDistanceAuto driveDistanceAuto;
-	private double distance;
 
-	SwerveDriveSubsystem s_Swerve;
+	private SwerveDriveSubsystem swerve;
 
-	private double speed;
+	private double speed, distanceX, distanceY, targetPositionX, targetPositionY;
 
-	private double targetPosition;
-
-	public DriveDistanceAuto(double distance, double speed, SwerveDriveSubsystem s_Swerve)
+	public DriveDistanceAuto(double distanceX, double distanceY, double speed,
+			SwerveDriveSubsystem swerve)
 	{
-		this.distance = distance;
-		this.speed = speed;
-		this.s_Swerve = s_Swerve;
+		this.distanceX = distanceX;
+		this.distanceY = distanceY;
 
-		addRequirements(s_Swerve);
+		this.speed = speed;
+		this.swerve = swerve;
+
+		addRequirements(swerve);
 	}
 
 	@Override
 	public void initialize()
 	{
-		targetPosition = s_Swerve.getPose().getX() + distance;
+		targetPositionX = swerve.getPose().getX() + distanceX;
+		targetPositionY = swerve.getPose().getY() + distanceY;
 	}
 
 	@Override
 	public void execute()
 	{
-		SmartDashboard.putNumber("Auto Drive Target X", targetPosition);
-		SmartDashboard.putNumber("Swerve Pose X", s_Swerve.getPose().getX());
+		SmartDashboard.putString("Auto Drive Target",
+				"(" + targetPositionX + ", " + targetPositionY + ")");
+		SmartDashboard.putString("Swerve Pose",
+				"(" + swerve.getPose().getX() + ", " + swerve.getPose().getY() + ")");
 
-		s_Swerve.drive(new Translation2d(-speed, 0).times(SwerveConstants.AUTO_SPEED), 0,
-				/*
-				 * !robotCentricSup . getAsBoolean (),
-				 */ true, // field
-							// relative
-							// is
-							// always
-							// on
-				true);
+		// Calculate speed
+		Translation2d speedVector = new Translation2d(distanceX > 0 ? speed : -speed,
+				distanceY > 0 ? speed : -speed).times(SwerveConstants.AUTO_SPEED);
+
+		swerve.drive(speedVector, 0, true, true);
 	}
 
 	@Override
 	public boolean isFinished()
 	{
-		if (distance > 0)
-			return (s_Swerve.getPose().getX() > targetPosition);
+		// Check if both x and y are finished
+
+		boolean xFinished = false;
+		if (distanceX > 0)
+			xFinished = swerve.getPose().getX() > targetPositionX;
 		else
-			return (s_Swerve.getPose().getX() < targetPosition);
+			xFinished = swerve.getPose().getX() < targetPositionX;
+
+		boolean yFinished = false;
+		if (distanceY > 0)
+			yFinished = swerve.getPose().getY() > targetPositionY;
+		else
+			yFinished = swerve.getPose().getY() < targetPositionY;
+
+		return xFinished && yFinished;
 	}
 }
