@@ -23,9 +23,6 @@ public class RobotContainer
 
 	private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-	private Joystick secondaryController;
-	private JoystickButton secondaryTrigger;
-
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
@@ -38,16 +35,13 @@ public class RobotContainer
 
 	private void configurePrimaryBindings()
 	{
-		// Testing for Shooter Mount code. Remove before merging into dev.
-		secondaryController = new Joystick(0);
-		secondaryTrigger = new JoystickButton(secondaryController, 2);
-		
-		secondaryTrigger.whileTrue(new RotateShooterMountCommand(ShooterMountSubsystem.getInstance()));
+
 	}
 
 	private void configureSecondaryBindings()
 	{
-
+		Joystick secondaryController;
+		JoystickButton secondaryTrigger;
 	}
 
 	// Add autonomous options to the SendableChooser
