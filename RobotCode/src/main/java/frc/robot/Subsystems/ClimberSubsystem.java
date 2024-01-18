@@ -16,15 +16,10 @@ public class ClimberSubsystem extends SubsystemBase {
         // sets extension of left and right motors to given extension length
         extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight", Ports.CLIMBER_EXTEND_RIGHT_MOTOR);
        extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft", Ports.CLIMBER_EXTEND_LEFT_MOTOR);
-       
        extendMotorLeft.setNeutralMode(NeutralMode.Brake);
        extendMotorRight.setNeutralMode(NeutralMode.Brake);
-
-     
     }
      
-    
-  
     public void setPowers(double leftPower, double rightPower, String reason) {
         if(!(leftMotorPowerCheck(leftPower))) {
             leftPower=0;
@@ -32,8 +27,8 @@ public class ClimberSubsystem extends SubsystemBase {
         if(!(rightMotorPowerCheck(rightPower))) {
             rightPower=0;
         }
-        if (leftPower > 0) leftPower /= 3;
-        if(rightPower > 0) rightPower /= 3;
+        if (leftPower != 0) leftPower /= 3;
+        if(rightPower != 0) rightPower /= 3;
 
         extendMotorLeft.set(-leftPower/3);
         extendMotorLeft.set(-rightPower/3);
