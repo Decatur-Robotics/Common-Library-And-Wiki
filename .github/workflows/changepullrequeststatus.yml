@@ -9,15 +9,13 @@ on:
 jobs: 
   update-status-to-review:
     runs-on: ubuntu-latest
-    env:
-      pr-ID: ${{github.event.pull_request.node_id}}
     steps:
       - uses: monry/actions-get-project-item-id@v2.0.2
         id: get-project-item-id
         with:
          github-token: ${{ secrets.WORKFLOWSAUTH }}
          project-id: 'PVT_kwDOAJ9aT84AaUJq'
-         issue-id: ${{ env.pr-ID }}
+         issue-id: ${{github.event.pull_request.node_id}}
       
 
   
