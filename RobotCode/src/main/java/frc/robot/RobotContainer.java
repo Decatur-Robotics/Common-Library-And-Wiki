@@ -41,7 +41,11 @@ public class RobotContainer
 
 	private void configureSecondaryBindings()
 	{
+		secondaryController = new Joystick(1);
+		JoystickButton rightTrigger = new JoystickButton(secondaryController,
+				LogitechControllerButtons.triggerRight);
 
+		rightTrigger.whileTrue(new ShooterCommand(shooting));
 	}
 
 	// Add autonomous options to the SendableChooser
