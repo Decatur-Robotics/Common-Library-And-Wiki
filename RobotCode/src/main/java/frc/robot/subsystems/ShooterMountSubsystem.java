@@ -60,12 +60,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 		mainMotor.getEncoder().setPosition(degreesToTicks(originalRotation));
 	}
 
-	private double degreesToTicks(double degrees)
+	private static double degreesToTicks(double degrees)
 	{
 		return degrees / DEGREES_IN_ONE_TICK;
 	}
 
-	private double ticksToDegrees(double ticks)
+	private static double ticksToDegrees(double ticks)
 	{
 		return ticks * DEGREES_IN_ONE_TICK;
 	}
