@@ -2,7 +2,11 @@ package frc.robot.constants;
 
 public final class Ports
 {
-    public static final int INTAKE_MOTOR = 0;
+    //place holder values for intake motors
+    public static final int INTAKE_MOTOR_CENTER = 0;
+    public static final int INTAKE_MOTOR_RIGHT = 1;
+    public static final int INTAKE_MOTOR_LEFT = 2;
+    
     //  Provvisory Climber Ports
     public static final int CLIMBER_LEFT_CENTER_MOTOR = 7;
     public static final int CLIMBER_RIGHT_CENTER_MOTOR = 8;
