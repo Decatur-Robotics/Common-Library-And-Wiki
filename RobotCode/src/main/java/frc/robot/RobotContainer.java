@@ -19,7 +19,9 @@ import frc.robot.Subsystems.ShooterSubsystem;
 
 public class RobotContainer
 {
-
+	public static Joystick primaryController;
+	public static Joystick secondaryController;
+	public static ShooterSubsystem shooting;
 	private static RobotContainer instance;
 
 	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");
@@ -30,7 +32,9 @@ public class RobotContainer
 	public RobotContainer()
 	{
 		instance = this;
+		shooting = new ShooterSubsystem();
 
+		addAutonomousOptions();
 		registerNamedCommands();
 		addAutonomousOptions();
 
@@ -61,7 +65,7 @@ public class RobotContainer
 	// Add autonomous options to the SendableChooser
 	private void addAutonomousOptions()
 	{
-		autoChooser = AutoBuilder.buildAutoChooser();
+		
 		ShuffleboardTab.add("Auto Chooser", autoChooser);
 	}
 
@@ -76,3 +80,9 @@ public class RobotContainer
 	}
 
 }
+
+
+
+
+	/** The container for the robot. Contains subsystems, OI devices, and commands. */
+	
