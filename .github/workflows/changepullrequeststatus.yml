@@ -2,8 +2,9 @@
 
 name: Update Pull Request Status to "Awaiting Review"
 
-on: pull_request
-  types: [review_requested]
+on: 
+  pull_request:
+    types: [review_requested]
 
 jobs: 
   update-status-to-review:
