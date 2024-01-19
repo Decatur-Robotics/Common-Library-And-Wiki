@@ -36,6 +36,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 		followMotor.follow(mainMotor);
 		followMotor.setInverted(true);
 
+		// This is the # of ticks in a rotation and the relative position
 		mainMotor.getEncoder().setPositionConversionFactor(42);
 		mainMotor.getEncoder().setPosition(0);
 
