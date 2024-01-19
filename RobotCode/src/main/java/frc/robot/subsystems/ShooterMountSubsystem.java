@@ -10,23 +10,22 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamSparkMAX mainMotor, followMotor;
 
-	private double currentRotation;
+	private double currentRotation, originalRotation, goalRotation;
 
-	private double originalRotation;
-	private double goalRotation;
+	private static final double DEGREES_IN_ONE_TICK = 360 / 42;
 
-	private static final double CONVERSION_NUMBER = 180 / 21;
+	// private static ShooterMountSubsystem instance;
 
-	private static ShooterMountSubsystem instance;
+	// public static ShooterMountSubsystem getInstance()
+	// {
+	// if (instance == null)
+	// instance = new ShooterMountSubsystem();
+	//
+	// return instance;
+	// return new ShooterMountSubsystem();
+	// }
 
-	public static ShooterMountSubsystem getInstance()
-	{
-		if (instance == null)
-			instance = new ShooterMountSubsystem();
-		return instance;
-	}
-
-	private ShooterMountSubsystem()
+	public ShooterMountSubsystem()
 	{
 		mainMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
 		followMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_RIGHT",
@@ -63,12 +62,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private double degreesToTicks(double degrees)
 	{
-		return degrees / CONVERSION_NUMBER;
+		return degrees / DEGREES_IN_ONE_TICK;
 	}
 
 	private double ticksToDegrees(double ticks)
 	{
-		return ticks * CONVERSION_NUMBER;
+		return ticks * DEGREES_IN_ONE_TICK;
 	}
 
 	public void setMotors(double power, String reason)
