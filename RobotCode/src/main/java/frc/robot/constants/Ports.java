@@ -2,6 +2,10 @@ package frc.robot.constants;
 
 public final class Ports
 {
+
+	public static final int SHOOTER_MOUNT_MOTOR_LEFT = 0;
+	public static final int SHOOTER_MOUNT_MOTOR_RIGHT = 1;
+
     //  Provvisory Climber Ports
     public static final int CLIMBER_LEFT_CENTER_MOTOR = 7;
     public static final int CLIMBER_RIGHT_CENTER_MOTOR = 8;
