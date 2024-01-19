@@ -1,49 +1,37 @@
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.lib.core.TeamSubsystemBase;
 import frc.robot.constants.Ports;
 import frc.lib.core.motors.TeamSparkMAX;
 
 public class IntakeSubsystem extends TeamSubsystemBase
 {
-    private DoubleSolenoid m_doubleSolenoid;
-    private TeamSparkMAX intakeMotor;
-    private double motorSpeed;
+    private final TeamSparkMAX intakeMotorRight, intakeMotorLeft, intakeMotorCenter;
+    private final double MOTOR_SPEED;
 
     public IntakeSubsystem(int forwardChannel, int reverseChannel)
     {
-        m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 0);
-        intakeMotor = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR);
-        motorSpeed = 0.5;
-        m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+        intakeMotorRight = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_RIGHT);
+        intakeMotorLeft = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_LEFT);
+        intakeMotorCenter = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_CENTER);
+        MOTOR_SPEED = 0.5;
 
     }
 
-    public String toggleIntake()
-    {
-        m_doubleSolenoid.toggle();
-
-        if (m_doubleSolenoid.get() == DoubleSolenoid.Value.kForward)
-        {
-            return "forward";
-        }
-        if (m_doubleSolenoid.get() == DoubleSolenoid.Value.kReverse)
-        {
-            intakeMotor.set(0, "intake retracted");
-            return "reverse";
-        }
-        return "off";
+    public void raiseIntake(){
+        
     }
 
-    public void spinIntake()
+    public void lowerIntake(){
+        
+    }
+
+    public void toggleIntakeOn()
     {
-        intakeMotor.set(motorSpeed);
+        intakeMotorCenter.set(motorSpeed);
     }
 
     public void stopIntake()
     {
-        intakeMotor.set(0);
-        m_doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+        intakeMotorCenter.set(0);
     }
 
 }
