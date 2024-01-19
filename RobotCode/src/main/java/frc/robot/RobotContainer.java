@@ -1,6 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,18 +22,28 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer
 {
 
-	private final static ShuffleboardTab shuffleboard = Shuffleboard.getTab("Tab 1");
+	private static RobotContainer instance;
 
-	private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");
+
+	private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
+		instance = this;
+
+		registerNamedCommands();
 		addAutonomousOptions();
 
 		// Configure the button bindings
 		configurePrimaryBindings();
 		configureSecondaryBindings();
+	}
+
+	private void registerNamedCommands()
+	{
+
 	}
 
 	private void configurePrimaryBindings()
@@ -45,9 +58,10 @@ public class RobotContainer
 	}
 
 	// Add autonomous options to the SendableChooser
-	public void addAutonomousOptions()
+	private void addAutonomousOptions()
 	{
-
+		autoChooser = AutoBuilder.buildAutoChooser();
+		ShuffleboardTab.add("Auto Chooser", autoChooser);
 	}
 
 	public Command getAutonomousCommand()
@@ -57,7 +71,7 @@ public class RobotContainer
 
 	public static ShuffleboardTab getShuffleboard()
 	{
-		return shuffleboard;
+		return instance.ShuffleboardTab;
 	}
 
 }

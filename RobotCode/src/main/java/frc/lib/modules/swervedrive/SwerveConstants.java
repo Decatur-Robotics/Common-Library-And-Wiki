@@ -46,6 +46,9 @@ public final class SwerveConstants
 	public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
 	public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
+	// Find this for the robot!
+	public static final double DRIVE_BASE_RADIUS_METERS = 0.5;
+
 	/*
 	 * Swerve Kinematics No need to ever change this unless you are not doing a traditional
 	 * rectangular/square 4 module swerve

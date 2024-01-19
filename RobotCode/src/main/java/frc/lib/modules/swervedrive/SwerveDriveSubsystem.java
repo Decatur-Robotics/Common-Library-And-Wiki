@@ -5,12 +5,22 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -51,6 +61,29 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		// construct odometry (full robot position/incorporated module states)
 		swerveOdometry = new SwerveDriveOdometry(SwerveConstants.SwerveKinematics, getYaw(),
 				getModulePositions());
+
+		configureAutoBuilder();
+	}
+
+	private void configureAutoBuilder()
+	{
+		HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+				new PIDConstants(SwerveConstants.DRIVE_KP, SwerveConstants.DRIVE_KI,
+						SwerveConstants.DRIVE_KD),
+				new PIDConstants(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI,
+						SwerveConstants.ANGLE_KD),
+				SwerveConstants.MAX_SPEED, SwerveConstants.DRIVE_BASE_RADIUS_METERS,
+				new ReplanningConfig());
+
+		BooleanSupplier isRedAlliance = () ->
+		{
+			Optional<Alliance> alliance = DriverStation.getAlliance();
+			return alliance.isPresent() && alliance.get() == Alliance.Red;
+		};
+
+		// Type::method gets a reference to the method. Type.method only allows us to run the method
+		AutoBuilder.configureHolonomic(this::getPose, this::resetPose, this::getCurrentSpeeds,
+				this::drive, pathFollowerConfig, isRedAlliance, this);
 	}
 
 	public void setAngleOffsets(boolean invert)
@@ -69,11 +102,17 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative,
 			boolean isOpenLoop)
 	{
+		drive(fieldRelative
+				? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(),
+						rotation, getYaw())
+				: new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+
+	}
+
+	private void drive(ChassisSpeeds speeds, boolean isOpenLoop)
+	{
 		SwerveModuleState[] swerveModuleStates = SwerveConstants.SwerveKinematics
-				.toSwerveModuleStates(fieldRelative
-						? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(),
-								translation.getY(), rotation, getYaw())
-						: new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+				.toSwerveModuleStates(speeds);
 
 		// Log module state
 		for (int i = 0; i < swerveModuleStates.length; i++)
@@ -95,6 +134,11 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 	}
 
+	private void drive(ChassisSpeeds speeds)
+	{
+		drive(speeds, true);
+	}
+
 	/* Used by SwerveControllerCommand in Auto */
 	public void setModuleStates(SwerveModuleState[] desiredStates)
 	{
@@ -113,7 +157,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	}
 
 	// resets odometry (position on field)
-	public void resetOdometry(Pose2d pose)
+	public void resetPose(Pose2d pose)
 	{
 		swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
 	}
@@ -140,7 +184,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		return positions;
 	}
 
-	public SwerveModule[] getSwerveMods() {
+	public SwerveModule[] getSwerveMods()
+	{
 		return swerveMods;
 	}
 
@@ -157,12 +202,13 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 		gyro.setYaw(0); // Used to setYaw(0);
 	}
-	
+
 	public void setGyroOffset(double offset)
 	{
 		gyroOffset = offset;
 	}
 
+	/** Returns angle around vertical axis */
 	public Rotation2d getYaw()
 	{
 		return (SwerveConstants.INVERT_GYRO)
@@ -203,5 +249,10 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		{
 			mod.resetToAbsolute();
 		}
+	}
+
+	public ChassisSpeeds getCurrentSpeeds()
+	{
+		return SwerveConstants.SwerveKinematics.toChassisSpeeds(getModuleStates());
 	}
 }
