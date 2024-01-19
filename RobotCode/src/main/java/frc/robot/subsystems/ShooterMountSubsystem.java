@@ -14,17 +14,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private static final double DEGREES_IN_ONE_TICK = 360 / 42;
 
-	// private static ShooterMountSubsystem instance;
-
-	// public static ShooterMountSubsystem getInstance()
-	// {
-	// if (instance == null)
-	// instance = new ShooterMountSubsystem();
-	//
-	// return instance;
-	// return new ShooterMountSubsystem();
-	// }
-
 	public ShooterMountSubsystem()
 	{
 		mainMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);

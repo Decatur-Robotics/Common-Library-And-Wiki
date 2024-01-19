@@ -6,7 +6,7 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 public class RotateShooterMountCommand extends Command
 {
 
-	private static double shooterMountSpeed;
+	private double shooterMountSpeed;
 
 	private double shooterMountRotation = 0.0f; // Ranges from 0 to 180
 
