@@ -13,7 +13,7 @@ jobs:
       pr-ID: ${{github.event.pull_request.node_id}}
     steps:
       - uses: monry/actions-get-project-item-id@v2.0.2
-        id: get-item-id
+        id: get-project-item-id
         with:
          github-token: ${{ secrets.WORKFLOWSAUTH }}
          project-id: 'PVT_kwDOAJ9aT84AaUJq'
@@ -26,7 +26,7 @@ jobs:
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{ steps.get-item-id.outputs.project-item-id }}
+          item-id: ${{ steps.get-project-item-id.outputs.project-item-id }}
           status: "Awaiting Review"
 
 
