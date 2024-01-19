@@ -1,0 +1,34 @@
+#Node id of project: "PVT_kwDOAJ9aT84AaUJq"
+
+name: Update Pull Request Status to "Awaiting Review"
+
+on: pull_request
+  types: [review_requested]
+
+jobs: 
+  update-status-to-review:
+  runs-on: ubuntu-latest
+  env:
+    pr-ID: ${{github.event.pull_request.node_id}}
+  steps:
+    - uses: monry/actions-get-project-item-id@v2.0.2
+      id: get-item-id
+      with:
+       github-token: ${{ secrets.WORKFLOWSAUTH }}
+       project-id: 'PVT_kwDOAJ9aT84AaUJq'
+       issue-id: ${{ env.pr-ID }}
+      
+
+  
+
+    - uses: kalgurn/update-project-item-status@v0.0.1
+      with:
+        project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
+        github-token: ${{ secrets.WORKFLOWSAUTH }}
+        item-id: ${{ steps.get-item-id.outputs.project-item-id }}
+        status: "Awaiting Review"
+
+
+
+
+
