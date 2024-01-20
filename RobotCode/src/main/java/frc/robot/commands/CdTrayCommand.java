@@ -8,11 +8,11 @@ import frc.robot.subsystems.CdTraySubsystem;
 
 public class CdTrayCommand extends Command
 {
-	CdTraySubsystem CdTray;
+	final private CdTraySubsystem CdTray;
 
 	Value cdMode;
 	LocalTime startTime;
-	long timeToWait = 100000000;
+	long timeToWait = 100 * 1000000;
 
 	public boolean open = false;
 
@@ -34,7 +34,6 @@ public class CdTrayCommand extends Command
 
 	public void execute()
 	{
-		System.out.println("Executing CdTrayCommand...");
 
 		CdTray.open = open;
 

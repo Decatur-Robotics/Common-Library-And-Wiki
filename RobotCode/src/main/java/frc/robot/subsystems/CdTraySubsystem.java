@@ -13,14 +13,11 @@ public class CdTraySubsystem extends SubsystemBase
 	// guys i think i'm starting to get the hang of thi- oh nevermind
 	private Compressor mainCompressor;
 
-	public DoubleSolenoid cdArmLeft;
-
-	private DoubleSolenoid cdArmRight;
+	private DoubleSolenoid cdArmLeft, cdArmRight;
 
 	public TeamSparkMAX intakeMotor;
 
-	public boolean open;
-	boolean closed;
+	public boolean closed;
 
 	public CdTraySubsystem()
 	{
@@ -30,15 +27,14 @@ public class CdTraySubsystem extends SubsystemBase
 
 		mainCompressor.enableDigital();
 
-		// koff koff (wow i'm so funny)
 		cdArmLeft.set(Value.kOff);
 		cdArmRight.set(Value.kOff);
-
+		// koff koff (comedy)
 	}
 
-	public void periodic()
+	public boolean getClosed()
 	{
-		closed = cdArmLeft.get() == Value.kForward && cdArmRight.get() == Value.kForward;
+		return cdArmLeft.get() == Value.kForward && cdArmRight.get() == Value.kForward;
 	}
 
 	public void setSolenoid(Value mode)
