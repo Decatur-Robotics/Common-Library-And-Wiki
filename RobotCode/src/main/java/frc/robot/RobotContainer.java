@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer
 {
 	private Joystick primaryController, secondaryController;
-	private ShooterSubsystem shooting;
+	private final ShooterSubsystem ShooterSubsystem;
 	private static RobotContainer instance;
 
 	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");
@@ -40,7 +40,7 @@ public class RobotContainer
 	public RobotContainer()
 	{
 		instance = this;
-		shooting = new ShooterSubsystem();
+		ShooterSubsystem = new ShooterSubsystem();
 
 		addAutonomousOptions();
 		registerNamedCommands();
@@ -67,7 +67,7 @@ public class RobotContainer
 		JoystickButton rightTrigger = new JoystickButton(secondaryController,
 				LogitechControllerButtons.triggerRight);
 
-		rightTrigger.whileTrue(new ShooterCommand(shooting));
+		rightTrigger.whileTrue(new ShooterCommand(ShooterSubsystem));
 	}
 
 	// Add autonomous options to the SendableChooser
@@ -75,6 +75,7 @@ public class RobotContainer
 	{
 		
 		ShuffleboardTab.add("Auto Chooser", autoChooser);
+		autoChooser = AutoBuilder.buildAutoChooser();
 	}
 
 	public Command getAutonomousCommand()
