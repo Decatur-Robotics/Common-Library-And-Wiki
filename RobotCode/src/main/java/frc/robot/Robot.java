@@ -10,13 +10,18 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.core.TeamSubsystemBase;
+import frc.lib.core.util.CTREConfigs;
 
 public class Robot extends TimedRobot
 {
+
+	private static Robot instance;
+
 	private Command autonomousCommand;
 	private RobotContainer robotContainer;
+	private CTREConfigs ctreConfigs;
 
-	private static List<TeamSubsystemBase> subsystems = new ArrayList<>();
+	private List<TeamSubsystemBase> subsystems = new ArrayList<>();
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
@@ -25,10 +30,15 @@ public class Robot extends TimedRobot
 	@Override
 	public void robotInit()
 	{
+		if(instance != null)
+			System.err.println("WARNING: Robot instance already exists!");
+		instance = this;
+
+		ctreConfigs = new CTREConfigs();
+
 		// Instantiate our RobotContainer. This will perform all our button bindings,
 		// and put our
 		// autonomous chooser on the dashboard.
-
 		robotContainer = new RobotContainer();
 	}
 
@@ -142,6 +152,11 @@ public class Robot extends TimedRobot
 
 	public static void addSubsystem(TeamSubsystemBase subsystem)
 	{
-		subsystems.add(subsystem);
+		instance.subsystems.add(subsystem);
+	}
+
+	public static CTREConfigs getCtreConfigs()
+	{
+		return instance.ctreConfigs;
 	}
 }
