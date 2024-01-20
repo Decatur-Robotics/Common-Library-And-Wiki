@@ -7,8 +7,6 @@ on:
   pull_request:
     types: [review_requested]
 
-env:
-  GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
 jobs: 
   update-status-to-review:
@@ -18,22 +16,24 @@ jobs:
       - name: Get Project ID of PR
         env:
           PR_ID: ${{ github.event.pull_request.node_id }}
-          
+          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
+
 
 
         run: |
-          pr_project_id="$( gh api graphql -f query='
+          pr_project_id="$( gh api graphql -f prID=$PR_ID -f query='
           query($prID: ID!) {
             node(id: $prID) {
               ...on PullRequest {
-                projectItems(first: 5) {
+                projectItems(first: 1) {
                   nodes {
                     id
                   }
                 }
               }
-            }' -f prID=$PR_ID --jq '.data.node.closingIssuesReferences.nodes[0].projectItems.nodes[0].id' )"
-            echo "PR_PROJECT_ID=$pr_project_id" >> $GITHUB_ENV
+            }' > project_data.json
+             )"
+            echo 'PR_PROJECT_ID=$pr_project_id'
 
 
 
@@ -50,10 +50,11 @@ jobs:
   
 
       - uses: kalgurn/update-project-item-status@v0.0.1
+        
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{ env.pr_project_id }}
+          item-id: ${{ env.PR_PROJECT_ID }}
           status: "Awaiting Review"
 
 
