@@ -73,9 +73,9 @@ public class RobotContainer
 	// Add autonomous options to the SendableChooser
 	private void addAutonomousOptions()
 	{
-		
-		ShuffleboardTab.add("Auto Chooser", autoChooser);
 		autoChooser = AutoBuilder.buildAutoChooser();
+		ShuffleboardTab.add("Auto Chooser", autoChooser);
+		
 	}
 
 	public Command getAutonomousCommand()

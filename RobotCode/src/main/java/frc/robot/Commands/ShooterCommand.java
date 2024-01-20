@@ -5,7 +5,7 @@ import frc.robot.Subsystems.ShooterSubsystem;
 
 public class ShooterCommand extends CommandBase
 {
-	// makes the subsystem object
+	// Initializes the subsystem object
 	private final ShooterSubsystem Shooter;
 
 	public ShooterCommand(ShooterSubsystem shoot)
@@ -14,13 +14,13 @@ public class ShooterCommand extends CommandBase
 		Shooter = shoot;
 		addRequirements(Shooter);
 	}
-	// execute command
+	
 	public void execute()
 	{
 		
-		// spins up the motor
+		// Spins up the motor
 		Shooter.setShooterMotorPower(1.0, "joystick said to shoot");
-		// if statement  to see if motor is spun up
+		// If-statement  to see if motor is spun up
 		if (Shooter.getShooterMotorPower() >= 0.95)
 		{
 			Shooter.setFeedMotorPower(1.0, "motor is spun");
@@ -30,7 +30,7 @@ public class ShooterCommand extends CommandBase
 			Shooter.setFeedMotorPower(0, "motor is not spun");
 		}
 	}
-	// the end command
+	
 	public void end(boolean interrupted)
 	{
 		Shooter.setShooterMotorPower(0.25, "command is over");
