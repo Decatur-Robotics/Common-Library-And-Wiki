@@ -14,7 +14,7 @@ public class RobotContainer
 
 	private static RobotContainer instance;
 
-	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");
+	private final ShuffleboardTab ShuffleboardTab;
 
 	private SendableChooser<Command> autoChooser;
 
@@ -22,6 +22,8 @@ public class RobotContainer
 	public RobotContainer()
 	{
 		instance = this;
+
+		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
 		// Autonomous set up
 		registerNamedCommands();
@@ -78,7 +80,7 @@ public class RobotContainer
 		return autoChooser.getSelected();
 	}
 
-	public static ShuffleboardTab getShuffleboard()
+	public static ShuffleboardTab getShuffleboardTab()
 	{
 		return instance.ShuffleboardTab;
 	}
