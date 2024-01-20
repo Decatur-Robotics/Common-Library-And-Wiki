@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.core.LogitechControllerButtons;
 
 public class RobotContainer
 {
@@ -32,8 +33,9 @@ public class RobotContainer
 
 	private void configurePrimaryBindings()
 	{
-		Joystick primaryController;
+		Joystick primaryController = new Joystick(0);
 		JoystickButton primaryTrigger;
+		JoystickButton a = new JoystickButton(primaryController, LogitechControllerButtons.a);
 	}
 
 	private void configureSecondaryBindings()

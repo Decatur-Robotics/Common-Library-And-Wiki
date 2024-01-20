@@ -11,11 +11,11 @@ import frc.lib.modules.leds.commands.FlashLightsCommand;
 
 public class FlashLightsOffCommand
 {
-	private LedSubsystem ledSubsystem;
+	private LedSubsystem led;
 
 	public FlashLightsOffCommand(LedSubsystem ledSubsystem)
 	{
-		this.ledSubsystem = ledSubsystem;
+		this.led = ledSubsystem;
 	}
 
 	public void execute()
@@ -25,7 +25,7 @@ public class FlashLightsOffCommand
 		if (FlashLightsCommand.progress <= 0)
 			return;
 		FlashLightsCommand.progress -= 0.02;
-		ledSubsystem.setAllPixels(
+		led.setAllPixels(
 				LedSubsystem.calcBlending(0, 0, 255, 0, 0, 0, FlashLightsCommand.progress));
 
 		// If NOTE = false
@@ -33,14 +33,14 @@ public class FlashLightsOffCommand
 		if (FlashLightsCommand.progress <= 0)
 			return;
 		FlashLightsCommand.progress -= 0.02;
-		ledSubsystem.setAllPixels(
+		led.setAllPixels(
 				LedSubsystem.calcBlending(255, 255, 0, 0, 0, 0, FlashLightsCommand.progress));
 
 		// If signal button is pressed
 		if (FlashLightsCommand.progress <= 0)
 			return;
 		FlashLightsCommand.progress -= 0.02;
-		ledSubsystem.setAllPixels(
+		led.setAllPixels(
 				LedSubsystem.calcBlending(255, 0, 0, 0, 0, 0, FlashLightsCommand.progress));
 
 	}
