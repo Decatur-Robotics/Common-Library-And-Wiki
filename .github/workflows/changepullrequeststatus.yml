@@ -14,6 +14,7 @@ jobs:
     steps:
 
       - name: Get Project ID of PR
+        id: getID
         env:
           PR_ID: ${{ github.event.pull_request.node_id }}
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
@@ -34,7 +35,7 @@ jobs:
             }
           }'
              )"
-            echo 'PR_PROJECT_ID=$pr_project_id' >> GITHUB.ENV
+            echo 'PR_PROJECT_ID=$pr_project_id' >> GITHUB.OUTPUTS
 
 
 
@@ -55,7 +56,7 @@ jobs:
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{ env.PR_PROJECT_ID }}
+          item-id: ${{ steps.getID.outputs.PR_PROJECT_ID }}
           status: "Awaiting Review"
 
 
