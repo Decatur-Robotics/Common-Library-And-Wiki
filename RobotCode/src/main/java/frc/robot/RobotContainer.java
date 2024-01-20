@@ -6,12 +6,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Joystick;
-
-// import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-// import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
-// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.Commands.ShooterCommand;
 
@@ -19,9 +14,8 @@ import frc.robot.Subsystems.ShooterSubsystem;
 
 public class RobotContainer
 {
-	public static Joystick primaryController;
-	public static Joystick secondaryController;
-	public static ShooterSubsystem shooting;
+	private Joystick primaryController, secondaryController;
+	private ShooterSubsystem shooting;
 	private static RobotContainer instance;
 
 	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");

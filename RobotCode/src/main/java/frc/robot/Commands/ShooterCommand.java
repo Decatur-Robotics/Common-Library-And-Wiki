@@ -6,11 +6,11 @@ import frc.robot.Subsystems.ShooterSubsystem;
 public class ShooterCommand extends CommandBase
 {
 	// makes the subsystem object
-	private ShooterSubsystem shooter;
+	private final ShooterSubsystem shooter;
 
 	public ShooterCommand(ShooterSubsystem shoot)
 	{
-		// constructor i guess
+		
 		shooter = shoot;
 		addRequirements(shooter);
 	}

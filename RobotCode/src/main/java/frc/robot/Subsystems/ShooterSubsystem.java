@@ -12,12 +12,10 @@ import frc.lib.core.motors.TeamSparkMAX;
 public class ShooterSubsystem extends SubsystemBase
 {
 	// creates objects
-	private double shooterMotorPower;
-	private double feederMotorPower;
+	private double shooterMotorPower, feederMotorPower;
 
-	private PIDController shooterPID;
-	private PIDController feederPID;
-	public TeamSparkMAX shooterMotorMain, shooterMotorSub, feederMotorMain, feederMotorSub;
+	private final PIDController shooterPID, feederPID;
+	public final TeamSparkMAX ShooterMotorMain, ShooterMotorSub, FeederMotorMain, FeederMotorSub;
 
 	private static double voltage = 12;
 
@@ -32,31 +30,31 @@ public class ShooterSubsystem extends SubsystemBase
 		feederPID = new PIDController(Constants.FEEDER_KP, Constants.FEEDER_KI,
 				Constants.FEEDER_KD);
 		//initializes motor object
-		shooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_MAIN);
-		shooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_SUB);
-		feederMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.FEEDER_MOTOR_MAIN);
-		feederMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.FEEDER_MOTOR_SUB);
+		ShooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_MAIN);
+		ShooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_SUB);
+		FeederMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.FEEDER_MOTOR_MAIN);
+		FeederMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.FEEDER_MOTOR_SUB);
 		//the code is able to enable the unable to be able voltage compensation
-		shooterMotorMain.enableVoltageCompensation(voltage);
-		shooterMotorSub.enableVoltageCompensation(voltage);
-		feederMotorMain.enableVoltageCompensation(voltage);
-		feederMotorSub.enableVoltageCompensation(voltage);
+		ShooterMotorMain.enableVoltageCompensation(voltage);
+		ShooterMotorSub.enableVoltageCompensation(voltage);
+		FeederMotorMain.enableVoltageCompensation(voltage);
+		FeederMotorSub.enableVoltageCompensation(voltage);
 		//makes sub motors follow main
-		feederMotorSub.follow(feederMotorMain);
-		shooterMotorSub.follow(shooterMotorMain);
+		FeederMotorSub.follow(FeederMotorMain);
+		ShooterMotorSub.follow(ShooterMotorMain);
 		//  inverts the right side
-		shooterMotorSub.setInverted(true);
-		feederMotorSub.setInverted(true);
+		ShooterMotorSub.setInverted(true);
+		FeederMotorSub.setInverted(true);
 		//  sets neutral mode for the motors
-		shooterMotorSub.setIdleMode(IdleMode.kBrake);
-		feederMotorSub.setIdleMode(IdleMode.kBrake);
-		shooterMotorMain.setIdleMode(IdleMode.kBrake);
-		feederMotorMain.setIdleMode(IdleMode.kBrake);
+		ShooterMotorSub.setIdleMode(IdleMode.kBrake);
+		FeederMotorSub.setIdleMode(IdleMode.kBrake);
+		ShooterMotorMain.setIdleMode(IdleMode.kBrake);
+		FeederMotorMain.setIdleMode(IdleMode.kBrake);
 	}
 	//gets the shooter power
 	public double getShooterMotorPower()
 	{
-		return shooterMotorMain.get();
+		return ShooterMotorMain.get();
 	}
 	// sets shooter motor power variable based on mathy stuff owen told me to do
 	public void setShooterMotorPower(double power, String reason)
@@ -72,10 +70,10 @@ public class ShooterSubsystem extends SubsystemBase
 	//continuously updates shooter speed based on the commands above
 	public void periodic()
 	{
-		double newShooterPower = shooterPID.calculate(shooterMotorSub.get(), shooterMotorPower);
-		shooterMotorMain.set(newShooterPower);
+		double newShooterPower = shooterPID.calculate(ShooterMotorSub.get(), shooterMotorPower);
+		ShooterMotorMain.set(newShooterPower);
 
-		double newFeederPower = feederPID.calculate(feederMotorSub.get(), feederMotorPower);
-		feederMotorMain.set(newFeederPower);
+		double newFeederPower = feederPID.calculate(FeederMotorSub.get(), feederMotorPower);
+		FeederMotorMain.set(newFeederPower);
 	}
 }
