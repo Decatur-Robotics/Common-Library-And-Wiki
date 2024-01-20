@@ -31,7 +31,8 @@ jobs:
                   }
                 }
               }
-            }'
+            }
+          }'
              )"
             echo 'PR_PROJECT_ID=$pr_project_id' >> GITHUB.ENV
 
