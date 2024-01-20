@@ -26,6 +26,7 @@
     }
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
+  "java.debug.settings.onBuildFailureProceed": true
   "java.format.settings.url": "https://raw.githubusercontent.com/Decatur-High-GlobalDynamics/Common-Library-And-Wiki/main/.vscode/java-formatter.xml",
   "editor.defaultFormatter": "redhat.java",
   "java.format.settings.profile": "4026Style",
