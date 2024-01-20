@@ -208,6 +208,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		gyroOffset = offset;
 	}
 
+	/** Returns angle around vertical axis */
 	public Rotation2d getYaw()
 	{
 		return (SwerveConstants.INVERT_GYRO)

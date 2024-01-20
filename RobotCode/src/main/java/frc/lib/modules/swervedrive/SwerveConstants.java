@@ -5,6 +5,7 @@
 package frc.lib.modules.swervedrive;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -219,6 +220,9 @@ public final class SwerveConstants
 		/* Constraint for the motion profilied robot angle controller */
 		public static final TrapezoidProfile.Constraints ThetaControllerConstraints = new TrapezoidProfile.Constraints(
 				MAX_ANGULAR_SPEED, MAX_ANGULAR_ACCELERATION);
+
+		public static final PathConstraints PathConstraints = new PathConstraints(MAX_SPEED,
+				MAX_ACCELERATION, MAX_ANGULAR_SPEED, MAX_ANGULAR_ACCELERATION);
 	}
 
 }
