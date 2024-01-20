@@ -16,7 +16,7 @@ public class RobotContainer
 
 	private final ShuffleboardTab ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
-	private SendableChooser<Command> autoChooser = new SendableChooser<>();
+	private SendableChooser<Command> autoChooser;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
