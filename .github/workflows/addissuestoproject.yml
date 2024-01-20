@@ -1,7 +1,10 @@
-name: Add Issues to TODO list
+name: Add Issues/PRs to TODO list
 
 on: 
   issues:
+    types:
+      - opened
+  pull_request:
     types:
       - opened
 
