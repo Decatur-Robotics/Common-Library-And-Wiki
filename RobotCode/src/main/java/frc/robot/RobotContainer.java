@@ -1,10 +1,9 @@
 package frc.robot;
 
-
-import edu.wpi.first.wpilibj.Joystick;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.wpilibj.Joystick;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -13,22 +12,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.lib.modules.swervedrive.SwerveConstants;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
-import frc.robot.Commands.ShooterCommand;
+import frc.robot.commands.ShooterCommand;
 
-import frc.robot.Subsystems.ShooterSubsystem;
-
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.RotateShooterMountCommand;
-import frc.robot.subsystems.ShooterMountSubsystem;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer
 {
@@ -83,7 +71,7 @@ public class RobotContainer
 	{
 		autoChooser = AutoBuilder.buildAutoChooser();
 		ShuffleboardTab.add("Auto Chooser", autoChooser);
-		
+
 	}
 
 	/**
@@ -116,8 +104,4 @@ public class RobotContainer
 
 }
 
-
-
-
-	/** The container for the robot. Contains subsystems, OI devices, and commands. */
-	
+/** The container for the robot. Contains subsystems, OI devices, and commands. */

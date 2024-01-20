@@ -1,7 +1,7 @@
-package frc.robot.Commands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterCommand extends CommandBase
 {
@@ -10,17 +10,17 @@ public class ShooterCommand extends CommandBase
 
 	public ShooterCommand(ShooterSubsystem shoot)
 	{
-		
+
 		Shooter = shoot;
 		addRequirements(Shooter);
 	}
-	
+
 	public void execute()
 	{
-		
+
 		// Spins up the motor
 		Shooter.setShooterMotorPower(1.0, "joystick said to shoot");
-		// If-statement  to see if motor is spun up
+		// If-statement to see if motor is spun up
 		if (Shooter.getShooterMotorPower() >= 0.95)
 		{
 			Shooter.setFeedMotorPower(1.0, "motor is spun");
@@ -30,7 +30,7 @@ public class ShooterCommand extends CommandBase
 			Shooter.setFeedMotorPower(0, "motor is not spun");
 		}
 	}
-	
+
 	public void end(boolean interrupted)
 	{
 		Shooter.setShooterMotorPower(0.25, "command is over");
