@@ -23,6 +23,7 @@ public class RobotContainer
 	{
 		instance = this;
 
+		// Autonomous set up
 		registerNamedCommands();
 		addAutonomousOptions();
 
@@ -31,9 +32,10 @@ public class RobotContainer
 		configureSecondaryBindings();
 	}
 
+	/** Registers any commands we want to use in PathPlanner */
 	private void registerNamedCommands()
 	{
-
+		// Ex: NamedCommands.registerCommand("commandName", command);
 	}
 
 	private void configurePrimaryBindings()
@@ -46,7 +48,7 @@ public class RobotContainer
 
 	}
 
-	// Add autonomous options to the SendableChooser
+	/** Adds autonomous options to the SendableChooser */
 	private void addAutonomousOptions()
 	{
 		autoChooser = AutoBuilder.buildAutoChooser();
@@ -67,6 +69,10 @@ public class RobotContainer
 				SwerveConstants.AutoConstants.PathConstraints);
 	}
 
+	/**
+	 * @return The command that will be run as the autonomous. Will return whatever is selected in
+	 *         the autochooser on Shuffleboard
+	 */
 	public Command getAutonomousCommand()
 	{
 		return autoChooser.getSelected();
