@@ -33,9 +33,9 @@ jobs:
                 }
               }
             }
-          }'
-             )"
-            echo 'PR_PROJECT_ID=$pr_project_id' >> GITHUB.OUTPUTS
+          }' --jq '.data.addProjectV2ItemById.item.id')"
+          
+            echo 'ITEM_ID='$pr_project_id >> GITHUB.ENV
 
 
 
@@ -56,7 +56,7 @@ jobs:
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{ steps.getID.outputs.PR_PROJECT_ID }}
+          item-id: ${{ env.ITEM_ID }}
           status: "Awaiting Review"
 
 
