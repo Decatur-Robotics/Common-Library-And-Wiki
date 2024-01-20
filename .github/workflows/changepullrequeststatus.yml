@@ -1,5 +1,5 @@
 #Node id of project: "PVT_kwDOAJ9aT84AaUJq"
-#test issue: 'PR_kwDOLB2J4c5kmPKe'
+#test pr node id: 'PR_kwDOLB2J4c5kmPKe'
 
 name: Update Pull Request Status to "Awaiting Review"
 
@@ -7,18 +7,44 @@ on:
   pull_request:
     types: [review_requested]
 
+env:
+  GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
+
 jobs: 
   update-status-to-review:
     runs-on: ubuntu-latest
     steps:
-      - uses: monry/actions-get-project-item-id@v2.0.2
-        id: get-project-item-id
-        with:
-         github-token: ${{ secrets.WORKFLOWSAUTH }}
-         project-id: 'PVT_kwDOAJ9aT84AaUJq'
-         issue-id: ${{github.event.pull_request.node_id}}
-      - run: |
-          echo '${{ steps.get-project-item-id.outputs.project-item-id }}' >> $GITHUB_OUTPUT
+
+      - name: Get Project ID of PR
+        env:
+          PR_ID: ${{ github.event.pull_request.node_id }}
+          
+
+
+        run: |
+          pr_project_id="$( gh api graphql -f query='
+          query($prID: ID!) {
+            node(id: $prID) {
+              ...on PullRequest {
+                projectItems(first: 5) {
+                  nodes {
+                    id
+                  }
+                }
+              }
+            }' -f prID=$PR_ID --jq '.data.node.closingIssuesReferences.nodes[0].projectItems.nodes[0].id' )"
+            echo "PR_PROJECT_ID=$pr_project_id" >> $GITHUB_ENV
+
+
+
+      # - uses: monry/actions-get-project-item-id@v2.0.2
+      #   id: get-project-item-id
+      #   with:
+      #    github-token: ${{ secrets.WORKFLOWSAUTH }}
+      #    project-id: 'PVT_kwDOAJ9aT84AaUJq'
+      #    issue-id: ${{github.event.pull_request.node_id}}
+      # - run: |
+      #     echo '${{ steps.get-project-item-id.outputs.project-item-id }}' >> $GITHUB_OUTPUT
       
 
   
@@ -27,7 +53,7 @@ jobs:
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{steps.get-project-item-id.outputs.project-item-id}}
+          item-id: ${{ env.pr_project_id }}
           status: "Awaiting Review"
 
 
