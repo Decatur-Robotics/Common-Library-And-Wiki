@@ -17,6 +17,8 @@ jobs:
          github-token: ${{ secrets.WORKFLOWSAUTH }}
          project-id: 'PVT_kwDOAJ9aT84AaUJq'
          issue-id: ${{github.event.pull_request.node_id}}
+      - run: |
+          echo '${{ steps.get-project-item-id.outputs.project-item-id }}' >> $GITHUB_OUTPUT
       
 
   
@@ -25,7 +27,7 @@ jobs:
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: '${{steps.get-project-item-id.outputs.project-item-id}}'
+          item-id: ${{steps.get-project-item-id.outputs.project-item-id}}
           status: "Awaiting Review"
 
 
