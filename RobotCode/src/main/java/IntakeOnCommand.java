@@ -10,13 +10,13 @@ public class IntakeOnCommand extends Command
             JoystickButton IntakeOnButton)
     {
         this.intake = intake;
-        this.spinIntakeButton = spinIntakeButton;
+        this.IntakeOnButton = IntakeOnButton;
     }
 
     @Override
     public void execute()
     {
-        if (spinIntakeButton.getAsBoolean())
+        if (IntakeOnButton.getAsBoolean())
             intake.toggleIntakeOn();
     }
 
