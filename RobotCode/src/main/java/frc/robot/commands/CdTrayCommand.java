@@ -14,14 +14,14 @@ public class CdTrayCommand extends Command
 	LocalTime startTime;
 	long timeToWait = 100 * 1000000;
 
-	public boolean open = false;
+	public boolean closed = false;
 
-	public CdTrayCommand(Value clawMode, CdTraySubsystem CdTray, boolean open)
-	{
+	public CdTrayCommand(Value clawMode, CdTraySubsystem CdTray, boolean closed)
+	
 		System.out.println("Constructing CdTrayCommand...");
 		this.CdTray = CdTray;
 		this.cdMode = cdMode;
-		this.open = open;
+		this.closed = true;
 		addRequirements(CdTray);
 	}
 
@@ -35,7 +35,7 @@ public class CdTrayCommand extends Command
 	public void execute()
 	{
 
-		CdTray.open = open;
+		CdTray.closed = true;
 
 		if (CdTray.cdArmLeft.get() == Value.kOff && startTime == null)
 		{
