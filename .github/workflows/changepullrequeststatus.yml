@@ -46,7 +46,8 @@ jobs:
 
 
       - name: Update status to "Awaiting Review"
-        
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
         run: |
           gh api graphql -f query='
             mutation($itemID: ID!) {
