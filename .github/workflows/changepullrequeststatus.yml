@@ -50,14 +50,14 @@ jobs:
       - name: Update status to "Awaiting Review"
         env:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
-          PR_PROJECT_ID: ${{ env.ITEM_ID }}
+          PR_PROJECT_ID: "${{ env.ITEM_ID }}"
         run: |
-          gh api graphql -f itemID=$PR_PROJECT_ID -f query='
-            mutation($itemID: ID!) {
+          gh api graphql -f pr_id=$PR_PROJECT_ID -f query='
+            mutation($pr_id: ID!) {
               updateProjectV2ItemFieldValue(
                 input: {
                   projectId: "PVT_kwDOAJ9aT84AaUJq"
-                  itemId: $itemID
+                  itemId: $pr_id
                   fieldId: "PVTSSF_lADOAJ9aT84AaUJqzgQ3tZU"
                   value: {
                     singleSelectOptionId: "PVTFSV_lQDOAJ9aT84AaUJqzgMET8fOCISe0A"
