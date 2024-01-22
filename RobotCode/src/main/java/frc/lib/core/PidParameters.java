@@ -15,7 +15,7 @@ public class PidParameters
 	private double lastTelemetryUpdate;
 
 	// The k prefix is Hungarian Notation and doesn't match our code standards, but I don't feel
-	// like fixing it rn -Renato
+	// like fixing it rn -Renato (Jan 2024)
 	private double kP, kI, kD, kF;
 
 	private final double KI_ZONE;
