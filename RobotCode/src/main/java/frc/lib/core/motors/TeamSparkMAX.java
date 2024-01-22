@@ -19,7 +19,7 @@ public class TeamSparkMAX extends CANSparkMax
   private static final double TELEMETRY_UPDATE_INTERVAL_SECS = 0.0;
   private double lastTelemetryUpdate = 0;
 
-  private final String smartDashboardPrefix;
+  private final String SmartDashboardPrefix;
 
   private double maxSpeed = Double.MAX_VALUE;
 
@@ -31,13 +31,13 @@ public class TeamSparkMAX extends CANSparkMax
 
   private final PidParameters PidProfiles[];
 
-  private CANSparkMax.ControlType ctrlType = null;
+  private CANSparkMax.ControlType ctrlType;
 
   public TeamSparkMAX(String smartDashboardPrefix, int deviceID)
   {
     super(deviceID, MotorType.kBrushless); // Neos are brushless
 
-    this.smartDashboardPrefix = smartDashboardPrefix;
+    this.SmartDashboardPrefix = smartDashboardPrefix;
 
     PidProfiles = new PidParameters[4];
     CanPidController = getPIDController();
@@ -48,7 +48,7 @@ public class TeamSparkMAX extends CANSparkMax
 
   public String getSmartDashboardPrefix()
   {
-    return smartDashboardPrefix;
+    return SmartDashboardPrefix;
   }
 
   @Override
@@ -64,17 +64,7 @@ public class TeamSparkMAX extends CANSparkMax
 
     // Are all possible values. If one of these are not part of PID, add case for them and return
     // false.
-    if (mode == null)
-    {
-      return true;
-    }
-    switch (mode)
-    {
-    case kCurrent:
-      return false;
-    default:
-      return true;
-    }
+    return mode != CANSparkMax.ControlType.kCurrent;
   }
 
   public double getCurrentEncoderValue()
@@ -89,7 +79,8 @@ public class TeamSparkMAX extends CANSparkMax
   }
 
   public boolean isRunningPidControlMode()
-  { // Dunno if this is safe, but its the easiest way to get around
+  {
+    // Dunno if this is safe, but its the easiest way to get around
     // problems with the PidParameters.
     return isPidControlMode(ctrlType);
   }
@@ -154,6 +145,7 @@ public class TeamSparkMAX extends CANSparkMax
         pidSlotIndex);
   }
 
+  /** @param reason Unused for now */
   public void set(double power, String reason)
   {
     super.set(power);

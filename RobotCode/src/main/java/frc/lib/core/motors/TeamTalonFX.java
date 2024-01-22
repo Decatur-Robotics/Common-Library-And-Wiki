@@ -10,9 +10,9 @@ import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
 
 /**
- * A wrapper class for Motors that helps to consistently and easily perform the following functions:
- * -Keep current and max speeds -Get and Reset encoder values -Lots and lots of SmartDashboard
- * information
+ * Used for everything that isn't a NEO. A wrapper class for motors that helps to consistently and
+ * easily perform the following functions: 1. Keep current and max speeds. 2. Get and reset encoder
+ * values. 3. Lots and lots of SmartDashboard information
  */
 public class TeamTalonFX extends WPI_TalonFX
 {
@@ -32,9 +32,7 @@ public class TeamTalonFX extends WPI_TalonFX
     switch (mode)
     {
     case Current:
-      return false;
     case Disabled:
-      return false;
     case Follower:
       return false;
     default:
@@ -83,6 +81,7 @@ public class TeamTalonFX extends WPI_TalonFX
     return isPidControlMode(getControlMode());
   }
 
+  /** @param reason Unused for now */
   public void set(double power, String reason)
   {
     super.set(power);
@@ -124,10 +123,12 @@ public class TeamTalonFX extends WPI_TalonFX
     return pidProfiles;
   }
 
-  // Public wrapper for protected method (which aren't allowed in interfaces)
-  // Use this for configurations which can be shared between SRX and FX
-  // Otherwise down cast and use configAllSettings(TalonFXConfiguration allConfigs)
-  // if using config settings only available for TalonFX
+  /**
+   * Public wrapper for protected method (which aren't allowed in interfaces) // Use this for
+   * configurations which can be shared between SRX and FX // Otherwise down cast and use
+   * configAllSettings(TalonFXConfiguration allConfigs) // if using config settings only available
+   * for TalonFX
+   */
   public ErrorCode configBaseAllSettings(BaseTalonConfiguration allConfigs)
   {
     return configAllSettings(allConfigs);
@@ -139,6 +140,7 @@ public class TeamTalonFX extends WPI_TalonFX
     {
       return 0;
     }
+
     double currentSpeed = getSelectedSensorVelocity(0);
     return (getClosedLoopTarget(0) - currentSpeed);
   }
