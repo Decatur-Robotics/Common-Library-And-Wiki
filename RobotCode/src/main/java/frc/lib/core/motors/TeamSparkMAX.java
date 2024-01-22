@@ -1,14 +1,12 @@
 package frc.lib.core.motors;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+
 import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
-
-import com.revrobotics.CANSparkMax;
-
-import com.revrobotics.RelativeEncoder;
-
-import com.revrobotics.REVLibError;
-import com.revrobotics.SparkPIDController;
 
 /**
  * Used for NEOs. Provides support for PID control and an encoder.
@@ -33,7 +31,7 @@ public class TeamSparkMAX extends CANSparkMax
 
   private CANSparkMax.ControlType ctrlType;
 
-  public TeamSparkMAX(String smartDashboardPrefix, int deviceID)
+  public TeamSparkMAX(final String smartDashboardPrefix, final int deviceID)
   {
     super(deviceID, MotorType.kBrushless); // Neos are brushless
 
@@ -57,7 +55,7 @@ public class TeamSparkMAX extends CANSparkMax
     return CanPidController;
   }
 
-  private static boolean isPidControlMode(CANSparkMax.ControlType mode)
+  private static boolean isPidControlMode(final CANSparkMax.ControlType mode)
   {
 
     // kDutyCycle, kVelocity, kVoltage, kPosition, kSmartMotion, kCurrent, kSmartVelocity
@@ -87,7 +85,7 @@ public class TeamSparkMAX extends CANSparkMax
 
   public void periodic()
   {
-    double now = TeamUtils.getCurrentTime();
+    final double now = TeamUtils.getCurrentTime();
 
     if ((now - lastTelemetryUpdate) < TELEMETRY_UPDATE_INTERVAL_SECS)
     {
@@ -96,7 +94,7 @@ public class TeamSparkMAX extends CANSparkMax
 
     lastTelemetryUpdate = now;
 
-    double currentSpeed = CanEncoder.getVelocity();
+    final double currentSpeed = CanEncoder.getVelocity();
 
     if (maxSpeed == Double.MAX_VALUE || currentSpeed > maxSpeed)
       maxSpeed = currentSpeed;
@@ -107,41 +105,42 @@ public class TeamSparkMAX extends CANSparkMax
     return this.smartMotionLoopTarget;
   }
 
-  public double setClosedLoopTarget(double value)
+  public double setClosedLoopTarget(final double value)
   {
     this.smartMotionLoopTarget = value;
     return this.smartMotionLoopTarget;
   }
 
-  public REVLibError setSmartMotionVelocity(double speed, String reason)
+  public REVLibError setSmartMotionVelocity(final double speed, final String reason)
   {
     setClosedLoopTarget(speed);
     ctrlType = CANSparkMax.ControlType.kSmartVelocity;
-    REVLibError errors = this.CanPidController.setReference(Math.abs(speed),
+    final REVLibError errors = this.CanPidController.setReference(Math.abs(speed),
         CANSparkMax.ControlType.kSmartVelocity);
     return errors;
   }
 
   public double getVelocityError()
   {
-    double currentSpeed = CanEncoder.getVelocity();
+    final double currentSpeed = CanEncoder.getVelocity();
     return getClosedLoopTarget() - currentSpeed;
   }
 
-  public void configureWithPidParameters(PidParameters pidParameters, int pidSlotIndex)
+  public void configureWithPidParameters(final PidParameters pidParameters, final int pidSlotIndex)
   {
     PidProfiles[pidSlotIndex] = pidParameters;
 
-    CanPidController.setFF(pidParameters.kF, pidSlotIndex); // Feed-forward
-    CanPidController.setP(pidParameters.kP, pidSlotIndex);
-    CanPidController.setI(pidParameters.kI, pidSlotIndex);
-    CanPidController.setD(pidParameters.kD, pidSlotIndex);
-    CanPidController.setOutputRange(-pidParameters.kPeakOutput, pidParameters.kPeakOutput);
+    CanPidController.setFF(pidParameters.getKF(), pidSlotIndex); // Feed-forward
+    CanPidController.setP(pidParameters.getKP(), pidSlotIndex);
+    CanPidController.setI(pidParameters.getKI(), pidSlotIndex);
+    CanPidController.setD(pidParameters.getKD(), pidSlotIndex);
+    CanPidController.setOutputRange(-pidParameters.getKPeakOutput(),
+        pidParameters.getKPeakOutput());
 
-    CanPidController.setSmartMotionMaxVelocity(pidParameters.maxVel, pidSlotIndex);
+    CanPidController.setSmartMotionMaxVelocity(pidParameters.getMaxVel(), pidSlotIndex);
     CanPidController.setSmartMotionMinOutputVelocity(0, pidSlotIndex);
-    CanPidController.setSmartMotionMaxAccel(pidParameters.maxAcc, pidSlotIndex);
-    CanPidController.setSmartMotionAllowedClosedLoopError(pidParameters.errorTolerance,
+    CanPidController.setSmartMotionMaxAccel(pidParameters.getMaxAcc(), pidSlotIndex);
+    CanPidController.setSmartMotionAllowedClosedLoopError(pidParameters.getErrorTolerance(),
         pidSlotIndex);
   }
 
@@ -150,7 +149,7 @@ public class TeamSparkMAX extends CANSparkMax
    * @param reason Unused for now
    * @see #set(double)
    */
-  public void set(double power, String reason)
+  public void set(final double power, final String reason)
   {
     super.set(power);
   }

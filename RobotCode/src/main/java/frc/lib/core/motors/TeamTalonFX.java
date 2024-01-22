@@ -25,9 +25,9 @@ public class TeamTalonFX extends WPI_TalonFX
 
   private double maxSpeed = Double.MAX_VALUE;
 
-  private PidParameters[] pidProfiles;
+  private final PidParameters[] pidProfiles;
 
-  public static boolean isPidControlMode(ControlMode mode)
+  public static boolean isPidControlMode(final ControlMode mode)
   {
     switch (mode)
     {
@@ -40,7 +40,7 @@ public class TeamTalonFX extends WPI_TalonFX
     }
   }
 
-  public TeamTalonFX(String smartDashboardPrefix, int deviceNumber)
+  public TeamTalonFX(final String smartDashboardPrefix, final int deviceNumber)
   {
     super(deviceNumber);
     this.smartDashboardPrefix = smartDashboardPrefix;
@@ -55,7 +55,7 @@ public class TeamTalonFX extends WPI_TalonFX
 
   public void periodic()
   {
-    double now = TeamUtils.getCurrentTime();
+    final double now = TeamUtils.getCurrentTime();
 
     if ((now - getLastTelemetryUpdate()) < telemetryUpdateInterval_secs)
     {
@@ -64,7 +64,7 @@ public class TeamTalonFX extends WPI_TalonFX
 
     setLastTelemetryUpdate(now);
 
-    double currentSpeed = getSelectedSensorVelocity(0);
+    final double currentSpeed = getSelectedSensorVelocity(0);
 
     if (getMaxSpeed() == Double.MAX_VALUE || currentSpeed > getMaxSpeed())
       setMaxSpeed(currentSpeed);
@@ -86,7 +86,7 @@ public class TeamTalonFX extends WPI_TalonFX
    * @param reason Unused for now
    * @see #set(double)
    */
-  public void set(double power, String reason)
+  public void set(final double power, final String reason)
   {
     super.set(power);
     // Logs.info("Set power to " + power + " REASON: " + reason);
@@ -102,7 +102,7 @@ public class TeamTalonFX extends WPI_TalonFX
     return lastTelemetryUpdate;
   }
 
-  public void setLastTelemetryUpdate(double val)
+  public void setLastTelemetryUpdate(final double val)
   {
     lastTelemetryUpdate = val;
   }
@@ -117,7 +117,7 @@ public class TeamTalonFX extends WPI_TalonFX
     return maxSpeed;
   }
 
-  public void setMaxSpeed(double val)
+  public void setMaxSpeed(final double val)
   {
     maxSpeed = val;
   }
@@ -133,7 +133,7 @@ public class TeamTalonFX extends WPI_TalonFX
    * configAllSettings(TalonFXConfiguration allConfigs) // if using config settings only available
    * for TalonFX
    */
-  public ErrorCode configBaseAllSettings(BaseTalonConfiguration allConfigs)
+  public ErrorCode configBaseAllSettings(final BaseTalonConfiguration allConfigs)
   {
     return configAllSettings(allConfigs);
   }
@@ -145,20 +145,20 @@ public class TeamTalonFX extends WPI_TalonFX
       return 0;
     }
 
-    double currentSpeed = getSelectedSensorVelocity(0);
+    final double currentSpeed = getSelectedSensorVelocity(0);
     return (getClosedLoopTarget(0) - currentSpeed);
   }
 
-  public void configureWithPidParameters(PidParameters pidParameters, int pidSlotIndex)
+  public void configureWithPidParameters(final PidParameters pidParameters, final int pidSlotIndex)
   {
     getPidProfiles()[pidSlotIndex] = pidParameters;
 
-    config_kF(pidSlotIndex, pidParameters.kF, 30);
-    config_kP(pidSlotIndex, pidParameters.kP, 30);
-    config_kI(pidSlotIndex, pidParameters.kI, 30);
-    config_kD(pidSlotIndex, pidParameters.kD, 30);
-    configPeakOutputForward(pidParameters.kPeakOutput, 30);
-    configPeakOutputReverse(-pidParameters.kPeakOutput, 30);
-    configAllowableClosedloopError(pidSlotIndex, pidParameters.errorTolerance, 30);
+    config_kF(pidSlotIndex, pidParameters.getKF(), 30);
+    config_kP(pidSlotIndex, pidParameters.getKP(), 30);
+    config_kI(pidSlotIndex, pidParameters.getKI(), 30);
+    config_kD(pidSlotIndex, pidParameters.getKD(), 30);
+    configPeakOutputForward(pidParameters.getKPeakOutput(), 30);
+    configPeakOutputReverse(-pidParameters.getKPeakOutput(), 30);
+    configAllowableClosedloopError(pidSlotIndex, pidParameters.getErrorTolerance(), 30);
   }
 }
