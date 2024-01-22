@@ -1,5 +1,7 @@
 #Node id of project: "PVT_kwDOAJ9aT84AaUJq"
 #test pr node id: 'PR_kwDOLB2J4c5kmPKe'
+#PVTFSV_lQDOAJ9aT84AaUJqzgMET8fOCISe0A- awaiting review field input id
+#PVTSSF_lADOAJ9aT84AaUJqzgQ3tZU- status field id
 
 name: Update Pull Request Status to "Awaiting Review"
 
@@ -17,9 +19,6 @@ jobs:
         id: getID
         env:
           PR_ID: ${{ github.event.pull_request.node_id }}
-          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
-
-
 
         run: |
           pr_project_id="$( gh api graphql -f prID=$PR_ID -f query='
@@ -37,6 +36,35 @@ jobs:
           
             echo 'ITEM_ID='$pr_project_id >> GITHUB.ENV
 
+      - name: Authenticate with Project scopes
+        
+        run: gh auth login --scopes "project"
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
+
+          
+
+      - name: Update status to "Awaiting Review"
+        
+        run: |
+          gh api graphql -f query='
+            mutation($itemID: ID!) {
+              updateProjectV2ItemFieldValue(
+                input: {
+                  projectId: "PVT_kwDOAJ9aT84AaUJq"
+                  itemId: $itemID
+                  fieldId: "PVTSSF_lADOAJ9aT84AaUJqzgQ3tZU"
+                  value: {
+                    singleSelectOptionId: "PVTFSV_lQDOAJ9aT84AaUJqzgMET8fOCISe0A"
+                  }
+                }
+              ) {
+                projectV2Item {
+                  id
+                }
+              }
+            }' -f itemID=$ITEM_ID
+
 
 
       # - uses: monry/actions-get-project-item-id@v2.0.2
@@ -51,13 +79,13 @@ jobs:
 
   
 
-      - uses: kalgurn/update-project-item-status@v0.0.1
+      # - uses: kalgurn/update-project-item-status@v0.0.1
         
-        with:
-          project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
-          github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{ env.ITEM_ID }}
-          status: "Awaiting Review"
+      #   with:
+      #     project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
+      #     github-token: ${{ secrets.WORKFLOWSAUTH }}
+      #     item-id: ${{ env.ITEM_ID }}
+      #     status: "Awaiting Review"
 
 
 
