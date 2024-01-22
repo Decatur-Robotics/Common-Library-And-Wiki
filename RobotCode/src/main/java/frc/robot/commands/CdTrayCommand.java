@@ -17,10 +17,9 @@ public class CdTrayCommand extends Command
 	public boolean closed = false;
 
 	public CdTrayCommand(Value clawMode, CdTraySubsystem CdTray, boolean closed)
-	
+	{
 		System.out.println("Constructing CdTrayCommand...");
 		this.CdTray = CdTray;
-		this.cdMode = cdMode;
 		this.closed = true;
 		addRequirements(CdTray);
 	}
