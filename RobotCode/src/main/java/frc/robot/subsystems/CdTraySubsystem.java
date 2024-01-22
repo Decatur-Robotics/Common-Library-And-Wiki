@@ -13,9 +13,7 @@ public class CdTraySubsystem extends SubsystemBase
 	// guys i think i'm starting to get the hang of thi- oh nevermind
 	private Compressor mainCompressor;
 
-	public DoubleSolenoid cdArmLeft;
-
-	private DoubleSolenoid cdArmRight;
+	private DoubleSolenoid cdArmLeft, cdArmRight;
 
 	public TeamSparkMAX intakeMotor;
 
@@ -32,6 +30,11 @@ public class CdTraySubsystem extends SubsystemBase
 		cdArmLeft.set(Value.kOff);
 		cdArmRight.set(Value.kOff);
 		// koff koff (comedy)
+	}
+
+	public DoubleSolenoid getCdArmLeft()
+	{
+		return cdArmLeft;
 	}
 
 	public boolean getClosed()

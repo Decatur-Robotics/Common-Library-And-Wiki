@@ -8,15 +8,16 @@ import frc.robot.subsystems.CdTraySubsystem;
 
 public class CdTrayCommand extends Command
 {
-	final private CdTraySubsystem CdTray;
+	private final CdTraySubsystem CdTray;
 
-	Value cdMode;
-	LocalTime startTime;
-	long timeToWait = 100 * 1000000;
+	private Value cdMode;
+	private LocalTime startTime;
+	private long timeToWait = 100 * 1000000;
+	// milliseconds * 1000000
 
-	public boolean closed = false;
+	private boolean closed;
 
-	public CdTrayCommand(Value clawMode, CdTraySubsystem CdTray, boolean closed)
+	public CdTrayCommand(CdTraySubsystem CdTray)
 	{
 		System.out.println("Constructing CdTrayCommand...");
 		this.CdTray = CdTray;
@@ -36,7 +37,7 @@ public class CdTrayCommand extends Command
 
 		CdTray.closed = true;
 
-		if (CdTray.cdArmLeft.get() == Value.kOff && startTime == null)
+		if (CdTray.getCdArmLeft().get() == Value.kOff && startTime == null)
 		{
 			CdTray.setSolenoid(cdMode);
 			startTime = LocalTime.now();
@@ -51,7 +52,7 @@ public class CdTrayCommand extends Command
 	public void end()
 	{
 		System.out.println("Ending CdTrayCommand...");
-		CdTray.cdArmLeft.set(Value.kOff);
+		CdTray.getCdArmLeft().set(Value.kOff);
 	}
 
 }
