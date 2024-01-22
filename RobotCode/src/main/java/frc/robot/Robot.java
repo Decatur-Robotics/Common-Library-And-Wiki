@@ -4,12 +4,11 @@
 package frc.robot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.lib.core.TeamSubsystemBase;
+import frc.lib.core.ModeBasedSubsystem;
 import frc.lib.core.util.CTREConfigs;
 
 public class Robot extends TimedRobot
@@ -21,7 +20,7 @@ public class Robot extends TimedRobot
 	private RobotContainer robotContainer;
 	private CTREConfigs ctreConfigs;
 
-	private List<TeamSubsystemBase> subsystems = new ArrayList<>();
+	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
@@ -30,7 +29,7 @@ public class Robot extends TimedRobot
 	@Override
 	public void robotInit()
 	{
-		if(instance != null)
+		if (instance != null)
 			System.err.println("WARNING: Robot instance already exists!");
 		instance = this;
 
@@ -66,7 +65,7 @@ public class Robot extends TimedRobot
 	@Override
 	public void disabledInit()
 	{
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.disabledInit();
 		}
@@ -82,7 +81,7 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.autonomousInit();
 		}
@@ -112,7 +111,7 @@ public class Robot extends TimedRobot
 			autonomousCommand.cancel();
 		}
 
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.teleopInit();
 		}
@@ -129,7 +128,7 @@ public class Robot extends TimedRobot
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
 
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.testInit();
 		}
@@ -150,7 +149,7 @@ public class Robot extends TimedRobot
 	public void simulationPeriodic()
 	{}
 
-	public static void addSubsystem(TeamSubsystemBase subsystem)
+	public static void addSubsystem(ModeBasedSubsystem subsystem)
 	{
 		instance.subsystems.add(subsystem);
 	}
