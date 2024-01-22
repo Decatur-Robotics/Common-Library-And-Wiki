@@ -7,10 +7,10 @@ import frc.robot.Robot;
  * Extend this class instead of SubsystemBase. This class receives method calls when the robot
  * changes state
  */
-public abstract class TeamSubsystemBase extends SubsystemBase
+public abstract class ModeBasedSubsystem extends SubsystemBase
 {
 
-	public TeamSubsystemBase()
+	public ModeBasedSubsystem()
 	{
 		super();
 		Robot.addSubsystem(this);
