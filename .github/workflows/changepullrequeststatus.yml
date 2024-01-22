@@ -22,22 +22,21 @@ jobs:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
         run: |
-          pr_project_id="$( gh api graphql -f prID=$PR_ID -f query='
-          query($prID: ID!) {
-            node(id: $prID) {
-              ...on PullRequest {
-                projectItems(first: 1) {
-                  nodes {
-                    id
+          gh api graphql -f prID=$PR_ID -f query='
+            query($prID: ID!) {
+              node(id: $prID) {
+                ...on PullRequest {
+                  projectItems(first: 1) {
+                    nodes {
+                      id
+                    }
                   }
                 }
               }
-            }
-          }' --jq '.data.node.projectItems.nodes[0].id')"
+            }' > item_id.json
 
-
-          echo "$pr_project_id"
-          echo "ITEM_ID=$pr_project_id" >> $GITHUB.ENV
+          echo 'ITEM_ID='$(jq '.data.node.projectItems.nodes[1].id' item_id.json) >> $GITHUB.ENV
+          
   
       # - name: Authenticate with Project scopes
         
