@@ -6,24 +6,23 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 public class RotateShooterMountCommand extends Command
 {
 
+	/** In degrees per {@link #execute()} call */
 	private double shooterMountSpeed;
-
-	private double shooterMountRotation = 0.0f; // Ranges from 0 to 180
 
 	private ShooterMountSubsystem shooterMountSubsystem;
 
+	/** @param speed in degrees per second */
 	public RotateShooterMountCommand(ShooterMountSubsystem subsytem, double speed)
 	{
 		shooterMountSubsystem = subsytem;
-		shooterMountSpeed = speed;
+		shooterMountSpeed = speed / 50;
 	}
 
 	public void execute()
 	{
-
-		shooterMountRotation = Math.max(0, Math.min(180, shooterMountRotation + shooterMountSpeed));
-		shooterMountSubsystem.setGoalRotation(shooterMountRotation);
-
+		double rotation = Math.max(0,
+				Math.min(180, shooterMountSubsystem.getCurrentRotation() + shooterMountSpeed));
+		shooterMountSubsystem.setGoalRotation(rotation);
 	}
 
 }

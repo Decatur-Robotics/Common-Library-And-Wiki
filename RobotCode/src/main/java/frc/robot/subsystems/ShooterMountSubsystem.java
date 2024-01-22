@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 import frc.robot.constants.Ports;
-import java.util.Scanner;
 
 public class ShooterMountSubsystem extends SubsystemBase
 {
@@ -36,7 +35,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 		goalRotation = 0.0;
 	}
 
-	public void update()
+	@Override
+	public void periodic()
 	{
 		double position = goalRotation - currentRotation;
 		setMotors(Math.sin((position * Math.PI) / 2),
@@ -50,12 +50,17 @@ public class ShooterMountSubsystem extends SubsystemBase
 		mainMotor.getEncoder().setPosition(degreesToTicks(originalRotation));
 	}
 
+	public double getCurrentRotation()
+	{
+		return currentRotation;
+	}
+
 	private static double degreesToTicks(double degrees)
 	{
 		return degrees / DEGREES_IN_ONE_TICK;
 	}
 
-	private static double ticksToDegrees(double ticks)
+	public static double ticksToDegrees(double ticks)
 	{
 		return ticks * DEGREES_IN_ONE_TICK;
 	}
