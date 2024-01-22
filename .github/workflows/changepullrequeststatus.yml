@@ -19,6 +19,7 @@ jobs:
         id: getID
         env:
           PR_ID: ${{ github.event.pull_request.node_id }}
+          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
         run: |
           pr_project_id="$( gh api graphql -f prID=$PR_ID -f query='
@@ -42,7 +43,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
-          
+
 
       - name: Update status to "Awaiting Review"
         
