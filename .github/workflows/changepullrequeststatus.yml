@@ -35,7 +35,7 @@ jobs:
             }
           }' --jq '.data.addProjectV2ItemById.item.id')"
           
-            echo 'ITEM_ID='$pr_project_id >> GITHUB.ENV
+            echo 'ITEM_ID='$pr_project_id >> GITHUB.OUTPUTS
 
       # - name: Authenticate with Project scopes
         
@@ -65,7 +65,7 @@ jobs:
                   id
                 }
               }
-            }' -f itemID=$ITEM_ID
+            }' -f itemID=${{ steps.getID.outputs.ITEM_ID }}
 
 
 
