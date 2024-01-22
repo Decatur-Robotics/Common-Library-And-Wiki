@@ -75,7 +75,11 @@ public class RobotContainer
 		rightTrigger.whileTrue(new ShooterCommand(ShooterSubsystem));
 	}
 
-	/** Adds autonomous options to the SendableChooser */
+	/**
+	 * Adds autonomous options to the SendableChooser
+	 * 
+	 * @see #registerNamedCommands()
+	 */
 	private void addAutonomousOptions()
 	{
 		ShuffleboardTab.add("Auto Chooser", AutoChooser);
@@ -98,6 +102,7 @@ public class RobotContainer
 	/**
 	 * @return The command that will be run as the autonomous. Will return whatever is selected in
 	 *         the autochooser on Shuffleboard
+	 * @see #addAutonomousOptions()
 	 */
 	public Command getAutonomousCommand()
 	{

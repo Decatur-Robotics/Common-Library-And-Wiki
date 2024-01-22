@@ -81,7 +81,11 @@ public class TeamTalonFX extends WPI_TalonFX
     return isPidControlMode(getControlMode());
   }
 
-  /** @param reason Unused for now */
+  /**
+   * @param power  Between -1 and 1
+   * @param reason Unused for now
+   * @see #set(double)
+   */
   public void set(double power, String reason)
   {
     super.set(power);

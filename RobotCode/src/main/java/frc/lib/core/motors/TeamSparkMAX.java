@@ -145,7 +145,11 @@ public class TeamSparkMAX extends CANSparkMax
         pidSlotIndex);
   }
 
-  /** @param reason Unused for now */
+  /**
+   * @param power  Between -1 and 1
+   * @param reason Unused for now
+   * @see #set(double)
+   */
   public void set(double power, String reason)
   {
     super.set(power);
