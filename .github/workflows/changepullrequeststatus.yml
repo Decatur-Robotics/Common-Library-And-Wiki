@@ -35,7 +35,7 @@ jobs:
               }
             }' > item_id.json
 
-          echo 'ITEM_ID='$(jq '.data.node.projectItems.nodes[1].id' item_id.json) >> $GITHUB.ENV
+          echo 'ITEM_ID='$(jq '.data.node.projectItems.nodes[0].id' item_id.json) >> $GITHUB.ENV
           
   
       # - name: Authenticate with Project scopes
