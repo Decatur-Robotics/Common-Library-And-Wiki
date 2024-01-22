@@ -22,21 +22,21 @@ jobs:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
         run: |
-          pr_project_id="$( gh api graphql -f prID=$PR_ID -f query='
-          query($prID: ID!) {
-            node(id: $prID) {
-              ...on PullRequest {
-                projectItems(first: 1) {
-                  nodes {
-                    id
+          gh api graphql -f prID=$PR_ID -f query='
+            query($prID: ID!) {
+              node(id: $prID) {
+                ...on PullRequest {
+                  projectItems(first: 1) {
+                    nodes {
+                      id
+                    }
                   }
                 }
               }
-            }
-          }' --jq '.data.addProjectV2ItemById.item.id')"
-          
-            echo 'ITEM_ID='$pr_project_id >> GITHUB.OUTPUTS
+            }' > item_data.json
 
+          echo 'ITEM_ID='$(jq .data.organization.projectV2.item.id) >> GITHUB.ENV
+  
       # - name: Authenticate with Project scopes
         
       #   run: gh auth login --scopes "project"
@@ -49,7 +49,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
         run: |
-          gh api graphql -f itemID=${{ steps.getID.outputs.ITEM_ID }} -f query='
+          gh api graphql -f itemID=$ITEM_ID -f query='
             mutation($itemID: ID!) {
               updateProjectV2ItemFieldValue(
                 input: {
