@@ -46,28 +46,28 @@ jobs:
 
 
 
-      - name: Update status to "Awaiting Review"
-        env:
-          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
-          PR_PROJECT_ID: "${{ env.ITEM_ID }}"
-        run: |
-          gh api graphql -f pr_id=$PR_PROJECT_ID -f query='
-            mutation($pr_id: ID!) {
-              updateProjectV2ItemFieldValue(
-                input: {
-                  projectId: "PVT_kwDOAJ9aT84AaUJq"
-                  itemId: $pr_id
-                  fieldId: "PVTSSF_lADOAJ9aT84AaUJqzgQ3tZU"
-                  value: {
-                    singleSelectOptionId: "PVTFSV_lQDOAJ9aT84AaUJqzgMET8fOCISe0A"
-                  }
-                }
-              ) {
-                projectV2Item {
-                  id
-                }
-              }
-            }' 
+      # - name: Update status to "Awaiting Review"
+      #   env:
+      #     GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
+      #     PR_PROJECT_ID: "${{ env.ITEM_ID }}"
+      #   run: |
+      #     gh api graphql -f pr_id=$PR_PROJECT_ID -f query='
+      #       mutation($pr_id: ID!) {
+      #         updateProjectV2ItemFieldValue(
+      #           input: {
+      #             projectId: "PVT_kwDOAJ9aT84AaUJq"
+      #             itemId: $pr_id
+      #             fieldId: "PVTSSF_lADOAJ9aT84AaUJqzgQ3tZU"
+      #             value: {
+      #               singleSelectOptionId: "PVTFSV_lQDOAJ9aT84AaUJqzgMET8fOCISe0A"
+      #             }
+      #           }
+      #         ) {
+      #           projectV2Item {
+      #             id
+      #           }
+      #         }
+      #       }' 
 
 
 
@@ -83,13 +83,13 @@ jobs:
 
   
 
-      # - uses: kalgurn/update-project-item-status@v0.0.1
+      - uses: kalgurn/update-project-item-status@v0.0.1
         
-      #   with:
-      #     project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
-      #     github-token: ${{ secrets.WORKFLOWSAUTH }}
-      #     item-id: ${{ env.ITEM_ID }}
-      #     status: "Awaiting Review"
+        with:
+          project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
+          github-token: ${{ secrets.WORKFLOWSAUTH }}
+          item-id: ${{ env.ITEM_ID }}
+          status: "Awaiting Review"
 
 
 
