@@ -5,14 +5,13 @@ import frc.lib.core.motors.TeamSparkMAX;
 public class IntakeSubsystem extends TeamSubsystemBase
 {
     private final TeamSparkMAX intakeMotorRight, intakeMotorLeft, intakeMotorCenter;
-    private final double MOTOR_SPEED;
+    private final double MOTOR_SPEED = 0.5;
 
     public IntakeSubsystem(int forwardChannel, int reverseChannel)
     {
         intakeMotorRight = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_RIGHT);
         intakeMotorLeft = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_LEFT);
         intakeMotorCenter = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_CENTER);
-        MOTOR_SPEED = 0.5;
 
     }
 
@@ -26,7 +25,7 @@ public class IntakeSubsystem extends TeamSubsystemBase
 
     public void toggleIntakeOn()
     {
-        intakeMotorCenter.set(motorSpeed);
+        intakeMotorCenter.set(MOTOR_SPEED);
     }
 
     public void stopIntake()
