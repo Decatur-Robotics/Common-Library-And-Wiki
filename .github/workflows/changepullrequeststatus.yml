@@ -37,11 +37,11 @@ jobs:
           
             echo 'ITEM_ID='$pr_project_id >> GITHUB.ENV
 
-      - name: Authenticate with Project scopes
+      # - name: Authenticate with Project scopes
         
-        run: gh auth login --scopes "project"
-        env:
-          GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
+      #   run: gh auth login --scopes "project"
+      #   env:
+      #     GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
 
 
