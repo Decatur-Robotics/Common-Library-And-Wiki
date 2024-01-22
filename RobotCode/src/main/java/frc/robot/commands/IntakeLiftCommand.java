@@ -14,6 +14,6 @@ public class IntakeLiftCommand extends Command {
 	}
 
 	public void execute() {
-		intake.
+		
 	}
 }

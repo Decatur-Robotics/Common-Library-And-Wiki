@@ -24,11 +24,12 @@ public class IntakeSubsystem extends TeamSubsystemBase
 
     }
 
-    public void raiseIntake(){
-        if (isLowered)
+    public void raiseIntake() {
+        // if (isLowered)
+
     }
 
-    public void lowerIntake(){
+    public void lowerIntake() {
         
     }
 
