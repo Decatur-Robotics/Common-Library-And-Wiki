@@ -4,37 +4,46 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.Joystick;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.lib.modules.swervedrive.SwerveConstants;
-
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.ShooterCommand;
-
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
+/** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer
 {
-	private Joystick primaryController, secondaryController;
-	private final ShooterSubsystem ShooterSubsystem;
+
 	private static RobotContainer instance;
 
 	private final ShuffleboardTab ShuffleboardTab;
 
-	private SendableChooser<Command> autoChooser;
+	private final SendableChooser<Command> AutoChooser;
+
+	private final ClimberSubsystem ClimberSubsystem;
+	private final ShooterSubsystem ShooterSubsystem;
+	private final ShooterMountSubsystem ShooterMountSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
 		instance = this;
-		ShooterSubsystem = new ShooterSubsystem();
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
+
+		AutoChooser = AutoBuilder.buildAutoChooser();
+
+		// Instantiate subsystems
+		ClimberSubsystem = new ClimberSubsystem();
+		ShooterSubsystem = new ShooterSubsystem();
+		ShooterMountSubsystem = new ShooterMountSubsystem();
 
 		// Autonomous set up
 		addAutonomousOptions();
@@ -54,12 +63,12 @@ public class RobotContainer
 
 	private void configurePrimaryBindings()
 	{
-
+		Joystick primaryController = new Joystick(0);
 	}
 
 	private void configureSecondaryBindings()
 	{
-		secondaryController = new Joystick(1);
+		Joystick secondaryController = new Joystick(1);
 		JoystickButton rightTrigger = new JoystickButton(secondaryController,
 				LogitechControllerButtons.triggerRight);
 
@@ -69,9 +78,7 @@ public class RobotContainer
 	/** Adds autonomous options to the SendableChooser */
 	private void addAutonomousOptions()
 	{
-		autoChooser = AutoBuilder.buildAutoChooser();
-		ShuffleboardTab.add("Auto Chooser", autoChooser);
-
+		ShuffleboardTab.add("Auto Chooser", AutoChooser);
 	}
 
 	/**
@@ -94,7 +101,7 @@ public class RobotContainer
 	 */
 	public Command getAutonomousCommand()
 	{
-		return autoChooser.getSelected();
+		return AutoChooser.getSelected();
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()
@@ -103,5 +110,3 @@ public class RobotContainer
 	}
 
 }
-
-/** The container for the robot. Contains subsystems, OI devices, and commands. */
