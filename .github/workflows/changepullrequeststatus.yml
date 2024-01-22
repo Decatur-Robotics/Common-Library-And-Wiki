@@ -49,7 +49,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
         run: |
-          gh api graphql -f query='
+          gh api graphql -f itemID=${{ steps.getID.outputs.ITEM_ID }} -f query='
             mutation($itemID: ID!) {
               updateProjectV2ItemFieldValue(
                 input: {
@@ -65,7 +65,7 @@ jobs:
                   id
                 }
               }
-            }' -f itemID=${{ steps.getID.outputs.ITEM_ID }}
+            }' 
 
 
 
