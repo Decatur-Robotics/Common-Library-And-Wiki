@@ -8,17 +8,18 @@ public class IntakeLiftCommand extends Command
 {
 
 	private IntakeSubsystem intake;
-	private JoystickButton IntakeOnButton;
 
-	public IntakeLiftCommand(IntakeSubsystem intake, JoystickButton IntakeOnButton)
+	public IntakeLiftCommand(IntakeSubsystem intake)
 	{
-
 		this.intake = intake;
-		this.IntakeOnButton = IntakeOnButton;
 	}
 
 	public void execute()
 	{
-
+		intake.raiseOrLowerIntake();
 	}
+	
+	public void end(boolean stop){
+		intake.stopIntake();
+    }
 }
