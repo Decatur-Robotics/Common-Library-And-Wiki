@@ -37,7 +37,7 @@ jobs:
 
           echo "$pr_project_id"
           echo 'ITEM_ID='$pr_project_id >> $GITHUB.ENV
-          echo "${{ env.ITEM_ID }}
+          echo "${{ env.ITEM_ID }}"
           
   
       # - name: Authenticate with Project scopes
