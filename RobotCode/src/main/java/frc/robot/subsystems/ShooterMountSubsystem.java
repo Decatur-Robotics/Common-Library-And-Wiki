@@ -12,13 +12,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/** In degrees */
 	private double goalRotation, distance;
 
-	private static final double DEGREES_IN_ONE_TICK = 360 / 42, DEADBAND = 0.5;
+	private static final double DEGREES_IN_ONE_TICK = 360 / 42;
+	public static final double DEADBAND = 0.5;
 
 	public ShooterMountSubsystem()
 	{
 		mainMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_RIGHT",
-				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 		followMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_RIGHT",
 				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
@@ -28,10 +27,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 		// This is the # of ticks in a rotation and the relative position
 		mainMotor.getEncoder().setPositionConversionFactor(42);
 		mainMotor.getEncoder().setPosition(0);
-
 		mainMotor.set(0);
 
-		mainMotor.getEncoder().setPosition(0);
 		goalRotation = 0.0;
 	}
 

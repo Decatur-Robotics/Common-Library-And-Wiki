@@ -12,10 +12,12 @@ public class RotateShooterMountCommand extends Command
 	private ShooterMountSubsystem shooterMountSubsystem;
 
 	/** @param speed in degrees per second */
-	public RotateShooterMountCommand(ShooterMountSubsystem subsytem, double speed)
+	public RotateShooterMountCommand(ShooterMountSubsystem subsystem, double speed)
 	{
-		shooterMountSubsystem = subsytem;
+		shooterMountSubsystem = subsystem;
 		shooterMountSpeed = speed / 50; // Convert from degrees per second to degrees per 20ms
+
+		addRequirements(subsystem);
 	}
 
 	public void execute()
