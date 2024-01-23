@@ -12,7 +12,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/** In degrees */
 	private double goalRotation, distance;
 
-	private static final double DEGREES_IN_ONE_TICK = 360 / 42;
+	private static final double DEGREES_IN_ONE_TICK = 360 / 42, SPEED = 1;
 	public static final double DEADBAND = 0.5;
 
 	public ShooterMountSubsystem()
@@ -72,7 +72,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	public void setMotors(double power, String reason)
 	{
-		mainMotor.set(Math.max(-1, Math.min(power, 1)), reason);
+		mainMotor.set(Math.max(-1, Math.min(power, 1)) * SPEED, reason);
 	}
 
 }
