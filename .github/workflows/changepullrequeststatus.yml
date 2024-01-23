@@ -26,7 +26,7 @@ jobs:
             query($prID: ID!) {
               node(id: $prID) {
                 ...on PullRequest {
-                  projectItems(first: 1) {
+                  projectItems(first: 5) {
                     nodes {
                       id
                     }
