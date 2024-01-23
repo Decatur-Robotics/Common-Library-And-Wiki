@@ -12,6 +12,11 @@ public class RotateShooterMountToPositionCommand extends Command
 
     private DoubleSupplier getPosition;
 
+    /**
+     * This constructor is the version that allows for variable targets (ex: based on joystick)
+     * 
+     * @param getPosition in degrees
+     */
     public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem,
             DoubleSupplier getPosition)
     {
@@ -23,6 +28,11 @@ public class RotateShooterMountToPositionCommand extends Command
         addRequirements(subsystem);
     }
 
+    /**
+     * This constructor is the version that uses a constant target
+     * 
+     * @param position in degrees
+     */
     public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem, double position)
     {
         this(subsystem, () -> position);
