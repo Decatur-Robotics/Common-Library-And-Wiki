@@ -7,19 +7,16 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeOnCommand extends Command
 {
     private IntakeSubsystem intake;
-    private JoystickButton IntakeOnButton;
 
-    public IntakeOnCommand(IntakeSubsystem intake, JoystickButton IntakeOnButton)
+    public IntakeOnCommand(IntakeSubsystem intake)
     {
         this.intake = intake;
-        this.IntakeOnButton = IntakeOnButton;
     }
 
     @Override
     public void execute()
     {
-        if (IntakeOnButton.getAsBoolean())
-            intake.toggleIntakeOn();
+        intake.toggleIntakeOn();
     }
 
     @Override
