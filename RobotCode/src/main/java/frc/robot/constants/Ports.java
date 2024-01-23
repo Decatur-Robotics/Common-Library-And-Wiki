@@ -4,9 +4,9 @@ public final class Ports
 {
   
     //place holder values for intake motors
-    public static final int INTAKE_MOTOR_CENTER = 0;
-    public static final int INTAKE_MOTOR_RIGHT = 1;
-    public static final int INTAKE_MOTOR_LEFT = 2;
+    public static final int INTAKE_MOTOR_CENTER = 3;
+    public static final int INTAKE_MOTOR_RIGHT = 4;
+    public static final int INTAKE_MOTOR_LEFT = 5;
 
 	public static final int SHOOTER_MOUNT_MOTOR_LEFT = 0;
 	public static final int SHOOTER_MOUNT_MOTOR_RIGHT = 1;
