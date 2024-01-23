@@ -63,20 +63,20 @@ public class ShooterSubsystem extends SubsystemBase
 		return ShooterMotorMain.get();
 	}
 
-	/* This is clamping the shooter motor power to be within the range of -1 to 1 */
+	// This is clamping the shooter motor power to be within the range of -1 to 1
 	public void setShooterMotorPower(double power, String reason)
 	{
 		shooterMotorPower = Math.max(Math.min(1, power), -1);
 
 	}
 
-	/* This is clamping the feeder motor power to be within the range of -1 to 1 */
+	// This is clamping the feeder motor power to be within the range of -1 to 1
 	public void setFeedMotorPower(double power, String reason)
 	{
 		feederMotorPower = Math.max(Math.min(1, power), -1);
 	}
 
-	/* Continuously updates shooter speed based on the commands above. */
+	// Continuously updates shooter speed based on the commands above.
 	@Override
 	public void periodic()
 	{
