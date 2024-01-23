@@ -86,12 +86,11 @@ jobs:
   
 
       - uses: kalgurn/update-project-item-status@v0.0.1
-        env: 
-          PR_ID: ${{ steps.getID.outputs.PR_ITEM_ID }}
+
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: $PR_ID
+          item-id: ${{ steps.getID.outputs.PR_ITEM_ID }}
           status: "Awaiting Review"
 
 
