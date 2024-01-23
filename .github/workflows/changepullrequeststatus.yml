@@ -22,7 +22,7 @@ jobs:
           GH_TOKEN: ${{ secrets.WORKFLOWSAUTH }}
 
         run: |
-          gh api graphql -f prID=$PR_ID -f query='
+          pr_project_id="(gh api graphql -f prID=$PR_ID -f query='
             query($prID: ID!) {
               node(id: $prID) {
                 ...on PullRequest {
