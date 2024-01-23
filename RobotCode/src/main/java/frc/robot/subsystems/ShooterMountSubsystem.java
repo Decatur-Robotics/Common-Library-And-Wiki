@@ -9,9 +9,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamSparkMAX mainMotor, followMotor;
 
-	private double currentRotation, originalRotation, goalRotation;
+	/** In degrees */
+	private double goalRotation, distance;
 
-	private static final double DEGREES_IN_ONE_TICK = 360 / 42;
+	private static final double DEGREES_IN_ONE_TICK = 360 / 42, DEADBAND = 0.5;
 
 	public ShooterMountSubsystem()
 	{
@@ -30,29 +31,36 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 		mainMotor.set(0);
 
-		currentRotation = 0.0;
-		originalRotation = 0.0;
+		mainMotor.getEncoder().setPosition(0);
 		goalRotation = 0.0;
 	}
 
 	@Override
 	public void periodic()
 	{
-		double position = goalRotation - currentRotation;
-		setMotors(Math.sin((position * Math.PI) / 2),
-				"ShooterMountSubsystem#update | Position: " + position);
+		double difference = goalRotation - getCurrentRotation();
+
+		if (Math.abs(difference) < DEADBAND)
+		{
+			setMotors(0, "Shooter Mount (Deadbanded): Difference: " + difference + ", Distance: "
+					+ distance);
+			return;
+		}
+
+		double power = distance * Math.sin(difference * Math.PI / distance);
+		power = Math.max(-1, Math.min(power, 1));
+		setMotors(power, "Shooter Mount: Difference: " + difference + ", Distance: " + distance);
 	}
 
 	public void setGoalRotation(double degrees)
 	{
-		originalRotation = currentRotation;
+		distance = degrees - getCurrentRotation();
 		goalRotation = degrees;
-		mainMotor.getEncoder().setPosition(degreesToTicks(originalRotation));
 	}
 
 	public double getCurrentRotation()
 	{
-		return currentRotation;
+		return ticksToDegrees(mainMotor.getEncoder().getPosition());
 	}
 
 	private static double degreesToTicks(double degrees)
