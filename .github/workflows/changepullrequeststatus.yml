@@ -33,7 +33,7 @@ jobs:
                   }
                 }
               }
-            }' --jq '.data.node.projectItems.nodes[0].id')"
+            }' --jq '.data.node.projectItems.nodes[1].id')"
 
           echo "$pr_project_id"
           echo 'ITEM_ID='$pr_project_id >> $GITHUB.ENV
