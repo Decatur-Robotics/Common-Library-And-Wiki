@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterMountSubsystem;
 
@@ -8,17 +10,28 @@ public class RotateShooterMountToPositionCommand extends Command
 
     private final ShooterMountSubsystem ShooterMountSubsystem;
 
-    private double position;
+    private DoubleSupplier getPosition;
 
-    public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem, double position)
+    public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem,
+            DoubleSupplier getPosition)
     {
         ShooterMountSubsystem = subsystem;
-        this.position = position;
+        this.getPosition = getPosition;
 
         // We do this before setting the rotation so that any other
         // command controlling the shooter mount will end before we set the rotation
         addRequirements(subsystem);
-        subsystem.setGoalRotation(position);
+    }
+
+    public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem, double position)
+    {
+        this(subsystem, () -> position);
+    }
+
+    @Override
+    public void execute()
+    {
+        ShooterMountSubsystem.setGoalRotation(getPosition.getAsDouble());
     }
 
     @Override
@@ -26,7 +39,7 @@ public class RotateShooterMountToPositionCommand extends Command
     {
         // We do the weird static access to avoid going through the variable
         return Math.abs(ShooterMountSubsystem.getCurrentRotation()
-                - position) < frc.robot.subsystems.ShooterMountSubsystem.DEADBAND;
+                - getPosition.getAsDouble()) < frc.robot.subsystems.ShooterMountSubsystem.DEADBAND;
     }
 
 }
