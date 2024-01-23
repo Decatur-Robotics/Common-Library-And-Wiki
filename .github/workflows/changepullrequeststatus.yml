@@ -36,8 +36,8 @@ jobs:
             }' -f prID=$PR_ID --jq '.data.node.projectItems.nodes[0].id')"
 
           echo "$pr_project_id"
-          echo 'ITEM_ID='$pr_project_id >> $GITHUB.ENV
-          echo "${{ env.ITEM_ID }}"
+          echo 'PR_ITEM_ID='$pr_project_id >> $GITHUB.OUTPUTS
+          echo "${{ env.PR_ITEM_ID }}"
           
   
       # - name: Authenticate with Project scopes
@@ -86,11 +86,12 @@ jobs:
   
 
       - uses: kalgurn/update-project-item-status@v0.0.1
-        
+        env: 
+          PR_ID: ${{ steps.getID.outputs.PR_ITEM_ID }}
         with:
           project-url: https://github.com/orgs/Decatur-Robotics/projects/2/views/1
           github-token: ${{ secrets.WORKFLOWSAUTH }}
-          item-id: ${{ env.ITEM_ID }}
+          item-id: $PR_ID
           status: "Awaiting Review"
 
 
