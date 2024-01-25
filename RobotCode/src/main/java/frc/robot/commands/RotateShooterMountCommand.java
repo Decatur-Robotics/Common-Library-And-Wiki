@@ -1,29 +1,47 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterMountSubsystem;
 
+/** Continuously rotates based on a speed */
 public class RotateShooterMountCommand extends Command
 {
 
-	private double shooterMountSpeed;
-
-	private double shooterMountRotation = 0.0f; // Ranges from 0 to 180
+	/** In degrees per {@link #execute()} call (20 ms) */
+	private DoubleSupplier getSpeed;
 
 	private ShooterMountSubsystem shooterMountSubsystem;
 
-	public RotateShooterMountCommand(ShooterMountSubsystem subsytem, double speed)
+	/**
+	 * This constructor is the version that allows for variable speeds (ex: based on joystick input)
+	 * 
+	 * @param speed in degrees per second
+	 */
+	public RotateShooterMountCommand(ShooterMountSubsystem subsystem, DoubleSupplier getSpeed)
 	{
-		shooterMountSubsystem = subsytem;
-		shooterMountSpeed = speed;
+		shooterMountSubsystem = subsystem;
+		this.getSpeed = getSpeed;
+
+		addRequirements(subsystem);
+	}
+
+	/**
+	 * This constructor is version that uses a constant speed
+	 * 
+	 * @param speed in degrees per second
+	 */
+	public RotateShooterMountCommand(ShooterMountSubsystem subsystem, double speed)
+	{
+		this(subsystem, () -> speed / 50); // Convert from degrees per second to degrees per 20ms
 	}
 
 	public void execute()
 	{
-
-		shooterMountRotation = Math.max(0, Math.min(180, shooterMountRotation + shooterMountSpeed));
-		shooterMountSubsystem.setGoalRotation(shooterMountRotation);
-
+		double rotation = Math.max(0,
+				Math.min(180, shooterMountSubsystem.getCurrentRotation() + getSpeed.getAsDouble()));
+		shooterMountSubsystem.setGoalRotation(rotation);
 	}
 
 }
