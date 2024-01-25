@@ -8,6 +8,7 @@ import frc.robot.constants.ClimberConstants;
 
 public class ClimberCommand extends Command
 {
+    
     private ClimberSubsystem climber;
     private DoubleSupplier leftInput, rightInput;
     private final double DEADBAND_RANGE = 0.1;

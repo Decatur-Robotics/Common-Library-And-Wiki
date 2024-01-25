@@ -49,7 +49,7 @@ public class ClimberSubsystem extends SubsystemBase
         return (extendMotorLeft.getCurrentEncoderValue() > ClimberConstants.MAX_EXTENSION_LEFT
                 && power >= 0)
                 || (extendMotorLeft.getCurrentEncoderValue() < ClimberConstants.MIN_EXTENSION_LEFT
-                        && power <= 0);
+                && power <= 0);
     }
 
     public boolean rightMotorPowerCheck(double power)
