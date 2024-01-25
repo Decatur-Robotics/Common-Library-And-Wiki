@@ -6,6 +6,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 
+/**
+ * Rotates the robot to a specified angle. This angle can be changed using a DoubleSupplier, but
+ * it's recommended to use a constant angle.
+ */
 public class RotateToAngleCommand extends Command
 {
 
