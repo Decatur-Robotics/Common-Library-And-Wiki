@@ -44,6 +44,7 @@ public class CdTrayCommand extends Command
 		}
 	}
 
+	
 	public boolean isFinished()
 	{
 		return startTime != null && LocalTime.now().minusNanos(timeToWait).compareTo(startTime) > 0;

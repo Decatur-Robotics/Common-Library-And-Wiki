@@ -37,6 +37,7 @@ public class CdTraySubsystem extends SubsystemBase
 		return cdArmLeft;
 	}
 
+	
 	public boolean getClosed()
 	{
 		return cdArmLeft.get() == Value.kForward && cdArmRight.get() == Value.kForward;
