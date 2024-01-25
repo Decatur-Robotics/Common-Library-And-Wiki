@@ -1,17 +1,18 @@
 package frc.lib.modules.leds.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.modules.leds.subsystems.LedSubsystem;
 import frc.robot.RobotContainer;
-
+import frc.lib.modules.leds.NamedColor;
 import java.util.Random;
 import java.lang.Thread;
 
 import frc.lib.modules.leds.commands.FlashLightsCommand;
 
-public class FlashLightsOffCommand
+public class FlashLightsOffCommand extends Command
 {
-	private LedSubsystem led;
+	public static LedSubsystem led;
 
 	public FlashLightsOffCommand(LedSubsystem ledSubsystem)
 	{
@@ -20,6 +21,9 @@ public class FlashLightsOffCommand
 
 	public void execute()
 	{
+
+		boolean note = true; // Replace later
+		boolean signaling = true;
 		// If NOTE = true
 		// Also add controls here
 		if (FlashLightsCommand.progress <= 0)

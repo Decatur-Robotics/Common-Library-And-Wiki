@@ -1,6 +1,7 @@
 package frc.lib.modules.leds.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.modules.leds.Color;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
@@ -28,36 +29,33 @@ public class LedSubsystem extends SubsystemBase
 
 	}
 
-	public void setAllPixels(int r, int g, int b)
+	public void setAllPixels(Color color)
 	{
 		for (int i = 0; i < length; i++)
-			buffer.setRGB(i, r, g, b);
+			buffer.setRGB(i, color.r, color.g, color.b);
 		// This is better than using the setPixel method in the same class because it's not setting
 		// the data every time.
 		this.updateData();
 	}
 
-	public static int[] calcBlending(int r1, int g1, int b1, int r2, int g2, int b2,
-			double currentFade)
+	public static int[] calcBlending(Color c1, Color c2, double currentFade)
 	{
-		int r = (int) (r1 * currentFade / 1 + r2 * (1 - currentFade) / currentFade);
-		int g = (int) (g1 * currentFade / 1 + g2 * (1 - currentFade) / currentFade);
-		int b = (int) (b1 * currentFade / 1 + b2 * (1 - currentFade) / currentFade);
+		int r = (int) (c1.r * currentFade / 1 + c2.r * (1 - currentFade) / currentFade);
+		int g = (int) (c1.g * currentFade / 1 + c2.g * (1 - currentFade) / currentFade);
+		int b = (int) (c1.b * currentFade / 1 + c2.b * (1 - currentFade) / currentFade);
 		return new int[]
 		{
 				r, g, b
 		};
 	}
 
-	public void setPixelRGB(int pixelToSet, int r, int g, int b)
+	public void setPixel(int pixelToSet, Color color)
 	{
-		buffer.setRGB(pixelToSet, r, g, b);
-		// THIS METHOD DOES NOT UPDATE THE BUFFER'S DATA! THAT NEEDS TO BE DONE MANUALLY
-	}
+		if (color.hsv)
+			buffer.setHSV(pixelToSet, color.h, color.s, color.v);
+		else
+			buffer.setRGB(pixelToSet, color.r, color.g, color.b);
 
-	public void setPixelHSV(int pixelToSet, int h, int s, int v)
-	{
-		buffer.setHSV(pixelToSet, h, s, v);
 		// THIS METHOD DOES NOT UPDATE THE BUFFER'S DATA! THAT NEEDS TO BE DONE MANUALLY
 	}
 
@@ -72,10 +70,10 @@ public class LedSubsystem extends SubsystemBase
 		return length;
 	}
 
-	public void setAllPixels(int[] calcBlending)
-	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'setAllPixels'");
-	}
+    public static Color calcBlending(int i, int j, int k, int l, int m, int n, double progress)
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'calcBlending'");
+    }
 
 }
