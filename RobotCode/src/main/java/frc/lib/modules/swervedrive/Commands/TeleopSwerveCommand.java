@@ -18,8 +18,8 @@ public class TeleopSwerveCommand extends Command
 	private DoubleSupplier strafeSup;
 	private DoubleSupplier rotationSup;
 	private BooleanSupplier slowSpeedSupplier, fastSpeedSupplier; // used for
-																					// field
-																					// relative
+																	// field
+																	// relative
 
 	public TeleopSwerveCommand(SwerveDriveSubsystem s_Swerve, DoubleSupplier translationSup,
 			DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier slowSpeedSupplier,
@@ -61,11 +61,9 @@ public class TeleopSwerveCommand extends Command
 		SmartDashboard.putNumber("Swerve Speed", speed);
 
 		/* Drive */
-		s_Swerve.drive(new Translation2d(translationVal, strafeVal).times(speed
-				* SwerveConstants.BASE_DRIVE_SPEED), rotationVal * speed
-						* SwerveConstants.BASE_TURN_SPEED,
-				/* !robotCentricSup.getAsBoolean(), */ true, // field relative is
-																// always on
-				true);
+		s_Swerve.drive(
+				new Translation2d(translationVal, strafeVal)
+						.times(speed * SwerveConstants.BASE_DRIVE_SPEED),
+				rotationVal * speed * SwerveConstants.BASE_TURN_SPEED);
 	}
 }

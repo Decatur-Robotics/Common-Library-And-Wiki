@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 1.4230406936150009,
+      "y": 5.521948263629788
     },
-    "rotation": -149.05
+    "rotation": -179.99999999987764
   },
   "command": {
     "type": "sequential",
@@ -14,25 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ShooterInstant"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Example Path"
+            "pathName": "Middle to First Note"
           }
         }
       ]
