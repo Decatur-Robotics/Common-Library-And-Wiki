@@ -15,7 +15,7 @@ import frc.lib.modules.swervedrive.SwerveConstants;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.ShooterCommand;
-
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer
@@ -23,6 +23,8 @@ public class RobotContainer
 	private Joystick primaryController, secondaryController;
 	private final ShooterSubsystem ShooterSubsystem;
 	private static RobotContainer instance;
+
+	private final IntakeSubsystem IntakeSubsystem;
 
 	private final ShuffleboardTab ShuffleboardTab;
 
@@ -33,6 +35,8 @@ public class RobotContainer
 	{
 		instance = this;
 		ShooterSubsystem = new ShooterSubsystem();
+		// Still have to assign buttons to the intake systems
+		IntakeSubsystem = new IntakeSubsystem();
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
