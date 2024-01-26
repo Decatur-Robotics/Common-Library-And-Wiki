@@ -20,7 +20,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle to First Note"
+            "pathName": "Middle to Top Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top to Middle Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle to Low Note"
           }
         }
       ]
