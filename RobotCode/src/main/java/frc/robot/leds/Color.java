@@ -1,4 +1,4 @@
-package frc.lib.modules.leds;
+package frc.robot.leds;
 
 import java.io.File;
 import java.util.HashMap;

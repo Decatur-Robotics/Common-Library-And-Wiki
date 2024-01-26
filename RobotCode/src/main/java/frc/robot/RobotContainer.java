@@ -9,9 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
-import frc.lib.modules.leds.commands.FlashLightsOffCommand;
-import frc.lib.modules.leds.commands.LightsCommand;
-import frc.lib.modules.leds.subsystems.LedSubsystem;
+import frc.robot.leds.commands.FlashLightsOffCommand;
+import frc.robot.leds.subsystems.LedSubsystem;
 
 public class RobotContainer
 {
@@ -45,9 +44,7 @@ public class RobotContainer
 		bButton = new JoystickButton(primaryController, LogitechControllerButtons.b);
 		// cButton = new JoystickButton(primaryController, LogitechControllerButtons.c);
 
-		aButton.whileTrue(new FlashLightsOffCommand(ledSubsystem));
-
-		bButton.whileTrue(new FlashLightsOffCommand(ledSubsystem));
+		aButton.whileFalse(new FlashLightsOffCommand(ledSubsystem));
 	}
 
 	private void configureSecondaryBindings()
