@@ -1,8 +1,8 @@
-package frc.robot.commands;
+package frc.robot.Commands;
 
 import frc.lib.core.util.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Subsystems.ShooterSubsystem;
 
 /** Runs the shooter and then ends. Semi-auto firing mode. */
 public class ShooterInstantCommand extends Command

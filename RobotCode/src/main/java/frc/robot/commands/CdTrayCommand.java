@@ -1,10 +1,10 @@
-package frc.robot.commands;
+package frc.robot.Commands;
 
 import java.time.LocalTime;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CdTraySubsystem;
+import frc.robot.Subsystems.CdTraySubsystem;
 
 public class CdTrayCommand extends Command
 {

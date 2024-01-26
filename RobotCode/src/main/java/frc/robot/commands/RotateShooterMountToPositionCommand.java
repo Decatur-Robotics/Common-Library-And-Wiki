@@ -1,9 +1,9 @@
-package frc.robot.commands;
+package frc.robot.Commands;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterMountSubsystem;
+import frc.robot.Subsystems.ShooterMountSubsystem;
 
 public class RotateShooterMountToPositionCommand extends Command
 {
@@ -49,7 +49,7 @@ public class RotateShooterMountToPositionCommand extends Command
     {
         // We do the weird static access to avoid going through the variable
         return Math.abs(ShooterMountSubsystem.getCurrentRotation()
-                - getPosition.getAsDouble()) < frc.robot.subsystems.ShooterMountSubsystem.DEADBAND;
+                - getPosition.getAsDouble()) < frc.robot.Subsystems.ShooterMountSubsystem.DEADBAND;
     }
 
 }
