@@ -28,11 +28,11 @@ public class IntakeSubsystem extends SubsystemBase
         ToggleIntakeMotorLeft.follow(ToggleIntakeMotorRight);
         ToggleIntakeMotorLeft.setInverted(true);
 
-        ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
-        ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
+        ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kForward, ROTATION_LIMIT_DOWN);
+        ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kForward, ROTATION_LIMIT_DOWN);
 
-        ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, rotationLimitUp);
-        ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kReverse, rotationLimitUp);
+        ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, ROTATION_LIMIT_UP);
+        ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kReverse, ROTATION_LIMIT_UP);
     }
 
     public boolean isStopped()
