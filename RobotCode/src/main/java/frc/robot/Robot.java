@@ -86,7 +86,8 @@ public class Robot extends TimedRobot
 			subsystem.autonomousInit();
 		}
 
-		autonomousCommand = robotContainer.getAutonomousCommand();
+		autonomousCommand = Autonomous.getAutoCommand();
+		Autonomous.close();
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null)
 		{

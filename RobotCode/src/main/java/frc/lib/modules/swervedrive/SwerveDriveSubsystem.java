@@ -147,7 +147,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 	}
 
-	// gets position of robot on the field (odometry)
+	/** gets position of robot on the field (odometry) in meters */
 	public Pose2d getPose()
 	{
 		return swerveOdometry.getPoseMeters();
