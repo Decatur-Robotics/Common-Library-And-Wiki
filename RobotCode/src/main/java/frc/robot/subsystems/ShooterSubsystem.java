@@ -81,10 +81,10 @@ public class ShooterSubsystem extends SubsystemBase
 	{
 		double newShooterPower = shooterPid.calculate(ShooterMotorSub.get(), shooterMotorPower);
 		ShooterMotorMain.set(newShooterPower);
-		ShooterMotorSub.set(newShooterPower * 0.8);
+		ShooterMotorSub.set(newShooterPower * ShooterConstants.MOTOR_SPEED_MOD);
 
 		double newFeederPower = feederPid.calculate(FeederMotorSub.get(), feederMotorPower);
 		FeederMotorMain.set(newFeederPower);
-		FeederMotorSub.set(newFeederPower * 0.8);
+		FeederMotorSub.set(newFeederPower * ShooterConstants.MOTOR_SPEED_MOD);
 	}
 }
