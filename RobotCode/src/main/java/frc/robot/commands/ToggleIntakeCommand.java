@@ -14,7 +14,7 @@ public class ToggleIntakeCommand extends Command
 	}
 
 	@Override
-	public void execute()
+	public void initialize()
 	{
 		Intake.raiseOrLowerIntake();
 	}
