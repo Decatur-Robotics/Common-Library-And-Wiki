@@ -24,15 +24,51 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RotateToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterInstant"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Top to Middle Note"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RotateToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterInstant"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Middle to Low Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RotateToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterInstant"
           }
         }
       ]
