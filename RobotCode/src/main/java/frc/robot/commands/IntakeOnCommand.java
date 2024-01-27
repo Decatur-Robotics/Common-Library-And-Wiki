@@ -16,7 +16,7 @@ public class IntakeOnCommand extends Command
 	@Override
 	public void execute()
 	{
-		intake.toggleIntakeOn();
+		Intake.toggleIntakeOn();
 	}
 
 	@Override
