@@ -39,13 +39,6 @@ public class ShooterSubsystem extends SubsystemBase
 		FeederMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.FEEDER_MOTOR_MAIN);
 		FeederMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.FEEDER_MOTOR_SUB);
 
-		// Sets the motors voltage compensation
-		ShooterMotorMain.enableVoltageCompensation(VOLTAGE);
-		ShooterMotorSub.enableVoltageCompensation(VOLTAGE);
-
-		FeederMotorMain.enableVoltageCompensation(VOLTAGE);
-		FeederMotorSub.enableVoltageCompensation(VOLTAGE);
-
 		// Inverts the right side
 		ShooterMotorSub.setInverted(true);
 		FeederMotorSub.setInverted(true);
@@ -65,9 +58,6 @@ public class ShooterSubsystem extends SubsystemBase
 
 	/**
 	 * This is clamping the shooter motor power to be within the range of -1 to 1
-	 * 
-	 * @param power
-	 * @param reason
 	 */
 	public void setShooterMotorPower(double power, String reason)
 	{
