@@ -190,6 +190,7 @@ public class TeamSparkMAX extends CANSparkMax implements IMotor
     CanPidController.setSmartMotionAllowedClosedLoopError(ERROR_TOLERANCE, SLOT);
   }
 
+  @Override
   public void onPidPeriodic(final int SLOT)
   {
     final PidParameters PidParams = PidProfiles[SLOT];
