@@ -1,27 +1,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeOnCommand extends Command
 {
-    private IntakeSubsystem intake;
+    private final IntakeSubsystem Intake;
 
     public IntakeOnCommand(IntakeSubsystem intake)
     {
-        this.intake = intake;
+        this.Intake = intake;
     }
 
     @Override
     public void execute()
     {
-        intake.toggleIntakeOn();
+        Intake.toggleIntakeOn();
     }
 
     @Override
     public void end(boolean stop)
     {
-        intake.stopIntake();
+        Intake.stopIntake();
     }
+
 }
