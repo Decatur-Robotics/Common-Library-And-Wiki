@@ -17,8 +17,7 @@ public class IntakeSubsystem extends SubsystemBase
     // Put as a constant, I don't think it is a value that has to be passed, since it's something
     // that would hardly change
     // The values are just provvisory and invented
-    private final float rotationLimitDown = 0.5f;
-    private final float rotationLimitUp = 0.1f;
+    private final float ROTATION_LIMIT_DOWN = 0.5f, ROTATION_LIMIT_UP = 0.1f;
 
     public IntakeSubsystem()
     {
@@ -28,7 +27,6 @@ public class IntakeSubsystem extends SubsystemBase
 
         ToggleIntakeMotorLeft.follow(ToggleIntakeMotorRight);
         ToggleIntakeMotorLeft.setInverted(true);
-        ToggleIntakeMotorRight.setInverted(false);
 
         ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
         ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
