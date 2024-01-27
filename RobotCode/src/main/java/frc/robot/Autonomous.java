@@ -134,7 +134,7 @@ public class Autonomous
             break;
         }
 
-        return Optional.of(Auto);
+        return Optional.ofNullable(Auto);
     }
 
     /** Calls {@link #buildAutoCommand()} */
