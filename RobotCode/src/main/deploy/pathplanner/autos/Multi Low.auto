@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low to Low Note"
+            "pathName": "Bottom Start to Bottom Note"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low to Middle Note"
+            "pathName": "Bottom to Middle Note"
           }
         }
       ]
