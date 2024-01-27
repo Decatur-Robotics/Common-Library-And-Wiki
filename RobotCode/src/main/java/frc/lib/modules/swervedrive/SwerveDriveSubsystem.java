@@ -99,10 +99,13 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	}
 
 	// main driving method. translation is change in every direction
-	public void drive(Translation2d translation, double rotation)
+	public void drive(Translation2d translation, double rotation, boolean fieldRelative,
+			boolean isOpenLoop)
 	{
-		drive(ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(),
-				rotation, getYaw()));
+		drive(fieldRelative
+				? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(),
+						rotation, getYaw())
+				: new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
 
 	}
 

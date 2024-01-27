@@ -108,7 +108,7 @@ public class DriveDistanceAuto extends Command
 		double rotSpeed = rotDiff > 0 ? Math.min(this.rotSpeed, rotDiff)
 				: Math.max(-this.rotSpeed, rotDiff);
 
-		Swerve.drive(speedVector, rotSpeed);
+		Swerve.drive(speedVector, rotSpeed, true, true);
 	}
 
 	@Override
