@@ -24,54 +24,41 @@ public class IntakeSubsystem extends SubsystemBase
         this.rotationLimitDown = rotationLimitDown;
         this.rotationLimitUp = rotationLimitUp;
 
-        ToggleIntakeMotorLeft.follow(ToggleIntakeMotorRight);
-        ToggleIntakeMotorLeft.setInverted(true);
-        ToggleIntakeMotorRight.setInverted(false);
+        intakeMotorLeft.follow(intakeMotorRight);
+        intakeMotorLeft.setInverted(true);
+        intakeMotorRight.setInverted(false);
 
-        // limits motor movement in a specified direction based on a specified amount of rotations
+        intakeMotorLeft.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
+        intakeMotorRight.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
 
-        ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
-        ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kForward, rotationLimitDown);
-        ToggleIntakeMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, rotationLimitUp);
-        ToggleIntakeMotorRight.setSoftLimit(SoftLimitDirection.kReverse, rotationLimitUp);
-
-        ToggleIntakeMotorLeft.setIdleMode(IdleMode.kBrake);
-        ToggleIntakeMotorRight.setIdleMode(IdleMode.kBrake);
-        ToggleIntakeOnMotor.setIdleMode(IdleMode.kBrake);
-
-    }
-
-    public boolean isStopped()
-    {
-        if (ToggleIntakeMotorLeft.get() != 0 && ToggleIntakeMotorRight.get() != 0)
-            return false;
-        return true;
+        intakeMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, rotationLimitUp);
+        intakeMotorRight.setSoftLimit(SoftLimitDirection.kReverse, rotationLimitUp);
     }
 
     public void raiseOrLowerIntake()
     {
         if (isLowered)
         {
-            ToggleIntakeMotorRight.set(MOTOR_SPEED * -1);
+            intakeMotorRight.set(MOTOR_SPEED * -1);
             isLowered = false;
         }
         else
         {
-            ToggleIntakeMotorRight.set(MOTOR_SPEED);
+            intakeMotorRight.set(MOTOR_SPEED);
             isLowered = true;
         }
     }
 
     public void toggleIntakeOn()
     {
-        ToggleIntakeOnMotor.set(MOTOR_SPEED);
+        intakeMotorCenter.set(MOTOR_SPEED);
     }
 
     public void stopIntake()
     {
-        ToggleIntakeOnMotor.set(0);
-        ToggleIntakeMotorLeft.set(0);
-        ToggleIntakeMotorRight.set(0);
+        intakeMotorCenter.set(0);
+        intakeMotorLeft.set(0);
+        intakeMotorRight.set(0);
     }
 
 }

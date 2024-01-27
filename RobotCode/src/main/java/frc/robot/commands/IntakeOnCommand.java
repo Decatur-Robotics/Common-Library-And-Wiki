@@ -5,23 +5,24 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeOnCommand extends Command
 {
-    private final IntakeSubsystem Intake;
+	private final IntakeSubsystem Intake;
 
-    public IntakeOnCommand(IntakeSubsystem intake)
-    {
-        this.Intake = intake;
-    }
+	public IntakeOnCommand(IntakeSubsystem intake)
+	{
+		this.Intake = intake;
+		addRequirements(intake);
+	}
 
-    @Override
-    public void execute()
-    {
-        Intake.toggleIntakeOn();
-    }
+	@Override
+	public void execute()
+	{
+		intake.toggleIntakeOn();
+	}
 
-    @Override
-    public void end(boolean stop)
-    {
-        Intake.stopIntake();
-    }
+	@Override
+	public void end(boolean stop)
+	{
+		Intake.stopIntake();
+	}
 
 }
