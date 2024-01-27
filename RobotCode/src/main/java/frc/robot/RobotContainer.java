@@ -1,104 +1,76 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.Joystick;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-
-import frc.lib.modules.swervedrive.SwerveConstants;
-
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
+/** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer
 {
-	private Joystick primaryController, secondaryController;
-	private final ShooterSubsystem ShooterSubsystem;
+
 	private static RobotContainer instance;
 
 	private final IntakeSubsystem IntakeSubsystem;
 
 	private final ShuffleboardTab ShuffleboardTab;
 
-	private SendableChooser<Command> autoChooser;
+	private final SendableChooser<Command> AutoChooser;
+
+	private final SwerveDriveSubsystem SwerveDrive;
+	private final ClimberSubsystem ClimberSubsystem;
+	private final ShooterSubsystem ShooterSubsystem;
+
+	private final ShooterMountSubsystem ShooterMountSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
 		instance = this;
-		ShooterSubsystem = new ShooterSubsystem();
-		// Still have to assign buttons to the intake systems
-		IntakeSubsystem = new IntakeSubsystem();
+    
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
-		// Autonomous set up
-		addAutonomousOptions();
-		registerNamedCommands();
-		addAutonomousOptions();
+		AutoChooser = AutoBuilder.buildAutoChooser();
+
+		// Instantiate subsystems
+		SwerveDrive = new SwerveDriveSubsystem();
+		ClimberSubsystem = new ClimberSubsystem();
+		ShooterSubsystem = new ShooterSubsystem();
+		ShooterMountSubsystem = new ShooterMountSubsystem();
+		IntakeSubsystem = new IntakeSubsystem();
+
+		Autonomous.init(this);
 
 		// Configure the button bindings
 		configurePrimaryBindings();
 		configureSecondaryBindings();
 	}
 
-	/** Registers any commands we want to use in PathPlanner */
-	private void registerNamedCommands()
-	{
-		// Ex: NamedCommands.registerCommand("commandName", command);
-	}
-
 	private void configurePrimaryBindings()
 	{
-
+		final Joystick primaryController = new Joystick(0);
 	}
 
 	private void configureSecondaryBindings()
 	{
-		secondaryController = new Joystick(1);
-		JoystickButton rightTrigger = new JoystickButton(secondaryController,
+		final Joystick secondaryController = new Joystick(1);
+		final JoystickButton rightTrigger = new JoystickButton(secondaryController,
 				LogitechControllerButtons.triggerRight);
 
 		rightTrigger.whileTrue(new ShooterCommand(ShooterSubsystem));
-	}
-
-	/** Adds autonomous options to the SendableChooser */
-	private void addAutonomousOptions()
-	{
-		autoChooser = AutoBuilder.buildAutoChooser();
-		ShuffleboardTab.add("Auto Chooser", autoChooser);
-
-	}
-
-	/**
-	 * Returns a command to follow a path from PathPlanner GUI whilst avoiding obstacles
-	 * 
-	 * @param pathName The filename of the path to follow w/o file extension. Must be in the paths
-	 *                 folder. Ex: Example Human Player Pickup
-	 * @return A command that will drive the robot along the path
-	 */
-	private Command followPath(String pathName)
-	{
-		PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-		return AutoBuilder.pathfindThenFollowPath(path,
-				SwerveConstants.AutoConstants.PathConstraints);
-	}
-
-	/**
-	 * @return The command that will be run as the autonomous. Will return whatever is selected in
-	 *         the autochooser on Shuffleboard
-	 */
-	public Command getAutonomousCommand()
-	{
-		return autoChooser.getSelected();
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()
@@ -106,6 +78,14 @@ public class RobotContainer
 		return instance.ShuffleboardTab;
 	}
 
-}
+	public SwerveDriveSubsystem getSwerveDrive()
+	{
+		return SwerveDrive;
+	}
 
-/** The container for the robot. Contains subsystems, OI devices, and commands. */
+	public ShooterSubsystem getShooter()
+	{
+		return ShooterSubsystem;
+	}
+
+}
