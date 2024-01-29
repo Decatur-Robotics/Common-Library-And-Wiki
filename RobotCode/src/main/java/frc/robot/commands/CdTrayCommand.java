@@ -17,11 +17,12 @@ public class CdTrayCommand extends Command
 
 	private boolean closed;
 
-	public CdTrayCommand(CdTraySubsystem CdTray)
+	public CdTrayCommand(CdTraySubsystem CdTray, CdTrayCommand cdMode)
 	{
 		System.out.println("Constructing CdTrayCommand...");
 		this.CdTray = CdTray;
 		this.closed = true;
+		this.cdMode = cdMode;
 		addRequirements(CdTray);
 	}
 
@@ -42,17 +43,6 @@ public class CdTrayCommand extends Command
 			CdTray.setSolenoid(cdMode);
 			startTime = LocalTime.now();
 		}
-	}
-
-	public boolean isFinished()
-	{
-		return startTime != null && LocalTime.now().minusNanos(timeToWait).compareTo(startTime) > 0;
-	}
-
-	public void end()
-	{
-		System.out.println("Ending CdTrayCommand...");
-		CdTray.getCdArmLeft().set(Value.kReverse);
 	}
 
 }
