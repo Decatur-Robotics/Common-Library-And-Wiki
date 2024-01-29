@@ -37,14 +37,13 @@ public class CdTrayCommand extends Command
 
 		CdTray.closed = true;
 
-		if (CdTray.getCdArmLeft().get() == Value.kOff && startTime == null)
+		if (CdTray.getCdArmLeft().get() == Value.kReverse && startTime == null)
 		{
 			CdTray.setSolenoid(cdMode);
 			startTime = LocalTime.now();
 		}
 	}
 
-	
 	public boolean isFinished()
 	{
 		return startTime != null && LocalTime.now().minusNanos(timeToWait).compareTo(startTime) > 0;
@@ -53,7 +52,7 @@ public class CdTrayCommand extends Command
 	public void end()
 	{
 		System.out.println("Ending CdTrayCommand...");
-		CdTray.getCdArmLeft().set(Value.kOff);
+		CdTray.getCdArmLeft().set(Value.kReverse);
 	}
 
 }
