@@ -38,6 +38,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 	private double gyroOffset = 0;
 
+	private Optional<DoubleSupplier> rotationController;
+
 	public SwerveDriveSubsystem()
 	{
 		gyro = new Pigeon2(SwervePorts.GYRO);
@@ -68,6 +70,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 				getModulePositions());
 
 		configureAutoBuilder();
+
+		rotationController = Optional.empty();
 	}
 
 	private void configureAutoBuilder()
@@ -97,10 +101,14 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 		double[] offsets = SwerveConstants.ANGLE_OFFSETS;
 
-		SwerveConstants.ModFL.angleOffset = Rotation2d.fromDegrees(offsets[0] - (invert ? 180 : 0));
-		SwerveConstants.ModFR.angleOffset = Rotation2d.fromDegrees(offsets[1] - (invert ? 180 : 0));
-		SwerveConstants.ModBL.angleOffset = Rotation2d.fromDegrees(offsets[2] - (invert ? 180 : 0));
-		SwerveConstants.ModBR.angleOffset = Rotation2d.fromDegrees(offsets[3] - (invert ? 180 : 0));
+		SwerveConstants.ModFL.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.FRONT_LEFT] - (invert ? 180 : 0));
+		SwerveConstants.ModFR.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.FRONT_RIGHT] - (invert ? 180 : 0));
+		SwerveConstants.ModBL.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.BACK_LEFT] - (invert ? 180 : 0));
+		SwerveConstants.ModBR.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.BACK_RIGHT] - (invert ? 180 : 0));
 	}
 
 	// main driving method. translation is change in every direction
@@ -141,6 +149,15 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 	private void drive(ChassisSpeeds speeds)
 	{
+		// Override rotation if a controller is present
+		// This override is used by autonomous to override PathPlanner
+		if (rotationController.isPresent())
+		{
+			double rotation = rotationController.get().getAsDouble();
+			speeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
+					rotation);
+		}
+
 		drive(speeds, true);
 	}
 
@@ -259,6 +276,11 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public ChassisSpeeds getCurrentSpeeds()
 	{
 		return SwerveConstants.SwerveKinematics.toChassisSpeeds(getModuleStates());
+	}
+
+	public void setRotationController(final DoubleSupplier RotationController)
+	{
+		rotationController = Optional.of(RotationController);
 	}
 
 	/**
