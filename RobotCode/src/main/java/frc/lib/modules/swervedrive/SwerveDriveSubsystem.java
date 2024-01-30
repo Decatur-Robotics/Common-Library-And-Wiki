@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -19,10 +20,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.core.LogitechControllerButtons;
+import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
 
 public class SwerveDriveSubsystem extends SubsystemBase
 {
@@ -254,5 +259,32 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public ChassisSpeeds getCurrentSpeeds()
 	{
 		return SwerveConstants.SwerveKinematics.toChassisSpeeds(getModuleStates());
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
+	 * @return the default command for the swerve drive that allows full driver control
+	 */
+	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller)
+	{
+		return getTeleopControlledRotationCommand(Controller, Controller::getTwist);
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
+	 * @param Rotation   supplier for the rotation of the swerve drive
+	 * @return the default command for the swerve drive that allows driver control except for
+	 *         rotation
+	 */
+	public TeleopSwerveCommand getTeleopControlledRotationCommand(final Joystick Controller,
+			final DoubleSupplier Rotation)
+	{
+		final JoystickButton TriggerLeft = new JoystickButton(Controller,
+				LogitechControllerButtons.triggerLeft),
+				TriggerRight = new JoystickButton(Controller,
+						LogitechControllerButtons.triggerRight);
+
+		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
+				Rotation, TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
 	}
 }

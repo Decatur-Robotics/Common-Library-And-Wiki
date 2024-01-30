@@ -56,7 +56,9 @@ public class RobotContainer
 
 	private void configurePrimaryBindings()
 	{
-		final Joystick primaryController = new Joystick(0);
+		final Joystick PrimaryController = new Joystick(0);
+
+		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 	}
 
 	private void configureSecondaryBindings()
