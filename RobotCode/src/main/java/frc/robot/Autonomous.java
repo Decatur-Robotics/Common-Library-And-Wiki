@@ -1,6 +1,9 @@
 package frc.robot;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
+
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -8,13 +11,17 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
+import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterInstantCommand;
 import frc.robot.constants.AutoConstants;
+import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class Autonomous
 {
@@ -85,8 +92,18 @@ public class Autonomous
 
         final SwerveDriveSubsystem SwerveDrive = RobotContainer.getSwerveDrive();
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final VisionSubsystem Vision = RobotContainer.getVision();
 
         final SequentialCommandGroup Auto = new SequentialCommandGroup();
+
+        // Override the swerve drive's rotation to always point at the target
+        Auto.addCommands(new InstantCommand(
+                () -> SwerveDrive.setRotationController(() -> Vision.getYawOffset())));
+
+        // Aim towards the target. Need to update once aiming is improved
+        Auto.addCommands(new RotateShooterMountToPositionCommand(ShooterMount,
+                Vision::getPitchOffset, false));
 
         switch (AutoMode)
         {
