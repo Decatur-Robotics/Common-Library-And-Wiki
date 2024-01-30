@@ -12,10 +12,12 @@ import frc.robot.constants.Ports;
 public class ClimberSubsystem extends SubsystemBase
 {
 
-	private TeamTalonFX extendMotorLeft;
-	private TeamTalonFX extendMotorRight;
-	private double targetPosition;
+	private TeamTalonFX extendMotorLeft, extendMotorRight;
+	private double targetPositionLeft;
+	private double targetPositionRight;
 	private ProfiledPIDController pidController;
+	private boolean override;
+	private double leftPower, rightPower;
 
 	public ClimberSubsystem()
 	{
@@ -27,26 +29,42 @@ public class ClimberSubsystem extends SubsystemBase
 		extendMotorLeft.setNeutralMode(NeutralMode.Brake);
 		extendMotorRight.setNeutralMode(NeutralMode.Brake);
 		extendMotorLeft.setInverted(true);
-		targetPosition = ClimberConstants.MIN_EXTENSION;
+		targetPositionLeft = ClimberConstants.MIN_EXTENSION;
 		pidController = new ProfiledPIDController(ClimberConstants.CLIMBER_KP,
 				ClimberConstants.CLIMBER_KI, ClimberConstants.CLIMBER_KD,
 				new TrapezoidProfile.Constraints(ClimberConstants.CLIMBER_VELOCITY,
 						ClimberConstants.CLIMBER_ACCELERATION));
+		override = false;
 	}
 
 	public void periodic()
 	{
-		
+		if (!override)
+		{
+			extendMotorLeft.set(pidController.calculate(extendMotorLeft.getCurrentEncoderValue(), targetPositionLeft));
+			extendMotorRight.set(pidController.calculate(extendMotorRight.getCurrentEncoderValue(), targetPositionRight));
+		} 
+		else 
+		{
+			extendMotorLeft.set(leftPower * ClimberConstants.MAX_OVERRIDE_SPEED);
+			extendMotorRight.set(rightPower * ClimberConstants.MAX_OVERRIDE_SPEED);
+			targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
+			targetPositionRight = extendMotorRight.getCurrentEncoderValue();
+		}
 	}
 
 	public void setPowers(double leftPower, double rightPower, String reason)
 	{
+		this.leftPower = leftPower;
+		this.rightPower = rightPower;
+
 
 	}
 
 	public void setPosition(double position)
 	{
-		targetPosition = position;
+		targetPositionLeft = position;
+		targetPositionRight = position;
 	}
 
 	// checks if the power level is too high or low for both motors.
@@ -56,6 +74,11 @@ public class ClimberSubsystem extends SubsystemBase
 				&& power >= 0)
 				|| (extendMotorLeft.getCurrentEncoderValue() < ClimberConstants.MIN_EXTENSION
 						&& power <= 0);
+	}
+
+	public void setOverride(boolean override)
+	{
+		this.override = override;
 	}
 
 }
