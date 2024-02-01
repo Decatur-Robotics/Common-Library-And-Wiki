@@ -154,9 +154,9 @@ public class PidParameters
 				errorTolerance);
 		if (NEW_ERROR_TOLERANCE != errorTolerance)
 		{
-			errorTolerance = new_errorTolerance;
-			if (updateMotor)
-				motor.configAllowableClosedloopError(pidSlotIndex, errorTolerance, 30);
+			errorTolerance = NEW_ERROR_TOLERANCE;
+			if (UPDATE_MOTOR)
+				motor.setClosedLoopErrorLimit(NEW_ERROR_TOLERANCE, 30);
 		}
 		SmartDashboard.putNumber(prefix + ".errorTolerance", errorTolerance);
 	}
