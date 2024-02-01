@@ -1,18 +1,22 @@
-package frc.robot.Commands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ClimberSubsystem;
-
+import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimberOverrideCommand extends Command
 {
-	public ClimberOverrideCommand(ClimberSubsystem ClimberSubsystem)
+	private ClimberSubsystem climber;
+
+	public ClimberOverrideCommand(ClimberSubsystem climber)
 	{
-		ClimberSubsystem.setOverride(true);
+		this.climber = climber;
+		addRequirements(climber);
+		climber.setOverride(true);
 
 	}
+
 	public void end()
 	{
-		ClimberSubsystem.setOverride(false);
+		climber.setOverride(false);
 	}
 }

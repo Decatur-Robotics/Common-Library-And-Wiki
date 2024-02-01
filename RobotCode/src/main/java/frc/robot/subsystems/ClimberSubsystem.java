@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -11,8 +13,9 @@ import frc.robot.constants.Ports;
 
 public class ClimberSubsystem extends SubsystemBase
 {
-
+	private Pigeon2 gyro;
 	private TeamTalonFX extendMotorLeft, extendMotorRight;
+	private double targetPosition;
 	private double targetPositionLeft;
 	private double targetPositionRight;
 	private ProfiledPIDController pidController;
@@ -21,6 +24,7 @@ public class ClimberSubsystem extends SubsystemBase
 
 	public ClimberSubsystem()
 	{
+		gyro = new Pigeon2(Ports.PIGEON_GYRO);
 		// sets extension of left and right motors to given extension length
 		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
 				Ports.CLIMBER_EXTEND_RIGHT_MOTOR);
@@ -29,7 +33,7 @@ public class ClimberSubsystem extends SubsystemBase
 		extendMotorLeft.setNeutralMode(NeutralMode.Brake);
 		extendMotorRight.setNeutralMode(NeutralMode.Brake);
 		extendMotorLeft.setInverted(true);
-		targetPositionLeft = ClimberConstants.MIN_EXTENSION;
+		targetPosition = ClimberConstants.MIN_EXTENSION;
 		pidController = new ProfiledPIDController(ClimberConstants.CLIMBER_KP,
 				ClimberConstants.CLIMBER_KI, ClimberConstants.CLIMBER_KD,
 				new TrapezoidProfile.Constraints(ClimberConstants.CLIMBER_VELOCITY,
@@ -41,6 +45,20 @@ public class ClimberSubsystem extends SubsystemBase
 	{
 		if (!override)
 		{
+			targetPositionLeft = targetPosition;
+			targetPositionRight = targetPosition;
+
+			// left
+			if (gyro.getRoll() > ClimberConstants.DEADBAND_GYRO)
+			{
+				targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
+			}
+
+			// right
+			else if (gyro.getRoll() < -ClimberConstants.DEADBAND_GYRO)
+			{
+				targetPositionRight = extendMotorRight.getCurrentEncoderValue();
+			}
 			extendMotorLeft.set(pidController.calculate(extendMotorLeft.getCurrentEncoderValue(),
 					targetPositionLeft));
 			extendMotorRight.set(pidController.calculate(extendMotorRight.getCurrentEncoderValue(),
@@ -50,8 +68,8 @@ public class ClimberSubsystem extends SubsystemBase
 		{
 			extendMotorLeft.set(leftPower * ClimberConstants.MAX_OVERRIDE_SPEED);
 			extendMotorRight.set(rightPower * ClimberConstants.MAX_OVERRIDE_SPEED);
-			targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
-			targetPositionRight = extendMotorRight.getCurrentEncoderValue();
+			targetPosition = extendMotorLeft.getCurrentEncoderValue();
+			targetPosition = extendMotorRight.getCurrentEncoderValue();
 		}
 	}
 
@@ -64,6 +82,7 @@ public class ClimberSubsystem extends SubsystemBase
 
 	public void setPosition(double position)
 	{
+		targetPosition = position;
 		targetPositionLeft = position;
 		targetPositionRight = position;
 	}
