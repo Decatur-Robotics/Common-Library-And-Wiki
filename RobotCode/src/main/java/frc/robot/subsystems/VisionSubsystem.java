@@ -26,6 +26,7 @@ public class VisionSubsystem extends SubsystemBase
     public void periodic()
     {
         latestPipelineResult = Camera.getLatestResult();
+
         // Pay attention to PhotonTargetSortMode!
         bestTarget = Optional.ofNullable(latestPipelineResult.getBestTarget());
     }

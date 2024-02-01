@@ -25,8 +25,6 @@ public class RobotContainer
 
 	private final ShuffleboardTab ShuffleboardTab;
 
-	private final SendableChooser<Command> AutoChooser;
-
 	private final SwerveDriveSubsystem SwerveDrive;
 	private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
@@ -39,8 +37,6 @@ public class RobotContainer
 		instance = this;
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
-
-		AutoChooser = AutoBuilder.buildAutoChooser();
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
