@@ -2,7 +2,7 @@ package frc.robot.constants;
 
 public final class ClimberConstants
 {
-	public static final double MAX_SPEED = 1, MIN_SPEED = 0.3, SPEED = 0.45;
+	public static final double MAX_OVERRIDE_SPEED = 0.5;
 	public static final double MIN_EXTENSION = 5;
 	public static final double MAX_EXTENSION = 280;
 
