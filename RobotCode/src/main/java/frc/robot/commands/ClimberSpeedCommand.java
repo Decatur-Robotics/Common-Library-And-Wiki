@@ -25,11 +25,11 @@ public class ClimberSpeedCommand extends Command
 	{
 		double leftInputFinal = leftInput.getAsDouble();
 		double rightInputFinal = rightInput.getAsDouble();
-		if (Math.abs(leftInputFinal) < ClimberConstants.DEADBAND_RANGE)
+		if (Math.abs(leftInputFinal) < ClimberConstants.DEADBAND_JOYSTICK)
 		{
 			leftInputFinal = 0;
 		}
-		if (Math.abs(rightInputFinal) < ClimberConstants.DEADBAND_RANGE)
+		if (Math.abs(rightInputFinal) < ClimberConstants.DEADBAND_JOYSTICK)
 		{
 			rightInputFinal = 0;
 		}
