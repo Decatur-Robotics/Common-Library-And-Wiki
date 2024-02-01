@@ -1,9 +1,9 @@
-package frc.robot.Commands;
+package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.ShooterMountSubsystem;
+import frc.robot.subsystems.ShooterMountSubsystem;
 
 /** Continuously rotates based on a speed */
 public class RotateShooterMountCommand extends Command

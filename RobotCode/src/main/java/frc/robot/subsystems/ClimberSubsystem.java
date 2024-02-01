@@ -1,4 +1,4 @@
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -36,7 +36,7 @@ public class ClimberSubsystem extends SubsystemBase
 
 	public void periodic()
 	{
-		
+
 	}
 
 	public void setPowers(double leftPower, double rightPower, String reason)
