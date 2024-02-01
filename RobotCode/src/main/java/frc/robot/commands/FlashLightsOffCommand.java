@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Color;
+import frc.lib.modules.leds.Color;
 import frc.robot.subsystems.LedSubsystem;
 
 public class FlashLightsOffCommand extends Command

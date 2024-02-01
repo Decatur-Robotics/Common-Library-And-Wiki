@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.lib.modules.leds;
 
 public final class NamedColor
 {
