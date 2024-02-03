@@ -11,7 +11,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamTalonFX mainMotor, followMotor;
 
-	/** In degrees */
 	private double targetRotation; // In degrees
 
 	private boolean autoAim;
