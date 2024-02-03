@@ -59,6 +59,7 @@ public class ClimberSubsystem extends SubsystemBase
 			{
 				targetPositionRight = extendMotorRight.getCurrentEncoderValue();
 			}
+			// setting extension of climber arms
 			extendMotorLeft.set(pidController.calculate(extendMotorLeft.getCurrentEncoderValue(),
 					targetPositionLeft));
 			extendMotorRight.set(pidController.calculate(extendMotorRight.getCurrentEncoderValue(),
