@@ -15,6 +15,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 	private static final double DEGREES_IN_ONE_TICK = 360 / 42, SPEED = 1;
 	public static final double DEADBAND = 0.5;
 
+	private boolean autoAim;
+
 	public ShooterMountSubsystem()
 	{
 		mainMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
@@ -30,6 +32,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 		mainMotor.set(0);
 
 		goalRotation = 0.0;
+
+		autoAim = false;
 	}
 
 	@Override
@@ -73,6 +77,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public void setMotors(double power, String reason)
 	{
 		mainMotor.set(Math.max(-1, Math.min(power, 1)) * SPEED, reason);
+	}
+
+	public void setAutoAim(boolean autoAim) {
+		this.autoAim = autoAim;
 	}
 
 }
