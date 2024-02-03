@@ -73,16 +73,21 @@ public interface ILogSource
 
         if (logger == null)
         {
-            logger = Logger.getLogger(loggerName);
-            logger.setLevel(Level.ALL);
+            // Initialize the logger
 
+            logger = Logger.getLogger(loggerName);
+            logger.setLevel(Level.ALL); // We will filter the messages in our own filter
+
+            // Set up the console handler
             ConsoleHandler consoleHandler = new ConsoleHandler();
             consoleHandler.setFormatter(Formatter);
-            consoleHandler.setLevel(Level.ALL);
+            consoleHandler.setLevel(Level.ALL); // We will filter the messages in our own filter
+            // Here's where we filter the messages
             consoleHandler.setFilter(new LogFilter(Level.CONFIG));
 
+            // Disable the default handler
             logger.setUseParentHandlers(false);
-            logger.addHandler(consoleHandler);
+            logger.addHandler(consoleHandler); // Add our own handler
 
             Loggers.put(loggerName, logger);
 
