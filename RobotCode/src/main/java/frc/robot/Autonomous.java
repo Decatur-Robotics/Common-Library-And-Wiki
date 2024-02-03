@@ -8,13 +8,18 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
+import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterInstantCommand;
 import frc.robot.constants.AutoConstants;
+import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class Autonomous
 {
@@ -41,6 +46,7 @@ public class Autonomous
     {
         instance = this;
         RobotContainer = robotContainer;
+
         Gui = frc.robot.RobotContainer.getShuffleboardTab();
 
         // Set up starting position chooser
@@ -71,7 +77,7 @@ public class Autonomous
         }
         else if (instance.RobotContainer != robotContainer)
         {
-            throw new IllegalStateException("Cannot reinitialize Autonomous!");
+            System.err.println("Cannot reinitialize Autonomous!");
         }
     }
 
@@ -85,8 +91,20 @@ public class Autonomous
 
         final SwerveDriveSubsystem SwerveDrive = RobotContainer.getSwerveDrive();
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final VisionSubsystem Vision = RobotContainer.getVision();
 
-        final SequentialCommandGroup Auto = new SequentialCommandGroup();
+        final SequentialCommandGroup AutoMain = new SequentialCommandGroup();
+        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(AutoMain);
+
+        // Override the swerve drive's rotation to always point at the target
+        AutoMain.addCommands(
+                new InstantCommand(() -> SwerveDrive.setRotationController(Vision::getYawOffset)));
+
+        // Aim towards the target. Need to update once aiming is improved
+        // We do this in AutoAsync since it won't end
+        AutoAsync.addCommands(new RotateShooterMountToPositionCommand(ShooterMount,
+                Vision::getPitchOffset, false));
 
         switch (AutoMode)
         {
@@ -94,13 +112,13 @@ public class Autonomous
             return Optional.empty();
 
         case Leave:
-            Auto.addCommands(new ShooterInstantCommand(Shooter));
-            Auto.addCommands(new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
+            AutoMain.addCommands(new ShooterInstantCommand(Shooter));
+            AutoMain.addCommands(new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
                     SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
             break;
 
         case MultiNote:
-            Auto.addCommands(new ShooterInstantCommand(Shooter));
+            AutoMain.addCommands(new ShooterInstantCommand(Shooter));
 
             String[] pathSequence = new String[0];
 
@@ -128,13 +146,13 @@ public class Autonomous
             for (String pathName : pathSequence)
             {
                 // Add intake and aiming command once we have that!
-                Auto.addCommands(followPath(pathName), new ShooterInstantCommand(Shooter));
+                AutoMain.addCommands(followPath(pathName), new ShooterInstantCommand(Shooter));
             }
 
             break;
         }
 
-        return Optional.ofNullable(Auto);
+        return Optional.ofNullable(AutoAsync);
     }
 
     /** Calls {@link #buildAutoCommand()} */

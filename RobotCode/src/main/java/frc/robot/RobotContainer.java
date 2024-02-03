@@ -15,6 +15,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer
@@ -24,13 +25,11 @@ public class RobotContainer
 
 	private final ShuffleboardTab ShuffleboardTab;
 
-	private final SendableChooser<Command> AutoChooser;
-
 	private final SwerveDriveSubsystem SwerveDrive;
 	private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
-
 	private final ShooterMountSubsystem ShooterMountSubsystem;
+	private final VisionSubsystem VisionSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
@@ -39,13 +38,12 @@ public class RobotContainer
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
-		AutoChooser = AutoBuilder.buildAutoChooser();
-
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
 		ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
 		ShooterMountSubsystem = new ShooterMountSubsystem();
+		VisionSubsystem = new VisionSubsystem();
 
 		Autonomous.init(this);
 
@@ -56,7 +54,9 @@ public class RobotContainer
 
 	private void configurePrimaryBindings()
 	{
-		final Joystick primaryController = new Joystick(0);
+		final Joystick PrimaryController = new Joystick(0);
+
+		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 	}
 
 	private void configureSecondaryBindings()
@@ -81,6 +81,16 @@ public class RobotContainer
 	public ShooterSubsystem getShooter()
 	{
 		return ShooterSubsystem;
+	}
+
+	public ShooterMountSubsystem getShooterMount()
+	{
+		return ShooterMountSubsystem;
+	}
+
+	public VisionSubsystem getVision()
+	{
+		return VisionSubsystem;
 	}
 
 }
