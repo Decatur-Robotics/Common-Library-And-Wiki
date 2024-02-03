@@ -11,8 +11,12 @@ public class ClimberOverrideCommand extends Command
 	{
 		this.climber = climber;
 		addRequirements(climber);
-		climber.setOverride(true);
 
+	}
+
+	public void instantiate()
+	{
+		climber.setOverride(true);
 	}
 
 	public void end()

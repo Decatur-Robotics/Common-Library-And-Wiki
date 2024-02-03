@@ -15,9 +15,7 @@ public class ClimberSubsystem extends SubsystemBase
 {
 	private Pigeon2 gyro;
 	private TeamTalonFX extendMotorLeft, extendMotorRight;
-	private double targetPosition;
-	private double targetPositionLeft;
-	private double targetPositionRight;
+	private double targetPosition, targetPositionLeft, targetPositionRight;
 	private ProfiledPIDController pidController;
 	private boolean override;
 	private double leftPower, rightPower;
