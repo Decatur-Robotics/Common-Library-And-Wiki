@@ -14,16 +14,16 @@ public class IntakeSubsystem extends SubsystemBase
     private final double MOTOR_SPEED = 0.5;
     private boolean isLowered = false;
 
-    // Put as a constant, I don't think it is a value that has to be passed, since it's something
-    // that would hardly change
-    // The values are just provvisory and invented
+    /*  Put as a constant, I don't think it is a value that has to be passed, since it's something
+     * that would hardly change
+     * The values are just provvisory and invented*/
     private final float ROTATION_LIMIT_DOWN = 0.5f, ROTATION_LIMIT_UP = 0.1f;
 
     public IntakeSubsystem()
     {
         ToggleIntakeMotorRight = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_RIGHT);
         ToggleIntakeMotorLeft = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_LEFT);
-        ToggleIntakeOnMotor = new TeamSparkMAX("Intake Motor", Ports.INTAKE_MOTOR_CENTER);
+        ToggleIntakeOnMotor = new TeamSparkMAX("Intake Motor", Ports.INTAKE_ON_MOTOR);
 
         ToggleIntakeMotorLeft.follow(ToggleIntakeMotorRight);
         ToggleIntakeMotorLeft.setInverted(true);
