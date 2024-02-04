@@ -8,48 +8,53 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 public class RotateShooterMountToPositionCommand extends Command
 {
 
-	private final ShooterMountSubsystem ShooterMountSubsystem;
 
-	private DoubleSupplier getPosition;
+    private final ShooterMountSubsystem ShooterMountSubsystem;
 
-	/**
-	 * This constructor is the version that allows for variable targets (ex: based on joystick)
-	 * 
-	 * @param getPosition in degrees
-	 */
-	public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem,
-			DoubleSupplier getPosition)
-	{
-		ShooterMountSubsystem = subsystem;
-		this.getPosition = getPosition;
+    private DoubleSupplier getPosition;
 
-		// We do this before setting the rotation so that any other
-		// command controlling the shooter mount will end before we set the rotation
-		addRequirements(subsystem);
-	}
+    private boolean endAutomatically;
 
-	/**
-	 * This constructor is the version that uses a constant target
-	 * 
-	 * @param position in degrees
-	 */
-	public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem, double position)
-	{
-		this(subsystem, () -> position);
-	}
+    /**
+     * This constructor is the version that allows for variable targets (ex: based on joystick)
+     * 
+     * @param getPosition in degrees
+     */
+    public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem,
+            DoubleSupplier getPosition, boolean endAutomatically)
+    {
+        ShooterMountSubsystem = subsystem;
+        this.getPosition = getPosition;
+        this.endAutomatically = endAutomatically;
 
-	@Override
-	public void execute()
-	{
-		ShooterMountSubsystem.setGoalRotation(getPosition.getAsDouble());
-	}
+        // We do this before setting the rotation so that any other
+        // command controlling the shooter mount will end before we set the rotation
+        addRequirements(subsystem);
+    }
 
-	@Override
-	public boolean isFinished()
-	{
-		// We do the funny static access to avoid going through the variable
-		return Math.abs(ShooterMountSubsystem.getCurrentRotation()
-				- getPosition.getAsDouble()) < frc.robot.subsystems.ShooterMountSubsystem.DEADBAND;
-	}
+    /**
+     * This constructor is the version that uses a constant target
+     * 
+     * @param position in degrees
+     */
+    public RotateShooterMountToPositionCommand(ShooterMountSubsystem subsystem, double position,
+            boolean endAutomatically)
+    {
+        this(subsystem, () -> position, endAutomatically);
+    }
+
+    @Override
+    public void execute()
+    {
+        ShooterMountSubsystem.setGoalRotation(getPosition.getAsDouble());
+    }
+
+    @Override
+    public boolean isFinished()
+    {
+        // We do the weird static access to avoid going through the variable
+        return endAutomatically && Math.abs(ShooterMountSubsystem.getCurrentRotation()
+                - getPosition.getAsDouble()) < frc.robot.subsystems.ShooterMountSubsystem.DEADBAND;
+    }
 
 }
