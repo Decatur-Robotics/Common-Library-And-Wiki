@@ -107,23 +107,27 @@ public class VisionSubsystem extends SubsystemBase
         return Optional.empty();
     }
 
-    public double pointTowardsPose(Pose3d targetPose)
+    /**
+     * @return the angle to the target pose in degrees
+     */
+    public double angleToPose(Pose3d targetPose)
     {
-        Optional<Pose2d> robotPose = getRobotPose();
+        Optional<Pose2d> robotPoseOptional = getRobotPose();
 
-        if (robotPose.isEmpty())
+        if (robotPoseOptional.isEmpty())
         {
             return 0.0;
         }
 
-        Pose2d robotPose2d = robotPose.get();
+        Pose2d robotPose = robotPoseOptional.get();
 
-        // Calculate the angle to the target
-        Pose2d distance = new Pose2d(targetPose.getX() - robotPose2d.getX(),
-                targetPose.getY() - robotPose2d.getY(), new Rotation2d());
+        // Calculate the distance to the target
+        Pose2d distance = new Pose2d(targetPose.getX() - robotPose.getX(),
+                targetPose.getY() - robotPose.getY(), new Rotation2d());
 
         // Use the inverse tangent to calculate the angle
-        return Math.atan2(distance.getY(), distance.getX());
+        // Atan2 accounts for the sign of the x and y values
+        return Math.toDegrees(Math.atan2(distance.getY(), distance.getX()));
     }
 
 }
