@@ -5,26 +5,31 @@ import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AimShooterCommand extends Command {
+public class AimShooterCommand extends Command
+{
 
 	private ShooterSubsystem shooter;
 	private ShooterMountSubsystem shooterMount;
 
-	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount) {
+	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount)
+	{
 		this.shooter = shooter;
 		this.shooterMount = shooterMount;
 
 		addRequirements(shooter, shooterMount);
 	}
 
-	public void initialize() {
+	public void initialize()
+	{
 		shooter.setShooterMotorPower(ShooterConstants.SPEAKER_SPEED, "Aiming shooter");
 		shooterMount.setAutoAim(true);
 	}
 
-	public void end() {
+	@Override
+	public void end(boolean interrupted)
+	{
 		shooter.setShooterMotorPower(0, "Ending aiming shooter");
 		shooterMount.setAutoAim(false);
 	}
-	
+
 }

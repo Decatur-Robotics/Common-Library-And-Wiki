@@ -11,6 +11,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -27,17 +30,22 @@ public class VisionSubsystem extends SubsystemBase
 	private Optional<PhotonTrackedTarget> bestTarget;
 
 	public VisionSubsystem()
-    {
-        Camera = new PhotonCamera(VisionConstants.CameraTableName);
+	{
+		Camera = new PhotonCamera(VisionConstants.CameraTableName);
 
-		AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-		Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); // Tune to robot
-		Transform3d shooterMountToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); // Tune to robot
-		
-		robotPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, robotToCam);
-		shooterMountPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, shooterMountToCam);
+		AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo
+				.loadAprilTagLayoutField();
+		Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
+				new Rotation3d(0, 0, 0)); // Tune to robot
+		Transform3d shooterMountToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
+				new Rotation3d(0, 0, 0)); // Tune to robot
 
-    }
+		robotPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, robotToCam);
+		shooterMountPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, shooterMountToCam);
+
+	}
 
 	@Override
 	public void periodic()
@@ -64,9 +72,22 @@ public class VisionSubsystem extends SubsystemBase
 		return bestTarget.map(PhotonTrackedTarget::getPitch).orElse(0.0);
 	}
 
-	public Optional<EstimatedRobotPose> getRobotPose()
+	public Optional<Pose2d> getRobotPose()
 	{
-		return robotPoseEstimator.update();
+		Optional<EstimatedRobotPose> estPose = robotPoseEstimator.update();
+		if (estPose.isPresent())
+		{
+			EstimatedRobotPose pose = estPose.get();
+			Pose3d pose3d = pose.estimatedPose;
+
+			// We only care about the x and z, and the yaw
+			Rotation2d rot2d = new Rotation2d(pose3d.getRotation().getY());
+			Pose2d pose2d = new Pose2d(pose3d.getX(), pose3d.getZ(), rot2d);
+
+			return Optional.of(pose2d);
+		}
+
+		return Optional.empty();
 	}
 
 	public Optional<EstimatedRobotPose> getShooterMountPose()
