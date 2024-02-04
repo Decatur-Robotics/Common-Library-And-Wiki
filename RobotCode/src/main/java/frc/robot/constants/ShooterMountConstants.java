@@ -2,7 +2,7 @@ package frc.robot.constants;
 
 public class ShooterMountConstants {
 
-	public static final double DEGREES_IN_ONE_TICK = 360 / 4096; // Update to reflect gear ratios
+	public static final double TICKS_IN_ONE_DEGREE = 4096 / 360; // Update to reflect gear ratios
 	
 	public static final double SHOOTER_MOUNT_KP = 0.1;
 	public static final double SHOOTER_MOUNT_KI = 0;

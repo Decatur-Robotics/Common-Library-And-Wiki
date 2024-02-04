@@ -1,8 +1,15 @@
 package frc.robot.subsystems;
 
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
+
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 import frc.lib.core.motors.TeamTalonFX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
@@ -15,11 +22,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private boolean autoAim;
 
+	private Pose2d shooterMountPose;
+
 	public ShooterMountSubsystem()
 	{
 		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT",
-				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
 		followMotor.follow(mainMotor);
 		followMotor.setInverted(true);
@@ -35,14 +43,20 @@ public class ShooterMountSubsystem extends SubsystemBase
 		targetRotation = 0;
 
 		autoAim = false;
+		shooterMountPose = new Pose2d();
 	}
 
 	@Override
 	public void periodic()
 	{
-		if (autoAim) 
+		
+
+		if (autoAim)
 		{
-			
+			shooterMountPose = /* RobotContainer.getVision().getShooterMountPose() */ new Pose2d();
+
+
+
 		}
 	}
 
@@ -53,10 +67,11 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private static double degreesToTicks(double degrees)
 	{
-		return degrees / ShooterMountConstants.DEGREES_IN_ONE_TICK;
+		return degrees * ShooterMountConstants.TICKS_IN_ONE_DEGREE;
 	}
 
-	public void setAutoAim(boolean autoAim) {
+	public void setAutoAim(boolean autoAim)
+	{
 		this.autoAim = autoAim;
 	}
 

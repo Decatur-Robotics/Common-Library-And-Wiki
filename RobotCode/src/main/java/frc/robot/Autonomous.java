@@ -103,8 +103,13 @@ public class Autonomous
 
         // Aim towards the target. Need to update once aiming is improved
         // We do this in AutoAsync since it won't end
-        AutoAsync.addCommands(new RotateShooterMountToPositionCommand(ShooterMount,
-                Vision::getPitchOffset, false));
+        /* 
+
+		Toggle shooter mount auto aim instead of this now.
+
+		AutoAsync.addCommands(new RotateShooterMountToPositionCommand(ShooterMount,
+                Vision::getPitchOffset));
+		*/
 
         switch (AutoMode)
         {
