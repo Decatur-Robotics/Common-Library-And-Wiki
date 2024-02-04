@@ -14,6 +14,7 @@ public class ClimberOverrideCommand extends Command
 
 	}
 
+	// forgot what this does but renato said its important
 	public void instantiate()
 	{
 		climber.setOverride(true);
