@@ -5,6 +5,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
@@ -14,8 +17,10 @@ import frc.lib.core.util.TeamUtils;
  * easily perform the following functions: 1. Keep current and max speeds. 2. Get and reset encoder
  * values. 3. Lots and lots of SmartDashboard information
  */
-public class TeamTalonFX extends WPI_TalonFX implements IMotor
+public class TeamTalonFX extends TalonFX implements IMotor
 {
+
+  private final VoltageOut voltageRequest = new VoltageOut(0);
 
   public static double telemetryUpdateInterval_secs = 0.0;
 
@@ -46,9 +51,8 @@ public class TeamTalonFX extends WPI_TalonFX implements IMotor
     this.smartDashboardPrefix = smartDashboardPrefix;
 
     // assuming quadencoder
-    this.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    enableVoltageCompensation(true);
+    setControl(voltageRequest.withOutput(12));
 
     pidProfiles = new PidParameters[4];
   }
@@ -65,10 +69,10 @@ public class TeamTalonFX extends WPI_TalonFX implements IMotor
 
     setLastTelemetryUpdate(now);
 
-    final double currentSpeed = getSelectedSensorVelocity(0);
+    final StatusSignal<Double> currentSpeed = getVelocity();
 
-    if (getMaxSpeed() == Double.MAX_VALUE || currentSpeed > getMaxSpeed())
-      setMaxSpeed(currentSpeed);
+    if (getMaxSpeed() == Double.MAX_VALUE || currentSpeed.getValueAsDouble() > getMaxSpeed())
+      setMaxSpeed(currentSpeed.getValueAsDouble());
   }
 
   public long getCurrentEncoderValue()
@@ -146,7 +150,7 @@ public class TeamTalonFX extends WPI_TalonFX implements IMotor
       return 0;
     }
 
-    final double currentSpeed = getSelectedSensorVelocity(0);
+    final StatusSignal<Double> currentSpeed = getVelocity();
     return (getClosedLoopTarget(0) - currentSpeed);
   }
 
