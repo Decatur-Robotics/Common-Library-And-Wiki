@@ -6,10 +6,13 @@ import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 import frc.lib.core.motors.TeamTalonFX;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
@@ -23,6 +26,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 	private boolean autoAim;
 
 	private Pose2d shooterMountPose;
+
+	private Pose2d speakerPose;
 
 	public ShooterMountSubsystem()
 	{
@@ -49,13 +54,20 @@ public class ShooterMountSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		
+		DriverStation.Alliance allianceColor = DriverStation.getAlliance().orElse(null);
+
+		if (allianceColor == DriverStation.Alliance.Red)
+		{
+			speakerPose = Constants.SPEAKER_POSE_RED;
+		}
+		else if (allianceColor == DriverStation.Alliance.Blue)
+		{
+			speakerPose = Constants.SPEAKER_POSE_BLUE;
+		}
 
 		if (autoAim)
 		{
 			shooterMountPose = /* RobotContainer.getVision().getShooterMountPose() */ new Pose2d();
-
-
 
 		}
 	}
