@@ -90,9 +90,22 @@ public class VisionSubsystem extends SubsystemBase
 		return Optional.empty();
 	}
 
-	public Optional<EstimatedRobotPose> getShooterMountPose()
+	public Optional<Pose2d> getShooterMountPose()
 	{
-		return shooterMountPoseEstimator.update();
+		Optional<EstimatedRobotPose> estPose = shooterMountPoseEstimator.update();
+		if (estPose.isPresent())
+		{
+			EstimatedRobotPose pose = estPose.get();
+			Pose3d pose3d = pose.estimatedPose;
+
+			// We only care about the x and z, and the yaw
+			Rotation2d rot2d = new Rotation2d(pose3d.getRotation().getY());
+			Pose2d pose2d = new Pose2d(pose3d.getX(), pose3d.getZ(), rot2d);
+
+			return Optional.of(pose2d);
+		}
+
+		return Optional.empty();
 	}
 
 }
