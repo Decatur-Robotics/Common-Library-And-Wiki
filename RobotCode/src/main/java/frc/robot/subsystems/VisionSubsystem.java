@@ -45,6 +45,8 @@ public class VisionSubsystem extends SubsystemBase
 		shooterMountPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
 				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, shooterMountToCam);
 
+		aprilTagFieldLayout.getTagPose(1);
+
 	}
 
 	@Override
