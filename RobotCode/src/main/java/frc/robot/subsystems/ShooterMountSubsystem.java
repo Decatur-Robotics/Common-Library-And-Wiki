@@ -12,7 +12,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamTalonFX mainMotor, followMotor;
 
-	private double targetRotation; // In degrees
+	private double targetRotation; // In encoder ticks (4096 to 1 degree)
 
 	public ShooterMountSubsystem()
 	{
@@ -36,19 +36,24 @@ public class ShooterMountSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		double targetPosition = degreesToTicks(targetRotation);
-		
-		mainMotor.set(ControlMode.MotionMagic, targetPosition);
+		mainMotor.set(ControlMode.MotionMagic, targetRotation);
 	}
 
 	public void setTargetRotation(double targetRotation)
 	{
-		this.targetRotation = Math.max(targetRotation - ShooterMountConstants.SHOOTER_MOUNT_OFFSET_DEGREES, 0);
+		this.targetRotation = degreesToTicks(
+				Math.max(targetRotation - ShooterMountConstants.SHOOTER_MOUNT_OFFSET_DEGREES, 0));
 	}
 
 	private static double degreesToTicks(double degrees)
 	{
 		return degrees * ShooterMountConstants.TICKS_IN_ONE_DEGREE;
+	}
+
+	public boolean withinAimTolerance()
+	{
+		return (mainMotor.getCurrentEncoderValue() - targetRotation < Math
+				.abs(ShooterMountConstants.AIMING_DEADBAND) ? true : false);
 	}
 
 }

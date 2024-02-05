@@ -20,4 +20,6 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 2000;
 	public static final double SHOOTER_MOUNT_ACCELERATION = 1000;
 
+	public static final double AIMING_DEADBAND = 100;
+
 }
