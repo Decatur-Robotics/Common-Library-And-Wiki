@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -7,8 +9,10 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.FeederConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -16,7 +20,7 @@ import frc.robot.subsystems.VisionSubsystem;
 public class AimShooterCommand extends Command
 {
 
-	private ShooterSubsystem shooter;
+	private FeederSubsystem feeder;
 	private ShooterMountSubsystem shooterMount;
 	private VisionSubsystem vision;
 
@@ -24,14 +28,14 @@ public class AimShooterCommand extends Command
 
 	private AprilTagFieldLayout aprilTagFieldLayout;
 
-	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount,
+	public AimShooterCommand(FeederSubsystem feeder, ShooterMountSubsystem shooterMount,
 			VisionSubsystem vision)
 	{
-		this.shooter = shooter;
+		this.feeder = feeder;
 		this.shooterMount = shooterMount;
 		this.vision = vision;
 
-		addRequirements(shooter, shooterMount, vision);
+		addRequirements(feeder, shooterMount, vision);
 
 		aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -41,7 +45,7 @@ public class AimShooterCommand extends Command
 
 	public void initialize()
 	{
-		shooter.setShooterMotorPower(ShooterConstants.SPEAKER_SPEED, "Aiming shooter");
+		feeder.setFeederMotorPower(FeederConstants.FEEDER_SHOOT_VELOCITY, "Ending aiming at ");
 	}
 
 	public void execute()
@@ -81,7 +85,7 @@ public class AimShooterCommand extends Command
 	@Override
 	public void end(boolean interrupted)
 	{
-		shooter.setShooterMotorPower(0, "Ending aiming shooter");
+		feeder.setFeederMotorPower(0, "Ending aiming at ");
 		shooterMount.setTargetRotation(0);
 	}
 
