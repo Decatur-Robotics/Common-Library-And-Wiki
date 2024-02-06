@@ -16,6 +16,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer
@@ -29,7 +30,7 @@ public class RobotContainer
 
 	private final SendableChooser<Command> autoChooser;
 
-	private final SwerveDriveSubsystem SwerveDrive;
+	private final SwerveDriveSubsystem swerveDrive;
 	private final ClimberSubsystem climberSubsystem;
 	private final ShooterSubsystem shooterSubsystem;
 
@@ -45,7 +46,7 @@ public class RobotContainer
 		autoChooser = AutoBuilder.buildAutoChooser();
 
 		// Instantiate subsystems
-		SwerveDrive = new SwerveDriveSubsystem();
+		swerveDrive = new SwerveDriveSubsystem();
 		climberSubsystem = new ClimberSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
 		shooterMountSubsystem = new ShooterMountSubsystem();
@@ -60,7 +61,9 @@ public class RobotContainer
 
 	private void configurePrimaryBindings()
 	{
-		final Joystick primaryController = new Joystick(0);
+		final Joystick PrimaryController = new Joystick(0);
+
+		swerveDrive.setDefaultCommand(swerveDrive.getDefaultCommand(PrimaryController));
 	}
 
 	private void configureSecondaryBindings()
@@ -79,12 +82,22 @@ public class RobotContainer
 
 	public SwerveDriveSubsystem getSwerveDrive()
 	{
-		return SwerveDrive;
+		return swerveDrive;
 	}
 
 	public ShooterSubsystem getShooter()
 	{
 		return shooterSubsystem;
+	}
+
+	public ShooterMountSubsystem getShooterMount()
+	{
+		return ShooterMountSubsystem;
+	}
+
+	public VisionSubsystem getVision()
+	{
+		return VisionSubsystem;
 	}
 
 }
