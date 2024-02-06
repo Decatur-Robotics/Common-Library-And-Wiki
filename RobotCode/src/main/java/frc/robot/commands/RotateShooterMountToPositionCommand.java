@@ -8,7 +8,7 @@ public class RotateShooterMountToPositionCommand extends Command
 {
 
     private ShooterMountSubsystem shooterMount;
-	private double targetPosition;
+	  private double targetPosition;
 
     /**
      * This constructor is the version that uses a constant target
@@ -18,7 +18,7 @@ public class RotateShooterMountToPositionCommand extends Command
     public RotateShooterMountToPositionCommand(ShooterMountSubsystem shooterMount, double targetPosition)
     {
         this.shooterMount = shooterMount;
-		this.targetPosition = targetPosition;
+		    this.targetPosition = targetPosition;
 
 		addRequirements(shooterMount);
     }
@@ -29,8 +29,8 @@ public class RotateShooterMountToPositionCommand extends Command
         shooterMount.setTargetRotation(targetPosition);
     }
 
-	public void end() {
-		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
-	}
+	  public void end() {
+		    shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+	  }
 
 }
