@@ -13,6 +13,10 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
+/**
+ * Points shooter mount at speaker
+ * Returns shooter mount to rest position when done
+ */
 public class AimShooterCommand extends Command
 {
 
@@ -68,11 +72,13 @@ public class AimShooterCommand extends Command
 				vision.getShooterMountPose().orElse(new Pose2d()).getX(),
 				vision.getShooterMountPose().orElse(new Pose2d()).getY());
 
+		// Get the distance from the shooter mount to the base of the speaker
 		double groundDistance = speakerPose.getDistance(shooterMountPose);
 
 		double targetRotation = Math
-				.atan(ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER / groundDistance);
+				.atan(ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER / groundDistance) * (180/ Math.PI);
 
+		// Get the distance from the shooter mount to speaker opening
 		double hypotenuse = Math.sqrt(Math.pow(ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER, 2)
 				+ Math.pow(groundDistance, 2));
 

@@ -23,6 +23,7 @@ public class ShooterOverrideCommand extends Command
 		addRequirements(shooter, indexer);
 	}
 
+	@Override
 	public void execute()
 	{
 		// Spins up the motor
@@ -39,6 +40,7 @@ public class ShooterOverrideCommand extends Command
 		}
 	}
 
+	@Override
 	public void end(boolean interrupted)
 	{
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "command is over");
