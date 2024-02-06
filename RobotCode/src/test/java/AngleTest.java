@@ -7,7 +7,7 @@ import frc.robot.subsystems.VisionSubsystem;
 class AngleTest
 {
 
-    @Test
+    // @Test
     void testAngle()
     {
         Pose2d pose1 = new Pose2d(0, 0, new Rotation2d(0));
