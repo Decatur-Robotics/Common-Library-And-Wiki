@@ -23,34 +23,33 @@ public class RobotContainer
 
 	private static RobotContainer instance;
 
-	private final IntakeSubsystem IntakeSubsystem;
+	private final IntakeSubsystem intakeSubsytem;
 
-	private final ShuffleboardTab ShuffleboardTab;
+	private final ShuffleboardTab shuffleboardTab;
 
-	private final SendableChooser<Command> AutoChooser;
+	private final SendableChooser<Command> autoChooser;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	private final ClimberSubsystem ClimberSubsystem;
-	private final ShooterSubsystem ShooterSubsystem;
+	private final ClimberSubsystem climberSubsystem;
+	private final ShooterSubsystem shooterSubsystem;
 
-	private final ShooterMountSubsystem ShooterMountSubsystem;
+	private final ShooterMountSubsystem shooterMountSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
 		instance = this;
-    
 
-		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
+		shuffleboardTab = Shuffleboard.getTab("Tab 1");
 
-		AutoChooser = AutoBuilder.buildAutoChooser();
+		autoChooser = AutoBuilder.buildAutoChooser();
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		ClimberSubsystem = new ClimberSubsystem();
-		ShooterSubsystem = new ShooterSubsystem();
-		ShooterMountSubsystem = new ShooterMountSubsystem();
-		IntakeSubsystem = new IntakeSubsystem();
+		climberSubsystem = new ClimberSubsystem();
+		shooterSubsystem = new ShooterSubsystem();
+		shooterMountSubsystem = new ShooterMountSubsystem();
+		intakeSubsytem = new IntakeSubsystem();
 
 		Autonomous.init(this);
 
@@ -70,12 +69,12 @@ public class RobotContainer
 		final JoystickButton rightTrigger = new JoystickButton(secondaryController,
 				LogitechControllerButtons.triggerRight);
 
-		rightTrigger.whileTrue(new ShooterCommand(ShooterSubsystem));
+		rightTrigger.whileTrue(new ShooterCommand(shooterSubsystem));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()
 	{
-		return instance.ShuffleboardTab;
+		return instance.shuffleboardTab;
 	}
 
 	public SwerveDriveSubsystem getSwerveDrive()
@@ -85,7 +84,7 @@ public class RobotContainer
 
 	public ShooterSubsystem getShooter()
 	{
-		return ShooterSubsystem;
+		return shooterSubsystem;
 	}
 
 }

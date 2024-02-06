@@ -49,7 +49,7 @@ public class RotateShooterMountToPositionCommand extends Command
     {
         // We do the weird static access to avoid going through the variable
         return Math.abs(ShooterMountSubsystem.getCurrentRotation()
-                - getPosition.getAsDouble()) < frc.robot.subsystems.ShooterMountSubsystem.DEADBAND;
+                - getPosition.getAsDouble()) < ShooterMountSubsystem.DEADBAND;
     }
 
 }

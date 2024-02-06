@@ -12,14 +12,14 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/** In degrees */
 	private double goalRotation, distance;
 
-	private static final double DEGREES_IN_ONE_TICK = 360 / 42, SPEED = 1;
-	public static final double DEADBAND = 0.5;
+	public static final double DEGREES_IN_ONE_TICK = 360 / 42,
+								ROTATION_SPEED = 1,
+								DEADBAND = 0.5;
 
 	public ShooterMountSubsystem()
 	{
 		mainMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_RIGHT",
-				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		followMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_RIGHT",Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
 		followMotor.follow(mainMotor);
 		followMotor.setInverted(true);
@@ -39,8 +39,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 		if (Math.abs(difference) < DEADBAND)
 		{
-			setMotors(0, "Shooter Mount (Deadbanded): Difference: " + difference + ", Distance: "
-					+ distance);
+			setMotors(0, "Shooter Mount (Deadbanded): Difference: " + difference + ", Distance: "+ distance);
 			return;
 		}
 
@@ -72,7 +71,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	public void setMotors(double power, String reason)
 	{
-		mainMotor.set(Math.max(-1, Math.min(power, 1)) * SPEED, reason);
+		mainMotor.set(Math.max(-1, Math.min(power, 1)) * ROTATION_SPEED, reason);
 	}
 
 }
