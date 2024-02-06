@@ -9,10 +9,10 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.FeederConstants;
+import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
-import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -20,7 +20,7 @@ import frc.robot.subsystems.VisionSubsystem;
 public class AimShooterCommand extends Command
 {
 
-	private FeederSubsystem feeder;
+	private IndexerSubsystem indexer;
 	private ShooterMountSubsystem shooterMount;
 	private VisionSubsystem vision;
 
@@ -28,14 +28,14 @@ public class AimShooterCommand extends Command
 
 	private AprilTagFieldLayout aprilTagFieldLayout;
 
-	public AimShooterCommand(FeederSubsystem feeder, ShooterMountSubsystem shooterMount,
+	public AimShooterCommand(IndexerSubsystem indexer, ShooterMountSubsystem shooterMount,
 			VisionSubsystem vision)
 	{
-		this.feeder = feeder;
+		this.indexer = indexer;
 		this.shooterMount = shooterMount;
 		this.vision = vision;
 
-		addRequirements(feeder, shooterMount, vision);
+		addRequirements(indexer, shooterMount, vision);
 
 		aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -45,7 +45,7 @@ public class AimShooterCommand extends Command
 
 	public void initialize()
 	{
-		feeder.setFeederMotorPower(FeederConstants.FEEDER_SHOOT_VELOCITY, "Ending aiming at ");
+		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "Ending aiming at ");
 	}
 
 	public void execute()
@@ -85,7 +85,7 @@ public class AimShooterCommand extends Command
 	@Override
 	public void end(boolean interrupted)
 	{
-		feeder.setFeederMotorPower(0, "Ending aiming at ");
+		indexer.setIndexerMotorVelocity(0, "Ending aiming at ");
 		shooterMount.setTargetRotation(0);
 	}
 
