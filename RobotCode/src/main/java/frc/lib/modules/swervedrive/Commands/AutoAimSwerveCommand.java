@@ -5,6 +5,7 @@ import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
 
+/** Rotates the chassis towards the speaker. Intended to work with PathPlanner paths */
 public class AutoAimSwerveCommand extends Command
 {
 
