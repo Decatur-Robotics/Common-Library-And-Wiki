@@ -39,6 +39,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 		mainMotor.set(ControlMode.MotionMagic, targetRotation);
 	}
 
+	/**
+	 * Set the desired rotation of the shooter mount
+	 * @param targetRotation the desired rotation in degrees
+	 */
 	public void setTargetRotation(double targetRotation)
 	{
 		this.targetRotation = degreesToTicks(

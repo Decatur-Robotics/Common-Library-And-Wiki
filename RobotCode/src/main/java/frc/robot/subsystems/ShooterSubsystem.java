@@ -28,9 +28,6 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_SUB);
 
 		shooterMotorSub.follow(shooterMotorMain, true);
-
-		shooterMotorMain.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-		shooterMotorSub.enableVoltageCompensation(Constants.MAX_VOLTAGE);
 		shooterMotorMain.setIdleMode(IdleMode.kBrake);
 		shooterMotorSub.setIdleMode(IdleMode.kBrake);
 		shooterMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
@@ -44,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
 	}
 
-	public double getShooterMotorVelocityError() // THIS NEEDS TO BE TESTED I'M NOT CONFIDENT THIS WORKS
+	public double getShooterMotorVelocityError() 
 	{
 		return shooterMotorMain.getVelocityError();
 	}

@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,32 +33,35 @@ public class AimShooterCommand extends Command
 
 		addRequirements(shooter, shooterMount, vision);
 
-		aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+		aprilTagFieldLayout = vision.getAprilTagFieldLayout();
 
 		shooterMountPose = new Translation2d();
 		speakerPose = new Translation2d();
 	}
 
+	@Override
 	public void initialize()
 	{
-		shooter.setShooterMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "Auto aiming at speaker");
+		shooter.setShooterMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
+				"Auto aiming at speaker");
 	}
 
+	@Override
 	public void execute()
 	{
 		DriverStation.Alliance allianceColor = DriverStation.getAlliance().orElse(null);
 
 		if (allianceColor == DriverStation.Alliance.Red)
 		{
-			speakerPose = new Translation2d(
-					aprilTagFieldLayout.getTagPose(4).orElse(new Pose3d()).getX(),
-					aprilTagFieldLayout.getTagPose(4).orElse(new Pose3d()).getY());
+			Pose3d tagPose = aprilTagFieldLayout.getTagPose(4).orElse(new Pose3d());
+
+			speakerPose = new Translation2d(tagPose.getX(), tagPose.getY());
 		}
 		else if (allianceColor == DriverStation.Alliance.Blue)
 		{
-			speakerPose = new Translation2d(
-					aprilTagFieldLayout.getTagPose(7).orElse(new Pose3d()).getX(),
-					aprilTagFieldLayout.getTagPose(7).orElse(new Pose3d()).getY());
+			Pose3d tagPose = aprilTagFieldLayout.getTagPose(7).orElse(new Pose3d());
+
+			speakerPose = new Translation2d(tagPose.getX(), tagPose.getY());
 		}
 
 		shooterMountPose = new Translation2d(
@@ -82,7 +84,8 @@ public class AimShooterCommand extends Command
 	@Override
 	public void end(boolean interrupted)
 	{
-		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "Ending auto aiming at speaker");
+		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY,
+				"Ending auto aiming at speaker");
 		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 

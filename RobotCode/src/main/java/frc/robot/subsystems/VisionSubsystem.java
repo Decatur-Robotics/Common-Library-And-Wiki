@@ -29,12 +29,13 @@ public class VisionSubsystem extends SubsystemBase
     private PhotonPipelineResult latestPipelineResult;
     private Optional<PhotonTrackedTarget> bestTarget;
 
+    private AprilTagFieldLayout aprilTagFieldLayout;
+
     public VisionSubsystem()
     {
         Camera = new PhotonCamera(VisionConstants.CameraTableName);
 
-        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo
-                .loadAprilTagLayoutField();
+        aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
                 new Rotation3d(0, 0, 0));
         Transform3d shooterMountToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
@@ -45,7 +46,7 @@ public class VisionSubsystem extends SubsystemBase
         shooterMountPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, shooterMountToCam);
     }
-	
+
     @Override
     public void periodic()
     {
@@ -131,6 +132,11 @@ public class VisionSubsystem extends SubsystemBase
         // Use the inverse tangent to calculate the angle
         // Atan2 accounts for the sign of the x and y values
         return Math.toDegrees(Math.atan2(distance.getY(), distance.getX()));
+    }
+
+    public AprilTagFieldLayout getAprilTagFieldLayout()
+    {
+        return aprilTagFieldLayout;
     }
 
 }
