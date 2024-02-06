@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -56,7 +57,11 @@ public class RobotContainer
 	{
 		final Joystick PrimaryController = new Joystick(0);
 
+		final JoystickButton rightTrigger = new JoystickButton(PrimaryController,
+				LogitechControllerButtons.triggerRight);
+
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
+		rightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, VisionSubsystem));
 	}
 
 	private void configureSecondaryBindings()

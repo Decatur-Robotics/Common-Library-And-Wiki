@@ -27,7 +27,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class SwerveDriveSubsystem extends SubsystemBase
 {
@@ -290,6 +292,24 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller)
 	{
 		return getTeleopControlledRotationCommand(Controller, Controller::getTwist);
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
+	 * @return a command for the swerve drive that allow driver control of translation and strafe,
+	 *         but rotates towards the speaker and automatically spins the feeder motors when in
+	 *         target
+	 */
+	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
+			final VisionSubsystem Vision)
+	{
+		final JoystickButton TriggerLeft = new JoystickButton(Controller,
+				LogitechControllerButtons.triggerLeft),
+				TriggerRight = new JoystickButton(Controller,
+						LogitechControllerButtons.triggerRight);
+
+		return new TeleopAimSwerveCommand(this, Vision, () -> -Controller.getY(),
+				() -> -Controller.getX(), TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
 	}
 
 	/**
