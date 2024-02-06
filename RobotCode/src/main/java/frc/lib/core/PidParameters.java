@@ -27,7 +27,7 @@ public class PidParameters
 	private double maxVel;
 	private int errorTolerance;
 
-	/** For TalonSRX */
+	/** For TalonFX */
 	public PidParameters(final double kP, final double kI, final double kD, final double kF,
 			final double kIZone, final double kPeakOutput, final int errorTolerance)
 	{

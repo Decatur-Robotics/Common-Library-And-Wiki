@@ -6,8 +6,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ControlModeValue;
 
 import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
@@ -32,12 +34,16 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
   private final PidParameters[] pidProfiles;
 
-  public static boolean isPidControlMode(final ControlMode mode)
+  private double encoderOffset;
+
+  /**I would love to understand how to make this work. Avoid using right now */
+  @Deprecated
+  public static boolean isPidControlMode(final ControlModeValue mode)
   {
     switch (mode)
     {
-    case Current:
-    case Disabled:
+    // case Current:
+    case DisabledOutput:
     case Follower:
       return false;
     default:
@@ -75,15 +81,15 @@ public class TeamTalonFX extends TalonFX implements IMotor
       setMaxSpeed(currentSpeed.getValueAsDouble());
   }
 
-  public long getCurrentEncoderValue()
+  public double getCurrentEncoderValue()
   {
     // This should be configurable
-    return (long) getSensorCollection().getIntegratedSensorPosition();
+    return  getRotorPosition().getValueAsDouble() + encoderOffset;
   }
 
   public boolean isRunningPidControlMode()
   {
-    return isPidControlMode(getControlMode());
+    return isPidControlMode(getControlMode().getValue());
   }
 
   /**
@@ -99,7 +105,8 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
   public void resetEncoder()
   {
-    getSensorCollection().setIntegratedSensorPosition(0, 0);
+    encoderOffset = -1 * getRotorPosition().getValueAsDouble();
+    
   }
 
   public double getLastTelemetryUpdate()
@@ -132,26 +139,16 @@ public class TeamTalonFX extends TalonFX implements IMotor
     return pidProfiles;
   }
 
-  /**
-   * Public wrapper for protected method (which aren't allowed in interfaces) // Use this for
-   * configurations which can be shared between SRX and FX // Otherwise down cast and use
-   * configAllSettings(TalonFXConfiguration allConfigs) // if using config settings only available
-   * for TalonFX
-   */
-  public ErrorCode configBaseAllSettings(final BaseTalonConfiguration allConfigs)
-  {
-    return configAllSettings(allConfigs);
-  }
-
+/**please make this work. I don't know how */
   public double getVelocityError()
   {
-    if (getControlMode() != ControlMode.Velocity)
+    if (getControlMode().getValue() != ControlModeValue.VelocityDutyCycle)
     {
       return 0;
     }
 
-    final StatusSignal<Double> currentSpeed = getVelocity();
-    return (getClosedLoopTarget(0) - currentSpeed);
+    final double currentSpeed = getVelocity().getValueAsDouble();
+    return (getRotorPosition().getValueAsDouble() - currentSpeed);
   }
 
   public void configureWithPidParameters(final PidParameters pidParameters, final int pidSlotIndex)
