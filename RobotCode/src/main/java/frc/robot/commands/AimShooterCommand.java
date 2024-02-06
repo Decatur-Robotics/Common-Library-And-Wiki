@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -12,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
-import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -20,7 +17,7 @@ import frc.robot.subsystems.VisionSubsystem;
 public class AimShooterCommand extends Command
 {
 
-	private IndexerSubsystem indexer;
+	private ShooterSubsystem shooter;
 	private ShooterMountSubsystem shooterMount;
 	private VisionSubsystem vision;
 
@@ -28,14 +25,14 @@ public class AimShooterCommand extends Command
 
 	private AprilTagFieldLayout aprilTagFieldLayout;
 
-	public AimShooterCommand(IndexerSubsystem indexer, ShooterMountSubsystem shooterMount,
+	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount,
 			VisionSubsystem vision)
 	{
-		this.indexer = indexer;
+		this.shooter = shooter;
 		this.shooterMount = shooterMount;
 		this.vision = vision;
 
-		addRequirements(indexer, shooterMount, vision);
+		addRequirements(shooter, shooterMount, vision);
 
 		aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -45,7 +42,7 @@ public class AimShooterCommand extends Command
 
 	public void initialize()
 	{
-		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "Ending aiming at ");
+		shooter.setShooterMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "Auto aiming at speaker");
 	}
 
 	public void execute()
@@ -77,7 +74,7 @@ public class AimShooterCommand extends Command
 		double hypotenuse = Math.sqrt(Math.pow(ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER, 2)
 				+ Math.pow(groundDistance, 2));
 
-		double gravityCompensation = 2 * Math.pow(hypotenuse, 2) + 2 * hypotenuse + 2;
+		double gravityCompensation = (2 * Math.pow(hypotenuse, 2)) + (2 * hypotenuse) + (2);
 
 		shooterMount.setTargetRotation(targetRotation + gravityCompensation);
 	}
@@ -85,8 +82,8 @@ public class AimShooterCommand extends Command
 	@Override
 	public void end(boolean interrupted)
 	{
-		indexer.setIndexerMotorVelocity(0, "Ending aiming at ");
-		shooterMount.setTargetRotation(0);
+		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "Ending auto aiming at speaker");
+		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 
 }

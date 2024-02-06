@@ -29,27 +29,34 @@ public class ShooterSubsystem extends SubsystemBase
 
 		shooterMotorSub.follow(shooterMotorMain, true);
 
-        shooterMotorMain.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-        shooterMotorSub.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-        shooterMotorMain.setIdleMode(IdleMode.kBrake);
-        shooterMotorSub.setIdleMode(IdleMode.kBrake);
-        shooterMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
-        shooterMotorSub.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		shooterMotorMain.enableVoltageCompensation(Constants.MAX_VOLTAGE);
+		shooterMotorSub.enableVoltageCompensation(Constants.MAX_VOLTAGE);
+		shooterMotorMain.setIdleMode(IdleMode.kBrake);
+		shooterMotorSub.setIdleMode(IdleMode.kBrake);
+		shooterMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		shooterMotorSub.setSmartCurrentLimit(Constants.MAX_CURRENT);
 
-        shooterPid = shooterMotorMain.getPidController();
+		shooterPid = shooterMotorMain.getPidController();
 
-        shooterPid.setP(ShooterConstants.SHOOTER_KP);
-        shooterPid.setI(ShooterConstants.SHOOTER_KI);
-        shooterPid.setD(ShooterConstants.SHOOTER_KD);
-        shooterPid.setFF(ShooterConstants.SHOOTER_KF);
+		shooterPid.setP(ShooterConstants.SHOOTER_KP);
+		shooterPid.setI(ShooterConstants.SHOOTER_KI);
+		shooterPid.setD(ShooterConstants.SHOOTER_KD);
+		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
+	}
+
+	public double getShooterMotorVelocityError() // THIS NEEDS TO BE TESTED I'M NOT CONFIDENT THIS WORKS
+	{
+		return shooterMotorMain.getVelocityError();
 	}
 
 	/**
-	 * This is clamping the shooter motor power to be within the range of -1 to 1
+	 * This is clamping the shooter motor power
 	 */
 	public void setShooterMotorVelocity(double desiredShooterVelocity, String reason)
 	{
-		this.desiredShooterVelocity = Math.max(Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity), -ShooterConstants.SHOOTER_MAX_VELOCITY);
+		this.desiredShooterVelocity = Math.max(
+				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
+				-ShooterConstants.SHOOTER_MAX_VELOCITY);
 	}
 
 	/**

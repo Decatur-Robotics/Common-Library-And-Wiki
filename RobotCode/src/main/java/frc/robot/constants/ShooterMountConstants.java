@@ -7,11 +7,15 @@ public class ShooterMountConstants
 
 	public static final double SHOOTER_MOUNT_OFFSET_DEGREES = 10; // Update to reflect lowest
 																	// shooter angle
+	public static final double SHOOTER_MOUNT_MIN_ANGLE = 0;
 
 	public static final double SHOOTER_MOUNT_TO_SPEAKER = 1.98 + 0.05 - 0.29; // Speaker height plus
 																				// note height minus
 																				// shooter mount
 																				// height (meters)
+
+	public static final double SHOOTER_MOUNT_AMP_ANGLE = 10;
+	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 10;
 
 	public static final double SHOOTER_MOUNT_KP = 0.1;
 	public static final double SHOOTER_MOUNT_KI = 0;

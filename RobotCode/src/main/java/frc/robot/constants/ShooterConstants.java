@@ -8,6 +8,8 @@ public class ShooterConstants
 	public static final double SHOOTER_KD = 0;
 	public static final double SHOOTER_KF = 0.01;
 
+	public static final double SHOOTER_VELOCITY_TOLERANCE = 10;
+
 	// Velocity in RPM
 	public static final double SHOOTER_MAX_VELOCITY = 10;
 	public static final double SHOOTER_SPEAKER_VELOCITY = 10;

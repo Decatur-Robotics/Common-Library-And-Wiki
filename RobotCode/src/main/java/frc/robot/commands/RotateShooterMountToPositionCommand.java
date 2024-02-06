@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
 
 public class RotateShooterMountToPositionCommand extends Command
@@ -31,7 +30,7 @@ public class RotateShooterMountToPositionCommand extends Command
     }
 
 	public void end() {
-		shooterMount.setTargetRotation(0);
+		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 
 }
