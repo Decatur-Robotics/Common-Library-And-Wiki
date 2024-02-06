@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
+import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
 import frc.robot.commands.ShooterInstantCommand;
 import frc.robot.constants.AutoConstants;
@@ -94,18 +96,8 @@ public class Autonomous
         final VisionSubsystem Vision = RobotContainer.getVision();
 
         final SequentialCommandGroup AutoMain = new SequentialCommandGroup();
-        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(AutoMain);
-
-        // Override the swerve drive's rotation to always point at the target
-        AutoMain.addCommands(new InstantCommand(
-                () -> SwerveDrive.setRotationController(Vision::getRotationToSpeaker)));
-
-        // Aim towards the target. Need to update once aiming is improved
-        // We do this in AutoAsync since it won't end
-        /*
-         * Toggle shooter mount auto aim instead of this now. AutoAsync.addCommands(new
-         * RotateShooterMountToPositionCommand(ShooterMount, Vision::getPitchOffset));
-         */
+        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(
+                new AutoAimSwerveCommand(SwerveDrive, Vision), AutoMain);
 
         switch (AutoMode)
         {

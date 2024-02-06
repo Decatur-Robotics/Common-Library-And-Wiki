@@ -1,31 +1,31 @@
 package frc.lib.modules.swervedrive.Commands;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class AutoAimSwerveCommand extends TeleopSwerveCommand
+public class AutoAimSwerveCommand extends Command
 {
 
+    private final SwerveDriveSubsystem Swerve;
     private final VisionSubsystem Vision;
 
-    public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
-            DoubleSupplier translationSup, DoubleSupplier strafeSup,
-            BooleanSupplier slowSpeedSupplier, BooleanSupplier fastSpeedSupplier)
+    public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision)
     {
-        super(swerve, translationSup, strafeSup, vision::getRotationToSpeaker, slowSpeedSupplier,
-                fastSpeedSupplier);
+        Swerve = swerve;
         Vision = vision;
+    }
+
+    @Override
+    public void initialize()
+    {
+        Swerve.setRotationController(Vision::getRotationToSpeaker);
     }
 
     @Override
     public void execute()
     {
-        super.execute();
-
         // Spin feeder motors if in target
         if (Math.abs(Vision.getRotationToSpeaker()) < VisionConstants.CHASSIS_AIM_THRESHOLD)
         {
@@ -33,4 +33,9 @@ public class AutoAimSwerveCommand extends TeleopSwerveCommand
         }
     }
 
+    @Override
+    public void end(boolean interrupted)
+    {
+        Swerve.setRotationController(null);
+    }
 }
