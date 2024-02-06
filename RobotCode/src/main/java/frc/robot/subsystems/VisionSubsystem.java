@@ -143,7 +143,8 @@ public class VisionSubsystem extends SubsystemBase
         return -Math.atan2(distance.getY(), distance.getX()) + Math.PI / 2;
     }
 
-    public double getRotationToSpeaker()
+    /** @return What angle to turn to to face the speaker */
+    public double getAngleToSpeaker()
     {
         // Get the target position
         int targetId = Alliance.Blue == DriverStation.getAlliance().get()

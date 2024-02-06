@@ -13,14 +13,17 @@ import frc.robot.subsystems.VisionSubsystem;
 public class TeleopAimSwerveCommand extends TeleopSwerveCommand
 {
 
+    private final SwerveDriveSubsystem Swerve;
     private final VisionSubsystem Vision;
 
     public TeleopAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
             DoubleSupplier translationSup, DoubleSupplier strafeSup,
             BooleanSupplier slowSpeedSupplier, BooleanSupplier fastSpeedSupplier)
     {
-        super(swerve, translationSup, strafeSup, vision::getRotationToSpeaker, slowSpeedSupplier,
-                fastSpeedSupplier);
+        super(swerve, translationSup, strafeSup, () -> swerve.getRotationToSpeaker(vision),
+                slowSpeedSupplier, fastSpeedSupplier);
+
+        Swerve = swerve;
         Vision = vision;
     }
 
@@ -30,7 +33,7 @@ public class TeleopAimSwerveCommand extends TeleopSwerveCommand
         super.execute();
 
         // Spin feeder motors if in target
-        if (Math.abs(Vision.getRotationToSpeaker()) < VisionConstants.CHASSIS_AIM_THRESHOLD)
+        if (Math.abs(Swerve.getRotationToSpeaker(Vision)) < VisionConstants.CHASSIS_AIM_THRESHOLD)
         {
             // Spin feeder motors
         }

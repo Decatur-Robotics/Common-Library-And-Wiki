@@ -21,14 +21,14 @@ public class AutoAimSwerveCommand extends Command
     @Override
     public void initialize()
     {
-        Swerve.setRotationController(Vision::getRotationToSpeaker);
+        Swerve.setRotationController(() -> Swerve.getRotationToSpeaker(Vision));
     }
 
     @Override
     public void execute()
     {
         // Spin feeder motors if in target
-        if (Math.abs(Vision.getRotationToSpeaker()) < VisionConstants.CHASSIS_AIM_THRESHOLD)
+        if (Math.abs(Swerve.getRotationToSpeaker(Vision)) < VisionConstants.CHASSIS_AIM_THRESHOLD)
         {
             // Spin feeder motors
         }

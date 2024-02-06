@@ -329,4 +329,15 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
 				Rotation, TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
 	}
+
+	/**
+	 * @return the angle to the speaker in radians. Counterclockwise rotation is negative.
+	 */
+	public double getRotationToSpeaker(final VisionSubsystem Vision)
+	{
+		double angle = Vision.getAngleToSpeaker();
+		double currentAngle = getYaw().getRadians();
+
+		return angle - currentAngle;
+	}
 }
