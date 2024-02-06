@@ -113,7 +113,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 				.fromDegrees(offsets[SwerveConstants.BACK_RIGHT] - (invert ? 180 : 0));
 	}
 
-	// main driving method. translation is change in every direction
+	/** main driving method. translation is change in every direction */
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative,
 			boolean isOpenLoop)
 	{
@@ -174,19 +174,19 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 	}
 
-	/** gets position of robot on the field (odometry) in meters */
+	/** @return position of robot on the field (odometry) in meters */
 	public Pose2d getPose()
 	{
 		return swerveOdometry.getPoseMeters();
 	}
 
-	// resets odometry (position on field)
+	/** resets odometry (position on field) */
 	public void resetPose(Pose2d pose)
 	{
 		swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
 	}
 
-	// returns array of a modules' states (angle, speed) for each one
+	/** @return array of a modules' states (angle, speed) for each one */
 	public SwerveModuleState[] getModuleStates()
 	{
 		SwerveModuleState[] states = new SwerveModuleState[4];
@@ -197,7 +197,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		return states;
 	}
 
-	// returns module positions(for each individual module)
+	/** @return module positions(for each individual module) */
 	public SwerveModulePosition[] getModulePositions()
 	{
 		SwerveModulePosition[] positions = new SwerveModulePosition[4];
