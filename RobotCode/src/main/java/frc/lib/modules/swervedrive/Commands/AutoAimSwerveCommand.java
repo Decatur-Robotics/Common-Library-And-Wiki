@@ -22,15 +22,15 @@ public class AutoAimSwerveCommand extends TeleopSwerveCommand
     }
 
     @Override
-    public boolean isFinished()
+    public void execute()
     {
-        return Math.abs(Vision.getRotationToSpeaker()) < VisionConstants.CHASSIS_AIM_THRESHOLD;
-    }
+        super.execute();
 
-    @Override
-    public void end(boolean interrupted)
-    {
-        // Enable the feeder motors
+        // Spin feeder motors if in target
+        if (Math.abs(Vision.getRotationToSpeaker()) < VisionConstants.CHASSIS_AIM_THRESHOLD)
+        {
+            // Spin feeder motors
+        }
     }
 
 }
