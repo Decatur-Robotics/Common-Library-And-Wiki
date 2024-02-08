@@ -32,4 +32,6 @@ public final class Ports
 
 	// sensors and stuff
 	public static final int PIGEON_GYRO = 0;
+	/** DIO not CAN */
+	public static final int BEAM_BREAK = 0;
 }
