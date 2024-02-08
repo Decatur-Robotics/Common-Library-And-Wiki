@@ -1,17 +1,12 @@
 package frc.lib.core.motors;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
+
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ControlModeValue;
 
-import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
 
 /**
@@ -31,8 +26,6 @@ public class TeamTalonFX extends TalonFX implements IMotor
   private final String smartDashboardPrefix;
 
   private double maxSpeed = Double.MAX_VALUE;
-
-  private final PidParameters[] pidProfiles;
 
   private double encoderOffset;
 
@@ -60,7 +53,6 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
     setControl(voltageRequest.withOutput(12));
 
-    pidProfiles = new PidParameters[4];
   }
 
   public void periodic()
@@ -134,11 +126,7 @@ public class TeamTalonFX extends TalonFX implements IMotor
     maxSpeed = val;
   }
 
-  public PidParameters[] getPidProfiles()
-  {
-    return pidProfiles;
-  }
-
+  
 /**please make this work. I don't know how */
   public double getVelocityError()
   {
@@ -151,54 +139,7 @@ public class TeamTalonFX extends TalonFX implements IMotor
     return (getRotorPosition().getValueAsDouble() - currentSpeed);
   }
 
-  public void configureWithPidParameters(final PidParameters pidParameters, final int pidSlotIndex)
-  {
-    getPidProfiles()[pidSlotIndex] = pidParameters;
+  
 
-    config_kF(pidSlotIndex, pidParameters.getKF(), 30);
-    config_kP(pidSlotIndex, pidParameters.getKP(), 30);
-    config_kI(pidSlotIndex, pidParameters.getKI(), 30);
-    config_kD(pidSlotIndex, pidParameters.getKD(), 30);
-    configPeakOutputForward(pidParameters.getKPeakOutput(), 30);
-    configPeakOutputReverse(-pidParameters.getKPeakOutput(), 30);
-    configAllowableClosedloopError(pidSlotIndex, pidParameters.getErrorTolerance(), 30);
-  }
-
-  @Override
-  public void configF(final double F, final int SLOT)
-  {
-    config_kF(SLOT, F, 30);
-  }
-
-  @Override
-  public void configP(final double P, final int SLOT)
-  {
-    config_kP(SLOT, P, 30);
-  }
-
-  @Override
-  public void configI(final double I, final int SLOT)
-  {
-    config_kI(SLOT, I, 30);
-  }
-
-  @Override
-  public void configD(final double D, final int SLOT)
-  {
-    config_kD(SLOT, D, 30);
-  }
-
-  @Override
-  public void configPeakOutput(final double PEAK_OUTPUT)
-  {
-    configPeakOutputForward(PEAK_OUTPUT, 30);
-    configPeakOutputReverse(-PEAK_OUTPUT, 30);
-  }
-
-  @Override
-  public void setClosedLoopErrorLimit(final double ERROR_TOLERANCE, final int SLOT)
-  {
-    configAllowableClosedloopError(SLOT, (int) ERROR_TOLERANCE, 30);
-  }
 
 }

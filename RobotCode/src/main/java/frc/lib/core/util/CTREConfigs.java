@@ -6,6 +6,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 
 import frc.lib.modules.swervedrive.SwerveConstants;
 
@@ -15,12 +16,17 @@ public final class CTREConfigs
 	public TalonFXConfiguration swerveDriveFXConfig;
 	public CANCoderConfiguration swerveCanCoderConfig;
 
+	public TalonFXConfigurator swerveAngleConfig;
+	public TalonFXConfigurator swerveDriveConfig;
+	public TalonFXConfigurator swerveCANCoderConfig;
+
 	public CTREConfigs()
 	{
 		swerveAngleFXConfig = new TalonFXConfiguration();
 		swerveDriveFXConfig = new TalonFXConfiguration();
 		swerveCanCoderConfig = new CANCoderConfiguration();
 
+		
 		/* Swerve Angle Motor Configurations */
 		SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(
 				SwerveConstants.ANGLE_ENABLE_CURRENT_LIMIT,
