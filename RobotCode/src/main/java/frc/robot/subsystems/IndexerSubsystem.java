@@ -60,7 +60,6 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setReference(desiredIndexerVelocity, ControlType.kVelocity);
 	}
 
-	/** Needs to be done later */
 	public boolean hasNote()
 	{
 		return beamBreak.get();
