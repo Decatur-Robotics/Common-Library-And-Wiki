@@ -4,6 +4,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 import frc.robot.constants.Constants;
@@ -18,9 +19,13 @@ public class IndexerSubsystem extends SubsystemBase
 	private SparkPIDController indexerPid;
 	private TeamSparkMAX indexerMotorMain, indexerMotorSub;
 
+	private DigitalInput beamBreak;
+
 	public IndexerSubsystem()
 	{
 		desiredIndexerVelocity = IndexerConstants.INDEXER_REST_VELOCITY;
+
+		beamBreak = new DigitalInput(Ports.BEAM_BREAK);
 
 		indexerMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_MAIN);
 		indexerMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_SUB);
@@ -58,7 +63,7 @@ public class IndexerSubsystem extends SubsystemBase
 	/** Needs to be done later */
 	public boolean hasNote()
 	{
-		return false;
+		return beamBreak.get();
 	}
 
 }
