@@ -15,6 +15,8 @@ public class AutoAimSwerveCommand extends Command
     private final VisionSubsystem Vision;
     private final IndexerSubsystem Indexer;
 
+    private boolean shooting;
+
     public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
             IndexerSubsystem indexer)
     {
@@ -38,11 +40,14 @@ public class AutoAimSwerveCommand extends Command
             // Spin feeder motors
             Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
                     "Within aim threshold");
+
+            shooting = true;
         }
-        else
+        else if (!Indexer.hasNote())
         {
             Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
                     "Not within aim threshold");
+            shooting = false;
         }
     }
 
