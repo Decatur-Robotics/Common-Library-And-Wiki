@@ -14,7 +14,6 @@ import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
-import frc.robot.commands.ShooterInstantCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -103,14 +102,11 @@ public class Autonomous
             return Optional.empty();
 
         case Leave:
-            AutoMain.addCommands(new ShooterInstantCommand(Shooter));
             AutoMain.addCommands(new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
                     SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
             break;
 
         case MultiNote:
-            AutoMain.addCommands(new ShooterInstantCommand(Shooter));
-
             String[] pathSequence = new String[0];
 
             switch (StartingPosition)
@@ -137,7 +133,7 @@ public class Autonomous
             for (String pathName : pathSequence)
             {
                 // Add intake and aiming command once we have that!
-                AutoMain.addCommands(followPath(pathName), new ShooterInstantCommand(Shooter));
+                AutoMain.addCommands(followPath(pathName));
             }
 
             break;

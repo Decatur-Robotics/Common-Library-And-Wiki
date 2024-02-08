@@ -158,4 +158,9 @@ public class VisionSubsystem extends SubsystemBase
         return angle;
     }
 
+    public AprilTagFieldLayout getAprilTagFieldLayout()
+    {
+        return aprilTagFieldLayout;
+    }
+
 }
