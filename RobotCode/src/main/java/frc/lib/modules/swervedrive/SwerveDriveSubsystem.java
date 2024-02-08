@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -19,10 +20,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.core.LogitechControllerButtons;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
+import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class SwerveDriveSubsystem extends SubsystemBase
 {
@@ -32,6 +39,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	private final double MAX_MODULE_SPEED = SwerveConstants.MAX_SPEED;
 
 	private double gyroOffset = 0;
+
+	private Optional<DoubleSupplier> rotationController;
 
 	public SwerveDriveSubsystem()
 	{
@@ -63,6 +72,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 				getModulePositions());
 
 		configureAutoBuilder();
+
+		rotationController = Optional.empty();
 	}
 
 	private void configureAutoBuilder()
@@ -92,13 +103,17 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 		double[] offsets = SwerveConstants.ANGLE_OFFSETS;
 
-		SwerveConstants.ModFL.angleOffset = Rotation2d.fromDegrees(offsets[0] - (invert ? 180 : 0));
-		SwerveConstants.ModFR.angleOffset = Rotation2d.fromDegrees(offsets[1] - (invert ? 180 : 0));
-		SwerveConstants.ModBL.angleOffset = Rotation2d.fromDegrees(offsets[2] - (invert ? 180 : 0));
-		SwerveConstants.ModBR.angleOffset = Rotation2d.fromDegrees(offsets[3] - (invert ? 180 : 0));
+		SwerveConstants.ModFL.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.FRONT_LEFT] - (invert ? 180 : 0));
+		SwerveConstants.ModFR.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.FRONT_RIGHT] - (invert ? 180 : 0));
+		SwerveConstants.ModBL.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.BACK_LEFT] - (invert ? 180 : 0));
+		SwerveConstants.ModBR.angleOffset = Rotation2d
+				.fromDegrees(offsets[SwerveConstants.BACK_RIGHT] - (invert ? 180 : 0));
 	}
 
-	// main driving method. translation is change in every direction
+	/** main driving method. translation is change in every direction */
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative,
 			boolean isOpenLoop)
 	{
@@ -136,6 +151,15 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 	private void drive(ChassisSpeeds speeds)
 	{
+		// Override rotation if a controller is present
+		// This override is used by autonomous to override PathPlanner
+		if (rotationController.isPresent())
+		{
+			double rotation = rotationController.get().getAsDouble();
+			speeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
+					rotation);
+		}
+
 		drive(speeds, true);
 	}
 
@@ -150,19 +174,19 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 	}
 
-	// gets position of robot on the field (odometry)
+	/** @return position of robot on the field (odometry) in meters */
 	public Pose2d getPose()
 	{
 		return swerveOdometry.getPoseMeters();
 	}
 
-	// resets odometry (position on field)
+	/** resets odometry (position on field) */
 	public void resetPose(Pose2d pose)
 	{
 		swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
 	}
 
-	// returns array of a modules' states (angle, speed) for each one
+	/** @return array of a modules' states (angle, speed) for each one */
 	public SwerveModuleState[] getModuleStates()
 	{
 		SwerveModuleState[] states = new SwerveModuleState[4];
@@ -173,7 +197,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		return states;
 	}
 
-	// returns module positions(for each individual module)
+	/** @return module positions(for each individual module) */
 	public SwerveModulePosition[] getModulePositions()
 	{
 		SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -254,5 +278,66 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public ChassisSpeeds getCurrentSpeeds()
 	{
 		return SwerveConstants.SwerveKinematics.toChassisSpeeds(getModuleStates());
+	}
+
+	public void setRotationController(final DoubleSupplier RotationController)
+	{
+		rotationController = Optional.of(RotationController);
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
+	 * @return the default command for the swerve drive that allows full driver control
+	 */
+	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller)
+	{
+		return getTeleopControlledRotationCommand(Controller, Controller::getTwist);
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
+	 * @return a command for the swerve drive that allow driver control of translation and strafe,
+	 *         but rotates towards the speaker and automatically spins the feeder motors when in
+	 *         target
+	 */
+	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
+			final VisionSubsystem Vision)
+	{
+		final JoystickButton TriggerLeft = new JoystickButton(Controller,
+				LogitechControllerButtons.triggerLeft),
+				TriggerRight = new JoystickButton(Controller,
+						LogitechControllerButtons.triggerRight);
+
+		return new TeleopAimSwerveCommand(this, Vision, () -> -Controller.getY(),
+				() -> -Controller.getX(), TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
+	 * @param Rotation   supplier for the rotation of the swerve drive
+	 * @return the default command for the swerve drive that allows driver control except for
+	 *         rotation
+	 */
+	public TeleopSwerveCommand getTeleopControlledRotationCommand(final Joystick Controller,
+			final DoubleSupplier Rotation)
+	{
+		final JoystickButton TriggerLeft = new JoystickButton(Controller,
+				LogitechControllerButtons.triggerLeft),
+				TriggerRight = new JoystickButton(Controller,
+						LogitechControllerButtons.triggerRight);
+
+		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
+				Rotation, TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
+	}
+
+	/**
+	 * @return the angle to the speaker in radians. Counterclockwise rotation is negative.
+	 */
+	public double getRotationToSpeaker(final VisionSubsystem Vision)
+	{
+		double angle = Vision.getAngleToSpeaker();
+		double currentAngle = getYaw().getRadians();
+
+		return angle - currentAngle;
 	}
 }

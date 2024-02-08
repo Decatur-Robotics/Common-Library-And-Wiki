@@ -1,89 +1,67 @@
 package frc.robot.subsystems;
 
-// import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
-import edu.wpi.first.math.controller.PIDController;
+import frc.robot.constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 
 public class ShooterSubsystem extends SubsystemBase
 {
 	// Creates objects
-	private double shooterMotorPower, feederMotorPower;
+	private double desiredShooterVelocity;
 
-	private final PIDController shooterPid, feederPid;
-	private final TeamSparkMAX ShooterMotorMain, ShooterMotorSub, FeederMotorMain, FeederMotorSub;
-
-	private static final double VOLTAGE = 12;
+	private SparkPIDController shooterPid;
+	private TeamSparkMAX shooterMotorMain, shooterMotorSub;
 
 	public ShooterSubsystem()
 	{
-		// Sets default shooter motor power to 0.25 and feeder to 0
-		shooterMotorPower = 0.25;
-		feederMotorPower = 0;
-
-		// Initializes the Pid
-		shooterPid = new PIDController(Constants.SHOOTER_KP, Constants.SHOOTER_KI,
-				Constants.SHOOTER_KD);
-		feederPid = new PIDController(Constants.FEEDER_KP, Constants.FEEDER_KI,
-				Constants.FEEDER_KD);
+		// Sets default shooter motor power
+		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		ShooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_MAIN);
-		ShooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_SUB);
-		FeederMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.FEEDER_MOTOR_MAIN);
-		FeederMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.FEEDER_MOTOR_SUB);
+		shooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_MAIN);
+		shooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_SUB);
 
-		// Sets the motors voltage compensation
-		ShooterMotorMain.enableVoltageCompensation(VOLTAGE);
-		ShooterMotorSub.enableVoltageCompensation(VOLTAGE);
-		FeederMotorMain.enableVoltageCompensation(VOLTAGE);
-		FeederMotorSub.enableVoltageCompensation(VOLTAGE);
+		shooterMotorSub.follow(shooterMotorMain, true);
+		shooterMotorMain.setIdleMode(IdleMode.kBrake);
+		shooterMotorSub.setIdleMode(IdleMode.kBrake);
+		shooterMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		shooterMotorSub.setSmartCurrentLimit(Constants.MAX_CURRENT);
 
-		// Makes the sub-motors follow main
-		FeederMotorSub.follow(FeederMotorMain);
-		ShooterMotorSub.follow(ShooterMotorMain);
+		shooterPid = shooterMotorMain.getPidController();
 
-		// Inverts the right side
-		ShooterMotorSub.setInverted(true);
-		FeederMotorSub.setInverted(true);
-
-		// Sets neutral mode for the motors
-		ShooterMotorSub.setIdleMode(IdleMode.kBrake);
-		FeederMotorSub.setIdleMode(IdleMode.kBrake);
-		ShooterMotorMain.setIdleMode(IdleMode.kBrake);
-		FeederMotorMain.setIdleMode(IdleMode.kBrake);
+		shooterPid.setP(ShooterConstants.SHOOTER_KP);
+		shooterPid.setI(ShooterConstants.SHOOTER_KI);
+		shooterPid.setD(ShooterConstants.SHOOTER_KD);
+		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
 	}
 
-	public double getShooterMotorPower()
+	public double getShooterMotorVelocityError() 
 	{
-		return ShooterMotorMain.get();
+		return shooterMotorMain.getVelocityError();
 	}
 
-	/* This is clamping the shooter motor power to be within the range of -1 to 1 */
-	public void setShooterMotorPower(double power, String reason)
+	/**
+	 * This is clamping the shooter motor power
+	 */
+	public void setShooterMotorVelocity(double desiredShooterVelocity, String reason)
 	{
-		shooterMotorPower = Math.max(Math.min(1, power), -1);
-
+		this.desiredShooterVelocity = Math.max(
+				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
+				-ShooterConstants.SHOOTER_MAX_VELOCITY);
 	}
 
-	/* This is clamping the feeder motor power to be within the range of -1 to 1 */
-	public void setFeedMotorPower(double power, String reason)
-	{
-		feederMotorPower = Math.max(Math.min(1, power), -1);
-	}
-
-	/* Continuously updates shooter speed based on the commands above. */
+	/**
+	 * Continuously updates shooter speed based on the commands above.
+	 */
 	@Override
 	public void periodic()
 	{
-		double newShooterPower = shooterPid.calculate(ShooterMotorSub.get(), shooterMotorPower);
-		ShooterMotorMain.set(newShooterPower);
-
-		double newFeederPower = feederPid.calculate(FeederMotorSub.get(), feederMotorPower);
-		FeederMotorMain.set(newFeederPower);
+		shooterPid.setReference(desiredShooterVelocity, ControlType.kVelocity);
 	}
 }
