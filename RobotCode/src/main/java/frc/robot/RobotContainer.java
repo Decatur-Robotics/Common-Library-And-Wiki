@@ -72,9 +72,9 @@ public class RobotContainer
 		final JoystickButton rightTrigger = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.triggerRight);
 
-		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
-		rightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, VisionSubsystem,
-				IndexerSubsystem));
+		swerveDrive.setDefaultCommand(swerveDrive.getDefaultCommand(PrimaryController));
+		rightTrigger.whileTrue(swerveDrive.getTeleopAimCommand(PrimaryController, visionSubsystem,
+				indexerSubsystem));
 	}
 
 	private void configureSecondaryBindings()
