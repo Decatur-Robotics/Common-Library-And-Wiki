@@ -8,11 +8,11 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
+import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterCommand;
@@ -95,16 +95,8 @@ public class Autonomous
         final VisionSubsystem Vision = RobotContainer.getVision();
 
         final SequentialCommandGroup AutoMain = new SequentialCommandGroup();
-        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(AutoMain);
-
-        // Override the swerve drive's rotation to always point at the target
-        AutoMain.addCommands(
-                new InstantCommand(() -> SwerveDrive.setRotationController(Vision::getYawOffset)));
-
-        // Aim towards the target. Need to update once aiming is improved
-        // We do this in AutoAsync since it won't end
-        AutoAsync.addCommands(new RotateShooterMountToPositionCommand(ShooterMount,
-                Vision::getPitchOffset, false));
+        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(
+                new AutoAimSwerveCommand(SwerveDrive, Vision), AutoMain);
 
         switch (AutoMode)
         {
@@ -112,14 +104,11 @@ public class Autonomous
             return Optional.empty();
 
         case Leave:
-            AutoMain.addCommands(new ShooterCommand(Shooter));
             AutoMain.addCommands(new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
                     SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
             break;
 
         case MultiNote:
-            AutoMain.addCommands(new ShooterCommand(Shooter));
-
             String[] pathSequence = new String[0];
 
             switch (StartingPosition)
@@ -145,8 +134,7 @@ public class Autonomous
 
             for (String pathName : pathSequence)
             {
-                // Add intake and aiming command once we have that!
-                AutoMain.addCommands(followPath(pathName), new ShooterCommand(Shooter));
+                AutoMain.addCommands(followPath(pathName));
             }
 
             break;
