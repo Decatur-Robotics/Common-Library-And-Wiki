@@ -35,6 +35,7 @@ public class RobotContainer
 	private final ShooterSubsystem shooterSubsystem;
 
 	private final ShooterMountSubsystem shooterMountSubsystem;
+	private final VisionSubsystem visionSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
@@ -51,6 +52,7 @@ public class RobotContainer
 		shooterSubsystem = new ShooterSubsystem();
 		shooterMountSubsystem = new ShooterMountSubsystem();
 		intakeSubsytem = new IntakeSubsystem();
+		visionSubsystem = new VisionSubsystem();
 
 		Autonomous.init(this);
 
@@ -92,12 +94,12 @@ public class RobotContainer
 
 	public ShooterMountSubsystem getShooterMount()
 	{
-		return ShooterMountSubsystem;
+		return shooterMountSubsystem;
 	}
 
 	public VisionSubsystem getVision()
 	{
-		return VisionSubsystem;
+		return visionSubsystem;
 	}
 
 }
