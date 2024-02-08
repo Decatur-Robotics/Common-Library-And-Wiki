@@ -16,6 +16,7 @@ import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.constants.AutoConstants;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -92,10 +93,11 @@ public class Autonomous
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
         final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
         final VisionSubsystem Vision = RobotContainer.getVision();
+        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
 
         final SequentialCommandGroup AutoMain = new SequentialCommandGroup();
         final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(
-                new AutoAimSwerveCommand(SwerveDrive, Vision), AutoMain);
+                new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer), AutoMain);
 
         switch (AutoMode)
         {
