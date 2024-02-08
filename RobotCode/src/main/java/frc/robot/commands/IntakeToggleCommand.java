@@ -24,6 +24,12 @@ public class IntakeToggleCommand extends Command
 	public void end(boolean stop)
 	{
 		this.intake.turnOnOrStopIntakeMotors(false);
-		this.intake.raiseOrLowerIntakeMount(false);
+		this.intake.raiseOrLowerIntakeMount(true);
+	}
+
+	@Override
+	public boolean isFinished()
+	{
+		return Math.abs(intake.goalRotation - intake.getPosition()) > IntakeSubsystem.DEADBAND;
 	}
 }
