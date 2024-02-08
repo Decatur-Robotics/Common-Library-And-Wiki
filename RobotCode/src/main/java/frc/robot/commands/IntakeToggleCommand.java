@@ -26,10 +26,4 @@ public class IntakeToggleCommand extends Command
 		this.intake.turnOnOrStopIntakeMotors(false);
 		this.intake.raiseOrLowerIntakeMount(false);
 	}
-
-	@Override
-	public boolean isFinished()
-	{
-		return Math.abs(intake.goalRotation - intake.getPosition()) > IntakeSubsystem.DEADBAND;
-	}
 }
