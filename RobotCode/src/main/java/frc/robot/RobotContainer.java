@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.core.LogitechControllerButtons;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -70,7 +69,7 @@ public class RobotContainer
 		final JoystickButton rightTrigger = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.triggerRight);
 
-		rightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, VisionSubsystem));
+		rightTrigger.whileTrue(swerveDrive.getTeleopAimCommand(PrimaryController, visionSubsystem));
 	}
 
 	private void configureSecondaryBindings()
@@ -80,7 +79,7 @@ public class RobotContainer
 		final JoystickButton rightTrigger = new JoystickButton(secondaryController,
 				LogitechControllerButtons.triggerRight);
 
-		rightTrigger.whileTrue(new ShooterCommand(shooterSubsystem));
+		//rightTrigger.whileTrue(new ShooterCommand(shooterSubsystem));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()

@@ -15,7 +15,6 @@ import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;

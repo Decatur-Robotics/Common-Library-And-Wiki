@@ -12,15 +12,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamTalonFX mainMotor, followMotor;
 
-	public static final double DEGREES_IN_ONE_TICK = 360 / 42,
-								ROTATION_SPEED = 1,
-								DEADBAND = 0.5;
-  private double targetRotation; // In encoder ticks (4096 to 1 degree)
+	private double targetRotation; // In encoder ticks (4096 to 1 degree)
 
 	public ShooterMountSubsystem()
 	{
-		mainMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamSparkMAX("SHOOTER_MOUNT_MOTOR_RIGHT",Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
+		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
 		followMotor.follow(mainMotor);
 		followMotor.setInverted(true);
@@ -39,23 +36,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		double difference = goalRotation - getCurrentRotation();
-
-		if (Math.abs(difference) < DEADBAND)
-		{
-			setMotors(0, "Shooter Mount (Deadbanded): Difference: " + difference + ", Distance: "+ distance);
-			return;
-		}
-
-		double power = distance * Math.sin(difference * Math.PI / distance);
-		power = Math.max(-1, Math.min(power, 1));
-		setMotors(power, "Shooter Mount: Difference: " + difference + ", Distance: " + distance);
-	}
-
-	public void setGoalRotation(double degrees)
-	{
-		distance = degrees - getCurrentRotation();
-		goalRotation = degrees;
 		mainMotor.set(ControlMode.MotionMagic, targetRotation);
 	}
 
