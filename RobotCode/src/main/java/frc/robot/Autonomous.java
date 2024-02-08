@@ -14,6 +14,7 @@ import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
+import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
@@ -134,7 +135,6 @@ public class Autonomous
 
             for (String pathName : pathSequence)
             {
-                // Add intake and aiming command once we have that!
                 AutoMain.addCommands(followPath(pathName));
             }
 

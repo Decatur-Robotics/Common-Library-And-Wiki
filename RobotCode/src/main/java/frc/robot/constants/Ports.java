@@ -3,6 +3,11 @@ package frc.robot.constants;
 public final class Ports
 {
 
+	// place holder values for intake motors
+	public static final int INTAKE_ON_MOTOR = 3;
+	public static final int INTAKE_MOTOR_RIGHT = 4;
+	public static final int INTAKE_MOTOR_LEFT = 5;
+
 	public final static int PNEUMATICS_HUB = 42;
 
 	public static final int SHOOTER_MOUNT_MOTOR_LEFT = 0;
