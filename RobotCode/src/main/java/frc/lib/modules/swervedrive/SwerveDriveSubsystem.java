@@ -341,4 +341,22 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 		return angle - currentAngle;
 	}
+
+	/**
+	 * @return the velocity of the robot in meters per second
+	 */
+	public Pose2d getVelocity()
+	{
+		double angle = getYaw().getRadians();
+
+		// Get average drive motor speed speed
+		double speed = 0;
+		for (SwerveModule mod : swerveMods)
+		{
+			speed += mod.getDriveMotorSpeed();
+		}
+		speed /= swerveMods.length;
+
+		return new Pose2d(speed * Math.cos(angle), speed * Math.sin(angle), new Rotation2d(angle));
+	}
 }
