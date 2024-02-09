@@ -15,8 +15,10 @@ import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -24,7 +26,7 @@ import com.revrobotics.CANSparkBase;
 
 public class SwerveModule
 {
-	
+
 	public final int moduleNumber;
 
 	private Rotation2d angleOffset;
@@ -36,6 +38,9 @@ public class SwerveModule
 	private RelativeEncoder integratedAngleEncoder;
 	private SparkPIDController angleController;
 	private CANCoder angleEncoder;
+
+	private DutyCycleOut openLoopDriveRequest;
+	private VelocityDutyCycle closedLoopDriveRequest;
 
 	SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(SwerveConstants.DRIVE_KS,
 			SwerveConstants.DRIVE_KV, SwerveConstants.DRIVE_KA);
@@ -79,15 +84,17 @@ public class SwerveModule
 		// using a PercentOutput of motor power
 		if (isOpenLoop)
 		{
+
 			double percentOutput = desiredState.speedMetersPerSecond / SwerveConstants.MAX_SPEED;
-			mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
+			openLoopDriveRequest.Output = percentOutput;
+			mDriveMotor.setControl(openLoopDriveRequest);
 		}
 		else
 		{
 			double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond,
 					SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO);
-			mDriveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
-					feedforward.calculate(desiredState.speedMetersPerSecond));
+			mDriveMotor.setControl(closedLoopDriveRequest.withVelocity(velocity)
+					.withFeedForward(feedforward.calculate(desiredState.speedMetersPerSecond)));
 		}
 	}
 
@@ -146,8 +153,7 @@ public class SwerveModule
 
 	private void configDriveMotor()
 	{
-		mDriveMotor.configFactoryDefault();
-		mDriveMotor.configAllSettings(Robot.getCtreConfigs().swerveDriveFXConfig);
+		mDriveMotor.getConfigurator().apply(Robot.getCtreConfigs().getDriveMotorConfigs());
 		mDriveMotor.setInverted(SwerveConstants.DRIVE_MOTOR_INVERT);
 		mDriveMotor.setNeutralMode(SwerveConstants.DRIVE_NEUTRAL_MODE);
 		mDriveMotor.setSelectedSensorPosition(0);

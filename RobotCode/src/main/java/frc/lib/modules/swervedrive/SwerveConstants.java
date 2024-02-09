@@ -5,6 +5,7 @@
 package frc.lib.modules.swervedrive;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -71,7 +72,7 @@ public final class SwerveConstants
 	public static final boolean DRIVE_MOTOR_INVERT = false;
 
 	/* Angle Encoder Invert */
-	public static final boolean CANCODER_INVERT = false;
+	public static final SensorDirectionValue CANCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
 
 	/* Swerve Current Limiting */
 	public static final int ANGLE_CONTINUOUS_CURRENT_LIMIT = 25;
