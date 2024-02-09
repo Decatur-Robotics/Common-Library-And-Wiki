@@ -153,6 +153,7 @@ public final class SwerveConstants
 	public static final int BACK_RIGHT = 3;
 
 	// Velocity measurement constants
+	/** TODO: Needs to checked */
 	public static final int DRIVE_MOTOR_TICKS_PER_ROTATION = 2048;
 
 	/* Module Specific Constants */
