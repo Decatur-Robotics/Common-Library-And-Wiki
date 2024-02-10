@@ -14,8 +14,9 @@ public class IntakeSubsystem extends SubsystemBase
     // Intake toggle motor turns on or off the motors that actually take in notes (game pieces).
     // Internally, it is known as INTAKE_ON_MOTOR, but I renamed it for the sake of clarity.
     // The right motor is the main motor, and the left motor is the follow motor.
-    private final TeamSparkMAX INTAKE_RAISER_MOTOR_LEFT, INTAKE_RAISER_MOTOR_RIGHT,
-            INTAKE_TOGGLE_MOTOR;
+    private final TeamSparkMAX INTAKE_RAISER_MOTOR_LEFT;
+    public final TeamSparkMAX INTAKE_RAISER_MOTOR_RIGHT;
+    private final TeamSparkMAX INTAKE_TOGGLE_MOTOR;
     public boolean isLowered = false;
 
     /*
@@ -61,7 +62,6 @@ public class IntakeSubsystem extends SubsystemBase
 
     public void raiseOrLowerIntakeMount(boolean lowered)
     {
-        // This is called a ternary operator. Look it up if you don't know what it is.
         INTAKE_RAISER_MOTOR_RIGHT.set(lowered ? -MOTOR_SPEED : MOTOR_SPEED);
         isLowered = lowered;
     }
@@ -79,6 +79,7 @@ public class IntakeSubsystem extends SubsystemBase
     public void periodic()
     {
         double difference = goalRotation - getCurrentRotation();
+        distance = goalRotation - getCurrentRotation();
         setMotors(
                 Math.abs(difference) < DEADBAND ? 0
                         : Math.max(-1,
@@ -94,12 +95,13 @@ public class IntakeSubsystem extends SubsystemBase
 
     public double getCurrentRotation()
     {
-        return INTAKE_RAISER_MOTOR_LEFT.getEncoder().getPosition();
+        return INTAKE_RAISER_MOTOR_RIGHT.getEncoder().getPosition();
     }
 
     public void setMotors(double power, String reason)
     {
         INTAKE_RAISER_MOTOR_RIGHT.set(Math.max(-1, Math.min(power, 1)) * MOTOR_SPEED, reason);
+        System.out.println(reason);
     }
 
 }

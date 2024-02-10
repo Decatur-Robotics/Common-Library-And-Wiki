@@ -23,8 +23,8 @@ public class IntakeToggleCommand extends Command
 	@Override
 	public void end(boolean stop)
 	{
+		this.intake.raiseOrLowerIntakeMount(false);
 		this.intake.turnOnOrStopIntakeMotors(false);
-		this.intake.raiseOrLowerIntakeMount(true);
 	}
 
 	@Override

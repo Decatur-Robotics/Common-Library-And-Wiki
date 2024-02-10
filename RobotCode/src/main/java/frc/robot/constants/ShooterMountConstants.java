@@ -3,7 +3,9 @@ package frc.robot.constants;
 public class ShooterMountConstants
 {
 
-	public static final double TICKS_IN_ONE_DEGREE = 4096 / 360; // Update to reflect gear ratios
+	// Note: The .0's are necessary, because otherwise java thinks they are integers-
+	// -and rounds them. No idea why- I have never had this problem before, but here we are.
+	public static final double TICKS_IN_ONE_DEGREE = 4096.0 / 360.0; // Update to reflect gear ratios
 
 	/**
 	 * Lowest possible position for the shooter mount to be at in degrees

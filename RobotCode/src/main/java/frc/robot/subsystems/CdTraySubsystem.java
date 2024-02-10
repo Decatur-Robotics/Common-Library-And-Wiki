@@ -13,7 +13,9 @@ public class CdTraySubsystem extends SubsystemBase
 	// guys i think i'm starting to get the hang of thi- oh nevermind
 	private Compressor mainCompressor;
 
-	private DoubleSolenoid cdArmLeft, cdArmRight;
+	public DoubleSolenoid cdArmLeft;
+
+	public DoubleSolenoid cdArmRight;
 
 	public TeamSparkMAX intakeMotor;
 
