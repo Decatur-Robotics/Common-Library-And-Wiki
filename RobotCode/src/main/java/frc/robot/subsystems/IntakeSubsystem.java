@@ -79,13 +79,13 @@ public class IntakeSubsystem extends SubsystemBase
                 intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
         }
 
-        /** @param desiredRotation Ticks */
+        /** Ticks */
         public void setDesiredRotation(double desiredRotation)
         {
                 this.desiredRotation = desiredRotation;
         }
 
-        /** @param desiredVelocity Ticks per second */
+        /** Ticks per second */
         public void setDesiredVelocity(double desiredVelocity)
         {
                 this.desiredVelocity = desiredVelocity;
