@@ -36,8 +36,6 @@ public class IntakeSubsystem extends SubsystemBase
 
                 // Configure deployment motors
                 intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
-                intakeDeployMotorRight.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-                intakeDeployMotorLeft.enableVoltageCompensation(Constants.MAX_VOLTAGE);
                 intakeDeployMotorRight.setSmartCurrentLimit(Constants.MAX_CURRENT);
                 intakeDeployMotorLeft.setSmartCurrentLimit(Constants.MAX_CURRENT);
                 intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
@@ -58,8 +56,6 @@ public class IntakeSubsystem extends SubsystemBase
 
                 // Configure roller motors
                 intakeRollerMotorBottom.follow(intakeRollerMotorTop, true);
-                intakeRollerMotorTop.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-                intakeRollerMotorBottom.enableVoltageCompensation(Constants.MAX_VOLTAGE);
                 intakeRollerMotorTop.setSmartCurrentLimit(Constants.MAX_CURRENT);
                 intakeRollerMotorBottom.setSmartCurrentLimit(Constants.MAX_CURRENT);
                 intakeRollerMotorTop.setIdleMode(IdleMode.kBrake);
@@ -88,11 +84,13 @@ public class IntakeSubsystem extends SubsystemBase
                 intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
         }
 
+        /** Ticks */
         public void setDesiredRotation(double desiredRotation)
         {
                 this.desiredRotation = desiredRotation;
         }
 
+        /** Ticks per second */
         public void setDesiredVelocity(double desiredVelocity)
         {
                 this.desiredVelocity = desiredVelocity;
