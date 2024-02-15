@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -24,9 +25,9 @@ public class ClimberSubsystem extends SubsystemBase
 		gyro = new Pigeon2(Ports.PIGEON_GYRO);
 		// sets extension of left and right motors to given extension length
 		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
-				Ports.CLIMBER_RIGHT_MOTOR);
+				Ports.CLIMBER_EXTEND_RIGHT_MOTOR);
 		extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
-				Ports.CLIMBER_LEFT_MOTOR);
+				Ports.CLIMBER_EXTEND_LEFT_MOTOR);
 		extendMotorLeft.setNeutralMode(NeutralMode.Brake);
 		extendMotorRight.setNeutralMode(NeutralMode.Brake);
 		extendMotorLeft.setInverted(true);
