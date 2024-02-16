@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import javax.swing.text.html.Option;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -15,12 +17,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.RobotContainer;
 import frc.robot.constants.VisionConstants;
 
@@ -35,8 +39,12 @@ public class VisionSubsystem extends SubsystemBase
 
     private final AprilTagFieldLayout AprilTagFieldLayout;
 
-    public VisionSubsystem()
+    private final SwerveDriveSubsystem Swerve;
+
+    public VisionSubsystem(SwerveDriveSubsystem swerve)
     {
+        Swerve = swerve;
+
         Camera = new PhotonCamera(VisionConstants.CameraTableName);
 
         AprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -104,6 +112,20 @@ public class VisionSubsystem extends SubsystemBase
         return Optional.empty();
     }
 
+    public Optional<Pose2d> adjustPoseForVelocity(Optional<Pose2d> pose)
+    {
+        if (pose.isEmpty())
+        {
+            return Optional.empty();
+        }
+
+        // Adjust for the velocity of the robot
+        Pose2d velocity = Swerve.getVelocity();
+        Pose2d adjustedPose = new Pose2d(pose.get().getX() + velocity.getX(),
+                pose.get().getY() + velocity.getY(), pose.get().getRotation());
+        return Optional.of(adjustedPose);
+    }
+
     /**
      * Convert a Pose3d to a Pose2d. Conversion: Pose3d.X -> Pose2d.X Pose3d.Z -> Pose2d.Y
      * Pose3d.Rotation.Y -> Pose2d.Rotation
@@ -115,9 +137,11 @@ public class VisionSubsystem extends SubsystemBase
         return new Pose2d(pose3d.getX(), pose3d.getZ(), rot2d);
     }
 
-    public double angleTowardsPose(Pose2d targetPose)
+    public double angleTowardsPose(Pose2d targetPose, boolean adjustForVelocity)
     {
-        Optional<Pose2d> robotPoseOptional = getRobotPose();
+        Optional<Pose2d> robotPoseOptional = adjustForVelocity
+                ? adjustPoseForVelocity(getRobotPose())
+                : getRobotPose();
 
         if (robotPoseOptional.isEmpty())
         {
@@ -153,7 +177,7 @@ public class VisionSubsystem extends SubsystemBase
         Pose2d targetPose = pose3dtoPose2d(
                 AprilTagFieldLayout.getTagPose(targetId).orElse(new Pose3d()));
 
-        double angle = angleTowardsPose(targetPose);
+        double angle = angleTowardsPose(targetPose, true);
 
         SmartDashboard.putNumber("Angle to Speaker", angle);
         return angle;
