@@ -51,4 +51,7 @@ public class ShooterMountConstants
 	/** Rotation compensation in degrees */
 	public static final double[] GRAVITY_COMPENSATION_TREE_MAP_VALUES = {1, 2, 3};
 
+	/** Note velocity when leaving the shooter in meters per second */
+	public static final double EJECTED_NOTE_VELOCITY = 1;
+
 }
