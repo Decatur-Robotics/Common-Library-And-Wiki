@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
@@ -28,7 +29,7 @@ public class AimShooterCommand extends Command
 
 	private AprilTagFieldLayout aprilTagFieldLayout;
 
-	private InterpolatingDoubleTreeMap gravityCompensationTreeMap;
+	private InterpolatingDoubleTreeMap gravityCompensationTreeMap, noteVelocityEstimateTreeMap;
 
 	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount,
 			VisionSubsystem vision, SwerveDriveSubsystem swerveDrive)
@@ -44,11 +45,20 @@ public class AimShooterCommand extends Command
 
 		gravityCompensationTreeMap = new InterpolatingDoubleTreeMap();
 
-		for (int i = 0; i < ShooterMountConstants.GRAVITY_COMPENSATION_TREE_MAP_KEYS.length; i++)
+		for (int i = 0; i < ShooterMountConstants.SPEAKER_DISTANCE_TREE_MAP_KEYS.length; i++)
 		{
 			gravityCompensationTreeMap.put(
-					ShooterMountConstants.GRAVITY_COMPENSATION_TREE_MAP_KEYS[i],
+					ShooterMountConstants.SPEAKER_DISTANCE_TREE_MAP_KEYS[i],
 					ShooterMountConstants.GRAVITY_COMPENSATION_TREE_MAP_VALUES[i]);
+		}
+
+		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
+
+		for (int i = 0; i < ShooterMountConstants.SPEAKER_DISTANCE_TREE_MAP_KEYS.length; i++)
+		{
+			noteVelocityEstimateTreeMap.put(
+				ShooterMountConstants.SPEAKER_DISTANCE_TREE_MAP_KEYS[i],
+				ShooterMountConstants.NOTE_VELOCITY_ESTIMATE_TREE_MAP_VALUES[i]);
 		}
 	}
 
@@ -66,6 +76,7 @@ public class AimShooterCommand extends Command
 
 		Translation2d speakerPose = new Translation2d();
 
+		// Get speaker pose
 		if (allianceColor == DriverStation.Alliance.Red)
 		{
 			Pose3d tagPose = aprilTagFieldLayout.getTagPose(4).orElse(new Pose3d());
@@ -82,39 +93,30 @@ public class AimShooterCommand extends Command
 		// Get the shooter mount pose
 		Pose2d shooterMountPose = vision.getShooterMountPose().orElse(new Pose2d());
 
+		// Calculate the distance from the shooter mount to the base of the speaker
+		double groundDistance = shooterMountPose.getTranslation().getDistance(speakerPose);
+
 		// Get the robots velocity
 		Translation2d chassisVelocity = swerveDrive.getVelocity().getTranslation();
 
-		// Calculate the distance from the shooter mount to the base of the speaker
-		double groundDistance = speakerPose.getDistance(shooterMountPose.getTranslation());
-
-		// Calculate the distance from the shooter mount to speaker opening
-		// Essentially how far the note will travel
-		double shotDistance = Math.sqrt(Math.pow(ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER, 2)
-				+ Math.pow(groundDistance, 2));
+		// Calculate the estimated time for the note to reach the speaker
+		double noteFlightTime = noteVelocityEstimateTreeMap.get(groundDistance);
 
 		// Calculate shooter mount pose adjusted by velocity and distance to speaker
-		Translation2d velocityAdjustedShooterMountPose = new Translation2d(
-				shooterMountPose.getX() + (shotDistance
-						* ShooterMountConstants.EJECTED_NOTE_VELOCITY * chassisVelocity.getX()),
-				shooterMountPose.getY()
-						+ (shotDistance / ShooterMountConstants.EJECTED_NOTE_VELOCITY)
-								* chassisVelocity.getY());
+		Translation2d velocityAdjustedSpeakerPose = new Translation2d(
+				speakerPose.getX() - (noteFlightTime * chassisVelocity.getX()),
+				speakerPose.getY() - (noteFlightTime * chassisVelocity.getY()));
 
-		// Recalculate ground distance and hypotenuse adjusted for velocity
-		double velocityAdjustedGroundDistance = speakerPose
-				.getDistance(velocityAdjustedShooterMountPose);
-		double velocityAdjustedHypotenuse = Math
-				.sqrt(Math.pow(ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER, 2)
-						+ Math.pow(velocityAdjustedGroundDistance, 2));
+		// Recalculate ground distance adjusting for velocity
+		double velocityAdjustedGroundDistance = shooterMountPose.getTranslation()
+				.getDistance(velocityAdjustedSpeakerPose);
 
-		// Calculate the target rotation of the shooter mount
-		double targetRotation = Math.atan(
-				ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER / velocityAdjustedGroundDistance)
-				* (180 / Math.PI);
+		// Calculate the target rotation of the shooter mount in degrees
+		double targetRotation = Units.radiansToDegrees(Math.atan(
+				ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER / velocityAdjustedGroundDistance));
 
 		shooterMount.setTargetRotation(
-				targetRotation + gravityCompensationTreeMap.get(velocityAdjustedHypotenuse));
+				targetRotation + gravityCompensationTreeMap.get(velocityAdjustedGroundDistance));
 	}
 
 	@Override
