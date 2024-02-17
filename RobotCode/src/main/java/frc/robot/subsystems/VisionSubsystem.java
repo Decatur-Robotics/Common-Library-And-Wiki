@@ -42,12 +42,12 @@ public class VisionSubsystem extends SubsystemBase
     private final AprilTagFieldLayout AprilTagFieldLayout;
 
     private final SwerveDriveSubsystem Swerve;
-    private final ShooterSubsystem Shooter;
+    private final ShooterMountSubsystem ShooterMount;
 
-    public VisionSubsystem(SwerveDriveSubsystem swerve, ShooterSubsystem shooter)
+    public VisionSubsystem(SwerveDriveSubsystem swerve, ShooterMountSubsystem shooterMount)
     {
         Swerve = swerve;
-        Shooter = shooter;
+        ShooterMount = shooterMount;
 
         Camera = new PhotonCamera(VisionConstants.CameraTableName);
 
@@ -246,7 +246,7 @@ public class VisionSubsystem extends SubsystemBase
         Translation2d chassisVelocity = Swerve.getVelocity().getTranslation();
 
         // Calculate the estimated time for the note to reach the speaker
-        double noteFlightTime = Shooter.getNoteVelocityEstimateTreeMap().get(groundDistance);
+        double noteFlightTime = ShooterMount.getNoteVelocityEstimateTreeMap().get(groundDistance);
 
         // Calculate shooter mount pose adjusted by velocity and time for note to reach speaker
         Translation2d velocityAdjustedSpeakerPose = new Translation2d(

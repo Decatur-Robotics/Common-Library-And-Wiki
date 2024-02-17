@@ -50,16 +50,14 @@ public class AimShooterCommand extends Command
 		Pose2d shooterMountPose = vision.getShooterMountPose2d().orElse(new Pose2d());
 		Translation2d velocityAdjustedSpeakerPose = vision.getSpeakerPoseAdjustedForVelocity();
 
-		// Recalculate ground distance adjusting for velocity
+		// Calculate ground distance adjusting for velocity
 		double velocityAdjustedGroundDistance = shooterMountPose.getTranslation()
 				.getDistance(velocityAdjustedSpeakerPose);
 
 		// Calculate the target rotation of the shooter mount in degrees
-		double targetRotation = Units.radiansToDegrees(Math.atan(
-				ShooterMountConstants.SHOOTER_MOUNT_TO_SPEAKER / velocityAdjustedGroundDistance));
+		double targetRotation = shooterMount.getShooterMountAngleTreeMap().get(velocityAdjustedGroundDistance);
 
-		shooterMount.setTargetRotation(targetRotation
-				+ shooter.getGravityCompensationTreeMap().get(velocityAdjustedGroundDistance));
+		shooterMount.setTargetRotation(targetRotation);
 	}
 
 	@Override

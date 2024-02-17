@@ -20,11 +20,6 @@ public class ShooterSubsystem extends SubsystemBase
 	private SparkPIDController shooterPid;
 	private TeamSparkMAX shooterMotorMain, shooterMotorSub;
 
-	/** Key: distance to speaker in meters, Value: Rotation compensation in degrees */
-	private InterpolatingDoubleTreeMap gravityCompensationTreeMap;
-	/** Key: distance to speaker in meters, Value: Note velocity in meters per second */
-	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
-
 	public ShooterSubsystem()
 	{
 		// Sets default shooter motor power
@@ -46,18 +41,6 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setI(ShooterConstants.SHOOTER_KI);
 		shooterPid.setD(ShooterConstants.SHOOTER_KD);
 		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
-
-		// Populate tree maps
-		gravityCompensationTreeMap = new InterpolatingDoubleTreeMap();
-		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
-		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
-		{
-			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
-			gravityCompensationTreeMap.put(key,
-					ShooterMountConstants.GravityCompensationTreeMapValues[i]);
-			noteVelocityEstimateTreeMap.put(key,
-					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
-		}
 	}
 
 	public double getShooterMotorVelocityError()
@@ -84,21 +67,4 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setReference(desiredShooterVelocity, ControlType.kVelocity);
 	}
 
-	/**
-	 * @return A map where: Key: distance to speaker in meters, Value: Rotation compensation in
-	 *         degrees
-	 */
-	public InterpolatingDoubleTreeMap getGravityCompensationTreeMap()
-	{
-		return gravityCompensationTreeMap;
-	}
-
-	/**
-	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity in meters per
-	 *         second
-	 */
-	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
-	{
-		return noteVelocityEstimateTreeMap;
-	}
 }

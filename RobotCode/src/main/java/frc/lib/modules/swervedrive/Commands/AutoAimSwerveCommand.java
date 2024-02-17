@@ -43,7 +43,7 @@ public class AutoAimSwerveCommand extends Command
         else if (!Indexer.hasNote())
         {
             Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
-                    "Not within aim threshold");
+                    "No note in indexer");
         }
     }
 
