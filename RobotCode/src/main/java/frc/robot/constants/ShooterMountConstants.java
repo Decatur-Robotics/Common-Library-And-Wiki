@@ -37,8 +37,4 @@ public class ShooterMountConstants
 	/** Note velocity in meters per second */
 	public static final double[] NOTE_VELOCITY_ESTIMATE_TREE_MAP_VALUES = {1, 2, 3};
 
-	// MAX_SHOT_DISTANCE should be equal to the largest value in SPEAKER_DISTANCE_TREE_MAP_KEYS
-	/** Farthest distance we can shoot from in meters */
-	public static final double MAX_SHOT_DISTANCE = 3;
-
 }
