@@ -102,7 +102,7 @@ public class AimShooterCommand extends Command
 		// Calculate the estimated time for the note to reach the speaker
 		double noteFlightTime = noteVelocityEstimateTreeMap.get(groundDistance);
 
-		// Calculate shooter mount pose adjusted by velocity and distance to speaker
+		// Calculate shooter mount pose adjusted by velocity and time for note to reach speaker
 		Translation2d velocityAdjustedSpeakerPose = new Translation2d(
 				speakerPose.getX() - (noteFlightTime * chassisVelocity.getX()),
 				speakerPose.getY() - (noteFlightTime * chassisVelocity.getY()));
