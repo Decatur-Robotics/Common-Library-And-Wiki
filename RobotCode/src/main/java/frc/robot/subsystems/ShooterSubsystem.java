@@ -7,16 +7,23 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.ShooterMountConstants;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 
 public class ShooterSubsystem extends SubsystemBase
 {
-	// Creates objects
+
 	private double desiredShooterVelocity;
 
 	private SparkPIDController shooterPid;
 	private TeamSparkMAX shooterMotorMain, shooterMotorSub;
+
+	/** Key: distance to speaker in meters, Value: Rotation compensation in degrees */
+	private InterpolatingDoubleTreeMap gravityCompensationTreeMap;
+	/** Key: distance to speaker in meters, Value: Note velocity in meters per second */
+	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
 
 	public ShooterSubsystem()
 	{
@@ -39,9 +46,21 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setI(ShooterConstants.SHOOTER_KI);
 		shooterPid.setD(ShooterConstants.SHOOTER_KD);
 		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
+
+		// Populate tree maps
+		gravityCompensationTreeMap = new InterpolatingDoubleTreeMap();
+		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
+		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
+		{
+			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
+			gravityCompensationTreeMap.put(key,
+					ShooterMountConstants.GravityCompensationTreeMapValues[i]);
+			noteVelocityEstimateTreeMap.put(key,
+					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
+		}
 	}
 
-	public double getShooterMotorVelocityError() 
+	public double getShooterMotorVelocityError()
 	{
 		return shooterMotorMain.getVelocityError();
 	}
@@ -63,5 +82,23 @@ public class ShooterSubsystem extends SubsystemBase
 	public void periodic()
 	{
 		shooterPid.setReference(desiredShooterVelocity, ControlType.kVelocity);
+	}
+
+	/**
+	 * @return A map where: Key: distance to speaker in meters, Value: Rotation compensation in
+	 *         degrees
+	 */
+	public InterpolatingDoubleTreeMap getGravityCompensationTreeMap()
+	{
+		return gravityCompensationTreeMap;
+	}
+
+	/**
+	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity in meters per
+	 *         second
+	 */
+	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
+	{
+		return noteVelocityEstimateTreeMap;
 	}
 }

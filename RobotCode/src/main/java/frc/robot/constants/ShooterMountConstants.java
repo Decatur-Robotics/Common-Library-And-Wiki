@@ -31,10 +31,19 @@ public class ShooterMountConstants
 	public static final double AIMING_DEADBAND = 100;
 
 	/** Distance to speaker in meters */
-	public static final double[] SPEAKER_DISTANCE_TREE_MAP_KEYS = {1, 2, 3};
+	public static final double[] SpeakerDistanceTreeMapKeys =
+	{
+			1, 2, 3
+	};
 	/** Rotation compensation in degrees */
-	public static final double[] GRAVITY_COMPENSATION_TREE_MAP_VALUES = {1, 2, 3};
+	public static final double[] GravityCompensationTreeMapValues =
+	{
+			1, 2, 3
+	};
 	/** Note velocity in meters per second */
-	public static final double[] NOTE_VELOCITY_ESTIMATE_TREE_MAP_VALUES = {1, 2, 3};
+	public static final double[] NoteVelocityEstimateTreeMapValues =
+	{
+			1, 2, 3
+	};
 
 }
