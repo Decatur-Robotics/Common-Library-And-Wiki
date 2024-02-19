@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,11 +39,12 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	private SwerveDriveOdometry swerveOdometry;
 	private SwerveModule[] swerveMods;
 	private Pigeon2 gyro;
-	private final double MAX_MODULE_SPEED = SwerveConstants.MAX_SPEED;
 
 	private double gyroOffset = 0;
 
 	private Optional<DoubleSupplier> rotationController;
+
+	private ProfiledPIDController autoAimPidController;
 
 	public SwerveDriveSubsystem()
 	{
@@ -76,6 +78,10 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		configureAutoBuilder();
 
 		rotationController = Optional.empty();
+
+		autoAimPidController = new ProfiledPIDController(SwerveConstants.ANGULAR_AIMING_KP,
+				SwerveConstants.ANGULAR_AIMING_KI, SwerveConstants.ANGULAR_AIMING_KD,
+				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
 	}
 
 	private void configureAutoBuilder()
@@ -142,7 +148,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 
 		// lowers module speeds to max attainable speed (avoids going above topspeed)
-		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_MODULE_SPEED);
+		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.MAX_SPEED);
 
 		// sets modules to desired state (angle, speed)
 		for (SwerveModule mod : swerveMods)
@@ -168,7 +174,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	/* Used by SwerveControllerCommand in Auto */
 	public void setModuleStates(SwerveModuleState[] desiredStates)
 	{
-		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, MAX_MODULE_SPEED);
+		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.MAX_SPEED);
 
 		for (SwerveModule mod : swerveMods)
 		{
@@ -341,6 +347,17 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		double currentAngle = getYaw().getRadians();
 
 		return angle - currentAngle;
+	}
+
+	/**
+	 * @return the angular velocity needed to aim to the speaker in radians.
+	 */
+	public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
+	{
+		double targetAngle = getRotationToSpeaker(Vision);
+		double desiredRotationalVelocity = autoAimPidController.calculate(gyro.getYaw(), targetAngle);
+
+		return desiredRotationalVelocity;
 	}
 
 	/**

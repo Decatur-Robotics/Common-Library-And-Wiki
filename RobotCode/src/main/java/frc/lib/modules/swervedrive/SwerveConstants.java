@@ -133,6 +133,11 @@ public final class SwerveConstants
 															// tuned to
 															// specific robot
 
+	/** Radians per Second Squared */
+	public static final double MAX_ANGULAR_ACCELERATION = 4.5; //TODO: This must be
+															   // tuned to
+															   // specific robot
+
 	/* Neutral Modes */
 	public static final IdleMode ANGLE_NEUTRAL_MODE = IdleMode.kCoast;
 	public static final NeutralMode DRIVE_NEUTRAL_MODE = NeutralMode.Brake;
@@ -228,5 +233,16 @@ public final class SwerveConstants
 		public static final PathConstraints PathConstraints = new PathConstraints(MAX_SPEED,
 				MAX_ACCELERATION, MAX_ANGULAR_SPEED, MAX_ANGULAR_ACCELERATION);
 	}
+
+	// Constraints for robot angle aiming PID controller
+	public static final double ANGULAR_AIMING_KP = 0.1;
+	public static final double ANGULAR_AIMING_KI = 0;
+	public static final double ANGULAR_AIMING_KD = 0.1;
+	
+	/**  */
+
+	/* Constraint for the motion profilied robot angle controller */
+	public static final TrapezoidProfile.Constraints ANGULAR_VELOCITY_CONSTRAINTS = new TrapezoidProfile.Constraints(
+			MAX_ANGULAR_VELOCITY, MAX_ANGULAR_ACCELERATION);
 
 }

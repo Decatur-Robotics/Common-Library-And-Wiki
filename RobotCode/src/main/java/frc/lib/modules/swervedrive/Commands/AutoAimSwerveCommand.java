@@ -26,7 +26,7 @@ public class AutoAimSwerveCommand extends Command
     @Override
     public void initialize()
     {
-        Swerve.setRotationController(() -> Swerve.getRotationToSpeaker(Vision));
+        Swerve.setRotationController(() -> Swerve.getRotationalVelocityToSpeaker(Vision));
     }
 
     @Override
