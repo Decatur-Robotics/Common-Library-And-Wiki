@@ -167,4 +167,17 @@ public class SwerveModule
 						SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO),
 				getAngle());
 	}
+
+	/**
+	 * @return motor speed in meters per second
+	 */
+	public double getDriveMotorSpeed()
+	{
+		// Rotations per second - Multiplied by 10 to get rotations per second from 100ms period
+		double rotations = mDriveMotor.getSelectedSensorVelocity()
+				/ SwerveConstants.DRIVE_MOTOR_TICKS_PER_ROTATION * 10;
+
+		// Return rotations per second * wheel circumference
+		return rotations * SwerveConstants.WHEEL_DIAMETER / Math.PI;
+	}
 }

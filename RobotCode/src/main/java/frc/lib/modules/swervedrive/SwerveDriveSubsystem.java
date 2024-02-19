@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,18 +28,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class SwerveDriveSubsystem extends SubsystemBase
 {
+
 	private SwerveDriveOdometry swerveOdometry;
 	private SwerveModule[] swerveMods;
 	private Pigeon2 gyro;
-	private final double MAX_MODULE_SPEED = SwerveConstants.MAX_SPEED;
 
 	private double gyroOffset = 0;
 
 	private Optional<DoubleSupplier> rotationController;
+
+	private ProfiledPIDController autoAimPidController;
 
 	public SwerveDriveSubsystem()
 	{
@@ -71,6 +77,10 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		configureAutoBuilder();
 
 		rotationController = Optional.empty();
+
+		autoAimPidController = new ProfiledPIDController(SwerveConstants.ANGULAR_AIMING_KP,
+				SwerveConstants.ANGULAR_AIMING_KI, SwerveConstants.ANGULAR_AIMING_KD,
+				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
 	}
 
 	private void configureAutoBuilder()
@@ -110,7 +120,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 				.fromDegrees(offsets[SwerveConstants.BACK_RIGHT] - (invert ? 180 : 0));
 	}
 
-	// main driving method. translation is change in every direction
+	/** main driving method. translation is change in every direction */
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative,
 			boolean isOpenLoop)
 	{
@@ -137,7 +147,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 
 		// lowers module speeds to max attainable speed (avoids going above topspeed)
-		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_MODULE_SPEED);
+		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.MAX_SPEED);
 
 		// sets modules to desired state (angle, speed)
 		for (SwerveModule mod : swerveMods)
@@ -163,7 +173,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	/* Used by SwerveControllerCommand in Auto */
 	public void setModuleStates(SwerveModuleState[] desiredStates)
 	{
-		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, MAX_MODULE_SPEED);
+		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.MAX_SPEED);
 
 		for (SwerveModule mod : swerveMods)
 		{
@@ -171,19 +181,19 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		}
 	}
 
-	/** gets position of robot on the field (odometry) in meters */
+	/** @return position of robot on the field (odometry) in meters */
 	public Pose2d getPose()
 	{
 		return swerveOdometry.getPoseMeters();
 	}
 
-	// resets odometry (position on field)
+	/** resets odometry (position on field) */
 	public void resetPose(Pose2d pose)
 	{
 		swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
 	}
 
-	// returns array of a modules' states (angle, speed) for each one
+	/** @return array of a modules' states (angle, speed) for each one */
 	public SwerveModuleState[] getModuleStates()
 	{
 		SwerveModuleState[] states = new SwerveModuleState[4];
@@ -194,7 +204,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		return states;
 	}
 
-	// returns module positions(for each individual module)
+	/** @return module positions(for each individual module) */
 	public SwerveModulePosition[] getModulePositions()
 	{
 		SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -293,6 +303,24 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 	/**
 	 * @param Controller that controls the swerve drive
+	 * @return a command for the swerve drive that allow driver control of translation and strafe,
+	 *         but rotates towards the speaker and automatically spins the feeder motors when in
+	 *         target
+	 */
+	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
+			final VisionSubsystem Vision, final IndexerSubsystem Indexer)
+	{
+		final JoystickButton TriggerLeft = new JoystickButton(Controller,
+				LogitechControllerButtons.triggerLeft),
+				TriggerRight = new JoystickButton(Controller,
+						LogitechControllerButtons.triggerRight);
+
+		return new TeleopAimSwerveCommand(this, Vision, Indexer, () -> -Controller.getY(),
+				() -> -Controller.getX(), TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
+	}
+
+	/**
+	 * @param Controller that controls the swerve drive
 	 * @param Rotation   supplier for the rotation of the swerve drive
 	 * @return the default command for the swerve drive that allows driver control except for
 	 *         rotation
@@ -308,4 +336,39 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
 				Rotation, TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
 	}
+
+	/**
+	 * @return the angle to the speaker in radians. Counterclockwise rotation is negative.
+	 */
+	public double getRotationToSpeaker(final VisionSubsystem Vision)
+	{
+		double angle = Vision.getAngleToSpeaker();
+		double currentAngle = getYaw().getRadians();
+
+		return angle - currentAngle;
+	}
+
+	/**
+	 * @return the angular velocity needed to aim to the speaker in radians.
+	 */
+	public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
+	{
+		double targetAngle = getRotationToSpeaker(Vision);
+		double desiredRotationalVelocity = autoAimPidController.calculate(gyro.getYaw(), targetAngle);
+
+		return desiredRotationalVelocity;
+	}
+
+	/**
+	 * @return the velocity of the robot in meters per second
+	 */
+	public Pose2d getVelocity()
+	{
+		ChassisSpeeds chassisSpeed = SwerveConstants.SwerveKinematics
+				.toChassisSpeeds(getModuleStates());
+
+		return new Pose2d(chassisSpeed.vxMetersPerSecond, chassisSpeed.vyMetersPerSecond,
+				new Rotation2d());
+	}
+
 }
