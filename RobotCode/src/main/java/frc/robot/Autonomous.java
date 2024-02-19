@@ -9,19 +9,42 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.lib.core.ILogSource;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
+import frc.robot.commands.AimShooterCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class Autonomous
+/**
+ * <p>
+ * A singleton class for handling autonomous. Puts dropdowns on Shuffleboard and then reads from
+ * them to dynamically generate an autonomous. Uses
+ * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths.
+ * </p>
+ * <p>
+ * <b>Usage:</b> Call {@link #init(RobotContainer)} in RobotContainer's constructor. Then, to
+ * actually get the autonomous command, call {@link #getAutoCommand()}.
+ * </p>
+ * <p>
+ * <b>Autonomous Options:</b> The options are hardcoded; they are built off the enums at the top of
+ * the class and then manually read into dropdowns on Shuffleboard. I would like to at some point
+ * improve this system to be more easily configureable.
+ * </p>
+ */
+public class Autonomous implements ILogSource
 {
+
+    // Options for configuring autonomous
 
     private enum StartingPosition
     {
@@ -46,6 +69,7 @@ public class Autonomous
         instance = this;
         RobotContainer = robotContainer;
 
+        logFine("Initializing GUI...");
         Gui = frc.robot.RobotContainer.getShuffleboardTab();
 
         // Set up starting position chooser
@@ -65,19 +89,17 @@ public class Autonomous
         AutoModeChooser.addOption("Multi Note", AutoMode.MultiNote);
         Gui.add("Auto Mode", AutoModeChooser);
         this.AutoModeChooser = AutoModeChooser;
+
+        logFine("GUI initialized!");
     }
 
     /** Creates an instance and adds auto options to Shuffleboard */
     public static void init(RobotContainer robotContainer)
     {
         if (instance == null)
-        {
             new Autonomous(robotContainer);
-        }
-        else if (instance.RobotContainer != robotContainer)
-        {
-            System.err.println("Cannot reinitialize Autonomous!");
-        }
+        else
+            instance.logSevere("Attempted to reinitialize Autonomous! This should not happen!");
     }
 
     /**
@@ -85,31 +107,49 @@ public class Autonomous
      */
     public Optional<Command> buildAutoCommand()
     {
+        logInfo("Building auto command...");
+
         final StartingPosition StartingPosition = StartingPositionChooser.getSelected();
+        logFine("Read starting position: " + StartingPosition);
         final AutoMode AutoMode = AutoModeChooser.getSelected();
+        logFine("Read auto mode: " + AutoMode);
 
         final SwerveDriveSubsystem SwerveDrive = RobotContainer.getSwerveDrive();
-        final ShooterSubsystem Shooter = RobotContainer.getShooter();
         final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final ShooterSubsystem Shooter = RobotContainer.getShooter();
         final VisionSubsystem Vision = RobotContainer.getVision();
         final IndexerSubsystem Indexer = RobotContainer.getIndexer();
+        final IntakeSubsystem Intake = RobotContainer.getIntake();
 
-        final SequentialCommandGroup AutoMain = new SequentialCommandGroup();
-        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(
-                new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer), AutoMain);
+        logFine("Initializing command groups...");
 
+        // Most of our auto will go in AutoMain
+        final SequentialCommandGroup AutoMain = new SequentialCommandGroup(
+                new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
+
+        // Everything in this group will run in parallel until one command finishes.
+        // AutoMain is in this group so everything in AutoAsync will be parallel with the main
+        // autonomous sequence.
+        // Unused for now, but I'm keeping it in case we need it later.
+        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(AutoMain);
+
+        logFine("Command groups initialized! Adding commands based on AutoMode...");
         switch (AutoMode)
         {
         case DoNothing:
+            logFine("Doing nothing...");
             return Optional.empty();
 
         case Leave:
-            AutoMain.addCommands(new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
-                    SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
+            logFine("Adding leave command...");
+            AutoMain.addCommands(new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer),
+                    new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
+                            SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
             break;
 
         case MultiNote:
-            String[] pathSequence = new String[0];
+            logFine("Adding multi note command based on StartingPosition...");
+            String[] pathSequence = null;
 
             switch (StartingPosition)
             {
@@ -132,15 +172,24 @@ public class Autonomous
                 break;
             }
 
+            if (pathSequence == null)
+                break;
+
+            logFine("Adding path sequence: " + String.join(", ", pathSequence));
             for (String pathName : pathSequence)
             {
-                // Add intake and aiming command once we have that!
-                AutoMain.addCommands(followPath(pathName));
+                ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(
+                        new IntakeCommand(Intake, Indexer, ShooterMount), followPath(pathName),
+                        new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
+
+                AutoMain.addCommands(new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer),
+                        commandsWhileFollowingPath);
             }
 
             break;
         }
 
+        logInfo("Auto command built!");
         return Optional.ofNullable(AutoAsync);
     }
 
@@ -153,6 +202,7 @@ public class Autonomous
     /** Closes the instance's SendableChoosers to free up resources */
     public static void close()
     {
+        instance.logFine("Closing Autonomous GUI...");
         instance.StartingPositionChooser.close();
         instance.AutoModeChooser.close();
     }
@@ -160,13 +210,13 @@ public class Autonomous
     /**
      * Returns a command to follow a path from PathPlanner GUI whilst avoiding obstacles
      * 
-     * @param pathName The filename of the path to follow w/o file extension. Must be in the paths
+     * @param PathName The filename of the path to follow w/o file extension. Must be in the paths
      *                 folder. Ex: Example Human Player Pickup
      * @return A command that will drive the robot along the path
      */
-    private Command followPath(final String pathName)
+    private Command followPath(final String PathName)
     {
-        final PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+        final PathPlannerPath path = PathPlannerPath.fromPathFile(PathName);
         return AutoBuilder.pathfindThenFollowPath(path,
                 SwerveConstants.AutoConstants.PathConstraints);
     }

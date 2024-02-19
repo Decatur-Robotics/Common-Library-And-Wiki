@@ -23,12 +23,14 @@ public class TeleopAimSwerveCommand extends TeleopSwerveCommand
             IndexerSubsystem indexer, DoubleSupplier translationSup, DoubleSupplier strafeSup,
             BooleanSupplier slowSpeedSupplier, BooleanSupplier fastSpeedSupplier)
     {
-        super(swerve, translationSup, strafeSup, () -> swerve.getRotationToSpeaker(vision),
+        super(swerve, translationSup, strafeSup, () -> swerve.getRotationalVelocityToSpeaker(vision),
                 slowSpeedSupplier, fastSpeedSupplier);
 
         Swerve = swerve;
         Vision = vision;
         Indexer = indexer;
+
+        addRequirements(Indexer);
     }
 
     @Override
