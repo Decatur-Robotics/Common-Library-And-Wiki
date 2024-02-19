@@ -54,5 +54,7 @@ public final class CTREConfigs
 		return swerveDriveFXConfig;
 	}
 
-	
+	public CANcoderConfiguration getAngleEncoderConfigs() {
+		return swerveCanCoderConfig;
+	}
 }

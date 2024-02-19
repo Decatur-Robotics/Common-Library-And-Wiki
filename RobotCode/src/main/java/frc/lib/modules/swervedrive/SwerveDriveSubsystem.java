@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -44,7 +44,6 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	{
 		gyro = new Pigeon2(SwervePorts.GYRO);
 
-		gyro.configFactoryDefault();
 		zeroGyro();
 
 		setAngleOffsets(false);
@@ -214,7 +213,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public void setGyro(double degrees)
 	{
 		System.out.println("Setting gyro to " + degrees + "...");
-		gyroOffset = degrees - gyro.getYaw();
+		gyroOffset = degrees - gyro.getYaw().getValueAsDouble();
 		zeroGyro();
 	}
 
@@ -234,8 +233,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public Rotation2d getYaw()
 	{
 		return (SwerveConstants.INVERT_GYRO)
-				? Rotation2d.fromDegrees(360 - gyro.getYaw() + gyroOffset)
-				: Rotation2d.fromDegrees(gyro.getYaw() + gyroOffset);
+				? Rotation2d.fromDegrees(360 - gyro.getYaw().getValueAsDouble() + gyroOffset)
+				: Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble() + gyroOffset);
 	}
 
 	public void resetModulesToAbsolute()

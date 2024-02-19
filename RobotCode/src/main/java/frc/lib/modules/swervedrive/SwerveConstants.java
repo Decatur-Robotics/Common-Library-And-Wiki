@@ -4,7 +4,7 @@
 
 package frc.lib.modules.swervedrive;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -136,7 +136,7 @@ public final class SwerveConstants
 
 	/* Neutral Modes */
 	public static final IdleMode ANGLE_NEUTRAL_MODE = IdleMode.kCoast;
-	public static final NeutralMode DRIVE_NEUTRAL_MODE = NeutralMode.Brake;
+	public static final NeutralModeValue DRIVE_NEUTRAL_MODE = NeutralModeValue.Brake;
 
 	public static final boolean DEFAULT_ANGLE_INVERT = false;
 
