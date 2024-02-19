@@ -24,7 +24,6 @@ public class AimShooterCommand extends Command
 	private ShooterSubsystem shooter;
 	private ShooterMountSubsystem shooterMount;
 	private VisionSubsystem vision;
-	private SwerveDriveSubsystem swerveDrive;
 
 	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount,
 			VisionSubsystem vision, SwerveDriveSubsystem swerveDrive)
@@ -32,7 +31,6 @@ public class AimShooterCommand extends Command
 		this.shooter = shooter;
 		this.shooterMount = shooterMount;
 		this.vision = vision;
-		this.swerveDrive = swerveDrive;
 
 		addRequirements(shooter, shooterMount, vision);
 	}
@@ -55,7 +53,8 @@ public class AimShooterCommand extends Command
 				.getDistance(velocityAdjustedSpeakerPose);
 
 		// Calculate the target rotation of the shooter mount in degrees
-		double targetRotation = shooterMount.getShooterMountAngleTreeMap().get(velocityAdjustedGroundDistance);
+		double targetRotation = shooterMount.getShooterMountAngleTreeMap()
+				.get(velocityAdjustedGroundDistance);
 
 		shooterMount.setTargetRotation(targetRotation);
 	}

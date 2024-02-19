@@ -15,6 +15,7 @@ import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -33,6 +34,7 @@ public class RobotContainer
 	private final ShooterMountSubsystem ShooterMountSubsystem;
 	private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
+	private final IntakeSubsystem IntakeSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
@@ -48,6 +50,7 @@ public class RobotContainer
 		ShooterMountSubsystem = new ShooterMountSubsystem();
 		VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
+		IntakeSubsystem = new IntakeSubsystem();
 
 		Autonomous.init(this);
 
@@ -101,6 +104,11 @@ public class RobotContainer
 	public IndexerSubsystem getIndexer()
 	{
 		return IndexerSubsystem;
+	}
+
+	public IntakeSubsystem getIntake()
+	{
+		return IntakeSubsystem;
 	}
 
 }

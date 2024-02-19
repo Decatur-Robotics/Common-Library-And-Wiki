@@ -29,6 +29,8 @@ public class TeleopAimSwerveCommand extends TeleopSwerveCommand
         Swerve = swerve;
         Vision = vision;
         Indexer = indexer;
+
+        addRequirements(Indexer);
     }
 
     @Override
