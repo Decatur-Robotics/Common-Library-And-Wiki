@@ -17,11 +17,10 @@ public class TeleopSwerveCommand extends Command
 	private DoubleSupplier translationSup;
 	private DoubleSupplier strafeSup;
 	private DoubleSupplier rotationSup;
-	private BooleanSupplier slowSpeedSupplier, fastSpeedSupplier;
+	private BooleanSupplier slowSpeedSupplier;
 
 	public TeleopSwerveCommand(SwerveDriveSubsystem s_Swerve, DoubleSupplier translationSup,
-			DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier slowSpeedSupplier,
-			BooleanSupplier fastSpeedSupplier)
+			DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier slowSpeedSupplier)
 	{
 		this.s_Swerve = s_Swerve;
 		addRequirements(s_Swerve);
@@ -31,15 +30,12 @@ public class TeleopSwerveCommand extends Command
 		this.rotationSup = rotationSup;
 
 		this.slowSpeedSupplier = slowSpeedSupplier;
-		this.fastSpeedSupplier = fastSpeedSupplier;
 	}
 
 	private double getSpeed()
 	{
 		if (slowSpeedSupplier.getAsBoolean())
 			return SwerveConstants.SLOW_SPEED;
-		if (fastSpeedSupplier.getAsBoolean())
-			return SwerveConstants.FAST_SPEED;
 		return SwerveConstants.NORMAL_SPEED;
 	}
 

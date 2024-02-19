@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveToPositionCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -311,13 +312,20 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
 			final VisionSubsystem Vision, final IndexerSubsystem Indexer)
 	{
-		final JoystickButton TriggerLeft = new JoystickButton(Controller,
-				LogitechControllerButtons.triggerLeft),
-				TriggerRight = new JoystickButton(Controller,
-						LogitechControllerButtons.triggerRight);
+		final JoystickButton BumperRight = new JoystickButton(Controller,
+						LogitechControllerButtons.bumperRight);
 
 		return new TeleopAimSwerveCommand(this, Vision, Indexer, () -> -Controller.getY(),
-				() -> -Controller.getX(), TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
+				() -> -Controller.getX(), BumperRight::getAsBoolean);
+	}
+
+	public TeleopSwerveCommand getTeleopAimToPositionCommand(final Joystick Controller, final double DesiredRotation) 
+	{
+		final JoystickButton BumperRight = new JoystickButton(Controller,
+						LogitechControllerButtons.bumperRight);
+
+		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(), 
+				() -> -Controller.getX(), BumperRight::getAsBoolean, DesiredRotation);
 	}
 
 	/**
@@ -329,13 +337,11 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public TeleopSwerveCommand getTeleopControlledRotationCommand(final Joystick Controller,
 			final DoubleSupplier Rotation)
 	{
-		final JoystickButton TriggerLeft = new JoystickButton(Controller,
-				LogitechControllerButtons.triggerLeft),
-				TriggerRight = new JoystickButton(Controller,
-						LogitechControllerButtons.triggerRight);
+		final JoystickButton BumperRight = new JoystickButton(Controller,
+				LogitechControllerButtons.bumperRight);
 
 		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
-				Rotation, TriggerLeft::getAsBoolean, TriggerRight::getAsBoolean);
+				Rotation, BumperRight::getAsBoolean);
 	}
 
 	/**
