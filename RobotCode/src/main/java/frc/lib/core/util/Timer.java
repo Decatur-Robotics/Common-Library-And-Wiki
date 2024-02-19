@@ -8,7 +8,7 @@ public class Timer
     private long startTime, duration;
 
     /**
-     * @param duration in ms
+     * @param duration in ms. Starts automatically
      */
     public Timer(long duration)
     {
