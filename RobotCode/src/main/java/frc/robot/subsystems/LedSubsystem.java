@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.core.ILogSource;
 import frc.lib.modules.leds.Color;
+
+import java.util.logging.Level;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
-public class LedSubsystem extends SubsystemBase
+public class LedSubsystem extends SubsystemBase implements ILogSource
 {
 
 	private AddressableLED led;
@@ -50,14 +54,21 @@ public class LedSubsystem extends SubsystemBase
 			this.lastColor = color;
 			this.progress = 1.0;
 		}
+		log(Level.FINEST,
+				"Set color to " + (color.hsv ? "hsv value " : "rgb value ")
+						+ (color.hsv ? 
+							color.h + ", " + color.s + ", " + color.v : 
+							color.r + ", " + color.g + ", " + color.b	));
 	}
 
-	public static Color calcBlending(Color c1, Color c2, double currentFade)
+	public static Color calcBlending(Color color1, Color color2, double progress)
 	{
-		int r = (int) (c1.r * currentFade / 1 + c2.r * (1 - currentFade) / currentFade);
-		int g = (int) (c1.g * currentFade / 1 + c2.g * (1 - currentFade) / currentFade);
-		int b = (int) (c1.b * currentFade / 1 + c2.b * (1 - currentFade) / currentFade);
-		return new Color(r, g, b);
+		if (progress < 0.0 || progress > 1.0)
+			throw new IllegalArgumentException("Progress must be between 0.0 and 1.0");
+		int red =   (int) (color1.r * (1 - progress) + color2.r * progress);
+		int green = (int) (color1.g * (1 - progress) + color2.g * progress);
+		int blue =  (int) (color1.b * (1 - progress) + color2.b * progress);
+		return new Color(red, green, blue);
 	}
 
 	public void setPixel(int pixelToSet, Color color)
@@ -74,17 +85,13 @@ public class LedSubsystem extends SubsystemBase
 	{
 		led.setData(buffer);
 		System.out.println("Updated LED Data.");
+
+		log(Level.FINEST, "Updated the LED Data.");
 	}
 
 	public int getLength()
 	{
 		return length;
-	}
-
-	public static Color calcBlending(int i, int j, int k, int l, int m, int n, double progress)
-	{
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'calcBlending'");
 	}
 
 }

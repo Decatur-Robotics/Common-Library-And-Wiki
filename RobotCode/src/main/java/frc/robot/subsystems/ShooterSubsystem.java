@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.logging.Level;
+
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -15,8 +17,8 @@ public class ShooterSubsystem extends SubsystemBase
 	// Creates objects
 	private double desiredShooterVelocity;
 
-	private SparkPIDController shooterPid;
-	private TeamSparkMAX shooterMotorMain, shooterMotorSub;
+	public SparkPIDController shooterPid;
+	public TeamSparkMAX shooterMotorMain, shooterMotorSub;
 
 	public ShooterSubsystem()
 	{

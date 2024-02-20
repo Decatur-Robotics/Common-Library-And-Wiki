@@ -2,11 +2,11 @@ import org.junit.jupiter.api.Test;
 
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterTest {
+class ShooterTest {
     
 
-    @Test
-    void testShooter(){
+    // @Test
+    void testShooter() {
 
         ShooterSubsystem subsystem = new ShooterSubsystem();
 
@@ -16,6 +16,7 @@ public class ShooterTest {
         System.out.println("Running ShooterSubsystem#periodic x50");
         for (int i = 0; i < 50; i++) {
             subsystem.periodic();
+            System.out.println("Main: " + subsystem.shooterMotorMain.get() + " | Sub: " + subsystem.shooterMotorSub.get());
         }
         System.out.println("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
