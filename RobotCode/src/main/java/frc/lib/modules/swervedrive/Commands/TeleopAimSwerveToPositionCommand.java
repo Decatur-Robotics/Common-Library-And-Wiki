@@ -15,10 +15,10 @@ public class TeleopAimSwerveToPositionCommand extends TeleopSwerveCommand
 
     public TeleopAimSwerveToPositionCommand(SwerveDriveSubsystem swerve,
             DoubleSupplier translationSup, DoubleSupplier strafeSup,
-            BooleanSupplier slowSpeedSupplier, BooleanSupplier fastSpeedSupplier, double desiredRotation)
+            BooleanSupplier slowSpeedSupplier, double desiredRotation)
     {
         super(swerve, translationSup, strafeSup, () -> desiredRotation,
-                slowSpeedSupplier, fastSpeedSupplier);
+                slowSpeedSupplier);
 
         Swerve = swerve;
     }
