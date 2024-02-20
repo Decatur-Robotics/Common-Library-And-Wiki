@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.core.ILogSource;
 import frc.lib.modules.swervedrive.SwerveConstants;
@@ -93,17 +92,23 @@ public class Autonomous implements ILogSource
         logFine("GUI initialized!");
     }
 
-    /** Creates an instance and adds auto options to Shuffleboard */
+    /**
+     * Creates an instance and adds auto options to Shuffleboard. Must be called before anything can
+     * be done using Autonomous. Creates a new instance if one does not exist, otherwise logs an
+     * exception.
+     */
     public static void init(RobotContainer robotContainer)
     {
         if (instance == null)
             new Autonomous(robotContainer);
         else
-            instance.logSevere("Attempted to reinitialize Autonomous! This should not happen!");
+            instance.logException(
+                    new Exception("Attempted to reinitialize Autonomous! This should not happen!"));
     }
 
     /**
-     * Parses selected options into a single command
+     * Parses selected options into a single command. {@link #init(RobotContainer)} must be called
+     * first.
      */
     public Optional<Command> buildAutoCommand()
     {
@@ -127,28 +132,33 @@ public class Autonomous implements ILogSource
         final SequentialCommandGroup AutoMain = new SequentialCommandGroup(
                 new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
 
-        // Everything in this group will run in parallel until one command finishes.
-        // AutoMain is in this group so everything in AutoAsync will be parallel with the main
-        // autonomous sequence.
-        // Unused for now, but I'm keeping it in case we need it later.
-        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(AutoMain);
+        // Initialize commands
+        final AimShooterCommand AimShooterCommand = new AimShooterCommand(Shooter, ShooterMount,
+                Vision, SwerveDrive);
+        final AutoAimSwerveCommand AutoAimSwerveCommand = new AutoAimSwerveCommand(SwerveDrive,
+                Vision, Indexer);
+        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
+
+        // Aim shooter mount and chassis in parallel, then shoot once both are aimed
+        // We still need to add the check that shooter mount is aimed to AutoAimSwerveCommand
+        final ParallelRaceGroup ShootGroup = new ParallelRaceGroup(AutoAimSwerveCommand,
+                AimShooterCommand);
 
         logFine("Command groups initialized! Adding commands based on AutoMode...");
         switch (AutoMode)
         {
         case DoNothing:
-            logFine("Doing nothing...");
+            logFiner("Doing nothing...");
             return Optional.empty();
 
         case Leave:
-            logFine("Adding leave command...");
-            AutoMain.addCommands(new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer),
-                    new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
-                            SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
+            logFiner("Adding leave command...");
+            AutoMain.addCommands(ShootGroup, new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
+                    SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
             break;
 
         case MultiNote:
-            logFine("Adding multi note command based on StartingPosition...");
+            logFiner("Adding multi-note command based on StartingPosition...");
             String[] pathSequence = null;
 
             switch (StartingPosition)
@@ -175,29 +185,25 @@ public class Autonomous implements ILogSource
             if (pathSequence == null)
                 break;
 
-            final AimShooterCommand AimShooterCommand = new AimShooterCommand(Shooter, ShooterMount,
-                    Vision, SwerveDrive);
-            final AutoAimSwerveCommand AutoAimSwerveCommand = new AutoAimSwerveCommand(SwerveDrive,
-                    Vision, Indexer);
-            final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
-
-            logFine("Adding path sequence: " + String.join(", ", pathSequence));
+            logFiner("Adding path sequence: " + String.join(", ", pathSequence));
             for (String pathName : pathSequence)
             {
                 ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(IntakeCommand,
-                        followPath(pathName), AimShooterCommand);
+                        followPath(pathName));
 
-                AutoMain.addCommands(AutoAimSwerveCommand, commandsWhileFollowingPath);
+                AutoMain.addCommands(ShootGroup, commandsWhileFollowingPath);
             }
 
             break;
         }
 
         logInfo("Auto command built!");
-        return Optional.ofNullable(AutoAsync);
+        return Optional.ofNullable(AutoMain);
     }
 
-    /** Calls {@link #buildAutoCommand()} */
+    /**
+     * Calls {@link #buildAutoCommand()}. {@link #init(RobotContainer)} must be called first!
+     */
     public static Optional<Command> getAutoCommand()
     {
         return instance.buildAutoCommand();
