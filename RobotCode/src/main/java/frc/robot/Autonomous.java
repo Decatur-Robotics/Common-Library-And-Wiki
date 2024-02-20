@@ -102,15 +102,14 @@ public class Autonomous implements ILogSource
         if (instance == null)
             new Autonomous(robotContainer);
         else
-            instance.logException(
-                    new Exception("Attempted to reinitialize Autonomous! This should not happen!"));
+            instance.logException("Attempted to reinitialize Autonomous! This should not happen!");
     }
 
     /**
      * Parses selected options into a single command. {@link #init(RobotContainer)} must be called
      * first.
      */
-    public Optional<Command> buildAutoCommand()
+    private Optional<Command> buildAutoCommand()
     {
         logInfo("Building auto command...");
 
@@ -209,7 +208,10 @@ public class Autonomous implements ILogSource
         return instance.buildAutoCommand();
     }
 
-    /** Closes the instance's SendableChoosers to free up resources */
+    /**
+     * Closes the instance's SendableChoosers ({@link #AutoModeChooser} &
+     * {@link #StartingPositionChooser}) to free up resources
+     */
     public static void close()
     {
         instance.logFine("Closing Autonomous GUI...");
