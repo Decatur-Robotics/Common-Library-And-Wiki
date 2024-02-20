@@ -134,6 +134,10 @@ public interface ILogSource
         log(Level.SEVERE, msg);
     }
 
+    /**
+     * Alternative to {@link #logException(Exception)} for custom exceptions that don't warrant
+     * their own classes.
+     */
     public default void logException(String message)
     {
         logException(new Exception(message));
