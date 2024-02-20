@@ -354,7 +354,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
 	{
 		double targetAngle = getRotationToSpeaker(Vision);
-		double desiredRotationalVelocity = autoAimPidController.calculate(gyro.getYaw(), targetAngle);
+		double desiredRotationalVelocity = autoAimPidController.calculate(gyro.getYaw().getValueAsDouble(), targetAngle);
 
 		return desiredRotationalVelocity;
 	}

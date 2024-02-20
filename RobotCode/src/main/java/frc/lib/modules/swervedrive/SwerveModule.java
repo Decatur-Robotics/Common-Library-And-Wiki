@@ -174,7 +174,7 @@ public class SwerveModule
 	public double getDriveMotorSpeed()
 	{
 		// Rotations per second - Multiplied by 10 to get rotations per second from 100ms period
-		double rotations = mDriveMotor.getSelectedSensorVelocity()
+		double rotations = mDriveMotor.getRotorVelocity().getValueAsDouble()
 				/ SwerveConstants.DRIVE_MOTOR_TICKS_PER_ROTATION * 10;
 
 		// Return rotations per second * wheel circumference
