@@ -135,11 +135,10 @@ public class Autonomous implements ILogSource
         final AimShooterCommand AimShooterCommand = new AimShooterCommand(Shooter, ShooterMount,
                 Vision, SwerveDrive);
         final AutoAimSwerveCommand AutoAimSwerveCommand = new AutoAimSwerveCommand(SwerveDrive,
-                Vision, Indexer);
+                Vision, Indexer, ShooterMount);
         final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
 
         // Aim shooter mount and chassis in parallel, then shoot once both are aimed
-        // We still need to add the check that shooter mount is aimed to AutoAimSwerveCommand
         final ParallelRaceGroup ShootGroup = new ParallelRaceGroup(AutoAimSwerveCommand,
                 AimShooterCommand);
 
