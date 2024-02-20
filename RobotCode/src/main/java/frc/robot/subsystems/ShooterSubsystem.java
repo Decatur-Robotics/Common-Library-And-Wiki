@@ -7,8 +7,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.constants.ShooterMountConstants;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 
@@ -56,6 +54,12 @@ public class ShooterSubsystem extends SubsystemBase
 		this.desiredShooterVelocity = Math.max(
 				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
 				-ShooterConstants.SHOOTER_MAX_VELOCITY);
+	}
+
+	public boolean isUpToSpeed()
+	{
+		return Math.abs(shooterMotorMain.getEncoder().getVelocity()
+				- desiredShooterVelocity) < ShooterConstants.SHOOTER_VELOCITY_TOLERANCE;
 	}
 
 	/**

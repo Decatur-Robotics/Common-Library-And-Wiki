@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -17,6 +18,8 @@ import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
 import frc.robot.commands.AimShooterCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.RotateShooterMountToPositionCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -28,7 +31,8 @@ import frc.robot.subsystems.VisionSubsystem;
  * <p>
  * A singleton class for handling autonomous. Puts dropdowns on Shuffleboard and then reads from
  * them to dynamically generate an autonomous. Uses
- * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths.
+ * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths and run
+ * commands.
  * </p>
  * <p>
  * <b>Usage:</b> Call {@link #init(RobotContainer)} in RobotContainer's constructor. Then, to
@@ -68,6 +72,8 @@ public class Autonomous implements ILogSource
         instance = this;
         RobotContainer = robotContainer;
 
+        registerNamedCommands();
+
         logFine("Initializing GUI...");
         Gui = frc.robot.RobotContainer.getShuffleboardTab();
 
@@ -90,6 +96,33 @@ public class Autonomous implements ILogSource
         this.AutoModeChooser = AutoModeChooser;
 
         logFine("GUI initialized!");
+    }
+
+    /** Registers commands for building autos through PathPlanner. */
+    private void registerNamedCommands()
+    {
+        logFine("Registering named commands...");
+
+        // Get subsystems
+        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
+        final IntakeSubsystem Intake = RobotContainer.getIntake();
+
+        // Initialize commands
+        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
+        NamedCommands.registerCommand("Intake", IntakeCommand);
+
+        final ShootCommand ShootCommand = new ShootCommand(Shooter, Indexer);
+        NamedCommands.registerCommand("Shoot", ShootCommand);
+
+        // Populate rotation commands
+        for (double rot : AutoConstants.AutoShooterMountRotations)
+        {
+            NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
+                    new SequentialCommandGroup(ShootCommand,
+                            new RotateShooterMountToPositionCommand(ShooterMount, rot)));
+        }
     }
 
     /**
@@ -118,29 +151,10 @@ public class Autonomous implements ILogSource
         final AutoMode AutoMode = AutoModeChooser.getSelected();
         logFine("Read auto mode: " + AutoMode);
 
-        final SwerveDriveSubsystem SwerveDrive = RobotContainer.getSwerveDrive();
-        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
-        final ShooterSubsystem Shooter = RobotContainer.getShooter();
-        final VisionSubsystem Vision = RobotContainer.getVision();
-        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
-        final IntakeSubsystem Intake = RobotContainer.getIntake();
-
         logFine("Initializing command groups...");
 
         // Most of our auto will go in AutoMain
-        SequentialCommandGroup autoMain = new SequentialCommandGroup(
-                new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
-
-        // Initialize commands
-        final AimShooterCommand AimShooterCommand = new AimShooterCommand(Shooter, ShooterMount,
-                Vision, SwerveDrive);
-        final AutoAimSwerveCommand AutoAimSwerveCommand = new AutoAimSwerveCommand(SwerveDrive,
-                Vision, Indexer, ShooterMount);
-        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
-
-        // Aim shooter mount and chassis in parallel, then shoot once both are aimed
-        final ParallelRaceGroup ShootGroup = new ParallelRaceGroup(AutoAimSwerveCommand,
-                AimShooterCommand);
+        SequentialCommandGroup autoMain = new SequentialCommandGroup();
 
         logFine("Command groups initialized! Adding commands based on AutoMode...");
         switch (AutoMode)
@@ -152,8 +166,7 @@ public class Autonomous implements ILogSource
 
         case Leave:
             logFiner("Adding leave command...");
-            autoMain.addCommands(ShootGroup, new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
-                    SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
+            autoMain.addCommands(followPath("Leave"));
             break;
 
         case MultiNote:
@@ -187,10 +200,7 @@ public class Autonomous implements ILogSource
             logFiner("Adding path sequence: " + String.join(", ", pathSequence));
             for (String pathName : pathSequence)
             {
-                ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(IntakeCommand,
-                        followPath(pathName));
-
-                autoMain.addCommands(ShootGroup, commandsWhileFollowingPath);
+                autoMain.addCommands(followPath(pathName));
             }
 
             break;
