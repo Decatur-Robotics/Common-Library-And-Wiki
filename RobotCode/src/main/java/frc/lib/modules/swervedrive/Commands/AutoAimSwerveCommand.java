@@ -76,6 +76,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
     {
         logInfo("Ending AutoAimSwerveCommand");
         Swerve.setRotationController(null);
+        timer = Optional.empty(); // We need to reset timer so we can reuse this instance
     }
 
     @Override

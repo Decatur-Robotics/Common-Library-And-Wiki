@@ -175,15 +175,19 @@ public class Autonomous implements ILogSource
             if (pathSequence == null)
                 break;
 
+            final AimShooterCommand AimShooterCommand = new AimShooterCommand(Shooter, ShooterMount,
+                    Vision, SwerveDrive);
+            final AutoAimSwerveCommand AutoAimSwerveCommand = new AutoAimSwerveCommand(SwerveDrive,
+                    Vision, Indexer);
+            final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
+
             logFine("Adding path sequence: " + String.join(", ", pathSequence));
             for (String pathName : pathSequence)
             {
-                ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(
-                        new IntakeCommand(Intake, Indexer, ShooterMount), followPath(pathName),
-                        new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
+                ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(IntakeCommand,
+                        followPath(pathName), AimShooterCommand);
 
-                AutoMain.addCommands(new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer),
-                        commandsWhileFollowingPath);
+                AutoMain.addCommands(AutoAimSwerveCommand, commandsWhileFollowingPath);
             }
 
             break;
