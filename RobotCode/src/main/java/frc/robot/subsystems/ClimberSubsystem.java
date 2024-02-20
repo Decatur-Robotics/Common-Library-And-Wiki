@@ -19,8 +19,7 @@ public class ClimberSubsystem extends SubsystemBase
 	private ProfiledPIDController pidController;
 	private boolean override;
 	private double leftPower, rightPower;
-	private double gyroRoll;
-
+	
 	public ClimberSubsystem()
 	{
 		gyro = new Pigeon2(Ports.PIGEON_GYRO);
@@ -44,12 +43,12 @@ public class ClimberSubsystem extends SubsystemBase
 
 	public void periodic()
 	{
-		gyroRoll = gyro.getRoll().getValueAsDouble();
-
 		if (!override)
 		{
+
 			targetPositionLeft = targetPosition;
 			targetPositionRight = targetPosition;
+			double gyroRoll = gyro.getRoll().getValueAsDouble();
 
 			// left
 			if (gyroRoll > ClimberConstants.DEADBAND_GYRO)
