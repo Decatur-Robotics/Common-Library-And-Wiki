@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -18,7 +17,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamTalonFX mainMotor, followMotor;
 
-	final MotionMagicDutyCycle motorControlRequest;
+	private final MotionMagicDutyCycle motorControlRequest;
 
 	/** Target rotation in encoder ticks (4096 encoder ticks to 1 degree) */
 	private double targetRotation;

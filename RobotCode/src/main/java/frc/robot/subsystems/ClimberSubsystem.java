@@ -19,6 +19,7 @@ public class ClimberSubsystem extends SubsystemBase
 	private ProfiledPIDController pidController;
 	private boolean override;
 	private double leftPower, rightPower;
+	private double gyroRoll;
 
 	public ClimberSubsystem()
 	{
@@ -43,19 +44,21 @@ public class ClimberSubsystem extends SubsystemBase
 
 	public void periodic()
 	{
+		gyroRoll = gyro.getRoll().getValueAsDouble();
+
 		if (!override)
 		{
 			targetPositionLeft = targetPosition;
 			targetPositionRight = targetPosition;
 
 			// left
-			if (gyro.getRoll().getValueAsDouble() > ClimberConstants.DEADBAND_GYRO)
+			if (gyroRoll > ClimberConstants.DEADBAND_GYRO)
 			{
 				targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
 			}
 
 			// right
-			else if (gyro.getRoll().getValueAsDouble() < -ClimberConstants.DEADBAND_GYRO)
+			else if (gyroRoll < -ClimberConstants.DEADBAND_GYRO)
 			{
 				targetPositionRight = extendMotorRight.getCurrentEncoderValue();
 			}

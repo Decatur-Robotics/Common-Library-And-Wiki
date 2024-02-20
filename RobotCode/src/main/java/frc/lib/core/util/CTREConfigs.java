@@ -9,8 +9,7 @@ import frc.lib.modules.swervedrive.SwerveConstants;
 public final class CTREConfigs
 {
 
-	final TalonFXConfiguration swerveAngleFXConfig;
-	final TalonFXConfiguration swerveDriveFXConfig;
+	final TalonFXConfiguration swerveAngleFXConfig, swerveDriveFXConfig;
 	final CANcoderConfiguration swerveCanCoderConfig;
 
 	public CTREConfigs()
