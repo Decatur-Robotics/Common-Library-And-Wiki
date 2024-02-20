@@ -319,6 +319,19 @@ public class SwerveDriveSubsystem extends SubsystemBase
 				() -> -Controller.getX(), BumperRight::getAsBoolean);
 	}
 
+	public TeleopSwerveCommand getTeleopAimToPositionAllianceRelativeCommand(final Joystick Controller, final double DesiredRotation) 
+	{
+		final JoystickButton BumperRight = new JoystickButton(Controller,
+						LogitechControllerButtons.bumperRight);
+
+		double desiredRotation = DriverStation.getAlliance().get() == Alliance.Blue
+				? DesiredRotation
+				: -DesiredRotation;
+
+		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(), 
+				() -> -Controller.getX(), BumperRight::getAsBoolean, desiredRotation);
+	}
+
 	public TeleopSwerveCommand getTeleopAimToPositionCommand(final Joystick Controller, final double DesiredRotation) 
 	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
@@ -361,7 +374,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
 	{
 		double targetAngle = getRotationToSpeaker(Vision);
-		double desiredRotationalVelocity = autoAimPidController.calculate(gyro.getYaw(), targetAngle);
+		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(), targetAngle);
 
 		return desiredRotationalVelocity;
 	}

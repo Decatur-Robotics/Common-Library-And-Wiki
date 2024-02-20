@@ -245,4 +245,9 @@ public final class SwerveConstants
 	public static final TrapezoidProfile.Constraints ANGULAR_VELOCITY_CONSTRAINTS = new TrapezoidProfile.Constraints(
 			MAX_ANGULAR_VELOCITY, MAX_ANGULAR_ACCELERATION);
 
+	/** Rotation to face blue amp when on the blue alliance in radians */
+	public static final double AMP_ROTATION = -Math.PI;
+
+	
+
 }
