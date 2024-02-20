@@ -31,4 +31,7 @@ public class ShooterConstants
 	 */
 	public static final double SHOOTER_REST_VELOCITY = 2.5;
 
+	/** Number of ms to wait when shooting in autonomous */
+	public static final long SHOOT_TIME = 500;
+
 }

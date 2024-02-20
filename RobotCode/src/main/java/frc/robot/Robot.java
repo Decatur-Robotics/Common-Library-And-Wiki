@@ -9,16 +9,16 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.lib.core.ILogSource;
 import frc.lib.core.ModeBasedSubsystem;
 import frc.lib.core.util.CTREConfigs;
 
-public class Robot extends TimedRobot
+public class Robot extends TimedRobot implements ILogSource
 {
 
 	private static Robot instance;
 
 	private Optional<Command> autonomousCommand;
-	private RobotContainer robotContainer;
 	private CTREConfigs ctreConfigs;
 
 	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
@@ -35,11 +35,6 @@ public class Robot extends TimedRobot
 		instance = this;
 
 		ctreConfigs = new CTREConfigs();
-
-		// Instantiate our RobotContainer. This will perform all our button bindings,
-		// and put our
-		// autonomous chooser on the dashboard.
-		robotContainer = new RobotContainer();
 	}
 
 	/**
@@ -82,11 +77,14 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
+		logInfo("Autonomous intializing...");
+
 		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.autonomousInit();
 		}
 
+		logFine("Getting and running auto command...");
 		autonomousCommand = Autonomous.getAutoCommand();
 		Autonomous.close();
 		// schedule the autonomous command (example)
@@ -104,12 +102,15 @@ public class Robot extends TimedRobot
 	@Override
 	public void teleopInit()
 	{
+		logInfo("Teleop initializing...");
+
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
 		if (autonomousCommand.isPresent())
 		{
+			logFine("Cancelling auto command...");
 			autonomousCommand.get().cancel();
 		}
 
