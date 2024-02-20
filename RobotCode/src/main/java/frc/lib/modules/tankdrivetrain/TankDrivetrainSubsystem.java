@@ -4,9 +4,9 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class TankDrivetrainSubsystem extends SubsystemBase
 {
@@ -34,29 +34,17 @@ public class TankDrivetrainSubsystem extends SubsystemBase
         // IMPLEMENT AND TEST A SLEW RATE LIMITER ON THE SHOWBOT BEFORE WE ADD THIS TO COMMON LIB
         powerRamping = new SlewRateLimiter(TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
 
+        // create a motor config object
         TalonFXConfiguration config = new TalonFXConfiguration();
-        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration();
-        currentConfig.currentLimit = 55;
-
-        // This configures the falcons to use their internal encoders
-        rightDriveFalconMain.configBaseAllSettings(config);
-        rightDriveFalconSub.configBaseAllSettings(config);
-        leftDriveFalconMain.configBaseAllSettings(config);
-        leftDriveFalconSub.configBaseAllSettings(config);
 
         // This configures the falcons to limit their current
-        rightDriveFalconMain.configSupplyCurrentLimit(currentConfig,
-                TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
-        rightDriveFalconSub.configSupplyCurrentLimit(currentConfig,
-                TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
-        leftDriveFalconMain.configSupplyCurrentLimit(currentConfig,
-                TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
-        leftDriveFalconSub.configSupplyCurrentLimit(currentConfig,
-                TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        config.CurrentLimits.SupplyCurrentLimit = 55;
+        config.CurrentLimits.SupplyTimeThreshold = TankDrivetrainConstants.CURRENT_TIMEOUT_MS;
 
         // This configures the sub motors to follow the main falcons
-        leftDriveFalconSub.follow(leftDriveFalconMain);
-        rightDriveFalconSub.follow(rightDriveFalconMain);
+        leftDriveFalconSub.setControl(new Follower(leftDriveFalconMain.getDeviceID(), false));
+        rightDriveFalconSub.setControl(new Follower(rightDriveFalconMain.getDeviceID(), false));
 
         // This inverts the left falcons
         rightDriveFalconMain.setInverted(false);
@@ -65,10 +53,16 @@ public class TankDrivetrainSubsystem extends SubsystemBase
         leftDriveFalconSub.setInverted(true);
 
         // This sets the neutral mode of the falcons to brake
-        rightDriveFalconMain.setNeutralMode(NeutralMode.Brake);
-        rightDriveFalconSub.setNeutralMode(NeutralMode.Brake);
-        leftDriveFalconMain.setNeutralMode(NeutralMode.Brake);
-        leftDriveFalconSub.setNeutralMode(NeutralMode.Brake);
+        rightDriveFalconMain.setNeutralMode(NeutralModeValue.Brake);
+        rightDriveFalconSub.setNeutralMode(NeutralModeValue.Brake);
+        leftDriveFalconMain.setNeutralMode(NeutralModeValue.Brake);
+        leftDriveFalconSub.setNeutralMode(NeutralModeValue.Brake);
+
+        // config the current limits
+        rightDriveFalconMain.getConfigurator().apply(config);
+        rightDriveFalconSub.getConfigurator().apply(config);
+        leftDriveFalconMain.getConfigurator().apply(config);
+        leftDriveFalconSub.getConfigurator().apply(config);
     }
 
     public void setSpeedMod(double speedMod)
