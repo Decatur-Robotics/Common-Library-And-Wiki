@@ -128,7 +128,7 @@ public class Autonomous implements ILogSource
         logFine("Initializing command groups...");
 
         // Most of our auto will go in AutoMain
-        final SequentialCommandGroup AutoMain = new SequentialCommandGroup(
+        SequentialCommandGroup autoMain = new SequentialCommandGroup(
                 new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
 
         // Initialize commands
@@ -147,12 +147,13 @@ public class Autonomous implements ILogSource
         switch (AutoMode)
         {
         case DoNothing:
-            logFiner("Doing nothing...");
+            logFiner("Not doing an auto.");
+            autoMain = null;
             break;
 
         case Leave:
             logFiner("Adding leave command...");
-            AutoMain.addCommands(ShootGroup, new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
+            autoMain.addCommands(ShootGroup, new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
                     SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
             break;
 
@@ -190,14 +191,14 @@ public class Autonomous implements ILogSource
                 ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(IntakeCommand,
                         followPath(pathName));
 
-                AutoMain.addCommands(ShootGroup, commandsWhileFollowingPath);
+                autoMain.addCommands(ShootGroup, commandsWhileFollowingPath);
             }
 
             break;
         }
 
         logInfo("Auto command built!");
-        return Optional.ofNullable(AutoMain);
+        return Optional.ofNullable(autoMain);
     }
 
     /**
