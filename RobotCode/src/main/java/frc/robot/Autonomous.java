@@ -148,7 +148,7 @@ public class Autonomous implements ILogSource
         {
         case DoNothing:
             logFiner("Doing nothing...");
-            return Optional.empty();
+            break;
 
         case Leave:
             logFiner("Adding leave command...");
