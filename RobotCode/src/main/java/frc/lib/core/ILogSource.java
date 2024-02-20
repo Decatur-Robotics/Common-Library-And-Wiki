@@ -134,6 +134,11 @@ public interface ILogSource
         log(Level.SEVERE, msg);
     }
 
+    public default void logException(String message)
+    {
+        logException(new Exception(message));
+    }
+
     public default void logConfig(String message)
     {
         log(Level.CONFIG, message);
