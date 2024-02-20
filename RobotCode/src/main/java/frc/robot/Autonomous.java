@@ -119,9 +119,11 @@ public class Autonomous implements ILogSource
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)
         {
+            RotateShooterMountToPositionCommand rotateCommand = new RotateShooterMountToPositionCommand(
+                    ShooterMount, rot);
+            NamedCommands.registerCommand("Aim to " + rot + " deg", rotateCommand);
             NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
-                    new SequentialCommandGroup(ShootCommand,
-                            new RotateShooterMountToPositionCommand(ShooterMount, rot)));
+                    new SequentialCommandGroup(ShootCommand, rotateCommand));
         }
     }
 

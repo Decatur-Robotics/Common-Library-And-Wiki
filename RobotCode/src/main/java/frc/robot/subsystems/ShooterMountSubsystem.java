@@ -61,7 +61,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/**
 	 * Set the desired rotation of the shooter mount
 	 * 
-	 * 
 	 * @param targetRotation the desired rotation in degrees
 	 */
 	public void setTargetRotation(double targetRotation)
@@ -97,6 +96,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
 	{
 		return noteVelocityEstimateTreeMap;
+	}
+
+	public boolean isAtTargetRotation()
+	{
+		return Math.abs(mainMotor.getCurrentEncoderValue()
+				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 
 }

@@ -1,9 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
+import frc.robot.constants.ShooterMountConstants;
 
+/**
+ * Rotates the shooter mount to a position and then ends once within a number of ticks specified by
+ * {@link ShooterMountConstants#AIMING_DEADBAND}. Holds position after ending.
+ */
 public class RotateShooterMountToPositionCommand extends Command
 {
 
@@ -30,9 +34,10 @@ public class RotateShooterMountToPositionCommand extends Command
         shooterMount.setTargetRotation(targetPosition);
     }
 
-    public void end()
+    @Override
+    public boolean isFinished()
     {
-        shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+        return shooterMount.isAtTargetRotation();
     }
 
 }
