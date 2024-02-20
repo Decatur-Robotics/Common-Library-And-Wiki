@@ -42,7 +42,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
     public void initialize()
     {
         logInfo("Starting AutoAimSwerveCommand");
-        Swerve.setRotationController(() -> Swerve.getRotationToSpeaker(Vision));
+        Swerve.setRotationController(() -> Swerve.getRotationalVelocityToSpeaker(Vision));
     }
 
     @Override
