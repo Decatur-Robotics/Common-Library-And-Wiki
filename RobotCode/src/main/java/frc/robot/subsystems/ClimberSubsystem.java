@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -18,7 +19,7 @@ public class ClimberSubsystem extends SubsystemBase
 	private ProfiledPIDController pidController;
 	private boolean override;
 	private double leftPower, rightPower;
-
+	
 	public ClimberSubsystem()
 	{
 		gyro = new Pigeon2(Ports.PIGEON_GYRO);
@@ -26,9 +27,11 @@ public class ClimberSubsystem extends SubsystemBase
 		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
 				Ports.CLIMBER_RIGHT_MOTOR);
 		extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
+
 				Ports.CLIMBER_LEFT_MOTOR);
-		extendMotorLeft.setNeutralMode(NeutralMode.Brake);
-		extendMotorRight.setNeutralMode(NeutralMode.Brake);
+		extendMotorLeft.setNeutralMode(NeutralModeValue.Brake);
+		extendMotorRight.setNeutralMode(NeutralModeValue.Brake);
+
 		extendMotorLeft.setInverted(true);
 		targetPosition = ClimberConstants.MIN_EXTENSION;
 		pidController = new ProfiledPIDController(ClimberConstants.CLIMBER_KP,
@@ -42,17 +45,19 @@ public class ClimberSubsystem extends SubsystemBase
 	{
 		if (!override)
 		{
+
 			targetPositionLeft = targetPosition;
 			targetPositionRight = targetPosition;
+			double gyroRoll = gyro.getRoll().getValueAsDouble();
 
 			// left
-			if (gyro.getRoll() > ClimberConstants.DEADBAND_GYRO)
+			if (gyroRoll > ClimberConstants.DEADBAND_GYRO)
 			{
 				targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
 			}
 
 			// right
-			else if (gyro.getRoll() < -ClimberConstants.DEADBAND_GYRO)
+			else if (gyroRoll < -ClimberConstants.DEADBAND_GYRO)
 			{
 				targetPositionRight = extendMotorRight.getCurrentEncoderValue();
 			}

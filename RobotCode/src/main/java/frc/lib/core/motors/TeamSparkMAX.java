@@ -5,8 +5,6 @@ import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.core.PidParameters;
 import frc.lib.core.util.TeamUtils;
 
 /**
@@ -28,8 +26,6 @@ public class TeamSparkMAX extends CANSparkMax implements IMotor
 
   private final RelativeEncoder CanEncoder;
 
-  private final PidParameters PidProfiles[];
-
   private CANSparkMax.ControlType ctrlType;
 
   public TeamSparkMAX(final String smartDashboardPrefix, final int deviceID)
@@ -38,7 +34,6 @@ public class TeamSparkMAX extends CANSparkMax implements IMotor
 
     this.SmartDashboardPrefix = smartDashboardPrefix;
 
-    PidProfiles = new PidParameters[4];
     CanPidController = getPIDController();
     CanEncoder = getEncoder();
 
@@ -127,23 +122,7 @@ public class TeamSparkMAX extends CANSparkMax implements IMotor
     return getClosedLoopTarget() - currentSpeed;
   }
 
-  public void configureWithPidParameters(final PidParameters pidParameters, final int pidSlotIndex)
-  {
-    PidProfiles[pidSlotIndex] = pidParameters;
-
-    CanPidController.setFF(pidParameters.getKF(), pidSlotIndex); // Feed-forward
-    CanPidController.setP(pidParameters.getKP(), pidSlotIndex);
-    CanPidController.setI(pidParameters.getKI(), pidSlotIndex);
-    CanPidController.setD(pidParameters.getKD(), pidSlotIndex);
-    CanPidController.setOutputRange(-pidParameters.getKPeakOutput(),
-        pidParameters.getKPeakOutput());
-
-    CanPidController.setSmartMotionMaxVelocity(pidParameters.getMaxVel(), pidSlotIndex);
-    CanPidController.setSmartMotionMinOutputVelocity(0, pidSlotIndex);
-    CanPidController.setSmartMotionMaxAccel(pidParameters.getMaxAcc(), pidSlotIndex);
-    CanPidController.setSmartMotionAllowedClosedLoopError(pidParameters.getErrorTolerance(),
-        pidSlotIndex);
-  }
+  
 
   /**
    * @param power  Between -1 and 1
@@ -155,69 +134,8 @@ public class TeamSparkMAX extends CANSparkMax implements IMotor
     super.set(power);
   }
 
-  @Override
-  public void configF(final double F, final int SLOT)
-  {
-    CanPidController.setFF(F, SLOT);
-  }
 
-  @Override
-  public void configP(final double P, final int SLOT)
-  {
-    CanPidController.setP(P, SLOT);
-  }
 
-  @Override
-  public void configI(final double I, final int SLOT)
-  {
-    CanPidController.setI(I, SLOT);
-  }
 
-  @Override
-  public void configD(final double D, final int SLOT)
-  {
-    CanPidController.setD(D, SLOT);
-  }
-
-  @Override
-  public void configPeakOutput(final double PEAK_OUTPUT)
-  {
-    CanPidController.setOutputRange(-PEAK_OUTPUT, PEAK_OUTPUT);
-  }
-
-  @Override
-  public void setClosedLoopErrorLimit(final double ERROR_TOLERANCE, final int SLOT)
-  {
-    CanPidController.setSmartMotionAllowedClosedLoopError(ERROR_TOLERANCE, SLOT);
-  }
-
-  @Override
-  public void onPidPeriodic(final int SLOT)
-  {
-    final PidParameters PidParams = PidProfiles[SLOT];
-
-    final boolean UPDATE_MOTOR = isRunningPidControlMode();
-    final String Prefix = SmartDashboardPrefix + ".PID";
-    double maxAcc = PidParams.getMaxAcc(), maxVel = PidParams.getMaxVel(),
-        kPeakOutput = PidParams.getKPeakOutput();
-
-    final double new_maxAcc = SmartDashboard.getNumber(Prefix + ".maxAcc", maxAcc);
-    if (new_maxAcc != maxAcc)
-    {
-      maxAcc = new_maxAcc;
-      if (UPDATE_MOTOR)
-        getPIDController().setSmartMotionMaxAccel(maxAcc, SLOT);
-    }
-
-    final double new_maxVel = SmartDashboard.getNumber(Prefix + ".maxAcc", maxVel);
-    if (new_maxVel != maxVel)
-    {
-      maxVel = new_maxVel;
-      if (UPDATE_MOTOR)
-        getPIDController().setSmartMotionMaxVelocity(maxVel, SLOT);
-    }
-
-    SmartDashboard.putNumber(Prefix + ".kPeakOutput", kPeakOutput);
-  }
 
 }

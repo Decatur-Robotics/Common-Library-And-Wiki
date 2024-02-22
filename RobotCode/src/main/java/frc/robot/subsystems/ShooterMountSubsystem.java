@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +17,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamTalonFX mainMotor, followMotor;
 
+	private final MotionMagicDutyCycle motorControlRequest;
+
 	/** Target rotation in encoder ticks (4096 encoder ticks to 1 degree) */
 	private double targetRotation;
 
@@ -23,19 +29,32 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	public ShooterMountSubsystem()
 	{
+
 		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
 		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
-		followMotor.follow(mainMotor);
+		followMotor.setControl(new Follower(mainMotor.getDeviceID(), false));
 		followMotor.setInverted(true);
 
-		mainMotor.config_kP(0, ShooterMountConstants.SHOOTER_MOUNT_KP);
-		mainMotor.config_kI(0, ShooterMountConstants.SHOOTER_MOUNT_KI);
-		mainMotor.config_kD(0, ShooterMountConstants.SHOOTER_MOUNT_KD);
-		mainMotor.config_kF(0, ShooterMountConstants.SHOOTER_MOUNT_KF);
-		mainMotor.configMotionCruiseVelocity(ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY);
-		mainMotor.configMotionAcceleration(ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION);
-		mainMotor.selectProfileSlot(0, 0);
+		// create configurator
+		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
+
+		// set pid profiles configs
+		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
+		pidSlot0Configs.kP = ShooterMountConstants.SHOOTER_MOUNT_KP;
+		pidSlot0Configs.kI = ShooterMountConstants.SHOOTER_MOUNT_KI;
+		pidSlot0Configs.kD = ShooterMountConstants.SHOOTER_MOUNT_KD;
+		pidSlot0Configs.kS = ShooterMountConstants.SHOOTER_MOUNT_KS;
+		pidSlot0Configs.kV = ShooterMountConstants.SHOOTER_MOUNT_KV;
+		pidSlot0Configs.kA = ShooterMountConstants.SHOOTER_MOUNT_KA;
+
+		// set motionmagic velocity configs
+		MotionMagicConfigs motionMagicVelocityConfigs = mainMotorConfigs.MotionMagic;
+		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
+		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
+
+		// config the main motor
+		mainMotor.getConfigurator().apply(mainMotorConfigs);
 
 		targetRotation = 0;
 
@@ -50,12 +69,14 @@ public class ShooterMountSubsystem extends SubsystemBase
 			noteVelocityEstimateTreeMap.put(key,
 					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
 		}
+
+		motorControlRequest = new MotionMagicDutyCycle(0);
 	}
 
 	@Override
 	public void periodic()
 	{
-		mainMotor.set(ControlMode.MotionMagic, targetRotation);
+		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
 	}
 
 	/**
