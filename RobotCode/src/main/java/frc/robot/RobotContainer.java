@@ -10,16 +10,16 @@ import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.AimShooterCommand;
-import frc.robot.commands.ClimberOverrideCommand;
-import frc.robot.commands.ClimberSpeedCommand;
-import frc.robot.commands.ClimberToPositionCommand;
+// import frc.robot.commands.ClimberOverrideCommand;
+// import frc.robot.commands.ClimberSpeedCommand;
+// import frc.robot.commands.ClimberToPositionCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
-import frc.robot.subsystems.ClimberSubsystem;
+// import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
@@ -35,7 +35,7 @@ public class RobotContainer
 	private final ShuffleboardTab ShuffleboardTab;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	private final ClimberSubsystem ClimberSubsystem;
+	// private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
 	private final ShooterMountSubsystem ShooterMountSubsystem;
 	private final VisionSubsystem VisionSubsystem;
@@ -51,7 +51,7 @@ public class RobotContainer
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		ClimberSubsystem = new ClimberSubsystem();
+		// ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
 		ShooterMountSubsystem = new ShooterMountSubsystem();
 		VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
@@ -94,15 +94,15 @@ public class RobotContainer
 		final JoystickButton UpButton = new JoystickButton(SecondaryController, LogitechControllerButtons.up);
 		final JoystickButton DownButton = new JoystickButton(SecondaryController, LogitechControllerButtons.down);
 
-		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
+		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
 		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
-		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
+		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
 		YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, VisionSubsystem, SwerveDrive));
-		UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
-		DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
+		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
+		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()
