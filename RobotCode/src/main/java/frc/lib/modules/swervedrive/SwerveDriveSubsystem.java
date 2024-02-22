@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -18,7 +16,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -41,7 +38,6 @@ public class SwerveDriveSubsystem extends SubsystemBase
 {
 
 	private SwerveDriveOdometry swerveOdometry;
-	private SwerveDrivePoseEstimator swervePoseEstimator;
 	private SwerveModule[] swerveMods;
 	private Pigeon2 gyro;
 
@@ -78,9 +74,6 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		// construct odometry (full robot position/incorporated module states)
 		swerveOdometry = new SwerveDriveOdometry(SwerveConstants.SwerveKinematics, getYaw(),
 				getModulePositions());
-
-		swervePoseEstimator = new SwerveDrivePoseEstimator(SwerveConstants.SwerveKinematics,
-				getYaw(), getModulePositions(), swerveOdometry.getPoseMeters());
 
 		configureAutoBuilder();
 
@@ -192,13 +185,13 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	/** @return position of robot on the field (odometry) in meters */
 	public Pose2d getPose()
 	{
-		return swervePoseEstimator.getEstimatedPosition();
+		return swerveOdometry.getPoseMeters();
 	}
 
 	/** resets odometry (position on field) */
 	public void resetPose(Pose2d pose)
 	{
-		swervePoseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
+		swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
 	}
 
 	/** @return array of a modules' states (angle, speed) for each one */
@@ -267,7 +260,6 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public void periodic()
 	{
 		swerveOdometry.update(getYaw(), getModulePositions());
-		swervePoseEstimator.update(getYaw(), getModulePositions());
 
 		// smartdashboard logging per module
 		for (SwerveModule mod : swerveMods)
@@ -320,33 +312,31 @@ public class SwerveDriveSubsystem extends SubsystemBase
 			final VisionSubsystem Vision, final IndexerSubsystem Indexer)
 	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
-				LogitechControllerButtons.bumperRight);
+						LogitechControllerButtons.bumperRight);
 
 		return new TeleopAimSwerveCommand(this, Vision, Indexer, () -> -Controller.getY(),
 				() -> -Controller.getX(), BumperRight::getAsBoolean);
 	}
 
-	public TeleopSwerveCommand getTeleopAimToPositionAllianceRelativeCommand(
-			final Joystick Controller, final double DesiredRotation)
+	public TeleopSwerveCommand getTeleopAimToPositionAllianceRelativeCommand(final Joystick Controller, final double DesiredRotation) 
 	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
-				LogitechControllerButtons.bumperRight);
+						LogitechControllerButtons.bumperRight);
 
 		double desiredRotation = DriverStation.getAlliance().get() == Alliance.Blue
 				? DesiredRotation
 				: -DesiredRotation;
 
-		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(),
+		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(), 
 				() -> -Controller.getX(), BumperRight::getAsBoolean, desiredRotation);
 	}
 
-	public TeleopSwerveCommand getTeleopAimToPositionCommand(final Joystick Controller,
-			final double DesiredRotation)
+	public TeleopSwerveCommand getTeleopAimToPositionCommand(final Joystick Controller, final double DesiredRotation) 
 	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
-				LogitechControllerButtons.bumperRight);
+						LogitechControllerButtons.bumperRight);
 
-		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(),
+		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(), 
 				() -> -Controller.getX(), BumperRight::getAsBoolean, DesiredRotation);
 	}
 
@@ -383,8 +373,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
 	{
 		double targetAngle = getRotationToSpeaker(Vision);
-		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-				targetAngle);
+		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(), targetAngle);
 
 		return desiredRotationalVelocity;
 	}
@@ -399,16 +388,6 @@ public class SwerveDriveSubsystem extends SubsystemBase
 
 		return new Pose2d(chassisSpeed.vxMetersPerSecond, chassisSpeed.vyMetersPerSecond,
 				new Rotation2d());
-	}
-
-	/** @param estimatedRobotPose estimated robot pose from vision */
-	public void updatePoseWithVision(Optional<EstimatedRobotPose> estimatedRobotPose)
-	{
-		if (estimatedRobotPose.isPresent())
-		{
-			swervePoseEstimator.addVisionMeasurement(estimatedRobotPose.get().estimatedPose.toPose2d(),
-					estimatedRobotPose.get().timestampSeconds);
-		}
 	}
 
 }
