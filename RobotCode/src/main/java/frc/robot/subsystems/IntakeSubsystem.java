@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
@@ -70,6 +71,11 @@ public class IntakeSubsystem extends SubsystemBase
 
                 desiredRotation = IntakeConstants.INTAKE_RETRACTED_ROTATION;
                 desiredVelocity = IntakeConstants.INTAKE_REST_VELOCITY;
+
+                RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity", () -> intakeRollerMotorTop.getVelocity());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Velocity", () -> desiredVelocity);
+                RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation", () -> intakeDeployMotorRight.getCurrentEncoderValue());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation", () -> desiredRotation);
         }
 
         @Override

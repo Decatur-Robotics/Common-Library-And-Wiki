@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
@@ -71,6 +72,9 @@ public class ShooterMountSubsystem extends SubsystemBase
 		}
 
 		motorControlRequest = new MotionMagicDutyCycle(0);
+
+		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation", () -> mainMotor.getCurrentEncoderValue());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation", () -> targetRotation);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
@@ -39,6 +40,9 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setI(ShooterConstants.SHOOTER_KI);
 		shooterPid.setD(ShooterConstants.SHOOTER_KD);
 		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
+
+		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity", () -> shooterMotorMain.getVelocity());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Velocity", () -> desiredShooterVelocity);
 	}
 
 	public double getShooterMotorVelocityError()

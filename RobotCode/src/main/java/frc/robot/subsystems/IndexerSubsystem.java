@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.Ports;
@@ -45,6 +46,9 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setI(IndexerConstants.INDEXER_KI);
 		indexerPid.setD(IndexerConstants.INDEXER_KD);
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
+
+		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity", () -> indexerMotorMain.getVelocity());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity", () -> desiredIndexerVelocity);
 	}
 
 	public void setIndexerMotorVelocity(double desiredIndexerVelocity, String reason)

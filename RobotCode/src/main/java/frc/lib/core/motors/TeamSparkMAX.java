@@ -116,6 +116,11 @@ public class TeamSparkMAX extends CANSparkMax implements IMotor
     return errors;
   }
 
+  public double getVelocity()
+  {
+    return CanEncoder.getVelocity();
+  }
+
   public double getVelocityError()
   {
     final double currentSpeed = CanEncoder.getVelocity();
