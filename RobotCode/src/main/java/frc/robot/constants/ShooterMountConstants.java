@@ -21,7 +21,12 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_KP = 0.1;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0.1;
-	public static final double SHOOTER_MOUNT_KF = 0.1;
+	public static final double SHOOTER_MOUNT_KS = 0.1;
+	public static final double SHOOTER_MOUNT_KV = 0;
+	public static final double SHOOTER_MOUNT_KA = 0;
+
+
+	
 	/** Encoder ticks per 100 ms */
 	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 2000;
 	/** Encoder ticks per 100 ms per second */
