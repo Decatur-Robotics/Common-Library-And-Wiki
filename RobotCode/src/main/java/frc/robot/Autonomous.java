@@ -9,6 +9,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.core.ILogSource;
 import frc.lib.modules.swervedrive.SwerveConstants;
@@ -16,6 +17,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.constants.AutoConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
@@ -99,7 +101,6 @@ public class Autonomous implements ILogSource
 
         // Get subsystems
         final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
-        final ShooterSubsystem Shooter = RobotContainer.getShooter();
         final IndexerSubsystem Indexer = RobotContainer.getIndexer();
         final IntakeSubsystem Intake = RobotContainer.getIntake();
 
@@ -107,7 +108,7 @@ public class Autonomous implements ILogSource
         final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
         NamedCommands.registerCommand("Intake", IntakeCommand);
 
-        final ShootCommand ShootCommand = new ShootCommand(Shooter, Indexer);
+        final ShootCommand ShootCommand = new ShootCommand(Indexer);
         NamedCommands.registerCommand("Shoot", ShootCommand);
 
         // Populate rotation commands
@@ -147,10 +148,14 @@ public class Autonomous implements ILogSource
         final AutoMode AutoMode = AutoModeChooser.getSelected();
         logFine("Read auto mode: " + AutoMode);
 
+        final ShooterSubsystem Shooter = RobotContainer.getShooter();
+
         logFine("Initializing command groups...");
 
         // Most of our auto will go in AutoMain
-        SequentialCommandGroup autoMain = new SequentialCommandGroup();
+        SequentialCommandGroup autoMain = new SequentialCommandGroup(new InstantCommand(
+                () -> Shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY,
+                        "Start of auto")));
 
         logFine("Command groups initialized! Adding commands based on AutoMode...");
         switch (AutoMode)
@@ -201,6 +206,9 @@ public class Autonomous implements ILogSource
 
             break;
         }
+
+        autoMain.addCommands(new InstantCommand(() -> Shooter
+                .setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "End of auto")));
 
         logInfo("Auto command built!");
         return Optional.ofNullable(autoMain);
