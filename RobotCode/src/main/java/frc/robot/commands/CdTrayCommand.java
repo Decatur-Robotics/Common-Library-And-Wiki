@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import java.time.LocalTime;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.core.util.Timer;
