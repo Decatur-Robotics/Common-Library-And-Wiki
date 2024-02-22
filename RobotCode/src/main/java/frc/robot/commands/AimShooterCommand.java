@@ -1,11 +1,7 @@
 package frc.robot.commands;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.constants.IndexerConstants;
@@ -24,15 +20,17 @@ public class AimShooterCommand extends Command
 	private ShooterSubsystem shooter;
 	private ShooterMountSubsystem shooterMount;
 	private VisionSubsystem vision;
+	private SwerveDriveSubsystem swerve;
 
 	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount,
-			VisionSubsystem vision, SwerveDriveSubsystem swerveDrive)
+			VisionSubsystem vision, SwerveDriveSubsystem swerve)
 	{
 		this.shooter = shooter;
 		this.shooterMount = shooterMount;
 		this.vision = vision;
+		this.swerve = swerve;
 
-		addRequirements(shooter, shooterMount, vision);
+		addRequirements(shooter, shooterMount);
 	}
 
 	@Override
@@ -45,11 +43,11 @@ public class AimShooterCommand extends Command
 	@Override
 	public void execute()
 	{
-		Pose2d shooterMountPose = vision.getShooterMountPose2d().orElse(new Pose2d());
+		Pose2d robotPose = swerve.getPose() ;
 		Translation2d velocityAdjustedSpeakerPose = vision.getSpeakerPoseAdjustedForVelocity();
 
 		// Calculate ground distance adjusting for velocity
-		double velocityAdjustedGroundDistance = shooterMountPose.getTranslation()
+		double velocityAdjustedGroundDistance = robotPose.getTranslation()
 				.getDistance(velocityAdjustedSpeakerPose);
 
 		// Calculate the target rotation of the shooter mount in degrees
