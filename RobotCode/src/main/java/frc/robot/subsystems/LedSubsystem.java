@@ -60,11 +60,15 @@ public class LedSubsystem extends SubsystemBase implements ILogSource
 							color.h + ", " + color.s + ", " + color.v : 
 							color.r + ", " + color.g + ", " + color.b	));
 	}
-
+	
+	/**
+	 * 
+	 * @return Returns a blend of two given colors.
+	 * @param progress The progress made of transitioning between the two colors. Ranges from 0.0-1.0.
+	 *  */
 	public static Color calcBlending(Color color1, Color color2, double progress)
 	{
-		if (progress < 0.0 || progress > 1.0)
-			throw new IllegalArgumentException("Progress must be between 0.0 and 1.0");
+		progress = Math.min(1, Math.max(0, progress));
 		int red =   (int) (color1.r * (1 - progress) + color2.r * progress);
 		int green = (int) (color1.g * (1 - progress) + color2.g * progress);
 		int blue =  (int) (color1.b * (1 - progress) + color2.b * progress);
@@ -89,6 +93,11 @@ public class LedSubsystem extends SubsystemBase implements ILogSource
 		log(Level.FINEST, "Updated the LED Data.");
 	}
 
+
+	/**
+	 *
+	 * @return The amonut of LEDs, or "pixels" on the LED strip
+	 */
 	public int getLength()
 	{
 		return length;

@@ -34,7 +34,7 @@ public class AimShooterCommand extends Command
 		this.shooter = shooter;
 		this.shooterMount = shooterMount;
 		this.vision = vision;
-
+		
 		addRequirements(shooter, shooterMount, vision);
 
 		aprilTagFieldLayout = vision.getAprilTagFieldLayout();

@@ -6,7 +6,7 @@ import frc.robot.subsystems.LedSubsystem;
 
 class LedTest {
     
-    // @Test
+    @Test
     void testLeds() {
 
         // LedSubsystem subsystem = new LedSubsystem(1);

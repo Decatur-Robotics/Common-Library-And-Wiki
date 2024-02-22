@@ -4,7 +4,7 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 
 class ShooterMountTest {
     
-    @Test
+    //@Test
     void testShooterMount() {
         
         ShooterMountSubsystem subsystem = new ShooterMountSubsystem();

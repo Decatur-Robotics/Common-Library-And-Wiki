@@ -5,7 +5,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 class ShooterTest {
     
 
-    // @Test
+    //@Test
     void testShooter() {
 
         ShooterSubsystem subsystem = new ShooterSubsystem();
@@ -22,3 +22,4 @@ class ShooterTest {
 
     }
 }
+//womp womp
