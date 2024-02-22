@@ -49,7 +49,7 @@ public final class SwerveConstants
 	public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
 	// Find this for the robot!
-	public static final double DRIVE_BASE_RADIUS_METERS = 0.5;
+	public static final double DRIVE_BASE_RADIUS_METERS = 0.33;
 
 	/*
 	 * Swerve Kinematics No need to ever change this unless you are not doing a traditional
