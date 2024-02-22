@@ -126,7 +126,7 @@ public final class SwerveConstants
 	public static final double AUTO_SPEED = 0.85;
 	public static final double NORMAL_SPEED = 1;
 	public static final double FAST_SPEED = 1.5;
-	public static final double MAX_SPEED = 0.7; // 4.5; //TODO: This must be tuned to
+	public static final double MAX_SPEED = 3.7; //TODO: This must be tuned to
 												// specific
 												// robot
 	/** Radians per Second */
