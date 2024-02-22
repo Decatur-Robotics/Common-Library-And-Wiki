@@ -95,12 +95,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 		return degrees * ShooterMountConstants.TICKS_IN_ONE_DEGREE;
 	}
 
-	public boolean withinAimTolerance()
-	{
-		return (Math.abs(mainMotor.getCurrentEncoderValue()
-				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND ? true : false);
-	}
-
 	/**
 	 * @return A map where: Key: distance to speaker in meters, Value: Rotation compensation in
 	 *         degrees
@@ -117,6 +111,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
 	{
 		return noteVelocityEstimateTreeMap;
+	}
+
+	public boolean isAtTargetRotation()
+	{
+		return Math.abs(mainMotor.getCurrentEncoderValue()
+				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 
 }

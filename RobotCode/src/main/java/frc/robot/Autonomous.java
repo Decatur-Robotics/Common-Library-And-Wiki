@@ -3,32 +3,32 @@ package frc.robot;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.core.ILogSource;
 import frc.lib.modules.swervedrive.SwerveConstants;
-import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
-import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
-import frc.lib.modules.swervedrive.Commands.DriveDistanceAuto;
-import frc.robot.commands.AimShooterCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.RotateShooterMountToPositionCommand;
+import frc.robot.commands.ShootCommand;
 import frc.robot.constants.AutoConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * <p>
  * A singleton class for handling autonomous. Puts dropdowns on Shuffleboard and then reads from
  * them to dynamically generate an autonomous. Uses
- * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths.
+ * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths and run
+ * commands.
  * </p>
  * <p>
  * <b>Usage:</b> Call {@link #init(RobotContainer)} in RobotContainer's constructor. Then, to
@@ -68,6 +68,8 @@ public class Autonomous implements ILogSource
         instance = this;
         RobotContainer = robotContainer;
 
+        registerNamedCommands();
+
         logFine("Initializing GUI...");
         Gui = frc.robot.RobotContainer.getShuffleboardTab();
 
@@ -92,19 +94,52 @@ public class Autonomous implements ILogSource
         logFine("GUI initialized!");
     }
 
-    /** Creates an instance and adds auto options to Shuffleboard */
+    /** Registers commands for building autos through PathPlanner. */
+    private void registerNamedCommands()
+    {
+        logFine("Registering named commands...");
+
+        // Get subsystems
+        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
+        final IntakeSubsystem Intake = RobotContainer.getIntake();
+
+        // Initialize commands
+        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
+        NamedCommands.registerCommand("Intake", IntakeCommand);
+
+        final ShootCommand ShootCommand = new ShootCommand(Indexer);
+        NamedCommands.registerCommand("Shoot", ShootCommand);
+
+        // Populate rotation commands
+        for (double rot : AutoConstants.AutoShooterMountRotations)
+        {
+            RotateShooterMountToPositionCommand rotateCommand = new RotateShooterMountToPositionCommand(
+                    ShooterMount, rot);
+            NamedCommands.registerCommand("Aim to " + rot + " deg", rotateCommand);
+            NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
+                    new SequentialCommandGroup(ShootCommand, rotateCommand));
+        }
+    }
+
+    /**
+     * Creates an instance and adds auto options to Shuffleboard. Must be called before anything can
+     * be done using Autonomous. Creates a new instance if one does not exist, otherwise logs an
+     * exception.
+     */
     public static void init(RobotContainer robotContainer)
     {
         if (instance == null)
             new Autonomous(robotContainer);
         else
-            instance.logSevere("Attempted to reinitialize Autonomous! This should not happen!");
+            instance.logException("Attempted to reinitialize Autonomous! This should not happen!");
     }
 
     /**
-     * Parses selected options into a single command
+     * Parses selected options into a single command. {@link #init(RobotContainer)} must be called
+     * first.
      */
-    public Optional<Command> buildAutoCommand()
+    private Optional<Command> buildAutoCommand()
     {
         logInfo("Building auto command...");
 
@@ -113,41 +148,30 @@ public class Autonomous implements ILogSource
         final AutoMode AutoMode = AutoModeChooser.getSelected();
         logFine("Read auto mode: " + AutoMode);
 
-        final SwerveDriveSubsystem SwerveDrive = RobotContainer.getSwerveDrive();
-        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
-        final VisionSubsystem Vision = RobotContainer.getVision();
-        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
-        final IntakeSubsystem Intake = RobotContainer.getIntake();
 
         logFine("Initializing command groups...");
 
         // Most of our auto will go in AutoMain
-        final SequentialCommandGroup AutoMain = new SequentialCommandGroup(
-                new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
-
-        // Everything in this group will run in parallel until one command finishes.
-        // AutoMain is in this group so everything in AutoAsync will be parallel with the main
-        // autonomous sequence.
-        // Unused for now, but I'm keeping it in case we need it later.
-        final ParallelRaceGroup AutoAsync = new ParallelRaceGroup(AutoMain);
+        SequentialCommandGroup autoMain = new SequentialCommandGroup(new InstantCommand(
+                () -> Shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY,
+                        "Start of auto")));
 
         logFine("Command groups initialized! Adding commands based on AutoMode...");
         switch (AutoMode)
         {
         case DoNothing:
-            logFine("Doing nothing...");
-            return Optional.empty();
+            logFiner("Not doing an auto.");
+            autoMain = null;
+            break;
 
         case Leave:
-            logFine("Adding leave command...");
-            AutoMain.addCommands(new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer),
-                    new DriveDistanceAuto(AutoConstants.LEAVE_DISTANCE,
-                            SwerveConstants.AutoConstants.MAX_SPEED, SwerveDrive));
+            logFiner("Adding leave command...");
+            autoMain.addCommands(followPath("Leave"));
             break;
 
         case MultiNote:
-            logFine("Adding multi note command based on StartingPosition...");
+            logFiner("Adding multi-note command based on StartingPosition...");
             String[] pathSequence = null;
 
             switch (StartingPosition)
@@ -174,31 +198,34 @@ public class Autonomous implements ILogSource
             if (pathSequence == null)
                 break;
 
-            logFine("Adding path sequence: " + String.join(", ", pathSequence));
+            logFiner("Adding path sequence: " + String.join(", ", pathSequence));
             for (String pathName : pathSequence)
             {
-                ParallelRaceGroup commandsWhileFollowingPath = new ParallelRaceGroup(
-                        new IntakeCommand(Intake, Indexer, ShooterMount), followPath(pathName),
-                        new AimShooterCommand(Shooter, ShooterMount, Vision, SwerveDrive));
-
-                AutoMain.addCommands(new AutoAimSwerveCommand(SwerveDrive, Vision, Indexer),
-                        commandsWhileFollowingPath);
+                autoMain.addCommands(followPath(pathName));
             }
 
             break;
         }
 
+        autoMain.addCommands(new InstantCommand(() -> Shooter
+                .setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "End of auto")));
+
         logInfo("Auto command built!");
-        return Optional.ofNullable(AutoAsync);
+        return Optional.ofNullable(autoMain);
     }
 
-    /** Calls {@link #buildAutoCommand()} */
+    /**
+     * Calls {@link #buildAutoCommand()}. {@link #init(RobotContainer)} must be called first!
+     */
     public static Optional<Command> getAutoCommand()
     {
         return instance.buildAutoCommand();
     }
 
-    /** Closes the instance's SendableChoosers to free up resources */
+    /**
+     * Closes the instance's SendableChoosers ({@link #AutoModeChooser} &
+     * {@link #StartingPositionChooser}) to free up resources
+     */
     public static void close()
     {
         instance.logFine("Closing Autonomous GUI...");

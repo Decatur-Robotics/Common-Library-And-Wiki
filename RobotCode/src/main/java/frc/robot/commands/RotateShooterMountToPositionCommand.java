@@ -1,26 +1,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
+import frc.robot.constants.ShooterMountConstants;
 
+/**
+ * Rotates the shooter mount to a position and then ends once within a number of ticks specified by
+ * {@link ShooterMountConstants#AIMING_DEADBAND}. Holds position after ending.
+ */
 public class RotateShooterMountToPositionCommand extends Command
 {
 
     private ShooterMountSubsystem shooterMount;
-	  private double targetPosition;
+    private double targetPosition;
 
     /**
      * This constructor is the version that uses a constant target
      * 
      * @param position in degrees
      */
-    public RotateShooterMountToPositionCommand(ShooterMountSubsystem shooterMount, double targetPosition)
+    public RotateShooterMountToPositionCommand(ShooterMountSubsystem shooterMount,
+            double targetPosition)
     {
         this.shooterMount = shooterMount;
-		    this.targetPosition = targetPosition;
+        this.targetPosition = targetPosition;
 
-		addRequirements(shooterMount);
+        addRequirements(shooterMount);
     }
 
     @Override
@@ -29,8 +34,10 @@ public class RotateShooterMountToPositionCommand extends Command
         shooterMount.setTargetRotation(targetPosition);
     }
 
-	  public void end() {
-		    shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
-	  }
+    @Override
+    public boolean isFinished()
+    {
+        return shooterMount.isAtTargetRotation();
+    }
 
 }

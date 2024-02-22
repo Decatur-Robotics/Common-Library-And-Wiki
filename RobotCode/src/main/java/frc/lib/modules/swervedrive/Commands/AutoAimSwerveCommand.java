@@ -8,6 +8,7 @@ import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.lib.core.ILogSource;
 import frc.lib.core.util.Timer;
@@ -22,16 +23,18 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
     private final SwerveDriveSubsystem Swerve;
     private final VisionSubsystem Vision;
     private final IndexerSubsystem Indexer;
+    private final ShooterMountSubsystem ShooterMount;
 
     /** Used to prevent ending before the note has left the shooter */
     private Optional<Timer> timer;
 
     public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
-            IndexerSubsystem indexer)
+            IndexerSubsystem indexer, ShooterMountSubsystem shooter)
     {
         Swerve = swerve;
         Vision = vision;
         Indexer = indexer;
+        ShooterMount = shooter;
 
         timer = Optional.empty();
 
@@ -76,6 +79,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
     {
         logInfo("Ending AutoAimSwerveCommand");
         Swerve.setRotationController(null);
+        timer = Optional.empty(); // We need to reset timer so we can reuse this instance
     }
 
     @Override

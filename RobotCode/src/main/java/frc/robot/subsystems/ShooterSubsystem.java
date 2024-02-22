@@ -56,6 +56,12 @@ public class ShooterSubsystem extends SubsystemBase
 				-ShooterConstants.SHOOTER_MAX_VELOCITY);
 	}
 
+	public boolean isUpToSpeed()
+	{
+		return Math.abs(shooterMotorMain.getEncoder().getVelocity()
+				- desiredShooterVelocity) < ShooterConstants.SHOOTER_VELOCITY_TOLERANCE;
+	}
+
 	/**
 	 * Continuously updates shooter speed based on the commands above.
 	 */
