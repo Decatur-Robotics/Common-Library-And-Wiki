@@ -130,12 +130,12 @@ public final class SwerveConstants
 												// specific
 												// robot
 	/** Radians per Second */
-	public static final double MAX_ANGULAR_VELOCITY = 2.25; // 10.0; //TODO: This must be
+	public static final double MAX_ANGULAR_VELOCITY = 9.42478; // 10.0; //TODO: This must be
 															// tuned to
 															// specific robot
 
 	/** Radians per Second Squared */
-	public static final double MAX_ANGULAR_ACCELERATION = 4.5; //TODO: This must be
+	public static final double MAX_ANGULAR_ACCELERATION = 12.5664; //TODO: This must be
 															   // tuned to
 															   // specific robot
 
