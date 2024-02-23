@@ -3,7 +3,9 @@ package frc.robot.constants;
 public class ShooterMountConstants
 {
 
-	public static final double TICKS_IN_ONE_DEGREE = 4096 / 360; // Update to reflect gear ratios
+	public static final double SHOOTER_MOUNT_GEAR_RATIO = (5/1) * (68/72);
+	/** Encoder ticks per degree shooter mount actually travels */
+	public static final double TICKS_IN_ONE_DEGREE = (4096 * SHOOTER_MOUNT_GEAR_RATIO) / 360;
 
 	/** Lowest possible position for the shooter mount to be at in degrees */
 	public static final double SHOOTER_MOUNT_OFFSET_DEGREES = 10;
@@ -27,10 +29,10 @@ public class ShooterMountConstants
 
 
 	
-	/** Encoder ticks per 100 ms */
-	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 2000;
-	/** Encoder ticks per 100 ms per second */
-	public static final double SHOOTER_MOUNT_ACCELERATION = 1000;
+	/** Rotations per second */
+	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 10;
+	/** Rotations per second per second */
+	public static final double SHOOTER_MOUNT_ACCELERATION = 10;
 
 	/** Tolerance for determining mount is within range to shoot in encoder ticks */
 	public static final double AIMING_DEADBAND = 100;

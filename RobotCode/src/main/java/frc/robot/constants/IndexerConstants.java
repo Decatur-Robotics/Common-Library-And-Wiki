@@ -12,15 +12,15 @@ public class IndexerConstants
 	/**
 	 * Maximum safe velocity in RPM
 	 */
-    public static final double INDEXER_MAX_VELOCITY = 10;
+    public static final double INDEXER_MAX_VELOCITY = 1000;
 	/**
 	 * Velocity for ejecting in RPM
 	 */
-    public static final double INDEXER_SHOOT_VELOCITY = 10;
+    public static final double INDEXER_SHOOT_VELOCITY = 1000;
 	/**
 	 * Velocity for intaking in RPM
 	 */
-    public static final double INDEXER_INTAKE_VELOCITY = 10;
+    public static final double INDEXER_INTAKE_VELOCITY = 60;
 	/**
 	 * Velocity when not in use in RPM
 	 */

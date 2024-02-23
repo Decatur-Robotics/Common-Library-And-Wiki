@@ -5,12 +5,10 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 
@@ -21,8 +19,6 @@ public class IntakeSubsystem extends SubsystemBase
                         intakeRollerMotorBottom;
         private double desiredRotation, desiredVelocity;
         private SparkPIDController intakeDeployPidController, intakeRollerPidController;
-        private TrapezoidProfile intakeDeployProfile;
-        private RelativeEncoder intakeDeployEncoder;
 
         public IntakeSubsystem()
         {
@@ -41,7 +37,6 @@ public class IntakeSubsystem extends SubsystemBase
                 intakeDeployMotorLeft.setSmartCurrentLimit(Constants.MAX_CURRENT);
                 intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
                 intakeDeployMotorLeft.setIdleMode(IdleMode.kBrake);
-                intakeDeployEncoder = intakeDeployMotorRight.getEncoder();
 
                 // Configure deployment PID
                 intakeDeployPidController = intakeDeployMotorRight.getPIDController();
@@ -49,11 +44,6 @@ public class IntakeSubsystem extends SubsystemBase
                 intakeDeployPidController.setI(IntakeConstants.INTAKE_DEPLOYMENT_KI, 0);
                 intakeDeployPidController.setD(IntakeConstants.INTAKE_DEPLOYMENT_KD, 0);
                 intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_KFF, 0);
-
-                // Configure deployment profile
-                intakeDeployProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(
-                                IntakeConstants.INTAKE_DEPLOYMENT_CRUISE_VELOCITY,
-                                IntakeConstants.INTAKE_DEPLOYMENT_ACCELERATION));
 
                 // Configure roller motors
                 intakeRollerMotorBottom.follow(intakeRollerMotorTop, true);
@@ -81,12 +71,7 @@ public class IntakeSubsystem extends SubsystemBase
         @Override
         public void periodic()
         {
-                TrapezoidProfile.State profiledDesiredRotation = intakeDeployProfile.calculate(0.0,
-                                new TrapezoidProfile.State(intakeDeployEncoder.getPosition(),
-                                                intakeDeployEncoder.getVelocity()),
-                                new TrapezoidProfile.State(desiredRotation, 0.0));
-                intakeDeployPidController.setReference(profiledDesiredRotation.position,
-                                ControlType.kPosition, 0);
+                intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
                 intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
         }
 
