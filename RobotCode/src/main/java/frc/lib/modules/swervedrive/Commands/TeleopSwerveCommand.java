@@ -43,12 +43,12 @@ public class TeleopSwerveCommand extends Command
 	public void execute()
 	{
 		/* Get Values, Deadband */
-		double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(),
-				SwerveConstants.JOYSTICK_DEADBAND);
-		double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(),
-				SwerveConstants.JOYSTICK_DEADBAND);
-		double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(),
-				SwerveConstants.JOYSTICK_DEADBAND);
+		double translationVal = Math.pow(MathUtil.applyDeadband(translationSup.getAsDouble(),
+				SwerveConstants.JOYSTICK_DEADBAND), 3);
+		double strafeVal = Math.pow(MathUtil.applyDeadband(strafeSup.getAsDouble(),
+				SwerveConstants.JOYSTICK_DEADBAND), 3);
+		double rotationVal = Math.pow(MathUtil.applyDeadband(rotationSup.getAsDouble(),
+				SwerveConstants.JOYSTICK_DEADBAND), 3);
 
 		double speed = getSpeed();
 		SmartDashboard.putNumber("Swerve Speed", speed);
