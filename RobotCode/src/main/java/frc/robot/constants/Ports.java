@@ -20,16 +20,20 @@ public final class Ports
 	/*
 	 * Climber ports
 	 */
-	public static final int CLIMBER_LEFT_MOTOR = 0;
-	public static final int CLIMBER_RIGHT_MOTOR = 0;
+	public static final int CLIMBER_MOTOR_LEFT = 0;
+	public static final int CLIMBER_RIGHT_MOTOR_RIGHT = 0;
 
 	/*
 	 * Shooter ports
 	 */
-	public static final int SHOOTER_MOTOR_MAIN = 0;
-	public static final int SHOOTER_MOTOR_SUB = 0;
-	public static final int INDEXER_MOTOR_MAIN = 0;
-	public static final int INDEXER_MOTOR_SUB = 0;
+	public static final int SHOOTER_MOTOR_RIGHT = 0;
+	public static final int SHOOTER_MOTOR_LEFT = 0;
+
+	/*
+	 * Indexer ports
+	 */
+	public static final int INDEXER_MOTOR_RIGHT = 0;
+	public static final int INDEXER_MOTOR_LEFT = 0;
 
 	/*
 	 * Sensor ports

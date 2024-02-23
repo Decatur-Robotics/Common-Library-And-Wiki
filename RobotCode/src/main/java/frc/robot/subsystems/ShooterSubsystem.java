@@ -25,8 +25,8 @@ public class ShooterSubsystem extends SubsystemBase
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_MAIN);
-		shooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_SUB);
+		shooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
+		shooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
 
 		shooterMotorSub.follow(shooterMotorMain, true);
 		shooterMotorMain.setIdleMode(IdleMode.kBrake);
@@ -41,8 +41,10 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setD(ShooterConstants.SHOOTER_KD);
 		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
 
-		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity", () -> shooterMotorMain.getVelocity());
-		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Velocity", () -> desiredShooterVelocity);
+		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity",
+				() -> shooterMotorMain.getVelocity());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Velocity",
+				() -> desiredShooterVelocity);
 	}
 
 	public double getShooterMotorVelocityError()

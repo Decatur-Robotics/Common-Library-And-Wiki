@@ -28,8 +28,8 @@ public class IndexerSubsystem extends SubsystemBase
 
 		beamBreak = new DigitalInput(Ports.BEAM_BREAK);
 
-		indexerMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_MAIN);
-		indexerMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_SUB);
+		indexerMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
+		indexerMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
 
 		indexerMotorSub.follow(indexerMotorMain, true);
 
@@ -47,8 +47,10 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setD(IndexerConstants.INDEXER_KD);
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
 
-		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity", () -> indexerMotorMain.getVelocity());
-		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity", () -> desiredIndexerVelocity);
+		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity",
+				() -> indexerMotorMain.getVelocity());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity",
+				() -> desiredIndexerVelocity);
 	}
 
 	public void setIndexerMotorVelocity(double desiredIndexerVelocity, String reason)
