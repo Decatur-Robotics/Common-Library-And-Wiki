@@ -18,7 +18,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private TeamTalonFX mainMotor, followMotor;
 
-	private final MotionMagicDutyCycle motorControlRequest;
+	private MotionMagicDutyCycle motorControlRequest;
 
 	/** Target rotation in encoder ticks (4096 encoder ticks to 1 degree) */
 	private double targetRotation;
@@ -31,58 +31,57 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public ShooterMountSubsystem()
 	{
 
-		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		// mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
+		// followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
-		followMotor.setControl(new Follower(mainMotor.getDeviceID(), false));
-		followMotor.setInverted(true);
+		// // followMotor.setControl(new Follower(mainMotor.getDeviceID(), true));
 
-		// create configurator
-		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
+		// // create configurator
+		// TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
 
-		// set pid profiles configs
-		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
-		pidSlot0Configs.kP = ShooterMountConstants.SHOOTER_MOUNT_KP;
-		pidSlot0Configs.kI = ShooterMountConstants.SHOOTER_MOUNT_KI;
-		pidSlot0Configs.kD = ShooterMountConstants.SHOOTER_MOUNT_KD;
-		pidSlot0Configs.kS = ShooterMountConstants.SHOOTER_MOUNT_KS;
-		pidSlot0Configs.kV = ShooterMountConstants.SHOOTER_MOUNT_KV;
-		pidSlot0Configs.kA = ShooterMountConstants.SHOOTER_MOUNT_KA;
+		// // set pid profiles configs
+		// Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
+		// pidSlot0Configs.kP = ShooterMountConstants.SHOOTER_MOUNT_KP;
+		// pidSlot0Configs.kI = ShooterMountConstants.SHOOTER_MOUNT_KI;
+		// pidSlot0Configs.kD = ShooterMountConstants.SHOOTER_MOUNT_KD;
+		// pidSlot0Configs.kS = ShooterMountConstants.SHOOTER_MOUNT_KS;
+		// pidSlot0Configs.kV = ShooterMountConstants.SHOOTER_MOUNT_KV;
+		// pidSlot0Configs.kA = ShooterMountConstants.SHOOTER_MOUNT_KA;
 
-		// set motionmagic velocity configs
-		MotionMagicConfigs motionMagicVelocityConfigs = mainMotorConfigs.MotionMagic;
-		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
-		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
+		// // set motionmagic velocity configs
+		// MotionMagicConfigs motionMagicVelocityConfigs = mainMotorConfigs.MotionMagic;
+		// motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
+		// motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
 
-		// config the main motor
-		mainMotor.getConfigurator().apply(mainMotorConfigs);
+		// // config the main motor
+		// mainMotor.getConfigurator().apply(mainMotorConfigs);
 
-		targetRotation = 0;
+		// targetRotation = 0;
 
-		// Populate tree maps
-		shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
-		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
-		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
-		{
-			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
-			shooterMountAngleTreeMap.put(key,
-					ShooterMountConstants.GravityCompensationTreeMapValues[i]);
-			noteVelocityEstimateTreeMap.put(key,
-					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
-		}
+		// // Populate tree maps
+		// shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
+		// noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
+		// for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
+		// {
+		// 	double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
+		// 	shooterMountAngleTreeMap.put(key,
+		// 			ShooterMountConstants.GravityCompensationTreeMapValues[i]);
+		// 	noteVelocityEstimateTreeMap.put(key,
+		// 			ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
+		// }
 
-		motorControlRequest = new MotionMagicDutyCycle(0);
+		// // motorControlRequest = new MotionMagicDutyCycle(0);
 
-		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation", () -> mainMotor.getCurrentEncoderValue());
-		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation", () -> targetRotation);
+		// RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation", () -> mainMotor.getCurrentEncoderValue());
+		// RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation", () -> targetRotation);
 	}
 
 	@Override
 	public void periodic()
 	{
 		// Calculate feedforward due to gravity
-		double arbitraryFeedForward = Math.cos(Math.toRadians(ticksToDegrees(mainMotor.getCurrentEncoderValue())));
-		mainMotor.setControl(motorControlRequest.withPosition(targetRotation).withFeedForward(arbitraryFeedForward));
+		// double arbitraryFeedForward = Math.cos(Math.toRadians(ticksToDegrees(mainMotor.getCurrentEncoderValue())));
+		// mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
 	}
 
 	/**

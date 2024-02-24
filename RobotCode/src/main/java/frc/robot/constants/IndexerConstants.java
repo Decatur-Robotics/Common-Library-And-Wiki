@@ -6,7 +6,7 @@ public class IndexerConstants
     public static final double INDEXER_KP = 0.001;
     public static final double INDEXER_KI = 0;
     public static final double INDEXER_KD = 0;
-    public static final double INDEXER_KF = 0.01;
+    public static final double INDEXER_KF = 0;
 
     // Velocities in RPM
 	/**

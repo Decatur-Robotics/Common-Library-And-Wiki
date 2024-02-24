@@ -147,10 +147,10 @@ public final class SwerveConstants
 
 	public static final double[] ANGLE_OFFSETS = new double[]
 	{
-			114.3, // FL
-			80.2, // FR
-			61.4, // BL
-			313.4 // BR
+			150.53, // FL
+			80.51, // FR
+			26.27, // BL
+			118.82 // BR
 	};
 
 	public static final int FRONT_LEFT = 0;

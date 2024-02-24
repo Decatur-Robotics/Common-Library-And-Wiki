@@ -31,9 +31,9 @@ public class ShooterMountConstants
 
 	
 	/** Rotations per second */
-	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 10;
+	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 0.1;
 	/** Rotations per second per second */
-	public static final double SHOOTER_MOUNT_ACCELERATION = 10;
+	public static final double SHOOTER_MOUNT_ACCELERATION = 0.1;
 
 	/** Tolerance for determining mount is within range to shoot in encoder ticks */
 	public static final double AIMING_DEADBAND = 100;

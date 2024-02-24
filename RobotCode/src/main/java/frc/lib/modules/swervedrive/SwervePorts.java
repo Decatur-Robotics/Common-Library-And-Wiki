@@ -3,7 +3,7 @@ package frc.lib.modules.swervedrive;
 public class SwervePorts
 { // TODO: Assign port values for each module
 
-   public final static int GYRO = 0; // CHECK THIS!!!
+   public final static int GYRO = 25; // CHECK THIS!!!
 
    // Front left
    public final static int MOD0_DRIVEMOTOR = 1;

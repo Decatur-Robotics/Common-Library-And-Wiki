@@ -39,6 +39,8 @@ public class Robot extends TimedRobot implements ILogSource
 
 		ctreConfigs = new CTREConfigs();
 
+		autonomousCommand = Optional.empty();
+
 		/* Initialize robot container last */
 		robotContainer = new RobotContainer();
 	}

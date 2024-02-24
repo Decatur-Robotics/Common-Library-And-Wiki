@@ -29,7 +29,7 @@ public class ShooterConstants
 	/**
 	 * Velocity when not in use in RPM
 	 */
-	public static final double SHOOTER_REST_VELOCITY = 500;
+	public static final double SHOOTER_REST_VELOCITY = 0;
 
 	/** Number of milliseconds to wait when shooting in autonomous */
 	public static final long SHOOT_TIME = 800;

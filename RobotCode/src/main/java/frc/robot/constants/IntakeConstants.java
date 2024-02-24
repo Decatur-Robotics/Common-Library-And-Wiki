@@ -12,13 +12,13 @@ public class IntakeConstants
     /** Ticks */
     public static final double INTAKE_DEPLOYED_ROTATION = 10;
 
-    public static final double INTAKE_DEPLOYMENT_KP = 0.1;
+    public static final double INTAKE_DEPLOYMENT_KP = 0;
     public static final double INTAKE_DEPLOYMENT_KI = 0;
-    public static final double INTAKE_DEPLOYMENT_KD = 0.1;
+    public static final double INTAKE_DEPLOYMENT_KD = 0;
     public static final double INTAKE_DEPLOYMENT_KFF = 0;
 
     public static final double INTAKE_ROLLER_KP = 0.001;
     public static final double INTAKE_ROLLER_KI = 0;
     public static final double INTAKE_ROLLER_KD = 0;
-    public static final double INTAKE_ROLLER_KFF = 0.01;
+    public static final double INTAKE_ROLLER_KFF = 0;
 }
