@@ -20,13 +20,13 @@ public class IndexerSubsystem extends SubsystemBase
 	private SparkPIDController indexerPid;
 	private TeamSparkMAX indexerMotorMain, indexerMotorSub;
 
-	private DigitalInput beamBreak;
+	// private DigitalInput beamBreak;
 
 	public IndexerSubsystem()
 	{
 		desiredIndexerVelocity = IndexerConstants.INDEXER_REST_VELOCITY;
 
-		beamBreak = new DigitalInput(Ports.BEAM_BREAK);
+		// beamBreak = new DigitalInput(Ports.BEAM_BREAK);
 
 		indexerMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
 		indexerMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
@@ -68,7 +68,9 @@ public class IndexerSubsystem extends SubsystemBase
 
 	public boolean hasNote()
 	{
-		return beamBreak.get();
+		// return beamBreak.get();
+
+		return false; // For testing without beam break, temporary
 	}
 
 }
