@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -31,11 +32,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
+import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 // import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveToPositionCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
+import frc.robot.RobotContainer;
+import frc.robot.constants.ShooterMountConstants;
+import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 // import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.ShooterMountSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class SwerveDriveSubsystem extends SubsystemBase
 {
@@ -316,15 +323,14 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	 *         but rotates towards the speaker and automatically spins the feeder motors when in
 	 *         target
 	 */
-	// public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
-	// 		final VisionSubsystem Vision, final IndexerSubsystem Indexer)
-	// {
-	// 	final JoystickButton BumperRight = new JoystickButton(Controller,
-	// 			LogitechControllerButtons.bumperRight);
+	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller, final ShooterMountSubsystem ShooterMount, final IndexerSubsystem Indexer)
+	{
+		final JoystickButton BumperRight = new JoystickButton(Controller,
+				LogitechControllerButtons.bumperRight);
 
-	// 	return new TeleopAimSwerveCommand(this, Vision, Indexer, () -> -Controller.getY(),
-	// 			() -> -Controller.getX(), BumperRight::getAsBoolean);
-	// }
+		return new TeleopAimSwerveCommand(this, ShooterMount, Indexer, () -> -Controller.getY(),
+				() -> -Controller.getX(), BumperRight::getAsBoolean);
+	}
 
 	public TeleopSwerveCommand getTeleopAimToPositionAllianceRelativeCommand(
 			final Joystick Controller, final double DesiredRotation)
@@ -369,25 +375,26 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	/**
 	 * @return the angle to the speaker in radians. Counterclockwise rotation is negative.
 	 */
-	// public double getRotationToSpeaker(final VisionSubsystem Vision)
-	// {
-	// 	double angle = Vision.getAngleToSpeaker();
-	// 	double currentAngle = getYaw().getRadians();
+	public double getRotationToSpeaker(ShooterMountSubsystem shooterMount)
+	{
+		double angle = getAngleToSpeaker(shooterMount);
+		double currentAngle = getYaw().getRadians();
 
-	// 	return angle - currentAngle;
-	// }
+		return angle - currentAngle;
+	}
 
 	/**
 	 * @return the angular velocity needed to aim to the speaker in radians.
 	 */
-	// public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
-	// {
-	// 	double targetAngle = getRotationToSpeaker(Vision);
-	// 	double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-	// 			targetAngle);
+	public double getRotationalVelocityToSpeaker(ShooterMountSubsystem shooterMount)
+	{
+		double targetAngle = getRotationToSpeaker(shooterMount);
 
-	// 	return desiredRotationalVelocity;
-	// }
+		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
+				targetAngle);
+
+		return desiredRotationalVelocity;
+	}
 
 	/**
 	 * @return the velocity of the robot in meters per second
@@ -410,5 +417,75 @@ public class SwerveDriveSubsystem extends SubsystemBase
 					estimatedRobotPose.get().timestampSeconds);
 		}
 	}
+
+	/**
+	 * NOTE: Velocity adjustment can be toggled with
+	 * {@link VisionConstants#ADJUST_SPEAKER_POSE_FOR_VELOCITY}. Takes our current position. Then,
+	 * calculates how long it will take for the note to reach the speaker and uses that time to find
+	 * how far the note will move due to the robot's velocity. Finally, offsets the speaker's
+	 * position by that amount.
+	 */
+	public Translation2d getSpeakerPoseAdjustedForVelocity(final ShooterMountSubsystem ShooterMount)
+	{
+		// Get speaker pose
+		Optional<Pose3d> speakerPoseOptional = RobotContainer.getSpeakerPose();
+		Translation2d speakerPose = !speakerPoseOptional.isEmpty() ? new Translation2d(
+				speakerPoseOptional.get().getX(), speakerPoseOptional.get().getY())
+				: new Translation2d();
+
+		if (!VisionConstants.ADJUST_SPEAKER_POSE_FOR_VELOCITY)
+			return speakerPose;
+
+		// Get the shooter mount pose
+		Pose2d robotPose = swervePoseEstimator.getEstimatedPosition();
+
+		// Calculate the distance from the shooter mount to the base of the speaker
+		double groundDistance = robotPose.getTranslation().getDistance(speakerPose);
+
+		// Get the robots velocity
+		Translation2d chassisVelocity = getVelocity().getTranslation();
+
+		// Calculate the estimated time for the note to reach the speaker
+		double noteFlightTime = ShooterMount.getNoteVelocityEstimateTreeMap().get(groundDistance);
+
+		// Calculate shooter mount pose adjusted by velocity and time for note to reach speaker
+		Translation2d velocityAdjustedSpeakerPose = new Translation2d(
+				speakerPose.getX() - (noteFlightTime * chassisVelocity.getX()),
+				speakerPose.getY() - (noteFlightTime * chassisVelocity.getY()));
+
+		return velocityAdjustedSpeakerPose;
+	}
+
+	/** @return boolean indicating whether robot is within shooting range of speaker */
+	public boolean isInShooterRange()
+	{
+		double max = ShooterMountConstants.SpeakerDistanceTreeMapKeys[ShooterMountConstants.SpeakerDistanceTreeMapKeys.length
+				- 1];
+		double distance = RobotContainer.getSpeakerPose().get().getTranslation().toTranslation2d()
+				.getDistance(getPose().getTranslation());
+
+		return distance <= max;
+	}
+
+	/** @return What angle to turn to to face the speaker. Adjusts for velocity */
+	public double getAngleToSpeaker(final ShooterMountSubsystem ShooterMount)
+	{
+		Pose2d targetPose = new Pose2d(getSpeakerPoseAdjustedForVelocity(ShooterMount), new Rotation2d());
+
+		// Calculate the distance to the target
+		Pose2d distance = new Pose2d(targetPose.getX() - getPose().getX(),
+				targetPose.getY() - getPose().getY(), new Rotation2d());
+
+		// Use the inverse tangent to calculate the angle
+		// Atan2 accounts for the sign of the x and y values
+		// We want the angle for (0, 0) to (0, 1) to be 0, so we add 90 degrees
+		// We multiply by -1 to make the angle negative when the target is to the left
+		double angle = -Math.atan2(distance.getY(), distance.getX()) + Math.PI / 2;
+
+		SmartDashboard.putNumber("Angle to Speaker", angle);
+		return angle;
+	}
+
+	
 
 }

@@ -1,6 +1,13 @@
 package frc.robot;
 
 
+import java.util.Optional;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -9,7 +16,7 @@ import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
 import frc.lib.core.LogitechControllerButtons;
-// import frc.robot.commands.AimShooterCommand;
+import frc.robot.commands.AimShooterCommand;
 // import frc.robot.commands.ClimberOverrideCommand;
 // import frc.robot.commands.ClimberSpeedCommand;
 // import frc.robot.commands.ClimberToPositionCommand;
@@ -17,8 +24,10 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
+import frc.robot.constants.VisionConstants;
 // import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -76,8 +85,7 @@ public class RobotContainer
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
-		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, VisionSubsystem,
-		// 		IndexerSubsystem));
+		RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
@@ -100,7 +108,7 @@ public class RobotContainer
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
-		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, VisionSubsystem, SwerveDrive));
+		YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
 		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
 	}
@@ -108,6 +116,17 @@ public class RobotContainer
 	public static ShuffleboardTab getShuffleboardTab()
 	{
 		return instance.ShuffleboardTab;
+	}
+
+	/**
+	 * @return the position of the speaker april tag for our alliance, or empty if the tag is not
+	 *         found
+	 */
+	public static Optional<Pose3d> getSpeakerPose()
+	{
+		return Constants.AprilTagFieldLayout.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
+				? VisionConstants.BLUE_SPEAKER_TAG_ID
+				: VisionConstants.RED_SPEAKER_TAG_ID);
 	}
 
 	public SwerveDriveSubsystem getSwerveDrive()

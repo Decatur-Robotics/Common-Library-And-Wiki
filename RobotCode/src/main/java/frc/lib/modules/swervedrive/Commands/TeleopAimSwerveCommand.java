@@ -1,62 +1,64 @@
-// package frc.lib.modules.swervedrive.Commands;
+package frc.lib.modules.swervedrive.Commands;
 
-// import java.util.function.BooleanSupplier;
-// import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
-// import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
-// import frc.robot.constants.IndexerConstants;
-// import frc.robot.constants.VisionConstants;
-// import frc.robot.subsystems.IndexerSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
+import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
+import frc.robot.constants.IndexerConstants;
+import frc.robot.constants.VisionConstants;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.ShooterMountSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
-// /**
-//  * Rotates the chassis towards the speaker but allows the driver to control translation and strafe
-//  */
-// public class TeleopAimSwerveCommand extends TeleopSwerveCommand
-// {
+/**
+ * Rotates the chassis towards the speaker but allows the driver to control translation and strafe
+ */
+public class TeleopAimSwerveCommand extends TeleopSwerveCommand
+{
 
-//     private final SwerveDriveSubsystem Swerve;
-//     private final VisionSubsystem Vision;
-//     private final IndexerSubsystem Indexer;
+	private final SwerveDriveSubsystem Swerve;
+	private final ShooterMountSubsystem ShooterMount;
+	private final IndexerSubsystem Indexer;
 
-//     public TeleopAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
-//             IndexerSubsystem indexer, DoubleSupplier translationSup, DoubleSupplier strafeSup,
-//             BooleanSupplier slowSpeedSupplier)
-//     {
-//         super(swerve, translationSup, strafeSup, () -> swerve.getRotationalVelocityToSpeaker(vision),
-//                 slowSpeedSupplier);
+	public TeleopAimSwerveCommand(SwerveDriveSubsystem swerve, ShooterMountSubsystem shooterMount,
+			IndexerSubsystem indexer, DoubleSupplier translationSup, DoubleSupplier strafeSup,
+			BooleanSupplier slowSpeedSupplier)
+	{
+		super(swerve, translationSup, strafeSup, () -> swerve.getRotationalVelocityToSpeaker(shooterMount),
+				slowSpeedSupplier);
 
-//         Swerve = swerve;
-//         Vision = vision;
-//         Indexer = indexer;
+		Swerve = swerve;
+		ShooterMount = shooterMount;
+		Indexer = indexer;
 
-//         addRequirements(Indexer);
-//     }
+		addRequirements(Indexer);
+	}
 
-//     @Override
-//     public void execute()
-//     {
-//         super.execute();
+	@Override
+	public void execute()
+	{
+		super.execute();
 
-//         // Spin feeder motors if in target
-//         if (Vision.isInShooterRange() && Math
-//                 .abs(Swerve.getRotationToSpeaker(Vision)) < VisionConstants.CHASSIS_AIM_THRESHOLD)
-//         {
-//             // Spin feeder motors
-//             Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
-//                     "Within aim threshold");
-//         }
-//         else
-//         {
-//             Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
-//                     "Not within aim threshold");
-//         }
-//     }
+		// Spin feeder motors if in target
+		if (Swerve.isInShooterRange()
+				&& Math.abs(Swerve.getRotationToSpeaker(ShooterMount)) < VisionConstants.CHASSIS_AIM_THRESHOLD
+				&& ShooterMount.isAtTargetRotation())
+		{
+			// Spin feeder motors
+			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
+					"Within aim threshold");
+		}
+		else if (!Indexer.hasNote())
+		{
+			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
+					"Not within aim threshold");
+		}
+	}
 
-//     @Override
-//     public void end(boolean interrupted)
-//     {
-//         Swerve.setRotationController(null);
-//     }
+	@Override
+	public void end(boolean interrupted)
+	{
+		Swerve.setRotationController(null);
+	}
 
-// }
+}
