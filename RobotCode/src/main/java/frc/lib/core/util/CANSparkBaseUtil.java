@@ -1,13 +1,13 @@
 package frc.lib.core.util;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import frc.lib.modules.swervedrive.SwerveConstants;
 
 /** Sets motor usage for a Spark Max motor controller */
-@SuppressWarnings("deprecation")
-public class CANSparkMaxUtil
+public class CANSparkBaseUtil
 {
 	public enum Usage
 	{
@@ -27,8 +27,8 @@ public class CANSparkMaxUtil
 	 *                        CANSparkMax is constructed.
 	 * @param enableFollowing Whether to enable motor following.
 	 */
-	
-	public static void setCANSparkMaxBusUsage(CANSparkMax motor, Usage usage,
+
+	public static void setCANSparkMaxBusUsage(CANSparkBase motor, Usage usage,
 			boolean enableFollowing)
 	{
 		if (enableFollowing)
@@ -90,7 +90,7 @@ public class CANSparkMaxUtil
 	 * @param usage The status frame feedack to enable. kAll is the default when a CANSparkMax is
 	 *              constructed.
 	 */
-	public static void setCANSparkMaxBusUsage(CANSparkMax motor, Usage usage)
+	public static void setCANSparkMaxBusUsage(CANSparkBase motor, Usage usage)
 	{
 		setCANSparkMaxBusUsage(motor, usage, false);
 	}

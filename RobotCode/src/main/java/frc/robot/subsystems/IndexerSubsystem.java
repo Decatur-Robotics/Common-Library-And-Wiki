@@ -6,8 +6,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamSparkMAX;
 import frc.robot.RobotContainer;
+import frc.lib.core.motors.TeamSparkBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.Ports;
@@ -18,7 +18,7 @@ public class IndexerSubsystem extends SubsystemBase
 	private double desiredIndexerVelocity;
 
 	private SparkPIDController indexerPid;
-	private TeamSparkMAX indexerMotorMain, indexerMotorSub;
+	private TeamSparkBase indexerMotorMain, indexerMotorSub;
 
 	// private DigitalInput beamBreak;
 
@@ -28,8 +28,8 @@ public class IndexerSubsystem extends SubsystemBase
 
 		// beamBreak = new DigitalInput(Ports.BEAM_BREAK);
 
-		indexerMotorMain = new TeamSparkMAX("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
-		indexerMotorSub = new TeamSparkMAX("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
+		indexerMotorMain = new TeamSparkBase("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
+		indexerMotorSub = new TeamSparkBase("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
 
 		indexerMotorSub.follow(indexerMotorMain, true);
 

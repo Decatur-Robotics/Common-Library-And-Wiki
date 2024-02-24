@@ -4,18 +4,17 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.lib.core.motors.TeamSparkMAX;
-import frc.lib.core.util.CANSparkMaxUtil;
+import frc.lib.core.motors.TeamSparkBase;
+import frc.lib.core.util.CANSparkBaseUtil;
 import frc.lib.core.util.CTREModuleState;
 import frc.lib.core.util.Conversions;
-import frc.lib.core.util.CANSparkMaxUtil.Usage;
+import frc.lib.core.util.CANSparkBaseUtil.Usage;
 import frc.robot.Robot;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase;
@@ -28,7 +27,7 @@ public class SwerveModule
 	private Rotation2d angleOffset;
 	private Rotation2d lastAngle;
 
-	private CANSparkMax mAngleMotor;
+	private TeamSparkBase mAngleMotor;
 	private TalonFX mDriveMotor;
 
 	private RelativeEncoder integratedAngleEncoder;
@@ -51,7 +50,7 @@ public class SwerveModule
 		configAngleEncoder();
 
 		/* Angle Motor Config */
-		mAngleMotor = new TeamSparkMAX("AngleMotor", moduleConstants.ANGLE_MOTOR_ID);
+		mAngleMotor = new TeamSparkBase("AngleMotor", moduleConstants.ANGLE_MOTOR_ID);
 		integratedAngleEncoder = mAngleMotor.getEncoder();
 		angleController = mAngleMotor.getPIDController();
 		configAngleMotor();
@@ -130,7 +129,7 @@ public class SwerveModule
 	private void configAngleMotor()
 	{
 		mAngleMotor.restoreFactoryDefaults();
-		CANSparkMaxUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kMinimal);
+		CANSparkBaseUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kMinimal);
 		mAngleMotor.setSmartCurrentLimit(SwerveConstants.ANGLE_CONTINUOUS_CURRENT_LIMIT);
 		mAngleMotor.setInverted(SwerveConstants.ANGLE_MOTOR_INVERT);
 		mAngleMotor.setIdleMode(SwerveConstants.ANGLE_NEUTRAL_MODE);

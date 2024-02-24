@@ -21,6 +21,8 @@ public class Robot extends TimedRobot implements ILogSource
 	private Optional<Command> autonomousCommand;
 	private CTREConfigs ctreConfigs;
 
+	private RobotContainer robotContainer;
+
 	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
 
 	/**
@@ -33,6 +35,8 @@ public class Robot extends TimedRobot implements ILogSource
 		if (instance != null)
 			System.err.println("WARNING: Robot instance already exists!");
 		instance = this;
+
+		robotContainer = new RobotContainer();
 
 		ctreConfigs = new CTREConfigs();
 	}

@@ -9,7 +9,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamSparkMAX;
+import frc.lib.core.motors.TeamSparkBase;
 
 public class ShooterSubsystem extends SubsystemBase
 {
@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase
 	private double desiredShooterVelocity;
 
 	private SparkPIDController shooterPid;
-	private TeamSparkMAX shooterMotorMain, shooterMotorSub;
+	private TeamSparkBase shooterMotorMain, shooterMotorSub;
 
 	public ShooterSubsystem()
 	{
@@ -25,8 +25,8 @@ public class ShooterSubsystem extends SubsystemBase
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorMain = new TeamSparkMAX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
-		shooterMotorSub = new TeamSparkMAX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
+		shooterMotorMain = new TeamSparkBase("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
+		shooterMotorSub = new TeamSparkBase("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
 
 		shooterMotorSub.follow(shooterMotorMain, true);
 		shooterMotorMain.setIdleMode(IdleMode.kBrake);
