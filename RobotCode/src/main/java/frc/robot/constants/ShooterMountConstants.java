@@ -26,6 +26,7 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_KS = 0.1;
 	public static final double SHOOTER_MOUNT_KV = 0;
 	public static final double SHOOTER_MOUNT_KA = 0;
+	public static final double SHOOTER_MOUNT_KG = 0;
 
 
 	

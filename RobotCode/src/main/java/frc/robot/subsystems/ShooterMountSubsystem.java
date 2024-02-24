@@ -80,7 +80,9 @@ public class ShooterMountSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
+		// Calculate feedforward due to gravity
+		double arbitraryFeedForward = Math.cos(Math.toRadians(ticksToDegrees(mainMotor.getCurrentEncoderValue())));
+		mainMotor.setControl(motorControlRequest.withPosition(targetRotation).withFeedForward(arbitraryFeedForward));
 	}
 
 	/**
@@ -94,9 +96,26 @@ public class ShooterMountSubsystem extends SubsystemBase
 				Math.max(targetRotation - ShooterMountConstants.SHOOTER_MOUNT_OFFSET_DEGREES, 0));
 	}
 
+	/**
+	 * Get the number of encoder ticks in an angle
+	 * 
+	 * @param degrees an angle in degrees
+	 * @return a position in encoder ticks
+	 */
 	private static double degreesToTicks(double degrees)
 	{
 		return degrees * ShooterMountConstants.TICKS_IN_ONE_DEGREE;
+	}
+
+	/**
+	 * Get the angle from encoder ticks
+	 * 
+	 * @param ticks a position in encoder ticks
+	 * @return an angle in degrees
+	 */
+	private static double ticksToDegrees(double ticks)
+	{
+		return ticks / ShooterMountConstants.TICKS_IN_ONE_DEGREE;
 	}
 
 	/**
