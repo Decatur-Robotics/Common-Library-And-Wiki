@@ -82,11 +82,11 @@ public class RobotContainer
 		final JoystickButton RightTrigger = new JoystickButton(PrimaryController, LogitechControllerButtons.triggerRight);
 		final JoystickButton YButton = new JoystickButton(PrimaryController, LogitechControllerButtons.y);
 
-		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
+		// SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
-		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
-		RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
-		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
+		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
+		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
+		// YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
 	private void configureSecondaryBindings()
@@ -104,11 +104,11 @@ public class RobotContainer
 
 		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
-		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
-		YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
+		// AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
+		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
 		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
 	}

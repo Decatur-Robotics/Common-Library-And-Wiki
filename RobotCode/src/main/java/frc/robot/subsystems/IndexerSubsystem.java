@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,9 +30,20 @@ public class IndexerSubsystem extends SubsystemBase
 		desiredIndexerVelocity = IndexerConstants.INDEXER_REST_VELOCITY;
 
 		// beamBreak = new DigitalInput(Ports.BEAM_BREAK);
-
 		indexerMotorMain = new TeamSparkBase("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
 		indexerMotorSub = new TeamSparkBase("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
+
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
+
+		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
+		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
+		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
+		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
+		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
 
 		indexerMotorSub.follow(indexerMotorMain, true);
 
@@ -40,7 +54,7 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
 		indexerMotorSub.setSmartCurrentLimit(Constants.MAX_CURRENT);
 
-		indexerPid = indexerMotorMain.getPidController();
+		indexerPid = indexerMotorMain.getPIDController();
 
 		indexerPid.setP(IndexerConstants.INDEXER_KP);
 		indexerPid.setI(IndexerConstants.INDEXER_KI);
@@ -48,7 +62,7 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity",
-				() -> indexerMotorMain.getVelocity());
+				() -> indexerMotorMain.getEncoder().getVelocity());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity",
 				() -> desiredIndexerVelocity);
 	}

@@ -34,11 +34,13 @@ public class Robot extends TimedRobot implements ILogSource
 	{
 		if (instance != null)
 			System.err.println("WARNING: Robot instance already exists!");
+
 		instance = this;
 
-		robotContainer = new RobotContainer();
-
 		ctreConfigs = new CTREConfigs();
+
+		/* Initialize robot container last */
+		robotContainer = new RobotContainer();
 	}
 
 	/**

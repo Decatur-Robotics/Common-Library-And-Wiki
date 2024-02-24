@@ -8,6 +8,7 @@ import frc.robot.constants.Ports;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkBase;
@@ -30,6 +31,30 @@ public class IntakeSubsystem extends SubsystemBase
                                 Ports.INTAKE_ROLLER_MOTOR_TOP);
                 intakeRollerMotorBottom = new TeamSparkBase("Intake Roller Motor Bottom",
                                 Ports.INTAKE_ROLLER_MOTOR_BOTTOM);
+
+                intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
+		intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
+		intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
+		intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
+		intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
+
+                intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
+                intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
+                intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
+                intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
+                intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
+
+                intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
+                intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
+                intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
+                intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
+                intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
+
+                intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
+                intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
+                intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
+                intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
+                intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
 
                 // Configure deployment motors
                 intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
