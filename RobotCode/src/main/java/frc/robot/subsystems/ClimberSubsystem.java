@@ -25,10 +25,10 @@ public class ClimberSubsystem extends SubsystemBase
 		gyro = new Pigeon2(Ports.PIGEON_GYRO);
 		// sets extension of left and right motors to given extension length
 		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
-				Ports.CLIMBER_RIGHT_MOTOR);
+				Ports.CLIMBER_MOTOR_RIGHT);
 		extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
 
-				Ports.CLIMBER_LEFT_MOTOR);
+				Ports.CLIMBER_MOTOR_LEFT);
 		extendMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		extendMotorRight.setNeutralMode(NeutralModeValue.Brake);
 

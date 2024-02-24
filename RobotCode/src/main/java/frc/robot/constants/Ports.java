@@ -21,7 +21,7 @@ public final class Ports
 	 * Climber ports
 	 */
 	public static final int CLIMBER_MOTOR_LEFT = 0;
-	public static final int CLIMBER_RIGHT_MOTOR_RIGHT = 0;
+	public static final int CLIMBER_MOTOR_RIGHT = 0;
 
 	/*
 	 * Shooter ports
