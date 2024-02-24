@@ -9,7 +9,7 @@ import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
 import frc.lib.core.LogitechControllerButtons;
-import frc.robot.commands.AimShooterCommand;
+// import frc.robot.commands.AimShooterCommand;
 // import frc.robot.commands.ClimberOverrideCommand;
 // import frc.robot.commands.ClimberSpeedCommand;
 // import frc.robot.commands.ClimberToPositionCommand;
@@ -24,7 +24,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 
 /** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer
@@ -38,7 +38,7 @@ public class RobotContainer
 	// private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
 	private final ShooterMountSubsystem ShooterMountSubsystem;
-	private final VisionSubsystem VisionSubsystem;
+	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
 	private final IntakeSubsystem IntakeSubsystem;
 
@@ -54,7 +54,7 @@ public class RobotContainer
 		// ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
 		ShooterMountSubsystem = new ShooterMountSubsystem();
-		VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
+		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
 		IntakeSubsystem = new IntakeSubsystem();
 
@@ -76,8 +76,8 @@ public class RobotContainer
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
-		RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, VisionSubsystem,
-				IndexerSubsystem));
+		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, VisionSubsystem,
+		// 		IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
@@ -100,7 +100,7 @@ public class RobotContainer
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
-		YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, VisionSubsystem, SwerveDrive));
+		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, VisionSubsystem, SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
 		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
 	}
@@ -125,10 +125,10 @@ public class RobotContainer
 		return ShooterMountSubsystem;
 	}
 
-	public VisionSubsystem getVision()
-	{
-		return VisionSubsystem;
-	}
+	// public VisionSubsystem getVision()
+	// {
+	// 	return VisionSubsystem;
+	// }
 
 	public IndexerSubsystem getIndexer()
 	{

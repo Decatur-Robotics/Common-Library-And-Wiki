@@ -31,11 +31,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.LogitechControllerButtons;
-import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
+// import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveToPositionCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
 import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 
 public class SwerveDriveSubsystem extends SubsystemBase
 {
@@ -316,15 +316,15 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	 *         but rotates towards the speaker and automatically spins the feeder motors when in
 	 *         target
 	 */
-	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
-			final VisionSubsystem Vision, final IndexerSubsystem Indexer)
-	{
-		final JoystickButton BumperRight = new JoystickButton(Controller,
-				LogitechControllerButtons.bumperRight);
+	// public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
+	// 		final VisionSubsystem Vision, final IndexerSubsystem Indexer)
+	// {
+	// 	final JoystickButton BumperRight = new JoystickButton(Controller,
+	// 			LogitechControllerButtons.bumperRight);
 
-		return new TeleopAimSwerveCommand(this, Vision, Indexer, () -> -Controller.getY(),
-				() -> -Controller.getX(), BumperRight::getAsBoolean);
-	}
+	// 	return new TeleopAimSwerveCommand(this, Vision, Indexer, () -> -Controller.getY(),
+	// 			() -> -Controller.getX(), BumperRight::getAsBoolean);
+	// }
 
 	public TeleopSwerveCommand getTeleopAimToPositionAllianceRelativeCommand(
 			final Joystick Controller, final double DesiredRotation)
@@ -369,25 +369,25 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	/**
 	 * @return the angle to the speaker in radians. Counterclockwise rotation is negative.
 	 */
-	public double getRotationToSpeaker(final VisionSubsystem Vision)
-	{
-		double angle = Vision.getAngleToSpeaker();
-		double currentAngle = getYaw().getRadians();
+	// public double getRotationToSpeaker(final VisionSubsystem Vision)
+	// {
+	// 	double angle = Vision.getAngleToSpeaker();
+	// 	double currentAngle = getYaw().getRadians();
 
-		return angle - currentAngle;
-	}
+	// 	return angle - currentAngle;
+	// }
 
 	/**
 	 * @return the angular velocity needed to aim to the speaker in radians.
 	 */
-	public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
-	{
-		double targetAngle = getRotationToSpeaker(Vision);
-		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-				targetAngle);
+	// public double getRotationalVelocityToSpeaker(final VisionSubsystem Vision)
+	// {
+	// 	double targetAngle = getRotationToSpeaker(Vision);
+	// 	double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
+	// 			targetAngle);
 
-		return desiredRotationalVelocity;
-	}
+	// 	return desiredRotationalVelocity;
+	// }
 
 	/**
 	 * @return the velocity of the robot in meters per second
