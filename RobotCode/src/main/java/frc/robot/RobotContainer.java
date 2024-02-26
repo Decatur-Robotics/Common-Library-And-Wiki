@@ -46,10 +46,10 @@ public class RobotContainer
 	private final SwerveDriveSubsystem SwerveDrive;
 	// private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
-	private final ShooterMountSubsystem ShooterMountSubsystem;
+	// private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
-	private final IntakeSubsystem IntakeSubsystem;
+	// private final IntakeSubsystem IntakeSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
@@ -62,10 +62,10 @@ public class RobotContainer
 		SwerveDrive = new SwerveDriveSubsystem();
 		// ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
-		ShooterMountSubsystem = new ShooterMountSubsystem();
+		// ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
-		IntakeSubsystem = new IntakeSubsystem();
+		// IntakeSubsystem = new IntakeSubsystem();
 
 		Autonomous.init(this);
 
@@ -85,7 +85,7 @@ public class RobotContainer
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
-		RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
+		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
@@ -107,7 +107,7 @@ public class RobotContainer
 		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		// AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
+		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
 		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
@@ -141,7 +141,8 @@ public class RobotContainer
 
 	public ShooterMountSubsystem getShooterMount()
 	{
-		return ShooterMountSubsystem;
+		// return ShooterMountSubsystem;
+		return null;
 	}
 
 	// public VisionSubsystem getVision()
@@ -156,7 +157,9 @@ public class RobotContainer
 
 	public IntakeSubsystem getIntake()
 	{
-		return IntakeSubsystem;
+		// return IntakeSubsystem;
+		return null;
+
 	}
 
 }
