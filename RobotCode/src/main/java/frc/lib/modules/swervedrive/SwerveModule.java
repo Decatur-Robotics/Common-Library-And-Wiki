@@ -109,12 +109,12 @@ public class SwerveModule
 
 	private Rotation2d getAngle()
 	{
-		return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+		return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition() * 360);
 	}
 
 	public Rotation2d getCanCoder()
 	{
-		return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValueAsDouble());
+		return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
 	}
 
 	public void resetToAbsolute()
