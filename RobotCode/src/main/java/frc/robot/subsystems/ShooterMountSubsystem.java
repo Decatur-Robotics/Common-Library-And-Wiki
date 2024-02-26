@@ -34,7 +34,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
 		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
-		// followMotor.setControl(new Follower(mainMotor.getDeviceID(), true));
+		followMotor.setControl(new Follower(mainMotor.getDeviceID(), true));
 
 		// create configurator
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
@@ -56,7 +56,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 		// config the main motor
 		mainMotor.getConfigurator().apply(mainMotorConfigs);
 
-		targetRotation = 0;
+		targetRotation = ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE;
 
 		// Populate tree maps
 		shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
@@ -65,15 +65,17 @@ public class ShooterMountSubsystem extends SubsystemBase
 		{
 			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
 			shooterMountAngleTreeMap.put(key,
-					ShooterMountConstants.GravityCompensationTreeMapValues[i]);
+					ShooterMountConstants.ShooterMountAngleTreeMapValues[i]);
 			noteVelocityEstimateTreeMap.put(key,
 					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
 		}
 
-		// motorControlRequest = new MotionMagicDutyCycle(0);
+		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
 
-		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation", () -> mainMotor.getCurrentEncoderValue());
-		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation", () -> targetRotation);
+		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
+				() -> mainMotor.getCurrentEncoderValue());
+		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
+				() -> targetRotation);
 	}
 
 	@Override
@@ -89,7 +91,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 	 */
 	public void setTargetRotation(double targetRotation)
 	{
-		this.targetRotation = Math.max(targetRotation, ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+		this.targetRotation = Math.max(targetRotation,
+				ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 
 	/**

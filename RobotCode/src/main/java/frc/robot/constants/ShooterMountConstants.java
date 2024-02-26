@@ -3,7 +3,7 @@ package frc.robot.constants;
 public class ShooterMountConstants
 {
 
-	public static final double SHOOTER_MOUNT_GEAR_RATIO = (5/1) * (68/72);
+	public static final double SHOOTER_MOUNT_GEAR_RATIO = (5 / 1) * (68 / 72);
 
 	/** Lowest position the shooter mount target position can be set to in encoder ticks */
 	public static final double SHOOTER_MOUNT_MIN_ANGLE = 0;
@@ -24,8 +24,6 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_KA = 0;
 	public static final double SHOOTER_MOUNT_KG = 0;
 
-
-	
 	/** Rotations per second */
 	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 0.1;
 	/** Rotations per second per second */
@@ -39,8 +37,8 @@ public class ShooterMountConstants
 	{
 			1, 2, 3
 	};
-	/** Rotation compensation in encoder ticks */
-	public static final double[] GravityCompensationTreeMapValues =
+	/** Rotation for aiming in encoder ticks */
+	public static final double[] ShooterMountAngleTreeMapValues =
 	{
 			1, 2, 3
 	};
