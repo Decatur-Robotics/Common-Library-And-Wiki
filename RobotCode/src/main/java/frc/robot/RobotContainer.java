@@ -46,7 +46,7 @@ public class RobotContainer
 	private final SwerveDriveSubsystem SwerveDrive;
 	// private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
-	// private final ShooterMountSubsystem ShooterMountSubsystem;
+	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
 	// private final IntakeSubsystem IntakeSubsystem;
@@ -62,7 +62,7 @@ public class RobotContainer
 		SwerveDrive = new SwerveDriveSubsystem();
 		// ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
-		// ShooterMountSubsystem = new ShooterMountSubsystem();
+		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
 		// IntakeSubsystem = new IntakeSubsystem();
@@ -85,7 +85,7 @@ public class RobotContainer
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
-		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
+		RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
@@ -104,9 +104,9 @@ public class RobotContainer
 
 		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
-		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		// AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
@@ -141,8 +141,7 @@ public class RobotContainer
 
 	public ShooterMountSubsystem getShooterMount()
 	{
-		// return ShooterMountSubsystem;
-		return null;
+		return ShooterMountSubsystem;
 	}
 
 	// public VisionSubsystem getVision()
