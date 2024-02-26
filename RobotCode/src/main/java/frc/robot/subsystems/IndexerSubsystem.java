@@ -33,18 +33,6 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerMotorMain = new TeamSparkBase("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
 		indexerMotorSub = new TeamSparkBase("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
 
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
-
-		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 250);
-		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 250);
-		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 250);
-		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 250);
-		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 250);
-
 		indexerMotorSub.follow(indexerMotorMain, true);
 
 		indexerMotorMain.enableVoltageCompensation(Constants.MAX_VOLTAGE);
