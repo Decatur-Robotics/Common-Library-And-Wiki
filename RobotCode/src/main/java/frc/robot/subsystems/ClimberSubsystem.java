@@ -27,7 +27,6 @@ public class ClimberSubsystem extends SubsystemBase
 		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
 				Ports.CLIMBER_MOTOR_RIGHT);
 		extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
-
 				Ports.CLIMBER_MOTOR_LEFT);
 		extendMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		extendMotorRight.setNeutralMode(NeutralModeValue.Brake);
@@ -88,15 +87,6 @@ public class ClimberSubsystem extends SubsystemBase
 		targetPosition = position;
 		targetPositionLeft = position;
 		targetPositionRight = position;
-	}
-
-	// checks if the power level is too high or low for both motors.
-	public boolean motorPowerCheck(double power)
-	{
-		return (extendMotorLeft.getCurrentEncoderValue() > ClimberConstants.MAX_EXTENSION
-				&& power >= 0)
-				|| (extendMotorLeft.getCurrentEncoderValue() < ClimberConstants.MIN_EXTENSION
-						&& power <= 0);
 	}
 
 	public void setOverride(boolean override)

@@ -48,7 +48,7 @@ public class AimShooterCommand extends Command
 		double velocityAdjustedGroundDistance = robotPose.getTranslation()
 				.getDistance(velocityAdjustedSpeakerPose);
 
-		// Calculate the target rotation of the shooter mount in degrees
+		// Calculate the target rotation of the shooter mount in encoder ticks
 		double targetRotation = shooterMount.getShooterMountAngleTreeMap()
 				.get(velocityAdjustedGroundDistance);
 
