@@ -105,8 +105,8 @@ public class Autonomous implements ILogSource {
         final IntakeSubsystem Intake = RobotContainer.getIntake();
 
         // Initialize commands
-        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
-        NamedCommands.registerCommand("Intake", IntakeCommand);
+        // final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
+        // NamedCommands.registerCommand("Intake", IntakeCommand);
 
         NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer));
 
