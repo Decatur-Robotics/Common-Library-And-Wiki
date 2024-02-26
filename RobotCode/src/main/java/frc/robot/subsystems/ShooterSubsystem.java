@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
