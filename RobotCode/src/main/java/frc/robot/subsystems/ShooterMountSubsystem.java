@@ -34,6 +34,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
 		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
+		mainMotor.optimizeBusUtilization();
+		followMotor.optimizeBusUtilization();
+		mainMotor.getRotorPosition().setUpdateFrequency(20);
+
 		followMotor.setControl(new Follower(mainMotor.getDeviceID(), true));
 
 		// create configurator

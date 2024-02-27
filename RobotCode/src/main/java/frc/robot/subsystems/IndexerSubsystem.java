@@ -46,6 +46,9 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setD(IndexerConstants.INDEXER_KD);
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
 
+		indexerMotorMain.setAllCanPeriodicFramePeriods(500);
+		indexerMotorSub.setAllCanPeriodicFramePeriods(500);
+
 		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity",
 				() -> indexerMotorMain.getEncoder().getVelocity());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity",

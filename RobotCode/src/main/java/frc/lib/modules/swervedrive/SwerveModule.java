@@ -4,12 +4,15 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.lib.core.ILogSource;
 import frc.lib.core.motors.TeamSparkBase;
 import frc.lib.core.util.CANSparkBaseUtil;
 import frc.lib.core.util.CTREModuleState;
 import frc.lib.core.util.Conversions;
 import frc.lib.core.util.CANSparkBaseUtil.Usage;
 import frc.robot.Robot;
+
+import java.util.logging.Level;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -19,7 +22,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase;
 
-public class SwerveModule
+public class SwerveModule implements ILogSource
 {
 
 	public final int moduleNumber;
@@ -97,11 +100,17 @@ public class SwerveModule
 
 	private void setAngle(SwerveModuleState desiredState)
 	{
-		Rotation2d angle = (Math
-				.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.01))
-						? lastAngle
-						: desiredState.angle; // Prevent rotating module if speed is less then 1%.
-												// Prevents Jittering.
+		// Prevent rotating module if speed is less then 1%. Prevents Jittering.
+		Rotation2d angle = desiredState.angle;
+		logFinest("Deadband threshold: " + (SwerveConstants.MAX_SPEED * 0.01));
+		if (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.01))
+		{
+			logFinest("Deadbanding angle... Last angle: " + lastAngle.getDegrees());
+			angle = lastAngle;
+		}
+
+		logFinest("Setting angle: Orig: " + desiredState.angle.getDegrees() + ", Converted: "
+				+ angle.getDegrees());
 
 		angleController.setReference(angle.getDegrees(), CANSparkBase.ControlType.kPosition);
 		lastAngle = angle;
@@ -109,7 +118,9 @@ public class SwerveModule
 
 	private Rotation2d getAngle()
 	{
-		return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition() * 360);
+		double rotations = integratedAngleEncoder.getPosition(), degrees = rotations * 360;
+		logFinest("Getting angle... Rotations: " + rotations + ", Degrees: " + degrees);
+		return Rotation2d.fromDegrees(degrees);
 	}
 
 	public Rotation2d getCanCoder()
@@ -158,7 +169,7 @@ public class SwerveModule
 		return new SwerveModuleState(
 				Conversions.falconToMPS(mDriveMotor.getRotorPosition().getValueAsDouble(),
 						SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO),
-				getAngle());
+				getCanCoder());
 	}
 
 	public SwerveModulePosition getPosition()
@@ -166,7 +177,7 @@ public class SwerveModule
 		return new SwerveModulePosition(
 				Conversions.falconToMeters(mDriveMotor.getRotorPosition().getValueAsDouble(),
 						SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO),
-				getAngle());
+				getCanCoder());
 	}
 
 	/**

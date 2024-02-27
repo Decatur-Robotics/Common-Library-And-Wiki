@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.logging.Level;
 
 import org.photonvision.EstimatedRobotPose;
 
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.core.ILogSource;
 import frc.lib.core.LogitechControllerButtons;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 // import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
@@ -44,7 +46,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class SwerveDriveSubsystem extends SubsystemBase
+public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 {
 
 	private SwerveDriveOdometry swerveOdometry;
@@ -151,6 +153,9 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		SwerveModuleState[] swerveModuleStates = SwerveConstants.SwerveKinematics
 				.toSwerveModuleStates(speeds);
 
+		// lowers module speeds to max attainable speed (avoids going above topspeed)
+		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.MAX_SPEED);
+
 		// Log module state
 		for (int i = 0; i < swerveModuleStates.length; i++)
 		{
@@ -160,9 +165,6 @@ public class SwerveDriveSubsystem extends SubsystemBase
 					mod.angle.getDegrees() - swerveMods[i].getCanCoder().getDegrees());
 			SmartDashboard.putNumber("Mod " + i + " Target Speed", mod.speedMetersPerSecond);
 		}
-
-		// lowers module speeds to max attainable speed (avoids going above topspeed)
-		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.MAX_SPEED);
 
 		// sets modules to desired state (angle, speed)
 		for (SwerveModule mod : swerveMods)
@@ -323,7 +325,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	 *         but rotates towards the speaker and automatically spins the feeder motors when in
 	 *         target
 	 */
-	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller, final ShooterMountSubsystem ShooterMount, final IndexerSubsystem Indexer)
+	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
+			final ShooterMountSubsystem ShooterMount, final IndexerSubsystem Indexer)
 	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
@@ -413,7 +416,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	{
 		if (estimatedRobotPose.isPresent())
 		{
-			swervePoseEstimator.addVisionMeasurement(estimatedRobotPose.get().estimatedPose.toPose2d(),
+			swervePoseEstimator.addVisionMeasurement(
+					estimatedRobotPose.get().estimatedPose.toPose2d(),
 					estimatedRobotPose.get().timestampSeconds);
 		}
 	}
@@ -470,7 +474,8 @@ public class SwerveDriveSubsystem extends SubsystemBase
 	/** @return What angle to turn to to face the speaker. Adjusts for velocity */
 	public double getAngleToSpeaker(final ShooterMountSubsystem ShooterMount)
 	{
-		Pose2d targetPose = new Pose2d(getSpeakerPoseAdjustedForVelocity(ShooterMount), new Rotation2d());
+		Pose2d targetPose = new Pose2d(getSpeakerPoseAdjustedForVelocity(ShooterMount),
+				new Rotation2d());
 
 		// Calculate the distance to the target
 		Pose2d distance = new Pose2d(targetPose.getX() - getPose().getX(),
@@ -485,7 +490,5 @@ public class SwerveDriveSubsystem extends SubsystemBase
 		SmartDashboard.putNumber("Angle to Speaker", angle);
 		return angle;
 	}
-
-	
 
 }

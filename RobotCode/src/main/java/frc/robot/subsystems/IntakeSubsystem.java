@@ -31,6 +31,9 @@ public class IntakeSubsystem extends SubsystemBase
                 intakeRollerMotorBottom = new TeamSparkBase("Intake Roller Motor Bottom",
                                 Ports.INTAKE_ROLLER_MOTOR_BOTTOM);
 
+                intakeRollerMotorTop.setAllCanPeriodicFramePeriods(500);
+                intakeRollerMotorBottom.setAllCanPeriodicFramePeriods(500);
+
                 // Configure deployment motors
                 intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
                 intakeDeployMotorRight.setSmartCurrentLimit(Constants.MAX_CURRENT);
@@ -62,10 +65,14 @@ public class IntakeSubsystem extends SubsystemBase
                 desiredRotation = IntakeConstants.INTAKE_RETRACTED_ROTATION;
                 desiredVelocity = IntakeConstants.INTAKE_REST_VELOCITY;
 
-                RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity", () -> intakeRollerMotorTop.getVelocity());
-		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Velocity", () -> desiredVelocity);
-                RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation", () -> intakeDeployMotorRight.getCurrentEncoderValue());
-		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation", () -> desiredRotation);
+                RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity",
+                                () -> intakeRollerMotorTop.getVelocity());
+                RobotContainer.getShuffleboardTab().addDouble("Desired Intake Velocity",
+                                () -> desiredVelocity);
+                RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation",
+                                () -> intakeDeployMotorRight.getCurrentEncoderValue());
+                RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation",
+                                () -> desiredRotation);
         }
 
         @Override

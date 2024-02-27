@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -27,6 +28,10 @@ public class ShooterSubsystem extends SubsystemBase
 		// Initializes motor object
 		shooterMotorMain = new TeamSparkBase("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
 		shooterMotorSub = new TeamSparkBase("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
+
+		shooterMotorMain.setAllCanPeriodicFramePeriods(500);
+		shooterMotorSub.setAllCanPeriodicFramePeriods(500);
+		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 
 		shooterMotorSub.follow(shooterMotorMain, true);
 		shooterMotorMain.setIdleMode(IdleMode.kBrake);
