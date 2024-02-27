@@ -3,6 +3,8 @@ package frc.robot;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -25,6 +27,7 @@ import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
 import frc.robot.constants.VisionConstants;
@@ -51,12 +54,18 @@ public class RobotContainer
 	private final IndexerSubsystem IndexerSubsystem;
 	// private final IntakeSubsystem IntakeSubsystem;
 
+	private final Pigeon2 gyro;
+
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
 	{
 		instance = this;
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
+
+		gyro = new Pigeon2(Ports.PIGEON_GYRO);
+		gyro.optimizeBusUtilization();
+		gyro.getYaw().setUpdateFrequency(20);
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
@@ -127,6 +136,11 @@ public class RobotContainer
 		return Constants.AprilTagFieldLayout.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
 				? VisionConstants.BLUE_SPEAKER_TAG_ID
 				: VisionConstants.RED_SPEAKER_TAG_ID);
+	}
+
+	public static Pigeon2 getGyro()
+	{
+		return instance.gyro;
 	}
 
 	public SwerveDriveSubsystem getSwerveDrive()

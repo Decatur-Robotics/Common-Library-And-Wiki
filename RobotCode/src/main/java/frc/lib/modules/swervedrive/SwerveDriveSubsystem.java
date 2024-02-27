@@ -62,7 +62,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 
 	public SwerveDriveSubsystem()
 	{
-		gyro = new Pigeon2(SwervePorts.GYRO);
+		gyro = RobotContainer.getGyro();
 
 		zeroGyro();
 

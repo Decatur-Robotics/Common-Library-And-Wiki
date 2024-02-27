@@ -20,6 +20,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkBase;
 
 public class SwerveModule implements ILogSource
@@ -65,6 +66,19 @@ public class SwerveModule implements ILogSource
 		lastAngle = getState().angle;
 
 		openLoopDriveRequest = new DutyCycleOut(0);
+
+		mDriveMotor.optimizeBusUtilization();
+		mDriveMotor.getRotorPosition().setUpdateFrequency(20);
+		mDriveMotor.getRotorVelocity().setUpdateFrequency(20);
+
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 500);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop)
@@ -102,25 +116,13 @@ public class SwerveModule implements ILogSource
 	{
 		// Prevent rotating module if speed is less then 1%. Prevents Jittering.
 		Rotation2d angle = desiredState.angle;
-		logFinest("Deadband threshold: " + (SwerveConstants.MAX_SPEED * 0.01));
 		if (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.01))
 		{
-			logFinest("Deadbanding angle... Last angle: " + lastAngle.getDegrees());
 			angle = lastAngle;
 		}
 
-		logFinest("Setting angle: Orig: " + desiredState.angle.getDegrees() + ", Converted: "
-				+ angle.getDegrees());
-
 		angleController.setReference(angle.getDegrees(), CANSparkBase.ControlType.kPosition);
 		lastAngle = angle;
-	}
-
-	private Rotation2d getAngle()
-	{
-		double rotations = integratedAngleEncoder.getPosition(), degrees = rotations * 360;
-		logFinest("Getting angle... Rotations: " + rotations + ", Degrees: " + degrees);
-		return Rotation2d.fromDegrees(degrees);
 	}
 
 	public Rotation2d getCanCoder()

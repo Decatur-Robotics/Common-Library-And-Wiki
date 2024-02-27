@@ -6,10 +6,10 @@ package frc.robot.constants;
 public class ShooterConstants
 {
 
-	public static final double SHOOTER_KP = 0.001;
+	public static final double SHOOTER_KP = 0.0001;
 	public static final double SHOOTER_KI = 0;
 	public static final double SHOOTER_KD = 0;
-	public static final double SHOOTER_KF = 0.01;
+	public static final double SHOOTER_KF = 0;
 
 	public static final double SHOOTER_VELOCITY_TOLERANCE = 50;
 
@@ -17,11 +17,11 @@ public class ShooterConstants
 	/**
 	 * Maximum safe velocity in RPM
 	 */
-	public static final double SHOOTER_MAX_VELOCITY = 1000;
+	public static final double SHOOTER_MAX_VELOCITY = 200;
 	/**
 	 * Velocity for shooting at speaker in RPM
 	 */
-	public static final double SHOOTER_SPEAKER_VELOCITY = 1000;
+	public static final double SHOOTER_SPEAKER_VELOCITY = 200;
 	/**
 	 * Velocity for shooting at amp in RPM
 	 */
