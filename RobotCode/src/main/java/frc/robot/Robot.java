@@ -85,8 +85,6 @@ public class Robot extends TimedRobot implements ILogSource
 		}
 
 		logFine("Getting and running auto command...");
-		autonomousCommand = Autonomous.getAutoCommand();
-		Autonomous.close();
 		// schedule the autonomous command (example)
 		if (autonomousCommand.isPresent())
 		{
