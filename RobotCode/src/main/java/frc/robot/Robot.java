@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.core.ILogSource;
 import frc.lib.core.ModeBasedSubsystem;
-import frc.lib.core.util.CTREConfigs;
 
 public class Robot extends TimedRobot implements ILogSource
 {
@@ -19,7 +18,6 @@ public class Robot extends TimedRobot implements ILogSource
 	private static Robot instance;
 
 	private Optional<Command> autonomousCommand;
-	private CTREConfigs ctreConfigs;
 
 	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
 
@@ -33,8 +31,6 @@ public class Robot extends TimedRobot implements ILogSource
 		if (instance != null)
 			System.err.println("WARNING: Robot instance already exists!");
 		instance = this;
-
-		ctreConfigs = new CTREConfigs();
 	}
 
 	/**
@@ -153,10 +149,5 @@ public class Robot extends TimedRobot implements ILogSource
 	public static void addSubsystem(ModeBasedSubsystem subsystem)
 	{
 		instance.subsystems.add(subsystem);
-	}
-
-	public static CTREConfigs getCtreConfigs()
-	{
-		return instance.ctreConfigs;
 	}
 }
