@@ -21,10 +21,9 @@ public class PneumaticClawSubsystem extends SubsystemBase {
 				PneumaticClawConstants.SOLENOID_RIGHT_OPEN);
 
 		// This is try-with-resources, it will automatically close the compressor
-		try (Compressor mainCompressor = new Compressor(PneumaticClawConstants.PNEUMATICS_HUB,
-				PneumaticsModuleType.REVPH)) {
-			mainCompressor.enableDigital();
-		}
+		Compressor mainCompressor = new Compressor(PneumaticClawConstants.PNEUMATICS_HUB,
+				PneumaticsModuleType.REVPH);
+		mainCompressor.enableDigital();
 
 		ClawGrabberLeft.set(startPosition);
 		ClawGrabberRight.set(startPosition);
