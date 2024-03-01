@@ -1,15 +1,12 @@
 package frc.lib.modules.tankdrivetrain;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamTalonFX;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.core.motors.TeamTalonFX;
 
-public class TankDrivetrainSubsystem extends SubsystemBase
-{
+public class TankDrivetrainSubsystem extends SubsystemBase {
 
 	private TeamTalonFX RightDriveFalconMain, LeftDriveFalconMain, RightDriveFalconSub,
 			LeftDriveFalconSub;
@@ -21,8 +18,7 @@ public class TankDrivetrainSubsystem extends SubsystemBase
 	private String reason;
 
 	public TankDrivetrainSubsystem(int rightMainPort, int leftMainPort, int rightSubPort,
-			int leftSubPort)
-	{
+			int leftSubPort) {
 		RightDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.RightMain", rightMainPort);
 		LeftDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.LeftMain", leftMainPort);
 		RightDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.RightSub", rightSubPort);
@@ -64,42 +60,34 @@ public class TankDrivetrainSubsystem extends SubsystemBase
 		speedMod = 1;
 	}
 
-	public void setSpeedMod(double speedMod)
-	{
+	public void setSpeedMod(double speedMod) {
 		// Sets a new speed mod
 		this.speedMod = speedMod;
 	}
 
-	public double getSpeedMod()
-	{
+	public double getSpeedMod() {
 		// Returns the current speed mod
 		return speedMod;
 	}
 
-	private double calculateClampedPower(double powerDesired)
-	{
+	private double calculateClampedPower(double powerDesired) {
 		// Clamp given power between -1 and 1
 		return Math.max(Math.min(1, powerDesired), -1);
 	}
 
-	private double calculateRampedPower(double powerDesired, double powerCurrent)
-	{
+	private double calculateRampedPower(double powerDesired, double powerCurrent) {
 		// Check if the power change exceeded the max power change, and limit the power change if so
-		if (powerDesired < powerCurrent)
-		{
+		if (powerDesired < powerCurrent) {
 			return Math.max(powerDesired,
 					powerCurrent - TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
-		}
-		else if (powerDesired < powerCurrent)
-		{
+		} else if (powerDesired < powerCurrent) {
 			return Math.min(powerDesired,
 					powerCurrent + TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
 		}
 		return powerDesired;
 	}
 
-	public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason)
-	{
+	public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) {
 		// Set desired motor powers
 		LeftDriveFalconMain.set(leftPowerDesired);
 		RightDriveFalconMain.set(rightPowerDesired);
@@ -109,8 +97,7 @@ public class TankDrivetrainSubsystem extends SubsystemBase
 	}
 
 	@Override
-	public void periodic()
-	{
+	public void periodic() {
 		// Get the current motor powers
 		double rightPowerCurrent = RightDriveFalconMain.get();
 		double leftPowerCurrent = LeftDriveFalconMain.get();

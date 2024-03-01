@@ -34,6 +34,7 @@ public class RobotContainer {
 	private void configureSecondaryBindings() {
 	}
 
+	@SuppressWarnings("unused")
 	public static ShuffleboardTab getShuffleboardTab() {
 		return instance.ShuffleboardTab;
 	}

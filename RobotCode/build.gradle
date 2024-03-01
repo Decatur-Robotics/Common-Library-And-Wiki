@@ -1,3 +1,4 @@
+//file:noinspection DependencyNotationArgument
 import edu.wpi.first.gradlerio.GradleRIOPlugin
 
 plugins {
