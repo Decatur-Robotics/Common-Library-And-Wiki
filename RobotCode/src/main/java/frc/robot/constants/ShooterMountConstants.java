@@ -16,7 +16,7 @@ public class ShooterMountConstants
 	/** Angle in encoder ticks for shooting at speaker */
 	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 100;
 
-	public static final double SHOOTER_MOUNT_KP = 0.1;
+	public static final double SHOOTER_MOUNT_KP = 0; //0.4;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0;
 	public static final double SHOOTER_MOUNT_KS = 0;
@@ -25,9 +25,9 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_KG = 0;
 
 	/** Rotations per second */
-	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 0.1;
+	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 10;
 	/** Rotations per second per second */
-	public static final double SHOOTER_MOUNT_ACCELERATION = 0.1;
+	public static final double SHOOTER_MOUNT_ACCELERATION = 10;
 
 	/** Tolerance for determining mount is within range to shoot in encoder ticks */
 	public static final double AIMING_DEADBAND = 100;

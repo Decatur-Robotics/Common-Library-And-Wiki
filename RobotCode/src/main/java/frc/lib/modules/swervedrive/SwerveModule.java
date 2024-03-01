@@ -67,12 +67,16 @@ public class SwerveModule implements ILogSource
 
 		openLoopDriveRequest = new DutyCycleOut(0);
 
+		angleEncoder.optimizeBusUtilization();
+		angleEncoder.getAbsolutePosition().setUpdateFrequency(200);
+
 		mDriveMotor.optimizeBusUtilization();
-		mDriveMotor.getRotorPosition().setUpdateFrequency(20);
-		mDriveMotor.getRotorVelocity().setUpdateFrequency(20);
+		mDriveMotor.getRotorPosition().setUpdateFrequency(200);
+		mDriveMotor.getRotorVelocity().setUpdateFrequency(200);
+		mDriveMotor.getDutyCycle().setUpdateFrequency(200);
 
 		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
 		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 500);
 		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 500);
 		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 500);
@@ -87,6 +91,7 @@ public class SwerveModule implements ILogSource
 		 * This is a custom optimize function, since default WPILib optimize assumes continuous
 		 * controller which CTRE and Rev onboard is not
 		 */
+
 		desiredState = CTREModuleState.optimize(desiredState, getState().angle);
 		setAngle(desiredState);
 		setSpeed(desiredState, isOpenLoop);
@@ -98,7 +103,6 @@ public class SwerveModule implements ILogSource
 		// using a PercentOutput of motor power
 		if (isOpenLoop)
 		{
-
 			double percentOutput = desiredState.speedMetersPerSecond / SwerveConstants.MAX_SPEED;
 			openLoopDriveRequest.Output = percentOutput;
 			mDriveMotor.setControl(openLoopDriveRequest);
