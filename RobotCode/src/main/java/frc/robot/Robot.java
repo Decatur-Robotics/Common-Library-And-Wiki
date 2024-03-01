@@ -4,19 +4,22 @@
 package frc.robot;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.lib.core.TeamSubsystemBase;
+import frc.lib.core.ILogSource;
+import frc.lib.core.ModeBasedSubsystem;
 
-public class Robot extends TimedRobot
+public class Robot extends TimedRobot implements ILogSource
 {
-	private Command autonomousCommand;
-	private RobotContainer robotContainer;
 
-	private static List<TeamSubsystemBase> subsystems = new ArrayList<>();
+	private static Robot instance;
+
+	private Optional<Command> autonomousCommand;
+
+	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
@@ -25,11 +28,9 @@ public class Robot extends TimedRobot
 	@Override
 	public void robotInit()
 	{
-		// Instantiate our RobotContainer. This will perform all our button bindings,
-		// and put our
-		// autonomous chooser on the dashboard.
-
-		robotContainer = new RobotContainer();
+		if (instance != null)
+			System.err.println("WARNING: Robot instance already exists!");
+		instance = this;
 	}
 
 	/**
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot
 	@Override
 	public void disabledInit()
 	{
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.disabledInit();
 		}
@@ -72,16 +73,18 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
-		for (TeamSubsystemBase subsystem : subsystems)
+		logInfo("Autonomous intializing...");
+
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.autonomousInit();
 		}
 
-		autonomousCommand = robotContainer.getAutonomousCommand();
+		logFine("Getting and running auto command...");
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
+		if (autonomousCommand.isPresent())
 		{
-			autonomousCommand.schedule();
+			autonomousCommand.get().schedule();
 		}
 	}
 
@@ -93,16 +96,19 @@ public class Robot extends TimedRobot
 	@Override
 	public void teleopInit()
 	{
+		logInfo("Teleop initializing...");
+
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (autonomousCommand != null)
+		if (autonomousCommand.isPresent())
 		{
-			autonomousCommand.cancel();
+			logFine("Cancelling auto command...");
+			autonomousCommand.get().cancel();
 		}
 
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.teleopInit();
 		}
@@ -119,7 +125,7 @@ public class Robot extends TimedRobot
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
 
-		for (TeamSubsystemBase subsystem : subsystems)
+		for (ModeBasedSubsystem subsystem : subsystems)
 		{
 			subsystem.testInit();
 		}
@@ -140,8 +146,8 @@ public class Robot extends TimedRobot
 	public void simulationPeriodic()
 	{}
 
-	public static void addSubsystem(TeamSubsystemBase subsystem)
+	public static void addSubsystem(ModeBasedSubsystem subsystem)
 	{
-		subsystems.add(subsystem);
+		instance.subsystems.add(subsystem);
 	}
 }

@@ -1,89 +1,140 @@
 package frc.lib.core.motors;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.BaseTalonConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.StatusSignal;
 
-import frc.lib.core.PidParameters;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ControlModeValue;
+
+import frc.lib.core.util.TeamUtils;
 
 /**
- * A wrapper class for Motors that helps to consistently and easily perform the following functions:
- * -Keep current and max speeds -Get and Reset encoder values -Lots and lots of SmartDashboard
- * information
+ * Used for everything that isn't a NEO. A wrapper class for motors that helps to consistently and
+ * easily perform the following functions: 1. Keep current and max speeds. 2. Get and reset encoder
+ * values. 3. Lots and lots of SmartDashboard information
  */
-public class TeamTalonFX extends WPI_TalonFX implements ITeamTalon {
+public class TeamTalonFX extends TalonFX
+{
+
+  private final VoltageOut voltageRequest = new VoltageOut(0);
+
+  public static double telemetryUpdateInterval_secs = 0.0;
 
   private double lastTelemetryUpdate = 0;
 
-  protected final String smartDashboardPrefix;
+  private final String smartDashboardPrefix;
 
-  protected int numEStops = 0;
+  private double maxSpeed = Double.MAX_VALUE;
 
-  protected double maxSpeed = Double.MAX_VALUE;
+  private double encoderOffset;
 
-  protected PidParameters pidProfiles[] = new PidParameters[4];
+  /** I would love to understand how to make this work. Avoid using right now */
+  @Deprecated
+  public static boolean isPidControlMode(final ControlModeValue mode)
+  {
+    switch (mode)
+    {
+    // case Current:
+    case DisabledOutput:
+    case Follower:
+      return false;
+    default:
+      return true;
+    }
+  }
 
-  public TeamTalonFX(String smartDashboardPrefix, int deviceNumber) {
+  public TeamTalonFX(final String smartDashboardPrefix, final int deviceNumber)
+  {
     super(deviceNumber);
     this.smartDashboardPrefix = smartDashboardPrefix;
+
     // assuming quadencoder
-    this.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    setControl(voltageRequest.withOutput(12));
+
   }
 
-  public long getCurrentEncoderValue() {
+  public void periodic()
+  {
+    final double now = TeamUtils.getCurrentTime();
+    // Renato told me to leave this alone, though we may wanna change it later.
+
+    if ((now - getLastTelemetryUpdate()) < telemetryUpdateInterval_secs)
+    {
+      return;
+    }
+
+    setLastTelemetryUpdate(now);
+
+    final StatusSignal<Double> currentSpeed = getVelocity();
+
+    if (getMaxSpeed() == Double.MAX_VALUE || currentSpeed.getValueAsDouble() > getMaxSpeed())
+      setMaxSpeed(currentSpeed.getValueAsDouble());
+  }
+
+  public double getCurrentEncoderValue()
+  {
     // This should be configurable
-    return (long) getSensorCollection().getIntegratedSensorPosition();
+    return getRotorPosition().getValueAsDouble() + encoderOffset;
   }
 
-  public void set(double power, String reason) {
+  public boolean isRunningPidControlMode()
+  {
+    return isPidControlMode(getControlMode().getValue());
+  }
+
+  /**
+   * @param power  Between -1 and 1
+   * @param reason Unused for now
+   * @see #set(double)
+   */
+  public void set(final double power, final String reason)
+  {
     super.set(power);
-    //Logs.info("Set power to " + power + " REASON: " + reason);
+    // Logs.info("Set power to " + power + " REASON: " + reason);
   }
 
-  public void resetEncoder() {
-    getSensorCollection().setIntegratedSensorPosition(0, 0);
+  public void resetEncoder()
+  {
+    encoderOffset = -1 * getRotorPosition().getValueAsDouble();
+
   }
 
-  public double getLastTelemetryUpdate() {
+  public double getLastTelemetryUpdate()
+  {
     return lastTelemetryUpdate;
   }
 
-  public void setLastTelemetryUpdate(double val) {
+  public void setLastTelemetryUpdate(final double val)
+  {
     lastTelemetryUpdate = val;
   }
 
-  public String getSmartDashboardPrefix() {
+  public String getSmartDashboardPrefix()
+  {
     return smartDashboardPrefix;
   }
 
-  public int getNumEStops() {
-    return numEStops;
-  }
-
-  public void setNumEStops(int val) {
-    numEStops = val;
-  }
-
-  public double getMaxSpeed() {
+  public double getMaxSpeed()
+  {
     return maxSpeed;
   }
 
-  public void setMaxSpeed(double val) {
+  public void setMaxSpeed(final double val)
+  {
     maxSpeed = val;
   }
 
-  public PidParameters[] getPidProfiles() {
-    return pidProfiles;
+  /** please make this work. I don't know how */
+  public double getVelocityError()
+  {
+    if (getControlMode().getValue() != ControlModeValue.VelocityDutyCycle)
+    {
+      return 0;
+    }
+
+    final double currentSpeed = getVelocity().getValueAsDouble();
+    return (getRotorPosition().getValueAsDouble() - currentSpeed);
   }
 
-  // Public wrapper for protected method (which aren't allowed in interfaces)
-  // Use this for configurations which can be shared between SRX and FX
-  // Otherwise down cast and use configAllSettings(TalonFXConfiguration allConfigs)
-  // if using config settings only available for TalonFX
-  public ErrorCode configBaseAllSettings(BaseTalonConfiguration allConfigs) {
-    return configAllSettings(allConfigs);
-  }
-
-  
 }

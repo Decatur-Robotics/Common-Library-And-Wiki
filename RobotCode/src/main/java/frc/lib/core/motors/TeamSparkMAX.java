@@ -1,170 +1,135 @@
 package frc.lib.core.motors;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.core.PidParameters;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+
 import frc.lib.core.util.TeamUtils;
 
-import com.revrobotics.CANSparkMax;
+/**
+ * Used for NEOs. Provides support for PID control and an encoder.
+ */
+public class TeamSparkMAX extends CANSparkMax
+{
 
-import com.revrobotics.RelativeEncoder;
-
-import com.revrobotics.REVLibError;
-import com.revrobotics.SparkMaxPIDController;
-
-public class TeamSparkMAX extends CANSparkMax {
-  public static double telemetryUpdateInterval_secs = 0.0;
+  private static final double TELEMETRY_UPDATE_INTERVAL_SECS = 0.0;
   private double lastTelemetryUpdate = 0;
 
-  protected final String smartDashboardPrefix;
+  private final String SmartDashboardPrefix;
 
-  protected int numEStops = 0;
+  private double maxSpeed = Double.MAX_VALUE;
 
-  protected double maxSpeed = Double.MAX_VALUE;
+  private double smartMotionLoopTarget;
 
-  protected double smartMotionLoopTarget;
+  private final SparkPIDController CanPidController;
 
-  public SparkMaxPIDController canPidController;
+  private final RelativeEncoder CanEncoder;
 
-  public RelativeEncoder canEncoder;
+  private CANSparkMax.ControlType ctrlType;
 
-  protected PidParameters pidProfiles[] = new PidParameters[4];
-
-  private CANSparkMax.ControlType ctrlType = null;
-
-  public TeamSparkMAX(String smartDashboardPrefix, int deviceID) {
+  public TeamSparkMAX(final String smartDashboardPrefix, final int deviceID)
+  {
     super(deviceID, MotorType.kBrushless); // Neos are brushless
-    this.smartDashboardPrefix = smartDashboardPrefix;
-    canPidController = getPIDController();
-    canEncoder = getEncoder();
+
+    this.SmartDashboardPrefix = smartDashboardPrefix;
+
+    CanPidController = getPIDController();
+    CanEncoder = getEncoder();
+
+    enableVoltageCompensation(12.0);
   }
 
-  private static boolean isPidControlMode(CANSparkMax.ControlType mode) {
+  public String getSmartDashboardPrefix()
+  {
+    return SmartDashboardPrefix;
+  }
+
+  public SparkPIDController getPidController()
+  {
+    return CanPidController;
+  }
+
+  private static boolean isPidControlMode(final CANSparkMax.ControlType mode)
+  {
 
     // kDutyCycle, kVelocity, kVoltage, kPosition, kSmartMotion, kCurrent, kSmartVelocity
 
     // Are all possible values. If one of these are not part of PID, add case for them and return
     // false.
-    if (mode == null) {
-      return true;
-    }
-    switch (mode) {
-      case kCurrent:
-        return false;
-      default:
-        return true;
-    }
+    return mode != CANSparkMax.ControlType.kCurrent;
   }
 
-  public void noteEmergencyStop() {
-    numEStops++;
-  }
-
-  public double getCurrentEncoderValue() {
+  public double getCurrentEncoderValue()
+  {
     // This should be configurable
-    return canEncoder.getPosition();
+    return CanEncoder.getPosition();
   }
 
-  public void resetEncoder() {
-    canEncoder.setPosition(0.0);
+  public void resetEncoder()
+  {
+    CanEncoder.setPosition(0.0);
   }
 
-  public boolean
-      isRunningPidControlMode() { // Dunno if this is safe, but its the easiest way to get around
+  public boolean isRunningPidControlMode()
+  {
+    // Dunno if this is safe, but its the easiest way to get around
     // problems with the PidParameters.
     return isPidControlMode(ctrlType);
   }
 
-  public void periodic() {
-    double now = TeamUtils.getCurrentTime();
+  public void periodic()
+  {
+    final double now = TeamUtils.getCurrentTime();
+    // Renato told me to leave this alone, though we may wanna change it later.
 
-    if ((now - lastTelemetryUpdate) < telemetryUpdateInterval_secs) {
+    if ((now - lastTelemetryUpdate) < TELEMETRY_UPDATE_INTERVAL_SECS)
+    {
       return;
     }
 
     lastTelemetryUpdate = now;
 
-    double currentEncoderValue = getCurrentEncoderValue();
-    double currentSpeed = canEncoder.getVelocity();
+    final double currentSpeed = CanEncoder.getVelocity();
 
-    SmartDashboard.putNumber(smartDashboardPrefix + ".power", super.get());
-
-    if (maxSpeed == Double.MAX_VALUE || currentSpeed > maxSpeed) maxSpeed = currentSpeed;
-
-    // SmartDashboard.putNumber(smartDashboardPrefix + ".PowerPercent", getMotorOutputPercent());
-
-    SmartDashboard.putNumber(smartDashboardPrefix + ".Position-ticks", currentEncoderValue);
-
-    SmartDashboard.putNumber(smartDashboardPrefix + ".speedPer100ms", currentSpeed);
-    SmartDashboard.putNumber(smartDashboardPrefix + ".speedPerSec", currentSpeed * 10);
-
-    SmartDashboard.putNumber(smartDashboardPrefix + ".maxSpeedPer100ms", maxSpeed);
-    SmartDashboard.putNumber(smartDashboardPrefix + ".maxSpeedPerSec", maxSpeed * 10);
-
-    // SmartDashboard.putString(smartDashboardPrefix + "Mode", getControlMode().toString());
-    SmartDashboard.putNumber(smartDashboardPrefix + "EmergencyStops", numEStops);
-
-    SmartDashboard.putNumber(smartDashboardPrefix + ".error", getVelocityError());
-    /*
-    switch (getControlMode()) {
-      case Position:
-      case Velocity:
-        SmartDashboard.putNumber(
-            smartDashboardPrefix + "Target",
-            getClosedLoopTarget(0)); // 0 is the primary closed-loop
-        SmartDashboard.putNumber(smartDashboardPrefix + "Error", getClosedLoopError(0));
-        break;
-      default:
-        // Fill in Zeros when we're not in a mode that is using it
-        SmartDashboard.putNumber(smartDashboardPrefix + "Target", 0);
-        SmartDashboard.putNumber(smartDashboardPrefix + "Error", 0);
-    }*/
-
-    SmartDashboard.putNumber(smartDashboardPrefix + ".setpoint", getClosedLoopTarget());
+    if (maxSpeed == Double.MAX_VALUE || currentSpeed > maxSpeed)
+      maxSpeed = currentSpeed;
   }
 
-  public double getClosedLoopTarget() {
+  public double getClosedLoopTarget()
+  {
     return this.smartMotionLoopTarget;
   }
 
-  public double setClosedLoopTarget(double value) {
+  public double setClosedLoopTarget(final double value)
+  {
     this.smartMotionLoopTarget = value;
     return this.smartMotionLoopTarget;
   }
 
-  public REVLibError setSmartMotionVelocity(double speed, String reason) {
+  public REVLibError setSmartMotionVelocity(final double speed, final String reason)
+  {
     setClosedLoopTarget(speed);
     ctrlType = CANSparkMax.ControlType.kSmartVelocity;
-    REVLibError errors = this.canPidController.setReference(Math.abs(speed), CANSparkMax.ControlType.kSmartVelocity);
-    //Logs.severe("Set smart motion velocity to: " + speed + " on motor: " + smartDashboardPrefix + " for reason: " + reason);
+    final REVLibError errors = this.CanPidController.setReference(Math.abs(speed),
+        CANSparkMax.ControlType.kSmartVelocity);
     return errors;
   }
 
-  public double getVelocityError() {
-    /* if (getControlMode() != CANSparkMax.ControlType.kSmartVelocity) {
-      return 0;
-    } */
-    double currentSpeed = canEncoder.getVelocity();
+  public double getVelocityError()
+  {
+    final double currentSpeed = CanEncoder.getVelocity();
     return getClosedLoopTarget() - currentSpeed;
   }
 
-  public void configureWithPidParameters(PidParameters pidParameters, int pidSlotIndex) {
-    pidProfiles[pidSlotIndex] = pidParameters;
-
-    canPidController.setFF(pidParameters.kF, pidSlotIndex); // Feed-forward
-    canPidController.setP(pidParameters.kP, pidSlotIndex);
-    canPidController.setI(pidParameters.kI, pidSlotIndex);
-    canPidController.setD(pidParameters.kD, pidSlotIndex);
-    canPidController.setOutputRange(-pidParameters.kPeakOutput, pidParameters.kPeakOutput);
-
-    canPidController.setSmartMotionMaxVelocity(pidParameters.maxVel, pidSlotIndex);
-    canPidController.setSmartMotionMinOutputVelocity(0, pidSlotIndex);
-    canPidController.setSmartMotionMaxAccel(pidParameters.maxAcc, pidSlotIndex);
-    canPidController.setSmartMotionAllowedClosedLoopError(
-        pidParameters.errorTolerance, pidSlotIndex);
-  }
-
-  public void set(double power, String reason) {
+  /**
+   * @param power  Between -1 and 1
+   * @param reason Unused for now
+   * @see #set(double)
+   */
+  public void set(final double power, final String reason)
+  {
     super.set(power);
-    //Logs.info("Set power to: " + power + " on motor: " + smartDashboardPrefix + " for reason: " + reason);
   }
+
 }
