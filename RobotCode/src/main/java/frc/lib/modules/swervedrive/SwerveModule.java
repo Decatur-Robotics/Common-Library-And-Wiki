@@ -134,6 +134,11 @@ public class SwerveModule implements ILogSource
 		return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
 	}
 
+	private Rotation2d getAngle()
+	{
+		return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+	}
+
 	public void resetToAbsolute()
 	{
 		double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
@@ -175,7 +180,7 @@ public class SwerveModule implements ILogSource
 		return new SwerveModuleState(
 				Conversions.falconToMPS(mDriveMotor.getRotorPosition().getValueAsDouble(),
 						SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO),
-				getCanCoder());
+				getAngle());
 	}
 
 	public SwerveModulePosition getPosition()
@@ -183,7 +188,7 @@ public class SwerveModule implements ILogSource
 		return new SwerveModulePosition(
 				Conversions.falconToMeters(mDriveMotor.getRotorPosition().getValueAsDouble(),
 						SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO),
-				getCanCoder());
+				getAngle());
 	}
 
 	/**
