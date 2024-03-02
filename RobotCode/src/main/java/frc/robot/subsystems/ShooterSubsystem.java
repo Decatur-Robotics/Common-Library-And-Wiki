@@ -31,8 +31,11 @@ public class ShooterSubsystem extends SubsystemBase
 
 		shooterMotorMain.setAllCanPeriodicFramePeriods(500);
 		shooterMotorSub.setAllCanPeriodicFramePeriods(500);
+		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+		shooterMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 
+		shooterMotorMain.setInverted(true);
 		shooterMotorSub.follow(shooterMotorMain, true);
 		shooterMotorMain.setIdleMode(IdleMode.kBrake);
 		shooterMotorSub.setIdleMode(IdleMode.kBrake);

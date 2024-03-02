@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +31,7 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerMotorMain = new TeamSparkBase("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
 		indexerMotorSub = new TeamSparkBase("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
 
+		indexerMotorMain.setInverted(true);
 		indexerMotorSub.follow(indexerMotorMain, true);
 
 		indexerMotorMain.enableVoltageCompensation(Constants.MAX_VOLTAGE);
@@ -48,6 +50,9 @@ public class IndexerSubsystem extends SubsystemBase
 
 		indexerMotorMain.setAllCanPeriodicFramePeriods(500);
 		indexerMotorSub.setAllCanPeriodicFramePeriods(500);
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity",
 				() -> indexerMotorMain.getEncoder().getVelocity());

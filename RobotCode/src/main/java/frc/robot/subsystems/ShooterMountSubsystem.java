@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
 import frc.robot.RobotContainer;
@@ -27,6 +28,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 	private InterpolatingDoubleTreeMap shooterMountAngleTreeMap;
 	/** Key: distance to speaker in meters, Value: Note velocity in meters per second */
 	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
+
+	private GenericEntry shuffleBoardRotation;
 
 	public ShooterMountSubsystem()
 	{
@@ -77,14 +80,17 @@ public class ShooterMountSubsystem extends SubsystemBase
 		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
-				() -> (mainMotor.getCurrentEncoderValue() * 2048));
+				() -> (mainMotor.getCurrentEncoderValue()));
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
 				() -> targetRotation);
+
+		shuffleBoardRotation = RobotContainer.getShuffleboardTab().add("Input Shooter Mount Rotation", 0.0).getEntry();
 	}
 
 	@Override
 	public void periodic()
 	{
+		targetRotation = shuffleBoardRotation.getDouble(0.0);
 		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
 	}
 

@@ -10,7 +10,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -47,12 +49,12 @@ public class RobotContainer
 	private final ShuffleboardTab ShuffleboardTab;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	private final ClimberSubsystem ClimberSubsystem;
+	// private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
 	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
-	private final IntakeSubsystem IntakeSubsystem;
+	// private final IntakeSubsystem IntakeSubsystem;
 
 	private final Pigeon2 gyro;
 
@@ -60,6 +62,8 @@ public class RobotContainer
 	public RobotContainer()
 	{
 		instance = this;
+
+		new PowerDistribution(26, ModuleType.kRev).setSwitchableChannel(true);
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
@@ -69,12 +73,12 @@ public class RobotContainer
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		ClimberSubsystem = new ClimberSubsystem();
+		// ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
 		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
-		IntakeSubsystem = new IntakeSubsystem();
+		// IntakeSubsystem = new IntakeSubsystem();
 
 		// Autonomous.init(this);
 
@@ -112,7 +116,7 @@ public class RobotContainer
 		final JoystickButton DownButton = new JoystickButton(SecondaryController, LogitechControllerButtons.down);
 
 		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
-		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
+		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
 		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		// AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
@@ -168,9 +172,9 @@ public class RobotContainer
 		return IndexerSubsystem;
 	}
 
-	public IntakeSubsystem getIntake()
-	{
-		return IntakeSubsystem;
-	}
+	// public IntakeSubsystem getIntake()
+	// {
+	// 	return IntakeSubsystem;
+	// }
 
 }

@@ -17,11 +17,11 @@ public class ShooterConstants
 	/**
 	 * Maximum safe velocity in RPM
 	 */
-	public static final double SHOOTER_MAX_VELOCITY = 200;
+	public static final double SHOOTER_MAX_VELOCITY = 1000;
 	/**
 	 * Velocity for shooting at speaker in RPM
 	 */
-	public static final double SHOOTER_SPEAKER_VELOCITY = 200;
+	public static final double SHOOTER_SPEAKER_VELOCITY = 1000;
 	/**
 	 * Velocity for shooting at amp in RPM
 	 */
