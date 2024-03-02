@@ -8,6 +8,7 @@ import frc.robot.constants.Ports;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkBase;
@@ -15,8 +16,8 @@ import frc.lib.core.motors.TeamSparkBase;
 public class IntakeSubsystem extends SubsystemBase
 {
 
-        private TeamSparkBase intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotorTop,
-                        intakeRollerMotorBottom;
+        private TeamSparkBase intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotorTop;
+                        // intakeRollerMotorBottom;
         private double desiredRotation, desiredVelocity;
         private SparkPIDController intakeDeployPidController, intakeRollerPidController;
 
@@ -28,11 +29,17 @@ public class IntakeSubsystem extends SubsystemBase
                                 Ports.INTAKE_DEPLOY_MOTOR_LEFT);
                 intakeRollerMotorTop = new TeamSparkBase("Intake Roller Motor Top",
                                 Ports.INTAKE_ROLLER_MOTOR_TOP);
-                intakeRollerMotorBottom = new TeamSparkBase("Intake Roller Motor Bottom",
-                                Ports.INTAKE_ROLLER_MOTOR_BOTTOM);
+                // intakeRollerMotorBottom = new TeamSparkBase("Intake Roller Motor Bottom",
+                //                 Ports.INTAKE_ROLLER_MOTOR_BOTTOM);
 
-                intakeRollerMotorTop.setAllCanPeriodicFramePeriods(500);
-                intakeRollerMotorBottom.setAllCanPeriodicFramePeriods(500);
+                intakeDeployMotorRight.setAllCanPeriodicFramePeriods(10000);
+                intakeDeployMotorLeft.setAllCanPeriodicFramePeriods(10000);
+                intakeRollerMotorTop.setAllCanPeriodicFramePeriods(10000);
+                // intakeRollerMotorBottom.setAllCanPeriodicFramePeriods(10000);
+                intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+                // intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+                intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+                intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 
                 // Configure deployment motors
                 intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
@@ -49,11 +56,12 @@ public class IntakeSubsystem extends SubsystemBase
                 intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_KFF, 0);
 
                 // Configure roller motors
-                intakeRollerMotorBottom.follow(intakeRollerMotorTop, true);
+                intakeRollerMotorTop.setInverted(true);
+                // intakeRollerMotorBottom.follow(intakeRollerMotorTop, true);
                 intakeRollerMotorTop.setSmartCurrentLimit(Constants.MAX_CURRENT);
-                intakeRollerMotorBottom.setSmartCurrentLimit(Constants.MAX_CURRENT);
+                // intakeRollerMotorBottom.setSmartCurrentLimit(Constants.MAX_CURRENT);
                 intakeRollerMotorTop.setIdleMode(IdleMode.kBrake);
-                intakeRollerMotorBottom.setIdleMode(IdleMode.kBrake);
+                // intakeRollerMotorBottom.setIdleMode(IdleMode.kBrake);
 
                 // Configure roller PID
                 intakeRollerPidController = intakeRollerMotorTop.getPIDController();
@@ -79,7 +87,8 @@ public class IntakeSubsystem extends SubsystemBase
         public void periodic()
         {
                 intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
-                intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
+                // intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
+                intakeRollerMotorTop.set(0.5);
         }
 
         /** @param desiredRotation Ticks */

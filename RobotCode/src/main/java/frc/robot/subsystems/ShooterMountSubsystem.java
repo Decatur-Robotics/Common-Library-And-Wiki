@@ -29,8 +29,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/** Key: distance to speaker in meters, Value: Note velocity in meters per second */
 	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
 
-	private GenericEntry shuffleBoardRotation;
-
 	public ShooterMountSubsystem()
 	{
 
@@ -83,14 +81,11 @@ public class ShooterMountSubsystem extends SubsystemBase
 				() -> (mainMotor.getCurrentEncoderValue()));
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
 				() -> targetRotation);
-
-		shuffleBoardRotation = RobotContainer.getShuffleboardTab().add("Input Shooter Mount Rotation", 0.0).getEntry();
 	}
 
 	@Override
 	public void periodic()
 	{
-		targetRotation = shuffleBoardRotation.getDouble(0.0);
 		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
 	}
 

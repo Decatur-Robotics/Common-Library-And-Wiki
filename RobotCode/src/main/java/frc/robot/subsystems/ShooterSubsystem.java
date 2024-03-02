@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase
 
 	private double desiredShooterVelocity;
 
-	private SparkPIDController shooterPid;
+	private SparkPIDController shooterPid, shooterPidLeft;
 	private TeamSparkBase shooterMotorMain, shooterMotorSub;
 
 	public ShooterSubsystem()
@@ -29,14 +29,15 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterMotorMain = new TeamSparkBase("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
 		shooterMotorSub = new TeamSparkBase("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
 
-		shooterMotorMain.setAllCanPeriodicFramePeriods(500);
-		shooterMotorSub.setAllCanPeriodicFramePeriods(500);
-		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-		shooterMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+		shooterMotorMain.setAllCanPeriodicFramePeriods(10000);
+		shooterMotorSub.setAllCanPeriodicFramePeriods(10000);
+		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10);
+		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10);
+		shooterMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
 
 		shooterMotorMain.setInverted(true);
-		shooterMotorSub.follow(shooterMotorMain, true);
+		// shooterMotorSub.follow(shooterMotorMain, true);
 		shooterMotorMain.setIdleMode(IdleMode.kBrake);
 		shooterMotorSub.setIdleMode(IdleMode.kBrake);
 		shooterMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
@@ -49,10 +50,22 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterPid.setD(ShooterConstants.SHOOTER_KD);
 		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
 
+		shooterPidLeft = shooterMotorSub.getPIDController();
+
+		shooterPidLeft.setP(ShooterConstants.SHOOTER_KP);
+		shooterPidLeft.setI(ShooterConstants.SHOOTER_KI);
+		shooterPidLeft.setD(ShooterConstants.SHOOTER_KD);
+		shooterPidLeft.setFF(ShooterConstants.SHOOTER_KF);
+
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity",
 				() -> shooterMotorMain.getVelocity());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Velocity",
 				() -> desiredShooterVelocity);
+	}
+
+	public double getVelocity()
+	{
+		return shooterMotorMain.getVelocity();
 	}
 
 	public double getShooterMotorVelocityError()
@@ -83,6 +96,7 @@ public class ShooterSubsystem extends SubsystemBase
 	public void periodic()
 	{
 		shooterPid.setReference(desiredShooterVelocity, ControlType.kVelocity);
+		shooterPidLeft.setReference(desiredShooterVelocity, ControlType.kVelocity);
 	}
 
 }

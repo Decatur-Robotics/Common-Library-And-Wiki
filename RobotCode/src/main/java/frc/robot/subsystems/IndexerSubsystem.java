@@ -48,8 +48,8 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setD(IndexerConstants.INDEXER_KD);
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
 
-		indexerMotorMain.setAllCanPeriodicFramePeriods(500);
-		indexerMotorSub.setAllCanPeriodicFramePeriods(500);
+		indexerMotorMain.setAllCanPeriodicFramePeriods(10000);
+		indexerMotorSub.setAllCanPeriodicFramePeriods(10000);
 		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);

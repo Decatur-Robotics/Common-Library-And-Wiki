@@ -30,13 +30,10 @@ public class ShooterOverrideCommand extends Command
 		shooter.setShooterMotorVelocity(desiredShooterVelocity, "joystick said to shoot");
 
 		// If-statement to see if motor is spun up
-		if (Math.abs(shooter.getShooterMotorVelocityError()) <= ShooterConstants.SHOOTER_VELOCITY_TOLERANCE)
+		// if (shooter.isUpToSpeed())
+		if (shooter.getVelocity() > desiredShooterVelocity)
 		{
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "motor is spun");
-		}
-		else
-		{
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "motor is not spun");
 		}
 	}
 

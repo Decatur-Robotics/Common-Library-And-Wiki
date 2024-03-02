@@ -80,7 +80,7 @@ public class RobotContainer
 		IndexerSubsystem = new IndexerSubsystem();
 		// IntakeSubsystem = new IntakeSubsystem();
 
-		// Autonomous.init(this);
+		Autonomous.init(this);
 
 		// Configure the button bindings
 		configurePrimaryBindings();
@@ -119,7 +119,7 @@ public class RobotContainer
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
 		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		// AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));

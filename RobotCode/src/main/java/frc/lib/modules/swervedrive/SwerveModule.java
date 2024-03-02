@@ -75,14 +75,14 @@ public class SwerveModule implements ILogSource
 		mDriveMotor.getRotorVelocity().setUpdateFrequency(200);
 		mDriveMotor.getDutyCycle().setUpdateFrequency(200);
 
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10000);
 		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 500);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 500);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 500);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 500);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 500);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 500);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop)
@@ -91,7 +91,7 @@ public class SwerveModule implements ILogSource
 		 * This is a custom optimize function, since default WPILib optimize assumes continuous
 		 * controller which CTRE and Rev onboard is not
 		 */
-
+		
 		desiredState = CTREModuleState.optimize(desiredState, getState().angle);
 		setAngle(desiredState);
 		setSpeed(desiredState, isOpenLoop);
