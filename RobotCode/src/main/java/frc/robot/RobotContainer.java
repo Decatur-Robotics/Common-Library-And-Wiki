@@ -19,9 +19,9 @@ import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
 import frc.lib.core.LogitechControllerButtons;
 import frc.robot.commands.AimShooterCommand;
-// import frc.robot.commands.ClimberOverrideCommand;
-// import frc.robot.commands.ClimberSpeedCommand;
-// import frc.robot.commands.ClimberToPositionCommand;
+import frc.robot.commands.ClimberOverrideCommand;
+import frc.robot.commands.ClimberSpeedCommand;
+import frc.robot.commands.ClimberToPositionCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
@@ -31,12 +31,12 @@ import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
 import frc.robot.constants.VisionConstants;
-// import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /** The container for the robot. Contains subsystems, OI devices, and commands. */
 public class RobotContainer
@@ -47,12 +47,12 @@ public class RobotContainer
 	private final ShuffleboardTab ShuffleboardTab;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	// private final ClimberSubsystem ClimberSubsystem;
+	private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
-	// private final ShooterMountSubsystem ShooterMountSubsystem;
+	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
-	// private final IndexerSubsystem IndexerSubsystem;
-	// private final IntakeSubsystem IntakeSubsystem;
+	private final IndexerSubsystem IndexerSubsystem;
+	private final IntakeSubsystem IntakeSubsystem;
 
 	private final Pigeon2 gyro;
 
@@ -69,12 +69,12 @@ public class RobotContainer
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		// ClimberSubsystem = new ClimberSubsystem();
+		ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
-		// ShooterMountSubsystem = new ShooterMountSubsystem();
+		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
-		// IndexerSubsystem = new IndexerSubsystem();
-		// IntakeSubsystem = new IntakeSubsystem();
+		IndexerSubsystem = new IndexerSubsystem();
+		IntakeSubsystem = new IntakeSubsystem();
 
 		// Autonomous.init(this);
 
@@ -93,7 +93,7 @@ public class RobotContainer
 
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
-		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
+		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
 		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
@@ -153,24 +153,24 @@ public class RobotContainer
 		return ShooterSubsystem;
 	}
 
-	// public ShooterMountSubsystem getShooterMount()
-	// {
-	// 	return ShooterMountSubsystem;
-	// }
+	public ShooterMountSubsystem getShooterMount()
+	{
+		return ShooterMountSubsystem;
+	}
 
 	// public VisionSubsystem getVision()
 	// {
 	// 	return VisionSubsystem;
 	// }
 
-	// public IndexerSubsystem getIndexer()
-	// {
-	// 	return IndexerSubsystem;
-	// }
+	public IndexerSubsystem getIndexer()
+	{
+		return IndexerSubsystem;
+	}
 
-	// public IntakeSubsystem getIntake()
-	// {
-	// 	return IntakeSubsystem;
-	// }
+	public IntakeSubsystem getIntake()
+	{
+		return IntakeSubsystem;
+	}
 
 }
