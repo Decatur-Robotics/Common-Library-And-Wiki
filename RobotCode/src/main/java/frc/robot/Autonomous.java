@@ -5,8 +5,12 @@ import java.util.logging.Level;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,11 +18,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.core.ILogSource;
 import frc.lib.modules.swervedrive.SwerveConstants;
+import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
@@ -26,35 +33,33 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * <p>
- * A singleton class for handling autonomous. Puts dropdowns on Shuffleboard and
- * then reads from
+ * A singleton class for handling autonomous. Puts dropdowns on Shuffleboard and then reads from
  * them to dynamically generate an autonomous. Uses
- * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to
- * follow paths and run
+ * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths and run
  * commands.
  * </p>
  * <p>
- * <b>Usage:</b> Call {@link #init(RobotContainer)} in RobotContainer's
- * constructor. Then, to
+ * <b>Usage:</b> Call {@link #init(RobotContainer)} in RobotContainer's constructor. Then, to
  * actually get the autonomous command, call {@link #getAutoCommand()}.
  * </p>
  * <p>
- * <b>Autonomous Options:</b> The options are hardcoded; they are built off the
- * enums at the top of
- * the class and then manually read into dropdowns on Shuffleboard. I would like
- * to at some point
+ * <b>Autonomous Options:</b> The options are hardcoded; they are built off the enums at the top of
+ * the class and then manually read into dropdowns on Shuffleboard. I would like to at some point
  * improve this system to be more easily configureable.
  * </p>
  */
-public class Autonomous implements ILogSource {
+public class Autonomous implements ILogSource
+{
 
     // Options for configuring autonomous
 
-    private enum StartingPosition {
+    private enum StartingPosition
+    {
         Amp, Middle, HumanPlayer
     }
 
-    private enum AutoMode {
+    private enum AutoMode
+    {
         DoNothing, Leave, MultiNote
     }
 
@@ -66,7 +71,8 @@ public class Autonomous implements ILogSource {
     private final SendableChooser<StartingPosition> StartingPositionChooser;
     private final SendableChooser<AutoMode> AutoModeChooser;
 
-    private Autonomous(RobotContainer robotContainer) {
+    private Autonomous(RobotContainer robotContainer)
+    {
         instance = this;
         RobotContainer = robotContainer;
 
@@ -99,11 +105,13 @@ public class Autonomous implements ILogSource {
     }
 
     /** Registers commands for building autos through PathPlanner. */
-    private void registerNamedCommands() {
+    private void registerNamedCommands()
+    {
         logFine("Registering named commands...");
 
         // Get subsystems
         final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final ShooterSubsystem Shooter = RobotContainer.getShooter();
         final IndexerSubsystem Indexer = RobotContainer.getIndexer();
         final IntakeSubsystem Intake = null;
 
@@ -113,25 +121,29 @@ public class Autonomous implements ILogSource {
         // NamedCommands.registerCommand("Intake", IntakeCommand);
 
         NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer));
+        NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(
+                ShooterMount, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+        NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter,
+                Indexer, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, true));
 
         // Populate rotation commands
-        for (double rot : AutoConstants.AutoShooterMountRotations) {
-            NamedCommands.registerCommand("Aim to " + rot + " deg", new RotateShooterMountToPositionCommand(
-                    ShooterMount, rot));
+        for (double rot : AutoConstants.AutoShooterMountRotations)
+        {
+            NamedCommands.registerCommand("Aim to " + rot + " deg",
+                    new RotateShooterMountToPositionCommand(ShooterMount, rot));
             NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
-                    new SequentialCommandGroup(new ShootCommand(Indexer), new RotateShooterMountToPositionCommand(
-                            ShooterMount, rot)));
+                    new SequentialCommandGroup(new ShootCommand(Indexer),
+                            new RotateShooterMountToPositionCommand(ShooterMount, rot)));
         }
     }
 
     /**
-     * Creates an instance and adds auto options to Shuffleboard. Must be called
-     * before anything can
-     * be done using Autonomous. Creates a new instance if one does not exist,
-     * otherwise logs an
+     * Creates an instance and adds auto options to Shuffleboard. Must be called before anything can
+     * be done using Autonomous. Creates a new instance if one does not exist, otherwise logs an
      * exception.
      */
-    public static void init(RobotContainer robotContainer) {
+    public static void init(RobotContainer robotContainer)
+    {
         if (instance == null)
             new Autonomous(robotContainer);
         else
@@ -139,11 +151,11 @@ public class Autonomous implements ILogSource {
     }
 
     /**
-     * Parses selected options into a single command. {@link #init(RobotContainer)}
-     * must be called
+     * Parses selected options into a single command. {@link #init(RobotContainer)} must be called
      * first.
      */
-    private Optional<Command> buildAutoCommand() {
+    private Optional<Command> buildAutoCommand()
+    {
         logInfo("Building auto command...");
 
         final StartingPosition StartingPosition = StartingPositionChooser.getSelected();
@@ -153,6 +165,8 @@ public class Autonomous implements ILogSource {
 
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
 
+        resetOdometry(RobotContainer.getSwerveDrive(), StartingPosition);
+
         logFine("Initializing command groups...");
 
         // Most of our auto will go in AutoMain
@@ -161,48 +175,53 @@ public class Autonomous implements ILogSource {
                         "Start of auto")));
 
         logFine("Command groups initialized! Adding commands based on AutoMode...");
-        switch (AutoMode) {
-            case DoNothing:
-                logFiner("Not doing an auto.");
-                autoMain = null;
+        switch (AutoMode)
+        {
+        case DoNothing:
+            logFiner("Not doing an auto.");
+            autoMain = null;
+            break;
+
+        case Leave:
+            logFiner("Adding leave command...");
+            autoMain.addCommands(getPathPlannerAuto("Basic Auto"));
+            break;
+
+        case MultiNote:
+            logFiner("Adding multi-note command based on StartingPosition...");
+            String[] pathSequence = null;
+
+            switch (StartingPosition)
+            {
+            case Amp:
+            case Middle:
+                pathSequence = new String[]
+                {
+                        StartingPosition == Autonomous.StartingPosition.Amp
+                                ? "Top Start to Top Note"
+                                : "Middle Start to Top Note",
+                        "Top to Middle Note", "Middle to Bottom Note",
+                };
+                break;
+            case HumanPlayer:
+                pathSequence = new String[]
+                {
+                        "Bottom Start to Bottom Note", "Bottom to Middle Note",
+                        "Middle to Top Note",
+                };
+                break;
+            }
+
+            if (pathSequence == null)
                 break;
 
-            case Leave:
-                logFiner("Adding leave command...");
-                autoMain.addCommands(followPath("Basic Test"));
-                break;
+            logFiner("Adding path sequence: " + String.join(", ", pathSequence));
+            for (String pathName : pathSequence)
+            {
+                autoMain.addCommands(getPathPlannerAuto(pathName));
+            }
 
-            case MultiNote:
-                logFiner("Adding multi-note command based on StartingPosition...");
-                String[] pathSequence = null;
-
-                switch (StartingPosition) {
-                    case Amp:
-                    case Middle:
-                        pathSequence = new String[] {
-                                StartingPosition == Autonomous.StartingPosition.Amp
-                                        ? "Top Start to Top Note"
-                                        : "Middle Start to Top Note",
-                                "Top to Middle Note", "Middle to Bottom Note",
-                        };
-                        break;
-                    case HumanPlayer:
-                        pathSequence = new String[] {
-                                "Bottom Start to Bottom Note", "Bottom to Middle Note",
-                                "Middle to Top Note",
-                        };
-                        break;
-                }
-
-                if (pathSequence == null)
-                    break;
-
-                logFiner("Adding path sequence: " + String.join(", ", pathSequence));
-                for (String pathName : pathSequence) {
-                    autoMain.addCommands(followPath(pathName));
-                }
-
-                break;
+            break;
         }
 
         autoMain.addCommands(new InstantCommand(() -> Shooter
@@ -213,36 +232,54 @@ public class Autonomous implements ILogSource {
     }
 
     /**
-     * Calls {@link #buildAutoCommand()}. {@link #init(RobotContainer)} must be
-     * called first!
+     * Calls {@link #buildAutoCommand()}. {@link #init(RobotContainer)} must be called first!
      */
-    public static Optional<Command> getAutoCommand() {
+    public static Optional<Command> getAutoCommand()
+    {
         return instance.buildAutoCommand();
+    }
+
+    private void resetOdometry(final SwerveDriveSubsystem Swerve, final StartingPosition StartPos)
+    {
+        logFiner("Resetting odometry...");
+        switch (StartPos)
+        {
+        case Middle -> Swerve
+                .resetPose(new Pose2d(new Translation2d(1.21, 5.5), new Rotation2d(0)));
+        // case Amp -> Swerve.resetPose(new Pose2d(new Translation2d(1.21, 5.5), new
+        // Rotation2d(0)));
+        // case HumanPlayer -> Swerve
+        // .resetPose(new Pose2d(new Translation2d(1.21, 5.5), new Rotation2d(0)));
+        }
     }
 
     /**
      * Closes the instance's SendableChoosers ({@link #AutoModeChooser} &
      * {@link #StartingPositionChooser}) to free up resources
      */
-    public static void close() {
+    public static void close()
+    {
         instance.logFine("Closing Autonomous GUI...");
         instance.StartingPositionChooser.close();
         instance.AutoModeChooser.close();
     }
 
     /**
-     * Returns a command to follow a path from PathPlanner GUI whilst avoiding
-     * obstacles
+     * Returns a command to follow a path from PathPlanner GUI whilst avoiding obstacles
      * 
-     * @param PathName The filename of the path to follow w/o file extension. Must
-     *                 be in the paths
+     * @param PathName The filename of the path to follow w/o file extension. Must be in the paths
      *                 folder. Ex: Example Human Player Pickup
      * @return A command that will drive the robot along the path
      */
-    private Command followPath(final String PathName) {
+    private Command followPath(final String PathName)
+    {
         final PathPlannerPath path = PathPlannerPath.fromPathFile(PathName);
-        return AutoBuilder.pathfindThenFollowPath(path,
-                SwerveConstants.AutoConstants.PathConstraints);
+        return AutoBuilder.followPath(path);
+    }
+
+    private PathPlannerAuto getPathPlannerAuto(final String PathName)
+    {
+        return new PathPlannerAuto(PathName);
     }
 
 }

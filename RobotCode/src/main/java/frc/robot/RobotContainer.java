@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -91,14 +90,19 @@ public class RobotContainer
 	{
 		final Joystick PrimaryController = new Joystick(0);
 
-		final JoystickButton LeftTrigger = new JoystickButton(PrimaryController, LogitechControllerButtons.triggerLeft);
-		final JoystickButton RightTrigger = new JoystickButton(PrimaryController, LogitechControllerButtons.triggerRight);
-		final JoystickButton YButton = new JoystickButton(PrimaryController, LogitechControllerButtons.y);
+		final JoystickButton LeftTrigger = new JoystickButton(PrimaryController,
+				LogitechControllerButtons.triggerLeft);
+		final JoystickButton RightTrigger = new JoystickButton(PrimaryController,
+				LogitechControllerButtons.triggerRight);
+		final JoystickButton YButton = new JoystickButton(PrimaryController,
+				LogitechControllerButtons.y);
 
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
-		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, SwerveConstants.AMP_ROTATION));
-		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController, ShooterMountSubsystem, IndexerSubsystem));
+		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
+		// SwerveConstants.AMP_ROTATION));
+		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController,
+		// ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
@@ -106,24 +110,40 @@ public class RobotContainer
 	{
 		final Joystick SecondaryController = new Joystick(1);
 
-		final JoystickButton LeftTrigger = new JoystickButton(SecondaryController, LogitechControllerButtons.triggerLeft);
-		final JoystickButton RightTrigger = new JoystickButton(SecondaryController, LogitechControllerButtons.triggerRight);
-		final JoystickButton LeftBumper = new JoystickButton(SecondaryController, LogitechControllerButtons.bumperLeft);
-		final JoystickButton AButton = new JoystickButton(SecondaryController, LogitechControllerButtons.a);
-		final JoystickButton XButton = new JoystickButton(SecondaryController, LogitechControllerButtons.x);
-		final JoystickButton YButton = new JoystickButton(SecondaryController, LogitechControllerButtons.y);
-		final JoystickButton UpButton = new JoystickButton(SecondaryController, LogitechControllerButtons.up);
-		final JoystickButton DownButton = new JoystickButton(SecondaryController, LogitechControllerButtons.down);
+		final JoystickButton LeftTrigger = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.triggerLeft);
+		final JoystickButton RightTrigger = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.triggerRight);
+		final JoystickButton LeftBumper = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.bumperLeft);
+		final JoystickButton AButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.a);
+		final JoystickButton XButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.x);
+		final JoystickButton YButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.y);
+		final JoystickButton UpButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.up);
+		final JoystickButton DownButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.down);
 
-		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
-		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY));
-		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () ->
+		// SecondaryController.getY(), () -> SecondaryController.getThrottle()));
+		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		// ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem));
-		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
-		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MAX_EXTENSION));
-		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem, ClimberConstants.MIN_EXTENSION));
+		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
+		// ShooterMountSubsystem));
+		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem,
+		// SwerveDrive));
+		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
+		// ClimberConstants.MAX_EXTENSION));
+		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
+		// ClimberConstants.MIN_EXTENSION));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()
@@ -137,9 +157,10 @@ public class RobotContainer
 	 */
 	public static Optional<Pose3d> getSpeakerPose()
 	{
-		return Constants.AprilTagFieldLayout.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
-				? VisionConstants.BLUE_SPEAKER_TAG_ID
-				: VisionConstants.RED_SPEAKER_TAG_ID);
+		return Constants.AprilTagFieldLayout
+				.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
+						? VisionConstants.BLUE_SPEAKER_TAG_ID
+						: VisionConstants.RED_SPEAKER_TAG_ID);
 	}
 
 	public static Pigeon2 getGyro()
@@ -164,7 +185,7 @@ public class RobotContainer
 
 	// public VisionSubsystem getVision()
 	// {
-	// 	return VisionSubsystem;
+	// return VisionSubsystem;
 	// }
 
 	public IndexerSubsystem getIndexer()
@@ -174,7 +195,7 @@ public class RobotContainer
 
 	// public IntakeSubsystem getIntake()
 	// {
-	// 	return IntakeSubsystem;
+	// return IntakeSubsystem;
 	// }
 
 }

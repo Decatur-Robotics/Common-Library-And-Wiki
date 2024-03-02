@@ -14,7 +14,7 @@ public class ShooterMountConstants
 	/** Angle in encoder ticks for shooting at amp */
 	public static final double SHOOTER_MOUNT_AMP_ANGLE = 3.8;
 	/** Angle in encoder ticks for shooting at speaker */
-	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 2;
+	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 3.8;
 
 	public static final double SHOOTER_MOUNT_KP = 0.08;
 	public static final double SHOOTER_MOUNT_KI = 0;
