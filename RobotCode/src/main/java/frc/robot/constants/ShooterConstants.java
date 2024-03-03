@@ -6,10 +6,12 @@ package frc.robot.constants;
 public class ShooterConstants
 {
 
-	public static final double SHOOTER_KP = 0.0001;
+	public static final double SHOOTER_KP = 0;
 	public static final double SHOOTER_KI = 0;
-	public static final double SHOOTER_KD = 0.0001;
-	public static final double SHOOTER_KF = 0.000175;
+	public static final double SHOOTER_KD = 0;
+	public static final double SHOOTER_KS = 0;
+	public static final double SHOOTER_KV = 0;
+	public static final double SHOOTER_KA = 0;
 
 	public static final double SHOOTER_VELOCITY_TOLERANCE = 50;
 

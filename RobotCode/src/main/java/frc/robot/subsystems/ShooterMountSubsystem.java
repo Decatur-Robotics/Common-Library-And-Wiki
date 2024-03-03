@@ -76,6 +76,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 		}
 
 		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
+		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
 				() -> (mainMotor.getCurrentEncoderValue()));
