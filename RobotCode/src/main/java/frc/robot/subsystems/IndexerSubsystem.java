@@ -38,8 +38,8 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerMotorLeft.enableVoltageCompensation(Constants.MAX_VOLTAGE);
 		indexerMotorRight.setIdleMode(IdleMode.kBrake);
 		indexerMotorLeft.setIdleMode(IdleMode.kBrake);
-		indexerMotorRight.setSmartCurrentLimit(Constants.MAX_CURRENT);
-		indexerMotorLeft.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		indexerMotorRight.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
+		indexerMotorLeft.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
 
 		indexerPid = indexerMotorRight.getPIDController();
 

@@ -31,6 +31,7 @@ public class ClimberSubsystem extends SubsystemBase
 				Ports.CLIMBER_MOTOR_RIGHT);
 		climberMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
 				Ports.CLIMBER_MOTOR_LEFT);
+
 		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorLeft.setInverted(true);

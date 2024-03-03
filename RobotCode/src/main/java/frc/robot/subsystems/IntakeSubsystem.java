@@ -43,8 +43,8 @@ public class IntakeSubsystem extends SubsystemBase
 
                 // Configure deployment motors
                 intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
-                intakeDeployMotorRight.setSmartCurrentLimit(Constants.MAX_CURRENT);
-                intakeDeployMotorLeft.setSmartCurrentLimit(Constants.MAX_CURRENT);
+                intakeDeployMotorRight.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
+                intakeDeployMotorLeft.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
                 intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
                 intakeDeployMotorLeft.setIdleMode(IdleMode.kBrake);
 
@@ -58,8 +58,8 @@ public class IntakeSubsystem extends SubsystemBase
                 // Configure roller motors
                 intakeRollerMotorTop.setInverted(true);
                 // intakeRollerMotorBottom.follow(intakeRollerMotorTop, true);
-                intakeRollerMotorTop.setSmartCurrentLimit(Constants.MAX_CURRENT);
-                // intakeRollerMotorBottom.setSmartCurrentLimit(Constants.MAX_CURRENT);
+                intakeRollerMotorTop.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
+                // intakeRollerMotorBottom.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
                 intakeRollerMotorTop.setIdleMode(IdleMode.kBrake);
                 // intakeRollerMotorBottom.setIdleMode(IdleMode.kBrake);
 
