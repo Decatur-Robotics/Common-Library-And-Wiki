@@ -17,7 +17,7 @@ import frc.robot.constants.ShooterMountConstants;
 public class ShooterMountSubsystem extends SubsystemBase
 {
 
-	private TeamTalonFX mainMotor, followMotor;
+	private TeamTalonFX shooterMountMotorLeft, shooterMountMotorRight;
 
 	private MotionMagicDutyCycle motorControlRequest;
 
@@ -32,14 +32,14 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public ShooterMountSubsystem()
 	{
 
-		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		shooterMountMotorLeft = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
+		shooterMountMotorRight = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
-		mainMotor.optimizeBusUtilization();
-		followMotor.optimizeBusUtilization();
-		mainMotor.getRotorPosition().setUpdateFrequency(20);
+		shooterMountMotorLeft.optimizeBusUtilization();
+		shooterMountMotorRight.optimizeBusUtilization();
+		shooterMountMotorLeft.getRotorPosition().setUpdateFrequency(20);
 
-		followMotor.setControl(new Follower(mainMotor.getDeviceID(), true));
+		shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
 
 		// create configurator
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
@@ -59,7 +59,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
 
 		// config the main motor
-		mainMotor.getConfigurator().apply(mainMotorConfigs);
+		shooterMountMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
 		targetRotation = ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE;
 
@@ -76,9 +76,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 		}
 
 		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
-				() -> (mainMotor.getCurrentEncoderValue()));
+				() -> (shooterMountMotorLeft.getCurrentEncoderValue()));
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
 				() -> targetRotation);
 	}
@@ -86,7 +87,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	public boolean isAtTargetRotation()
 	{
-		return Math.abs((mainMotor.getCurrentEncoderValue() * 2048)
+		return Math.abs((shooterMountMotorLeft.getCurrentEncoderValue() * 2048)
 				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 

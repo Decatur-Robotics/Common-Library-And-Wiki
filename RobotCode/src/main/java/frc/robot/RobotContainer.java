@@ -131,8 +131,8 @@ public class RobotContainer
 		// SecondaryController.getY(), () -> SecondaryController.getThrottle()));
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		// RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-		// ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));

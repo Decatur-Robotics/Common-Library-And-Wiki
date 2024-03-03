@@ -19,7 +19,7 @@ public class IndexerSubsystem extends SubsystemBase
 	private double desiredIndexerVelocity;
 
 	private SparkPIDController indexerPid;
-	private TeamSparkBase indexerMotorMain, indexerMotorSub;
+	private TeamSparkBase indexerMotorRight, indexerMotorLeft;
 
 	// private DigitalInput beamBreak;
 
@@ -28,34 +28,34 @@ public class IndexerSubsystem extends SubsystemBase
 		desiredIndexerVelocity = IndexerConstants.INDEXER_REST_VELOCITY;
 
 		// beamBreak = new DigitalInput(Ports.BEAM_BREAK);
-		indexerMotorMain = new TeamSparkBase("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
-		indexerMotorSub = new TeamSparkBase("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
+		indexerMotorRight = new TeamSparkBase("Left Shooter Motor Sub", Ports.INDEXER_MOTOR_RIGHT);
+		indexerMotorLeft = new TeamSparkBase("Right Shooter Motor Sub", Ports.INDEXER_MOTOR_LEFT);
 
-		indexerMotorMain.setInverted(true);
-		indexerMotorSub.follow(indexerMotorMain, true);
+		indexerMotorRight.setInverted(true);
+		indexerMotorLeft.follow(indexerMotorRight, true);
 
-		indexerMotorMain.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-		indexerMotorSub.enableVoltageCompensation(Constants.MAX_VOLTAGE);
-		indexerMotorMain.setIdleMode(IdleMode.kBrake);
-		indexerMotorSub.setIdleMode(IdleMode.kBrake);
-		indexerMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
-		indexerMotorSub.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		indexerMotorRight.enableVoltageCompensation(Constants.MAX_VOLTAGE);
+		indexerMotorLeft.enableVoltageCompensation(Constants.MAX_VOLTAGE);
+		indexerMotorRight.setIdleMode(IdleMode.kBrake);
+		indexerMotorLeft.setIdleMode(IdleMode.kBrake);
+		indexerMotorRight.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		indexerMotorLeft.setSmartCurrentLimit(Constants.MAX_CURRENT);
 
-		indexerPid = indexerMotorMain.getPIDController();
+		indexerPid = indexerMotorRight.getPIDController();
 
 		indexerPid.setP(IndexerConstants.INDEXER_KP);
 		indexerPid.setI(IndexerConstants.INDEXER_KI);
 		indexerPid.setD(IndexerConstants.INDEXER_KD);
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
 
-		indexerMotorMain.setAllCanPeriodicFramePeriods(10000);
-		indexerMotorSub.setAllCanPeriodicFramePeriods(10000);
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-		indexerMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-		indexerMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+		indexerMotorRight.setAllCanPeriodicFramePeriods(10000);
+		indexerMotorLeft.setAllCanPeriodicFramePeriods(10000);
+		indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+		indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+		indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity",
-				() -> indexerMotorMain.getEncoder().getVelocity());
+				() -> indexerMotorRight.getEncoder().getVelocity());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity",
 				() -> desiredIndexerVelocity);
 	}

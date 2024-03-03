@@ -16,7 +16,7 @@ import frc.robot.constants.Ports;
 public class ClimberSubsystem extends SubsystemBase
 {
 	private Pigeon2 gyro;
-	private TeamTalonFX extendMotorLeft, extendMotorRight;
+	private TeamTalonFX climberMotorLeft, climberMotorRight;
 	private double targetPosition, targetPositionLeft, targetPositionRight;
 	private MotionMagicDutyCycle motorControlRequestLeft, motorControlRequestRight;
 	private MotionMagicVelocityDutyCycle motorControlRequestLeftVelocity, motorControlRequestRightVelocity;
@@ -27,13 +27,13 @@ public class ClimberSubsystem extends SubsystemBase
 	{
 		gyro = new Pigeon2(Ports.PIGEON_GYRO);
 		// sets extension of left and right motors to given extension length
-		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
+		climberMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
 				Ports.CLIMBER_MOTOR_RIGHT);
-		extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
+		climberMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
 				Ports.CLIMBER_MOTOR_LEFT);
-		extendMotorLeft.setNeutralMode(NeutralModeValue.Brake);
-		extendMotorRight.setNeutralMode(NeutralModeValue.Brake);
-		extendMotorLeft.setInverted(true);
+		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
+		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
+		climberMotorLeft.setInverted(true);
 
 		targetPosition = ClimberConstants.MIN_EXTENSION;
 		targetPositionLeft = targetPosition;
@@ -57,8 +57,8 @@ public class ClimberSubsystem extends SubsystemBase
 		motionMagicVelocityConfigs.MotionMagicAcceleration = ClimberConstants.CLIMBER_ACCELERATION;
 
 		// config the main motor
-		extendMotorLeft.getConfigurator().apply(motorConfigs);
-		extendMotorRight.getConfigurator().apply(motorConfigs);
+		climberMotorLeft.getConfigurator().apply(motorConfigs);
+		climberMotorRight.getConfigurator().apply(motorConfigs);
 
 		motorControlRequestLeft = new MotionMagicDutyCycle(targetPositionLeft);
 		motorControlRequestRight = new MotionMagicDutyCycle(targetPositionRight);
@@ -79,12 +79,12 @@ public class ClimberSubsystem extends SubsystemBase
 			// left
 			if (gyroRoll > ClimberConstants.DEADBAND_GYRO)
 			{
-				targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
+				targetPositionLeft = climberMotorLeft.getCurrentEncoderValue();
 			}
 			// right
 			else if (gyroRoll < -ClimberConstants.DEADBAND_GYRO)
 			{
-				targetPositionRight = extendMotorRight.getCurrentEncoderValue();
+				targetPositionRight = climberMotorRight.getCurrentEncoderValue();
 			}
 			else 
 			{
@@ -93,16 +93,16 @@ public class ClimberSubsystem extends SubsystemBase
 			}
 
 			// setting extension of climber arms
-			extendMotorLeft.setControl(motorControlRequestLeft.withPosition(targetPositionLeft));
-			extendMotorRight.setControl(motorControlRequestRight.withPosition(targetPositionRight));
+			climberMotorLeft.setControl(motorControlRequestLeft.withPosition(targetPositionLeft));
+			climberMotorRight.setControl(motorControlRequestRight.withPosition(targetPositionRight));
 		}
 		else
 		{
-			extendMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
-			extendMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(rightPower));
+			climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
+			climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(rightPower));
 
-			targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
-			targetPositionRight = extendMotorRight.getCurrentEncoderValue();
+			targetPositionLeft = climberMotorLeft.getCurrentEncoderValue();
+			targetPositionRight = climberMotorRight.getCurrentEncoderValue();
 		}
 	}
 

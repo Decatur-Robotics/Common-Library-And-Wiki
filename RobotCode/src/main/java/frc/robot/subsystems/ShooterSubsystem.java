@@ -1,5 +1,12 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -9,16 +16,19 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.ShooterMountConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkBase;
+import frc.lib.core.motors.TeamTalonFX;
 
 public class ShooterSubsystem extends SubsystemBase
 {
 
 	private double desiredShooterVelocity;
 
-	private SparkPIDController shooterPid, shooterPidLeft;
-	private TeamSparkBase shooterMotorMain, shooterMotorSub;
+	private TeamTalonFX shooterMotorRight, shooterMotorLeft;
+
+	private MotionMagicVelocityDutyCycle motorControlRequest;
 
 	public ShooterSubsystem()
 	{
@@ -26,51 +36,50 @@ public class ShooterSubsystem extends SubsystemBase
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorMain = new TeamSparkBase("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
-		shooterMotorSub = new TeamSparkBase("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
+		shooterMotorRight = new TeamTalonFX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
+		shooterMotorLeft = new TeamTalonFX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
 
-		shooterMotorMain.setAllCanPeriodicFramePeriods(10000);
-		shooterMotorSub.setAllCanPeriodicFramePeriods(10000);
-		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
-		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10);
-		shooterMotorMain.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10);
-		shooterMotorSub.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+		shooterMotorRight.optimizeBusUtilization();
+		shooterMotorLeft.optimizeBusUtilization();
+		shooterMotorRight.getRotorPosition().setUpdateFrequency(20);
 
-		shooterMotorMain.setInverted(true);
-		// shooterMotorSub.follow(shooterMotorMain, true);
-		shooterMotorMain.setIdleMode(IdleMode.kBrake);
-		shooterMotorSub.setIdleMode(IdleMode.kBrake);
-		shooterMotorMain.setSmartCurrentLimit(Constants.MAX_CURRENT);
-		shooterMotorSub.setSmartCurrentLimit(Constants.MAX_CURRENT);
+		shooterMotorRight.setInverted(true);
+		shooterMotorLeft.setControl(new Follower(shooterMotorRight.getDeviceID(), true));
+		shooterMotorRight.setNeutralMode(NeutralModeValue.Brake);
+		shooterMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 
-		shooterPid = shooterMotorMain.getPidController();
+		// create configurator
+		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
 
-		shooterPid.setP(ShooterConstants.SHOOTER_KP);
-		shooterPid.setI(ShooterConstants.SHOOTER_KI);
-		shooterPid.setD(ShooterConstants.SHOOTER_KD);
-		shooterPid.setFF(ShooterConstants.SHOOTER_KF);
+		// set pid profiles configs
+		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
+		pidSlot0Configs.kP = ShooterConstants.SHOOTER_KP;
+		pidSlot0Configs.kI = ShooterConstants.SHOOTER_KI;
+		pidSlot0Configs.kD = ShooterConstants.SHOOTER_KD;
+		pidSlot0Configs.kS = ShooterConstants.SHOOTER_KS;
+		pidSlot0Configs.kV = ShooterConstants.SHOOTER_KV;
+		pidSlot0Configs.kA = ShooterConstants.SHOOTER_KA;
 
-		shooterPidLeft = shooterMotorSub.getPIDController();
+		// set motionmagic velocity configs
+		MotionMagicConfigs motionMagicVelocityConfigs = mainMotorConfigs.MotionMagic;
+		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
+		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
 
-		shooterPidLeft.setP(ShooterConstants.SHOOTER_KP);
-		shooterPidLeft.setI(ShooterConstants.SHOOTER_KI);
-		shooterPidLeft.setD(ShooterConstants.SHOOTER_KD);
-		shooterPidLeft.setFF(ShooterConstants.SHOOTER_KF);
+		// config the main motor
+		shooterMotorRight.getConfigurator().apply(mainMotorConfigs);
+
+		motorControlRequest = new MotionMagicVelocityDutyCycle(desiredShooterVelocity);
+		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity",
-				() -> shooterMotorMain.getVelocity());
+				() -> shooterMotorRight.getRotorVelocity().getValueAsDouble());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Velocity",
 				() -> desiredShooterVelocity);
 	}
 
 	public double getVelocity()
 	{
-		return shooterMotorMain.getVelocity();
-	}
-
-	public double getShooterMotorVelocityError()
-	{
-		return shooterMotorMain.getVelocityError();
+		return shooterMotorRight.getRotorVelocity().getValueAsDouble();
 	}
 
 	/**
@@ -85,7 +94,7 @@ public class ShooterSubsystem extends SubsystemBase
 
 	public boolean isUpToSpeed()
 	{
-		return Math.abs(shooterMotorMain.getEncoder().getVelocity()
+		return Math.abs(shooterMotorRight.getRotorVelocity().getValueAsDouble()
 				- desiredShooterVelocity) < ShooterConstants.SHOOTER_VELOCITY_TOLERANCE;
 	}
 
@@ -95,8 +104,7 @@ public class ShooterSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		shooterPid.setReference(desiredShooterVelocity, ControlType.kVelocity);
-		shooterPidLeft.setReference(desiredShooterVelocity, ControlType.kVelocity);
+		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 	}
 
 }
