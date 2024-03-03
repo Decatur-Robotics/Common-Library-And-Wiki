@@ -32,8 +32,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public ShooterMountSubsystem()
 	{
 
-		shooterMountMotorLeft = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		shooterMountMotorRight = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		shooterMountMotorLeft = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT",
+				Ports.SHOOTER_MOUNT_MOTOR_LEFT);
+		shooterMountMotorRight = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT",
+				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
 		shooterMountMotorLeft.optimizeBusUtilization();
 		shooterMountMotorRight.optimizeBusUtilization();
@@ -87,7 +89,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
+		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
+				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
+						+ (shooterMountMotorLeft.getPosition().getValueAsDouble()
+								* ShooterMountConstants.SHOOTER_MOUNT_GEAR_RATIO * 2 * Math.PI));
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation)
+				.withFeedForward(gravityFeedForward));
 	}
 
 	/**

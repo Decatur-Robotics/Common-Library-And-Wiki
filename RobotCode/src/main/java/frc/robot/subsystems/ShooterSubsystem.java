@@ -62,8 +62,8 @@ public class ShooterSubsystem extends SubsystemBase
 
 		// set motionmagic velocity configs
 		MotionMagicConfigs motionMagicVelocityConfigs = mainMotorConfigs.MotionMagic;
-		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
-		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
+		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterConstants.SHOOTER_CRUISE_VELOCITY;
+		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterConstants.SHOOTER_ACCELERATION;
 
 		// config the main motor
 		shooterMotorRight.getConfigurator().apply(mainMotorConfigs);
