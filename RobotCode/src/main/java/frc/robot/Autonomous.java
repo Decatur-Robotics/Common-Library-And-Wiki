@@ -165,8 +165,6 @@ public class Autonomous implements ILogSource
 
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
 
-        resetOdometry(RobotContainer.getSwerveDrive(), StartingPosition);
-
         logFine("Initializing command groups...");
 
         // Most of our auto will go in AutoMain
@@ -237,20 +235,6 @@ public class Autonomous implements ILogSource
     public static Optional<Command> getAutoCommand()
     {
         return instance.buildAutoCommand();
-    }
-
-    private void resetOdometry(final SwerveDriveSubsystem Swerve, final StartingPosition StartPos)
-    {
-        logFiner("Resetting odometry...");
-        switch (StartPos)
-        {
-        case Middle -> Swerve
-                .resetPose(new Pose2d(new Translation2d(1.21, 5.5), new Rotation2d(0)));
-        // case Amp -> Swerve.resetPose(new Pose2d(new Translation2d(1.21, 5.5), new
-        // Rotation2d(0)));
-        // case HumanPlayer -> Swerve
-        // .resetPose(new Pose2d(new Translation2d(1.21, 5.5), new Rotation2d(0)));
-        }
     }
 
     /**
