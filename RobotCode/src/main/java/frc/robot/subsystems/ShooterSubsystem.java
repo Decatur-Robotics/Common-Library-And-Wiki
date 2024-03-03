@@ -4,21 +4,13 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.constants.ShooterMountConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamSparkBase;
 import frc.lib.core.motors.TeamTalonFX;
 
 public class ShooterSubsystem extends SubsystemBase

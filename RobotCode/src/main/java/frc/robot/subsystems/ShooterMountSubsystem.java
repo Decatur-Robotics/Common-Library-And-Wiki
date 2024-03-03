@@ -7,7 +7,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
 import frc.robot.RobotContainer;
