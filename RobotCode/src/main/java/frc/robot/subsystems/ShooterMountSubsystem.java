@@ -82,7 +82,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/**
 	 * Set the desired rotation of the shooter mount
 	 * 
-	 * @param targetRotation the desired rotation in degrees
+	 * @param targetRotation the desired rotation in encoder ticks
 	 */
 	public void setTargetRotation(double targetRotation)
 	{

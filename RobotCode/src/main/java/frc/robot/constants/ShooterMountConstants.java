@@ -13,9 +13,9 @@ public class ShooterMountConstants
 	/** Speaker height plus note height minus shooter mount height (meters) */
 	public static final double SHOOTER_MOUNT_TO_SPEAKER = 1.98 + 0.05 - 0.29;
 
-	/** Angle in degrees for shooting at amp */
+	/** Angle in encoder ticks for shooting at amp */
 	public static final double SHOOTER_MOUNT_AMP_ANGLE = 10;
-	/** Angle in degrees for shooting at speaker */
+	/** Angle in encoder ticks for shooting at speaker */
 	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 10;
 
 	public static final double SHOOTER_MOUNT_KP = 0.1;
