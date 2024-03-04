@@ -65,12 +65,8 @@ public class IndexerSubsystem extends SubsystemBase
 		this.desiredIndexerVelocity = Math.max(
 				Math.min(IndexerConstants.INDEXER_MAX_VELOCITY, desiredIndexerVelocity),
 				-IndexerConstants.INDEXER_MAX_VELOCITY);
-	}
 
-	@Override
-	public void periodic()
-	{
-		indexerPid.setReference(desiredIndexerVelocity, ControlType.kVelocity);
+		indexerPid.setReference(this.desiredIndexerVelocity, ControlType.kVelocity);
 	}
 
 	public boolean hasNote()

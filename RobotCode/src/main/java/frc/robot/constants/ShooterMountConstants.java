@@ -11,6 +11,9 @@ public class ShooterMountConstants
 	/** Lowest position of the shooter in radians */
 	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = 0;
 
+	/** Encoder ticks to radians */
+	public static final double ENCODER_TICKS_IN_RADIANS = SHOOTER_MOUNT_GEAR_RATIO * 2 * Math.PI;
+
 	/** Speaker height plus note height minus shooter mount height (meters) */
 	public static final double SHOOTER_MOUNT_TO_SPEAKER = 1.98 + 0.05 - 0.29;
 

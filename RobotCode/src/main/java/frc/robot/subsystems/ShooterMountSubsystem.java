@@ -85,17 +85,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 				() -> targetRotation);
 	}
 
-	@Override
-	public void periodic()
-	{
-		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
-				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-						+ (shooterMountMotorLeft.getPosition().getValueAsDouble()
-								* ShooterMountConstants.SHOOTER_MOUNT_GEAR_RATIO * 2 * Math.PI));
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation)
-				.withFeedForward(gravityFeedForward));
-	}
-
 	/**
 	 * Set the desired rotation of the shooter mount
 	 * 
@@ -105,6 +94,12 @@ public class ShooterMountSubsystem extends SubsystemBase
 	{
 		this.targetRotation = Math.max(targetRotation,
 				ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
+				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
+						+ (this.targetRotation * ShooterMountConstants.ENCODER_TICKS_IN_RADIANS));
+
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
+				.withFeedForward(gravityFeedForward));
 	}
 
 	/**

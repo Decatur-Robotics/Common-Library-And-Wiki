@@ -82,21 +82,13 @@ public class ShooterSubsystem extends SubsystemBase
 		this.desiredShooterVelocity = Math.max(
 				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
 				-ShooterConstants.SHOOTER_MAX_VELOCITY);
+		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 	}
 
 	public boolean isUpToSpeed()
 	{
 		return Math.abs(shooterMotorRight.getRotorVelocity().getValueAsDouble()
 				- desiredShooterVelocity) < ShooterConstants.SHOOTER_VELOCITY_TOLERANCE;
-	}
-
-	/**
-	 * Continuously updates shooter speed based on the commands above.
-	 */
-	@Override
-	public void periodic()
-	{
-		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 	}
 
 }
