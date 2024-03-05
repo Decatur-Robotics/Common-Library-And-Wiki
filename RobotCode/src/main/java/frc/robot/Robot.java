@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.core.ILogSource;
-import frc.lib.core.ModeBasedSubsystem;
+import frc.lib.core.IModeChangeListener;
 
-public class Robot extends TimedRobot implements ILogSource
+public class Robot extends TimedRobot implements ILogSource, IModeChangeListener
 {
 
 	private static Robot instance;
 
 	private Optional<Command> autonomousCommand;
 
-	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
+	private ArrayList<IModeChangeListener> modeChangeListeners = new ArrayList<>();
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
@@ -57,9 +57,9 @@ public class Robot extends TimedRobot implements ILogSource
 	@Override
 	public void disabledInit()
 	{
-		for (ModeBasedSubsystem subsystem : subsystems)
+		for (IModeChangeListener modeChangeListener : modeChangeListeners)
 		{
-			subsystem.disabledInit();
+			modeChangeListener.disabledInit();
 		}
 	}
 
@@ -75,9 +75,9 @@ public class Robot extends TimedRobot implements ILogSource
 	{
 		logInfo("Autonomous intializing...");
 
-		for (ModeBasedSubsystem subsystem : subsystems)
+		for (IModeChangeListener modeChangeListener : modeChangeListeners)
 		{
-			subsystem.autonomousInit();
+			modeChangeListener.autonomousInit();
 		}
 
 		logFine("Getting and running auto command...");
@@ -108,9 +108,9 @@ public class Robot extends TimedRobot implements ILogSource
 			autonomousCommand.get().cancel();
 		}
 
-		for (ModeBasedSubsystem subsystem : subsystems)
+		for (IModeChangeListener modeChangeListener : modeChangeListeners)
 		{
-			subsystem.teleopInit();
+			modeChangeListener.teleopInit();
 		}
 	}
 
@@ -125,9 +125,9 @@ public class Robot extends TimedRobot implements ILogSource
 		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
 
-		for (ModeBasedSubsystem subsystem : subsystems)
+		for (IModeChangeListener modeChangeListener : modeChangeListeners)
 		{
-			subsystem.testInit();
+			modeChangeListener.testInit();
 		}
 	}
 
@@ -146,8 +146,8 @@ public class Robot extends TimedRobot implements ILogSource
 	public void simulationPeriodic()
 	{}
 
-	public static void addSubsystem(ModeBasedSubsystem subsystem)
+	public static void addSubsystem(IModeChangeListener modeChangeListener)
 	{
-		instance.subsystems.add(subsystem);
+		instance.modeChangeListeners.add(modeChangeListener);
 	}
 }
