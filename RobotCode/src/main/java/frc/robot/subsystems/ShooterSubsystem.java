@@ -62,6 +62,7 @@ public class ShooterSubsystem extends SubsystemBase
 
 		motorControlRequest = new MotionMagicVelocityDutyCycle(desiredShooterVelocity);
 		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
+		shooterMotorLeft.setControl(new Follower(shooterMotorRight.getDeviceID(), true));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity",
 				() -> shooterMotorRight.getRotorVelocity().getValueAsDouble());

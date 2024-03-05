@@ -53,7 +53,7 @@ public class RobotContainer
 	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
-	// private final IntakeSubsystem IntakeSubsystem;
+	private final IntakeSubsystem IntakeSubsystem;
 
 	private final Pigeon2 gyro;
 
@@ -77,7 +77,7 @@ public class RobotContainer
 		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
-		// IntakeSubsystem = new IntakeSubsystem();
+		IntakeSubsystem = new IntakeSubsystem();
 
 		Autonomous.init(this);
 
@@ -136,8 +136,8 @@ public class RobotContainer
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
-		// ShooterMountSubsystem));
+		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
+		ShooterMountSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem,
 		// SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
@@ -193,9 +193,9 @@ public class RobotContainer
 		return IndexerSubsystem;
 	}
 
-	// public IntakeSubsystem getIntake()
-	// {
-	// return IntakeSubsystem;
-	// }
+	public IntakeSubsystem getIntake()
+	{
+	return IntakeSubsystem;
+	}
 
 }
