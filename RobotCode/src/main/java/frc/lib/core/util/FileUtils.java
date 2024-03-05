@@ -8,6 +8,8 @@ public class FileUtils {
 
 	/**
 	 * Don't do circular references.
+	 * <p>
+	 * Ex: If you do: class A { A b; } A a = new A(); a.b = a; You will get a StackOverflowError.
 	 */
 	public static String toJson(Object object) {
 		return Gson.toJson(object);
