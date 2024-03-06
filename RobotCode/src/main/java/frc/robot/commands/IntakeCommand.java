@@ -13,6 +13,7 @@ public class IntakeCommand extends Command
 	private IntakeSubsystem intake;
 	private IndexerSubsystem indexer;
 	private ShooterMountSubsystem shooterMount;
+	private State state;
 
 	public IntakeCommand(IntakeSubsystem intake, IndexerSubsystem indexer, ShooterMountSubsystem shooterMount)
 	{
@@ -20,7 +21,16 @@ public class IntakeCommand extends Command
 		this.indexer = indexer;
 		this.shooterMount = shooterMount;
 
+		state = State.FORWARD;
+
 		addRequirements(intake, indexer, shooterMount);
+	}
+
+	enum State
+	{
+		FORWARD,
+		REVERSE,
+		DONE
 	}
 
 	@Override
@@ -30,6 +40,25 @@ public class IntakeCommand extends Command
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY, "Intaking");
 		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+	}
+
+	@Override
+	public void execute()
+	{
+		if (indexer.hasNote() && state == State.FORWARD)
+		{
+			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
+			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
+			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY, "Reversing note");
+
+			state = State.REVERSE;
+
+			// Flash LEDs blue
+		}
+		if (!indexer.hasNote() && state == State.REVERSE)
+		{
+			state = State.DONE;
+		}
 	}
 
 	@Override
@@ -43,6 +72,6 @@ public class IntakeCommand extends Command
 	@Override
 	public boolean isFinished()
 	{
-		return indexer.hasNote();
+		return state == State.DONE;
 	}
 }
