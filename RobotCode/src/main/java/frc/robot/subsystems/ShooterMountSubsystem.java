@@ -36,10 +36,6 @@ public class ShooterMountSubsystem extends SubsystemBase
 		shooterMountMotorRight = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT",
 				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
-		shooterMountMotorLeft.optimizeBusUtilization();
-		shooterMountMotorRight.optimizeBusUtilization();
-		shooterMountMotorLeft.getRotorPosition().setUpdateFrequency(20);
-
 		shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
 
 		// create configurator
@@ -85,6 +81,18 @@ public class ShooterMountSubsystem extends SubsystemBase
 				() -> targetRotation);
 	}
 
+	@Override
+	public void periodic()
+	{
+		if (shooterMountMotorLeft.hasResetOccurred()
+				|| shooterMountMotorRight.hasResetOccurred())
+		{
+			shooterMountMotorLeft.optimizeBusUtilization();
+			shooterMountMotorRight.optimizeBusUtilization();
+			shooterMountMotorLeft.getRotorPosition().setUpdateFrequency(20);
+		}
+	}
+
 	/**
 	 * Set the desired rotation of the shooter mount
 	 * 
@@ -96,7 +104,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 				ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-						+ (this.targetRotation * ShooterMountConstants.ENCODER_TICKS_IN_RADIANS));
+				+ ((this.targetRotation - ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE) 
+				* ShooterMountConstants.ENCODER_TICKS_IN_RADIANS));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
 				.withFeedForward(gravityFeedForward));

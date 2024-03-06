@@ -281,6 +281,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		// smartdashboard logging per module
 		for (SwerveModule mod : swerveMods)
 		{
+			mod.periodic();
+
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder",
 					mod.getCanCoder().getDegrees());
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated",

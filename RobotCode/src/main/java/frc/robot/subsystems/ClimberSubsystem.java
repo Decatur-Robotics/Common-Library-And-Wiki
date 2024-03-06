@@ -65,6 +65,19 @@ public class ClimberSubsystem extends SubsystemBase
 		override = false;
 	}
 
+	@Override
+	public void periodic()
+	{
+		if (climberMotorLeft.hasResetOccurred()
+				|| climberMotorRight.hasResetOccurred())
+		{
+			climberMotorLeft.optimizeBusUtilization();
+			climberMotorRight.optimizeBusUtilization();
+			climberMotorLeft.getRotorPosition().setUpdateFrequency(20);
+			climberMotorRight.getRotorPosition().setUpdateFrequency(20);
+		}
+	}
+
 	public void setPowers(double leftPower, double rightPower, String reason)
 	{
 		if (override)

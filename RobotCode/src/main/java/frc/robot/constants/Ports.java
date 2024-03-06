@@ -26,8 +26,8 @@ public final class Ports
 	/*
 	 * Shooter ports
 	 */
-	public static final int SHOOTER_MOTOR_RIGHT = 21;
-	public static final int SHOOTER_MOTOR_LEFT = 22;
+	public static final int SHOOTER_MOTOR_RIGHT = 22;
+	public static final int SHOOTER_MOTOR_LEFT = 21;
 
 	/*
 	 * Indexer ports

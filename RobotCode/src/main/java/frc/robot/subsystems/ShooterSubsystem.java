@@ -31,12 +31,6 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterMotorRight = new TeamTalonFX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT);
 		shooterMotorLeft = new TeamTalonFX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT);
 
-		shooterMotorRight.optimizeBusUtilization();
-		shooterMotorLeft.optimizeBusUtilization();
-		shooterMotorRight.getRotorPosition().setUpdateFrequency(20);
-
-		shooterMotorRight.setInverted(true);
-		shooterMotorLeft.setControl(new Follower(shooterMotorRight.getDeviceID(), true));
 		shooterMotorRight.setNeutralMode(NeutralModeValue.Brake);
 		shooterMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 
@@ -59,20 +53,33 @@ public class ShooterSubsystem extends SubsystemBase
 
 		// config the main motor
 		shooterMotorRight.getConfigurator().apply(mainMotorConfigs);
+		shooterMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
 		motorControlRequest = new MotionMagicVelocityDutyCycle(desiredShooterVelocity);
 		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
-		shooterMotorLeft.setControl(new Follower(shooterMotorRight.getDeviceID(), true));
+		shooterMotorLeft.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Velocity",
-				() -> shooterMotorRight.getRotorVelocity().getValueAsDouble());
+				() -> shooterMotorLeft.getRotorVelocity().getValueAsDouble());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Velocity",
 				() -> desiredShooterVelocity);
 	}
 
+	@Override
+	public void periodic()
+	{
+		if(shooterMotorRight.hasResetOccurred()
+				|| shooterMotorLeft.hasResetOccurred())
+		{
+			shooterMotorRight.optimizeBusUtilization();
+			shooterMotorLeft.optimizeBusUtilization();
+			shooterMotorRight.getRotorPosition().setUpdateFrequency(20);
+		}
+	}
+
 	public double getVelocity()
 	{
-		return shooterMotorRight.getRotorVelocity().getValueAsDouble();
+		return shooterMotorLeft.getRotorVelocity().getValueAsDouble();
 	}
 
 	/**
@@ -83,12 +90,13 @@ public class ShooterSubsystem extends SubsystemBase
 		this.desiredShooterVelocity = Math.max(
 				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
 				-ShooterConstants.SHOOTER_MAX_VELOCITY);
-		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
+		shooterMotorRight.setControl(motorControlRequest.withVelocity(-desiredShooterVelocity));
+		shooterMotorLeft.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 	}
 
 	public boolean isUpToSpeed()
 	{
-		return Math.abs(shooterMotorRight.getRotorVelocity().getValueAsDouble()
+		return Math.abs(shooterMotorLeft.getRotorVelocity().getValueAsDouble()
 				- desiredShooterVelocity) < ShooterConstants.SHOOTER_VELOCITY_TOLERANCE;
 	}
 

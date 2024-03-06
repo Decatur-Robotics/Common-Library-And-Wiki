@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
@@ -48,16 +49,24 @@ public class IndexerSubsystem extends SubsystemBase
 		indexerPid.setD(IndexerConstants.INDEXER_KD);
 		indexerPid.setFF(IndexerConstants.INDEXER_KF);
 
-		indexerMotorRight.setAllCanPeriodicFramePeriods(10000);
-		indexerMotorLeft.setAllCanPeriodicFramePeriods(10000);
-		indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-		indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-		indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-
 		RobotContainer.getShuffleboardTab().addDouble("Actual Indexer Velocity",
 				() -> indexerMotorRight.getEncoder().getVelocity());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity",
 				() -> desiredIndexerVelocity);
+	}
+
+	@Override
+	public void periodic()
+	{
+		if (indexerMotorLeft.getStickyFault(FaultID.kHasReset)
+				|| indexerMotorRight.getStickyFault(FaultID.kHasReset))
+		{
+			indexerMotorRight.setAllCanPeriodicFramePeriods(10000);
+			indexerMotorLeft.setAllCanPeriodicFramePeriods(10000);
+			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+		}
 	}
 
 	public void setIndexerMotorVelocity(double desiredIndexerVelocity, String reason)

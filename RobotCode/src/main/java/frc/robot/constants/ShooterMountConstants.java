@@ -6,10 +6,10 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_GEAR_RATIO = (25 / 1) * (68 / 72);
 
 	/** Lowest position the shooter mount target position can be set to in encoder ticks */
-	public static final double SHOOTER_MOUNT_MIN_ANGLE = 0.33;
+	public static final double SHOOTER_MOUNT_MIN_ANGLE = 0.33; // 0.33;
 
 	/** Lowest position of the shooter in radians */
-	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = 0;
+	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = 0.419;
 
 	/** Encoder ticks to radians */
 	public static final double ENCODER_TICKS_IN_RADIANS = SHOOTER_MOUNT_GEAR_RATIO * 2 * Math.PI;
@@ -22,7 +22,7 @@ public class ShooterMountConstants
 	/** Angle in encoder ticks for shooting at speaker */
 	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 3.8;
 
-	public static final double SHOOTER_MOUNT_KP = 0.08;
+	public static final double SHOOTER_MOUNT_KP = 0.7; // 0.1;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0;
 	public static final double SHOOTER_MOUNT_KS = 0;

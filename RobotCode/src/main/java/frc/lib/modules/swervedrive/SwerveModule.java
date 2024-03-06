@@ -20,6 +20,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkBase;
 
@@ -66,23 +67,30 @@ public class SwerveModule implements ILogSource
 		lastAngle = getState().angle;
 
 		openLoopDriveRequest = new DutyCycleOut(0);
+	}
 
-		angleEncoder.optimizeBusUtilization();
-		angleEncoder.getAbsolutePosition().setUpdateFrequency(200);
+	public void periodic()
+	{
+		if (angleEncoder.hasResetOccurred() || mDriveMotor.hasResetOccurred()
+				|| mAngleMotor.getStickyFault(FaultID.kHasReset))
+		{
+			angleEncoder.optimizeBusUtilization();
+			angleEncoder.getAbsolutePosition().setUpdateFrequency(200);
 
-		mDriveMotor.optimizeBusUtilization();
-		mDriveMotor.getRotorPosition().setUpdateFrequency(200);
-		mDriveMotor.getRotorVelocity().setUpdateFrequency(200);
-		mDriveMotor.getDutyCycle().setUpdateFrequency(200);
+			mDriveMotor.optimizeBusUtilization();
+			mDriveMotor.getRotorPosition().setUpdateFrequency(200);
+			mDriveMotor.getRotorVelocity().setUpdateFrequency(200);
+			mDriveMotor.getDutyCycle().setUpdateFrequency(200);
 
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10000);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
-		mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 5);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
+		}
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop)
@@ -91,7 +99,7 @@ public class SwerveModule implements ILogSource
 		 * This is a custom optimize function, since default WPILib optimize assumes continuous
 		 * controller which CTRE and Rev onboard is not
 		 */
-		
+
 		desiredState = CTREModuleState.optimize(desiredState, getState().angle);
 		setAngle(desiredState);
 		setSpeed(desiredState, isOpenLoop);

@@ -5,7 +5,7 @@ public class IntakeConstants
     /** Ticks per second */
     public static final double INTAKE_REST_VELOCITY = 0;
     /** Ticks per second */
-    public static final double INTAKE_DEPLOYED_VELOCITY = 2500;
+    public static final double INTAKE_DEPLOYED_VELOCITY = 7500;
 
     /** Ticks */
     public static final double INTAKE_RETRACTED_ROTATION = -5.81;
