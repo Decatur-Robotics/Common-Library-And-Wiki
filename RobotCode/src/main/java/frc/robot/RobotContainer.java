@@ -66,7 +66,7 @@ public class RobotContainer
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
-		gyro = new Pigeon2(Ports.PIGEON_GYRO);
+		gyro = new Pigeon2(Ports.PIGEON_GYRO, "Default Name");
 		gyro.optimizeBusUtilization();
 		gyro.getYaw().setUpdateFrequency(20);
 

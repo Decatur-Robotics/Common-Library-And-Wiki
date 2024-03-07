@@ -55,6 +55,16 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
   }
 
+  public TeamTalonFX(final String smartDashboardPrefix, final int deviceNumber, final String canBus)
+  {
+    super(deviceNumber, canBus);
+    this.smartDashboardPrefix = smartDashboardPrefix;
+
+    // assuming quadencoder
+
+    setControl(voltageRequest.withOutput(12));
+  }
+
   public void periodic()
   {
     final double now = TeamUtils.getCurrentTime();

@@ -25,9 +25,9 @@ public class ClimberSubsystem extends SubsystemBase
 	{
 		// sets extension of left and right motors to given extension length
 		climberMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
-				Ports.CLIMBER_MOTOR_RIGHT);
+				Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
 		climberMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
-				Ports.CLIMBER_MOTOR_LEFT);
+				Ports.CLIMBER_MOTOR_LEFT, "Default Name");
 
 		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);

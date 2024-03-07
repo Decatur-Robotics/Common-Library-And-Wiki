@@ -33,6 +33,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 		shooterMountMotorLeft = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT",
 				Ports.SHOOTER_MOUNT_MOTOR_LEFT);
+
 		shooterMountMotorRight = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT",
 				Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
