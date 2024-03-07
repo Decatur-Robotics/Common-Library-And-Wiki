@@ -54,6 +54,7 @@ public class IntakeCommand extends Command
 			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY,
 					"Reversing note");
+			leds.flashAllPixels(Color.Yellow);
 
 			state = State.REVERSE;
 
@@ -71,7 +72,6 @@ public class IntakeCommand extends Command
 		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "Intaking done");
-		leds.flashAllPixels(Color.Yellow);
 	}
 
 	@Override
