@@ -1,13 +1,17 @@
 package frc.lib.modules.leds;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Scanner;
-
 public class Color
 {
 
-	public static HashMap<String, Color> colors = new HashMap<>();
+	// Preset colors
+	public static final Color Red = new Color(255, 0, 0);
+	public static final Color Green = new Color(0, 255, 0);
+	public static final Color Blue = new Color(0, 0, 255);
+	public static final Color Yellow = new Color(255, 255, 0);
+	public static final Color Cyan = new Color(0, 255, 255);
+	public static final Color Magenta = new Color(255, 0, 255);
+	public static final Color White = new Color(255, 255, 255);
+	public static final Color Black = new Color(0, 0, 0);
 
 	public boolean hsv;
 
@@ -76,28 +80,6 @@ public class Color
 	{
 		return this.hsv ? new Color(this.r, this.g, this.b, true)
 				: new Color(this.h, this.s, this.b, false);
-	}
-
-	private static void initColors()
-	{
-		try
-		{
-			String contents = "";
-			Scanner scanner = new Scanner(new File("colors.json"));
-			while (scanner.hasNextLine())
-				contents += scanner.nextLine();
-
-		}
-		catch (Exception ignored)
-		{ // The autoformatter is stupid.
-		} // Fun fact: This could be one line, instead it's 3
-	}
-
-	public Color fromString(String color)
-	{
-		if (colors.isEmpty())
-			initColors();
-		return colors.get(color);
 	}
 
 }

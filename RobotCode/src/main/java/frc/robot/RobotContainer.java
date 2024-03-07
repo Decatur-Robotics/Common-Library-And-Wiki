@@ -35,6 +35,7 @@ import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -54,6 +55,7 @@ public class RobotContainer
 	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
 	private final IntakeSubsystem IntakeSubsystem;
+	private final LedSubsystem LedSubsystem;
 
 	private final Pigeon2 gyro;
 
@@ -78,6 +80,7 @@ public class RobotContainer
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
 		IntakeSubsystem = new IntakeSubsystem();
+		LedSubsystem = new LedSubsystem();
 
 		Autonomous.init(this);
 
@@ -130,7 +133,7 @@ public class RobotContainer
 		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () ->
 		// SecondaryController.getY(), () -> SecondaryController.getThrottle()));
 		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-		// 		ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		// ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
@@ -195,7 +198,12 @@ public class RobotContainer
 
 	public IntakeSubsystem getIntake()
 	{
-	return IntakeSubsystem;
+		return IntakeSubsystem;
+	}
+
+	public LedSubsystem getLeds()
+	{
+		return LedSubsystem;
 	}
 
 }

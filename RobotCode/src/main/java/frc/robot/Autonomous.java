@@ -28,6 +28,7 @@ import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -114,13 +115,14 @@ public class Autonomous implements ILogSource
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
         final IndexerSubsystem Indexer = RobotContainer.getIndexer();
         final IntakeSubsystem Intake = null;
+        final LedSubsystem Leds = RobotContainer.getLeds();
 
         // Initialize commands
         // final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer,
         // ShooterMount);
         // NamedCommands.registerCommand("Intake", IntakeCommand);
 
-        NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer));
+        NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer, Leds));
         NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(
                 ShooterMount, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
         NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter,
@@ -132,7 +134,7 @@ public class Autonomous implements ILogSource
             NamedCommands.registerCommand("Aim to " + rot + " deg",
                     new RotateShooterMountToPositionCommand(ShooterMount, rot));
             NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
-                    new SequentialCommandGroup(new ShootCommand(Indexer),
+                    new SequentialCommandGroup(new ShootCommand(Indexer, Leds),
                             new RotateShooterMountToPositionCommand(ShooterMount, rot)));
         }
     }

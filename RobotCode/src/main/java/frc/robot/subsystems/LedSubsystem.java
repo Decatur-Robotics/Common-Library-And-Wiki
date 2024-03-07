@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.modules.leds.Color;
+import frc.robot.constants.LedConstants;
 import frc.robot.constants.Ports;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -25,15 +26,14 @@ public class LedSubsystem extends SubsystemBase
 	private Color offColor;
 	private int periodsPassed;
 
-	public LedSubsystem(int pixels)
+	public LedSubsystem()
 	{
+		this.length = LedConstants.LENGTH;
 
-		this.length = pixels;
-
-		buffer = new AddressableLEDBuffer(pixels);
+		buffer = new AddressableLEDBuffer(length);
 
 		led = new AddressableLED(Ports.ADDRESSABLE_LED);
-		led.setLength(pixels);
+		led.setLength(length);
 		led.setData(buffer);
 		led.start();
 
@@ -64,6 +64,12 @@ public class LedSubsystem extends SubsystemBase
 		}
 	}
 
+	/** Flashes all pixels the default number of times */
+	public void flashAllPixels(Color color)
+	{
+		flashAllPixels(color, LedConstants.DEFAULT_FLASHES);
+	}
+
 	public void flashAllPixels(Color color, int numFlashes)
 	{
 		setAllPixels(color, true);
@@ -84,7 +90,7 @@ public class LedSubsystem extends SubsystemBase
 				setAllPixels(offColor, false);
 				on = false;
 			}
-			else 
+			else
 			{
 				setAllPixels(lastColor, false);
 				on = true;
