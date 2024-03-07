@@ -19,6 +19,11 @@ public class LedSubsystem extends SubsystemBase
 	private int length; // How many "pixels" are on the strip, I think that the one we have on the
 						// showbot has 300
 
+	private int numFlashes;
+	private int timesFlashed;
+	private boolean on;
+	private Color offColor;
+
 	public LedSubsystem(int pixels)
 	{
 
@@ -31,6 +36,11 @@ public class LedSubsystem extends SubsystemBase
 		led.setData(buffer);
 		led.start();
 
+		numFlashes = 0;
+		timesFlashed = 0;
+
+		on = true;
+		offColor = new Color(0, 0, 0);
 	}
 
 	public void setAllPixels(Color color)
@@ -49,6 +59,34 @@ public class LedSubsystem extends SubsystemBase
 		{
 			this.lastColor = color;
 			this.progress = 1.0;
+		}
+	}
+
+	public void flashAllPixels(Color color, int numFlashes)
+	{
+		setAllPixels(color, true);
+
+		this.numFlashes = numFlashes;
+		this.timesFlashed = 0;
+	}
+
+	@Override
+	public void periodic()
+	{
+		if (timesFlashed < numFlashes)
+		{
+			if (on)
+			{
+				setAllPixels(offColor, false);
+				on = false;
+			}
+			else 
+			{
+				setAllPixels(lastColor, false);
+				on = true;
+				timesFlashed++;
+			}
+			this.updateData();
 		}
 	}
 
