@@ -23,6 +23,7 @@ public class LedSubsystem extends SubsystemBase
 	private int timesFlashed;
 	private boolean on;
 	private Color offColor;
+	private int periodsPassed;
 
 	public LedSubsystem(int pixels)
 	{
@@ -38,6 +39,7 @@ public class LedSubsystem extends SubsystemBase
 
 		numFlashes = 0;
 		timesFlashed = 0;
+		periodsPassed = 0;
 
 		on = true;
 		offColor = new Color(0, 0, 0);
@@ -73,7 +75,9 @@ public class LedSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		if (timesFlashed < numFlashes)
+		periodsPassed++;
+
+		if (periodsPassed == 5 || timesFlashed < numFlashes)
 		{
 			if (on)
 			{
@@ -87,6 +91,11 @@ public class LedSubsystem extends SubsystemBase
 				timesFlashed++;
 			}
 			this.updateData();
+		}
+
+		if (periodsPassed > 5)
+		{
+			periodsPassed = 0;
 		}
 	}
 
