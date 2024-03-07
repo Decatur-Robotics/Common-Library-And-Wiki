@@ -41,4 +41,9 @@ public final class Ports
 	public static final int PIGEON_GYRO = 25;
 	/** DIO */
 	public static final int BEAM_BREAK = 0;
+
+	/*
+	 * LED ports
+	 */
+	public static final int ADDRESSABLE_LED = 0;
 }

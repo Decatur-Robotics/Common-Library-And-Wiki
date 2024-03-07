@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.modules.leds.Color;
+import frc.robot.constants.Ports;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
@@ -15,7 +16,6 @@ public class LedSubsystem extends SubsystemBase
 	public Color lastColor = new Color(255, 255, 255);
 	public double progress = 1.0;
 
-	private static final int port = 0; // The PWM port of the LED strip. Setting to 0 for now.
 	private int length; // How many "pixels" are on the strip, I think that the one we have on the
 						// showbot has 300
 
@@ -32,7 +32,7 @@ public class LedSubsystem extends SubsystemBase
 
 		buffer = new AddressableLEDBuffer(pixels);
 
-		led = new AddressableLED(port);
+		led = new AddressableLED(Ports.ADDRESSABLE_LED);
 		led.setLength(pixels);
 		led.setData(buffer);
 		led.start();
