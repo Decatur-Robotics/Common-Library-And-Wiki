@@ -14,16 +14,14 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkBase;
 
-public class IntakeSubsystem extends SubsystemBase
-{
+public class IntakeSubsystem extends SubsystemBase {
 
 	private TeamSparkBase intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotorTop,
 			intakeRollerMotorBottom;
 	private double desiredRotation, desiredVelocity;
 	private SparkPIDController intakeDeployPidController, intakeRollerPidController;
 
-	public IntakeSubsystem()
-	{
+	public IntakeSubsystem() {
 		intakeDeployMotorRight = new TeamSparkBase("Intake Deploy Motor Right",
 				Ports.INTAKE_DEPLOY_MOTOR_RIGHT);
 		intakeDeployMotorLeft = new TeamSparkBase("Intake Deploy Motor Left",
@@ -76,13 +74,11 @@ public class IntakeSubsystem extends SubsystemBase
 	}
 
 	@Override
-	public void periodic()
-	{
+	public void periodic() {
 		if (intakeDeployMotorLeft.getStickyFault(FaultID.kHasReset)
 				|| intakeDeployMotorRight.getStickyFault(FaultID.kHasReset)
 				|| intakeRollerMotorBottom.getStickyFault(FaultID.kHasReset)
-				|| intakeRollerMotorTop.getStickyFault(FaultID.kHasReset))
-		{
+				|| intakeRollerMotorTop.getStickyFault(FaultID.kHasReset)) {
 			intakeDeployMotorRight.setAllCanPeriodicFramePeriods(10000);
 			intakeDeployMotorLeft.setAllCanPeriodicFramePeriods(10000);
 			intakeRollerMotorTop.setAllCanPeriodicFramePeriods(10000);
@@ -99,15 +95,13 @@ public class IntakeSubsystem extends SubsystemBase
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(double desiredRotation)
-	{
+	public void setDesiredRotation(double desiredRotation) {
 		this.desiredRotation = desiredRotation;
 		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
 	}
 
 	/** @param desiredVelocity Ticks per second */
-	public void setDesiredVelocity(double desiredVelocity)
-	{
+	public void setDesiredVelocity(double desiredVelocity) {
 		this.desiredVelocity = desiredVelocity;
 		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
 	}

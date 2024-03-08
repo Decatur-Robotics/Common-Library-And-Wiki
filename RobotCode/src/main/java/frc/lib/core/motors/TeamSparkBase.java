@@ -10,8 +10,7 @@ import frc.lib.core.util.TeamUtils;
 /**
  * Used for NEOs. Provides support for PID control and an encoder.
  */
-public class TeamSparkBase extends CANSparkBase implements IMotor
-{
+public class TeamSparkBase extends CANSparkBase implements IMotor {
 
   private static final double TELEMETRY_UPDATE_INTERVAL_SECS = 0.0;
   private double lastTelemetryUpdate = 0;
@@ -28,8 +27,7 @@ public class TeamSparkBase extends CANSparkBase implements IMotor
 
   private CANSparkBase.ControlType ctrlType;
 
-  public TeamSparkBase(final String smartDashboardPrefix, final int deviceID)
-  {
+  public TeamSparkBase(final String smartDashboardPrefix, final int deviceID) {
     super(deviceID, MotorType.kBrushless); // Neos are brushless
 
     this.SmartDashboardPrefix = smartDashboardPrefix;
@@ -41,59 +39,51 @@ public class TeamSparkBase extends CANSparkBase implements IMotor
   }
 
   /** Sets all {@link CANSparkBase.PeriodicFrame} values to periodicMs. */
-  public void setAllCanPeriodicFramePeriods(final int periodMs)
-  {
+  public void setAllCanPeriodicFramePeriods(final int periodMs) {
     CANSparkBase.PeriodicFrame[] frames = CANSparkBase.PeriodicFrame.values();
 
-    for (CANSparkBase.PeriodicFrame frame : frames)
-    {
+    for (CANSparkBase.PeriodicFrame frame : frames) {
       setPeriodicFramePeriod(frame, periodMs);
     }
   }
 
-  public String getSmartDashboardPrefix()
-  {
+  public String getSmartDashboardPrefix() {
     return SmartDashboardPrefix;
   }
 
-  public SparkPIDController getPidController()
-  {
+  public SparkPIDController getPidController() {
     return CanPidController;
   }
 
-  private static boolean isPidControlMode(final CANSparkBase.ControlType mode)
-  {
-    // kDutyCycle, kVelocity, kVoltage, kPosition, kSmartMotion, kCurrent, kSmartVelocity
-    // Are all possible values. If one of these are not part of PID, add case for them and return
+  private static boolean isPidControlMode(final CANSparkBase.ControlType mode) {
+    // kDutyCycle, kVelocity, kVoltage, kPosition, kSmartMotion, kCurrent,
+    // kSmartVelocity
+    // Are all possible values. If one of these are not part of PID, add case for
+    // them and return
     // false.
     return mode != CANSparkBase.ControlType.kCurrent;
   }
 
-  public double getCurrentEncoderValue()
-  {
+  public double getCurrentEncoderValue() {
     // This should be configurable
     return CanEncoder.getPosition();
   }
 
-  public void resetEncoder()
-  {
+  public void resetEncoder() {
     CanEncoder.setPosition(0.0);
   }
 
-  public boolean isRunningPidControlMode()
-  {
+  public boolean isRunningPidControlMode() {
     // Dunno if this is safe, but its the easiest way to get around
     // problems with the PidParameters.
     return isPidControlMode(ctrlType);
   }
 
-  public void periodic()
-  {
+  public void periodic() {
     final double now = TeamUtils.getCurrentTime();
     // Renato told me to leave this alone, though we may wanna change it later.
 
-    if ((now - lastTelemetryUpdate) < TELEMETRY_UPDATE_INTERVAL_SECS)
-    {
+    if ((now - lastTelemetryUpdate) < TELEMETRY_UPDATE_INTERVAL_SECS) {
       return;
     }
 
@@ -105,19 +95,16 @@ public class TeamSparkBase extends CANSparkBase implements IMotor
       maxSpeed = currentSpeed;
   }
 
-  public double getClosedLoopTarget()
-  {
+  public double getClosedLoopTarget() {
     return this.smartMotionLoopTarget;
   }
 
-  public double setClosedLoopTarget(final double value)
-  {
+  public double setClosedLoopTarget(final double value) {
     this.smartMotionLoopTarget = value;
     return this.smartMotionLoopTarget;
   }
 
-  public REVLibError setSmartMotionVelocity(final double speed, final String reason)
-  {
+  public REVLibError setSmartMotionVelocity(final double speed, final String reason) {
     setClosedLoopTarget(speed);
     ctrlType = CANSparkBase.ControlType.kSmartVelocity;
     final REVLibError errors = this.CanPidController.setReference(Math.abs(speed),
@@ -125,14 +112,12 @@ public class TeamSparkBase extends CANSparkBase implements IMotor
     return errors;
   }
 
-  public double getVelocityError()
-  {
+  public double getVelocityError() {
     final double currentSpeed = CanEncoder.getVelocity();
     return getClosedLoopTarget() - currentSpeed;
   }
 
-  public double getVelocity()
-  {
+  public double getVelocity() {
     return CanEncoder.getVelocity();
   }
 
@@ -141,8 +126,7 @@ public class TeamSparkBase extends CANSparkBase implements IMotor
    * @param reason Unused for now
    * @see #set(double)
    */
-  public void set(final double power, final String reason)
-  {
+  public void set(final double power, final String reason) {
     super.set(power);
   }
 

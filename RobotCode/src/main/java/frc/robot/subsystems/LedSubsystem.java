@@ -7,8 +7,7 @@ import frc.robot.constants.Ports;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
-public class LedSubsystem extends SubsystemBase
-{
+public class LedSubsystem extends SubsystemBase {
 
 	private AddressableLED led;
 	private AddressableLEDBuffer buffer;
@@ -26,8 +25,7 @@ public class LedSubsystem extends SubsystemBase
 	private Color offColor;
 	private int periodsPassed;
 
-	public LedSubsystem()
-	{
+	public LedSubsystem() {
 		this.length = LedConstants.LENGTH;
 
 		buffer = new AddressableLEDBuffer(length);
@@ -45,33 +43,29 @@ public class LedSubsystem extends SubsystemBase
 		offColor = new Color(0, 0, 0);
 	}
 
-	public void setAllPixels(Color color)
-	{
+	public void setAllPixels(Color color) {
 		setAllPixels(color, true);
 	}
 
-	public void setAllPixels(Color color, boolean reset)
-	{
+	public void setAllPixels(Color color, boolean reset) {
 		for (int i = 0; i < length; i++)
 			buffer.setRGB(i, color.r, color.g, color.b);
-		// This is better than using the setPixel method in the same class because it's not setting
+		// This is better than using the setPixel method in the same class because it's
+		// not setting
 		// the data every time.
 		this.updateData();
-		if (reset)
-		{
+		if (reset) {
 			this.lastColor = color;
 			this.progress = 1.0;
 		}
 	}
 
 	/** Flashes all pixels the default number of times */
-	public void flashAllPixels(Color color)
-	{
+	public void flashAllPixels(Color color) {
 		flashAllPixels(color, LedConstants.DEFAULT_FLASHES);
 	}
 
-	public void flashAllPixels(Color color, int numFlashes)
-	{
+	public void flashAllPixels(Color color, int numFlashes) {
 		setAllPixels(color, true);
 
 		this.numFlashes = numFlashes;
@@ -79,19 +73,14 @@ public class LedSubsystem extends SubsystemBase
 	}
 
 	@Override
-	public void periodic()
-	{
+	public void periodic() {
 		periodsPassed++;
 
-		if (periodsPassed == 5 || timesFlashed < numFlashes)
-		{
-			if (on)
-			{
+		if (periodsPassed == 5 || timesFlashed < numFlashes) {
+			if (on) {
 				setAllPixels(offColor, false);
 				on = false;
-			}
-			else
-			{
+			} else {
 				setAllPixels(lastColor, false);
 				on = true;
 				timesFlashed++;
@@ -99,22 +88,19 @@ public class LedSubsystem extends SubsystemBase
 			this.updateData();
 		}
 
-		if (periodsPassed > 5)
-		{
+		if (periodsPassed > 5) {
 			periodsPassed = 0;
 		}
 	}
 
-	public static Color calcBlending(Color c1, Color c2, double currentFade)
-	{
+	public static Color calcBlending(Color c1, Color c2, double currentFade) {
 		int r = (int) (c1.r * currentFade / 1 + c2.r * (1 - currentFade) / currentFade);
 		int g = (int) (c1.g * currentFade / 1 + c2.g * (1 - currentFade) / currentFade);
 		int b = (int) (c1.b * currentFade / 1 + c2.b * (1 - currentFade) / currentFade);
 		return new Color(r, g, b);
 	}
 
-	public void setPixel(int pixelToSet, Color color)
-	{
+	public void setPixel(int pixelToSet, Color color) {
 		if (color.hsv)
 			buffer.setHSV(pixelToSet, color.h, color.s, color.v);
 		else
@@ -123,19 +109,16 @@ public class LedSubsystem extends SubsystemBase
 		// THIS METHOD DOES NOT UPDATE THE BUFFER'S DATA! THAT NEEDS TO BE DONE MANUALLY
 	}
 
-	public void updateData()
-	{
+	public void updateData() {
 		led.setData(buffer);
-		System.out.println("Updated LED Data.");
+		// System.out.println("Updated LED Data.");
 	}
 
-	public int getLength()
-	{
+	public int getLength() {
 		return length;
 	}
 
-	public static Color calcBlending(int i, int j, int k, int l, int m, int n, double progress)
-	{
+	public static Color calcBlending(int i, int j, int k, int l, int m, int n, double progress) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'calcBlending'");
 	}

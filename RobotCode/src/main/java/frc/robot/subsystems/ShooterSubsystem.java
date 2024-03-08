@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -13,8 +12,7 @@ import frc.robot.constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
 
-public class ShooterSubsystem extends SubsystemBase
-{
+public class ShooterSubsystem extends SubsystemBase {
 
 	private double desiredShooterVelocity;
 
@@ -22,15 +20,14 @@ public class ShooterSubsystem extends SubsystemBase
 
 	private MotionMagicVelocityDutyCycle motorControlRequest;
 
-	public ShooterSubsystem()
-	{
+	public ShooterSubsystem() {
 		// Sets default shooter motor power
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorRight = new TeamTalonFX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT, 
+		shooterMotorRight = new TeamTalonFX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT,
 				"Default Name");
-		shooterMotorLeft = new TeamTalonFX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT, 
+		shooterMotorLeft = new TeamTalonFX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT,
 				"Default Name");
 
 		shooterMotorRight.setNeutralMode(NeutralModeValue.Brake);
@@ -68,27 +65,23 @@ public class ShooterSubsystem extends SubsystemBase
 	}
 
 	@Override
-	public void periodic()
-	{
-		if(shooterMotorRight.hasResetOccurred()
-				|| shooterMotorLeft.hasResetOccurred())
-		{
+	public void periodic() {
+		if (shooterMotorRight.hasResetOccurred()
+				|| shooterMotorLeft.hasResetOccurred()) {
 			shooterMotorRight.optimizeBusUtilization();
 			shooterMotorLeft.optimizeBusUtilization();
 			shooterMotorRight.getRotorPosition().setUpdateFrequency(20);
 		}
 	}
 
-	public double getVelocity()
-	{
+	public double getVelocity() {
 		return shooterMotorLeft.getRotorVelocity().getValueAsDouble();
 	}
 
 	/**
 	 * This is clamping the shooter motor power
 	 */
-	public void setShooterMotorVelocity(double desiredShooterVelocity, String reason)
-	{
+	public void setShooterMotorVelocity(double desiredShooterVelocity, String reason) {
 		this.desiredShooterVelocity = Math.max(
 				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
 				-ShooterConstants.SHOOTER_MAX_VELOCITY);
@@ -96,8 +89,7 @@ public class ShooterSubsystem extends SubsystemBase
 		shooterMotorLeft.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 	}
 
-	public boolean isUpToSpeed()
-	{
+	public boolean isUpToSpeed() {
 		return Math.abs(shooterMotorLeft.getRotorVelocity().getValueAsDouble()
 				- desiredShooterVelocity) < ShooterConstants.SHOOTER_VELOCITY_TOLERANCE;
 	}

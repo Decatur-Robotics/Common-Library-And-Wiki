@@ -5,24 +5,24 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Ports;
 
-public class ClimberSubsystem extends SubsystemBase
-{
+public class ClimberSubsystem extends SubsystemBase {
 
 	private TeamTalonFX climberMotorLeft, climberMotorRight;
 	private double targetPosition;
 	private MotionMagicDutyCycle motorControlRequestLeft, motorControlRequestRight;
-	private MotionMagicVelocityDutyCycle motorControlRequestLeftVelocity, motorControlRequestRightVelocity;
+	private VelocityDutyCycle motorControlRequestLeftVelocity, motorControlRequestRightVelocity;
 	private boolean override;
-	
-	public ClimberSubsystem()
-	{
+
+	public ClimberSubsystem() {
 		// sets extension of left and right motors to given extension length
 		climberMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
 				Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
@@ -59,18 +59,26 @@ public class ClimberSubsystem extends SubsystemBase
 		motorControlRequestLeft = new MotionMagicDutyCycle(targetPosition + ClimberConstants.LEFT_CLIMBER_OFFSET);
 		motorControlRequestRight = new MotionMagicDutyCycle(targetPosition + ClimberConstants.RIGHT_CLIMBER_OFFSET);
 
-		motorControlRequestLeftVelocity = new MotionMagicVelocityDutyCycle(0);
-		motorControlRequestRightVelocity = new MotionMagicVelocityDutyCycle(0);
+		motorControlRequestLeftVelocity = new VelocityDutyCycle(0);
+		motorControlRequestRightVelocity = new VelocityDutyCycle(0);
 
 		override = false;
+
+		RobotContainer.getShuffleboardTab().addNumber("L Climber Pos",
+				() -> climberMotorLeft.getPosition().getValueAsDouble());
+		RobotContainer.getShuffleboardTab().addNumber("R Climber Pos",
+				() -> climberMotorRight.getPosition().getValueAsDouble());
+
+		climberMotorLeft.setControl(
+				motorControlRequestLeft.withPosition(targetPosition + ClimberConstants.LEFT_CLIMBER_OFFSET));
+		climberMotorRight.setControl(
+				motorControlRequestRight.withPosition(targetPosition + ClimberConstants.RIGHT_CLIMBER_OFFSET));
 	}
 
 	@Override
-	public void periodic()
-	{
+	public void periodic() {
 		if (climberMotorLeft.hasResetOccurred()
-				|| climberMotorRight.hasResetOccurred())
-		{
+				|| climberMotorRight.hasResetOccurred()) {
 			climberMotorLeft.optimizeBusUtilization();
 			climberMotorRight.optimizeBusUtilization();
 			climberMotorLeft.getRotorPosition().setUpdateFrequency(20);
@@ -78,10 +86,9 @@ public class ClimberSubsystem extends SubsystemBase
 		}
 	}
 
-	public void setPowers(double leftPower, double rightPower, String reason)
-	{
-		if (override)
-		{
+	public void setPowers(double leftPower, double rightPower, String reason) {
+		if (override) {
+			System.out.println("Right Climber Power: " + rightPower);
 			climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
 			climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(rightPower));
 
@@ -89,19 +96,22 @@ public class ClimberSubsystem extends SubsystemBase
 		}
 	}
 
-	public void setPosition(double position)
-	{
+	public void setPosition(double position) {
 		targetPosition = position;
 
-		climberMotorLeft.setControl(motorControlRequestLeft.withPosition(targetPosition + ClimberConstants.LEFT_CLIMBER_OFFSET));
-		climberMotorRight.setControl(motorControlRequestRight.withPosition(targetPosition + ClimberConstants.RIGHT_CLIMBER_OFFSET));
+		climberMotorLeft.setControl(
+				motorControlRequestLeft.withPosition(targetPosition + ClimberConstants.LEFT_CLIMBER_OFFSET));
+		climberMotorRight.setControl(
+				motorControlRequestRight.withPosition(targetPosition + ClimberConstants.RIGHT_CLIMBER_OFFSET));
 	}
 
-	public void setOverride(boolean override)
-	{
+	public void setOverride(boolean override) {
+		System.out.println("Setting climber override to " + override);
+
 		this.override = override;
 
-		if (override = false) setPosition(targetPosition);
+		if (override = false)
+			setPosition(targetPosition);
 	}
 
 }

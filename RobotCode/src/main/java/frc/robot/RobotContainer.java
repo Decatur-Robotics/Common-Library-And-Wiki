@@ -40,16 +40,17 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-/** The container for the robot. Contains subsystems, OI devices, and commands. */
-public class RobotContainer
-{
+/**
+ * The container for the robot. Contains subsystems, OI devices, and commands.
+ */
+public class RobotContainer {
 
 	private static RobotContainer instance;
 
 	private final ShuffleboardTab ShuffleboardTab;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	// private final ClimberSubsystem ClimberSubsystem;
+	private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
 	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
@@ -59,9 +60,10 @@ public class RobotContainer
 
 	private final Pigeon2 gyro;
 
-	/** The container for the robot. Contains subsystems, OI devices, and commands. */
-	public RobotContainer()
-	{
+	/**
+	 * The container for the robot. Contains subsystems, OI devices, and commands.
+	 */
+	public RobotContainer() {
 		instance = this;
 
 		new PowerDistribution(26, ModuleType.kRev).setSwitchableChannel(true);
@@ -74,7 +76,7 @@ public class RobotContainer
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		// ClimberSubsystem = new ClimberSubsystem();
+		ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
 		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
@@ -89,8 +91,7 @@ public class RobotContainer
 		configureSecondaryBindings();
 	}
 
-	private void configurePrimaryBindings()
-	{
+	private void configurePrimaryBindings() {
 		final Joystick PrimaryController = new Joystick(0);
 
 		final JoystickButton LeftTrigger = new JoystickButton(PrimaryController,
@@ -109,8 +110,7 @@ public class RobotContainer
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
-	private void configureSecondaryBindings()
-	{
+	private void configureSecondaryBindings() {
 		final Joystick SecondaryController = new Joystick(1);
 
 		final JoystickButton LeftTrigger = new JoystickButton(SecondaryController,
@@ -130,18 +130,21 @@ public class RobotContainer
 		final JoystickButton DownButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.down);
 
-		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem, () ->
-		// SecondaryController.getY(), () -> SecondaryController.getThrottle()));
-		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-		// ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
+		// () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
+		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
+				IndexerSubsystem,
+				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		// RightTrigger.whileTrue(new
+		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		// ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
-		// ShooterMountSubsystem));
-		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem,
+		// AButton.whileTrue(new
+		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		// ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, LedSubsystem));
+		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
+		// ShooterMountSubsystem,
 		// SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
 		// ClimberConstants.MAX_EXTENSION));
@@ -149,40 +152,35 @@ public class RobotContainer
 		// ClimberConstants.MIN_EXTENSION));
 	}
 
-	public static ShuffleboardTab getShuffleboardTab()
-	{
+	public static ShuffleboardTab getShuffleboardTab() {
 		return instance.ShuffleboardTab;
 	}
 
 	/**
-	 * @return the position of the speaker april tag for our alliance, or empty if the tag is not
+	 * @return the position of the speaker april tag for our alliance, or empty if
+	 *         the tag is not
 	 *         found
 	 */
-	public static Optional<Pose3d> getSpeakerPose()
-	{
+	public static Optional<Pose3d> getSpeakerPose() {
 		return Constants.AprilTagFieldLayout
 				.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
 						? VisionConstants.BLUE_SPEAKER_TAG_ID
 						: VisionConstants.RED_SPEAKER_TAG_ID);
 	}
 
-	public static Pigeon2 getGyro()
-	{
+	public static Pigeon2 getGyro() {
 		return instance.gyro;
 	}
 
-	public SwerveDriveSubsystem getSwerveDrive()
-	{
+	public SwerveDriveSubsystem getSwerveDrive() {
 		return SwerveDrive;
 	}
 
-	public ShooterSubsystem getShooter()
-	{
+	public ShooterSubsystem getShooter() {
 		return ShooterSubsystem;
 	}
 
-	public ShooterMountSubsystem getShooterMount()
-	{
+	public ShooterMountSubsystem getShooterMount() {
 		return ShooterMountSubsystem;
 	}
 
@@ -191,18 +189,15 @@ public class RobotContainer
 	// return VisionSubsystem;
 	// }
 
-	public IndexerSubsystem getIndexer()
-	{
+	public IndexerSubsystem getIndexer() {
 		return IndexerSubsystem;
 	}
 
-	public IntakeSubsystem getIntake()
-	{
+	public IntakeSubsystem getIntake() {
 		return IntakeSubsystem;
 	}
 
-	public LedSubsystem getLeds()
-	{
+	public LedSubsystem getLeds() {
 		return LedSubsystem;
 	}
 
