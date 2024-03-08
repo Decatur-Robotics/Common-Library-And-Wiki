@@ -50,13 +50,13 @@ public class RobotContainer {
 	private final ShuffleboardTab ShuffleboardTab;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	private final ClimberSubsystem ClimberSubsystem;
-	private final ShooterSubsystem ShooterSubsystem;
-	private final ShooterMountSubsystem ShooterMountSubsystem;
+	// private final ClimberSubsystem ClimberSubsystem;
+	// private final ShooterSubsystem ShooterSubsystem;
+	// private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
-	private final IndexerSubsystem IndexerSubsystem;
-	private final IntakeSubsystem IntakeSubsystem;
-	private final LedSubsystem LedSubsystem;
+	// private final IndexerSubsystem IndexerSubsystem;
+	// private final IntakeSubsystem IntakeSubsystem;
+	// private final LedSubsystem LedSubsystem;
 
 	private final Pigeon2 gyro;
 
@@ -76,13 +76,13 @@ public class RobotContainer {
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		ClimberSubsystem = new ClimberSubsystem();
-		ShooterSubsystem = new ShooterSubsystem();
-		ShooterMountSubsystem = new ShooterMountSubsystem();
+		// ClimberSubsystem = new ClimberSubsystem();
+		// ShooterSubsystem = new ShooterSubsystem();
+		// ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
-		IndexerSubsystem = new IndexerSubsystem();
-		IntakeSubsystem = new IntakeSubsystem();
-		LedSubsystem = new LedSubsystem();
+		// IndexerSubsystem = new IndexerSubsystem();
+		// IntakeSubsystem = new IntakeSubsystem();
+		// LedSubsystem = new LedSubsystem();
 
 		Autonomous.init(this);
 
@@ -132,9 +132,9 @@ public class RobotContainer {
 
 		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 		// () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
-		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
-				IndexerSubsystem,
-				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
+		// 		IndexerSubsystem,
+		// 		ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		// RightTrigger.whileTrue(new
 		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 		// ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
@@ -142,7 +142,7 @@ public class RobotContainer {
 		// AButton.whileTrue(new
 		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 		// ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, LedSubsystem));
+		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
@@ -176,29 +176,29 @@ public class RobotContainer {
 		return SwerveDrive;
 	}
 
-	public ShooterSubsystem getShooter() {
-		return ShooterSubsystem;
-	}
+	// public ShooterSubsystem getShooter() {
+	// 	return ShooterSubsystem;
+	// }
 
-	public ShooterMountSubsystem getShooterMount() {
-		return ShooterMountSubsystem;
-	}
+	// public ShooterMountSubsystem getShooterMount() {
+	// 	return ShooterMountSubsystem;
+	// }
 
 	// public VisionSubsystem getVision()
 	// {
 	// return VisionSubsystem;
 	// }
 
-	public IndexerSubsystem getIndexer() {
-		return IndexerSubsystem;
-	}
+	// public IndexerSubsystem getIndexer() {
+	// 	return IndexerSubsystem;
+	// }
 
-	public IntakeSubsystem getIntake() {
-		return IntakeSubsystem;
-	}
+	// public IntakeSubsystem getIntake() {
+	// 	return IntakeSubsystem;
+	// }
 
-	public LedSubsystem getLeds() {
-		return LedSubsystem;
-	}
+	// public LedSubsystem getLeds() {
+	// 	return LedSubsystem;
+	// }
 
 }

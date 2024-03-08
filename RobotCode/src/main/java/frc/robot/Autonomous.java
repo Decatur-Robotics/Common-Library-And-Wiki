@@ -112,11 +112,17 @@ public class Autonomous implements ILogSource {
         logFine("Registering named commands...");
 
         // Get subsystems
-        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
-        final ShooterSubsystem Shooter = RobotContainer.getShooter();
-        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
+        // final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        // final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        // final IndexerSubsystem Indexer = RobotContainer.getIndexer();
+        // final IntakeSubsystem Intake = RobotContainer.getIntake();
+        // final LedSubsystem Leds = RobotContainer.getLeds();
+
+        final ShooterMountSubsystem ShooterMount = null;
+        final ShooterSubsystem Shooter = null;
+        final IndexerSubsystem Indexer = null;
         final IntakeSubsystem Intake = null;
-        final LedSubsystem Leds = RobotContainer.getLeds();
+        final LedSubsystem Leds = null;
 
         // Initialize commands
         // final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer,
@@ -166,7 +172,7 @@ public class Autonomous implements ILogSource {
         final AutoMode AutoMode = AutoModeChooser.getSelected();
         logFine("Read auto mode: " + AutoMode);
 
-        final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        final ShooterSubsystem Shooter = null;
 
         logFine("Initializing command groups...");
 
