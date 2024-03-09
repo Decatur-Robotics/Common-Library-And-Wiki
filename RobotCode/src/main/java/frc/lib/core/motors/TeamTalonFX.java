@@ -51,8 +51,6 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
     // assuming quadencoder
 
-    // setControl(voltageRequest.withOutput(12));
-
   }
 
   public TeamTalonFX(final String smartDashboardPrefix, final int deviceNumber, final String canBus)
@@ -61,8 +59,6 @@ public class TeamTalonFX extends TalonFX implements IMotor
     this.smartDashboardPrefix = smartDashboardPrefix;
 
     // assuming quadencoder
-
-    // setControl(voltageRequest.withOutput(12));
   }
 
   public void periodic()
