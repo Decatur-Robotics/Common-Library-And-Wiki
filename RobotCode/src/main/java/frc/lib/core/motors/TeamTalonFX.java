@@ -51,7 +51,7 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
     // assuming quadencoder
 
-    setControl(voltageRequest.withOutput(12));
+    // setControl(voltageRequest.withOutput(12));
 
   }
 
@@ -62,7 +62,7 @@ public class TeamTalonFX extends TalonFX implements IMotor
 
     // assuming quadencoder
 
-    setControl(voltageRequest.withOutput(12));
+    // setControl(voltageRequest.withOutput(12));
   }
 
   public void periodic()

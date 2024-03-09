@@ -20,8 +20,8 @@ public final class Ports
 	/*
 	 * Climber ports
 	 */
-	public static final int CLIMBER_MOTOR_LEFT = 19;
-	public static final int CLIMBER_MOTOR_RIGHT = 20;
+	public static final int CLIMBER_MOTOR_LEFT = 39;
+	public static final int CLIMBER_MOTOR_RIGHT = 40;
 
 	/*
 	 * Shooter ports

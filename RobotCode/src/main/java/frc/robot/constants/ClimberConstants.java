@@ -5,11 +5,11 @@ public final class ClimberConstants {
 	public static final double MIN_EXTENSION = 0;
 	public static final double MAX_EXTENSION = 5;
 
-	public static final double CLIMBER_KP = 0.1;
+	public static final double CLIMBER_KP = 0;
 	public static final double CLIMBER_KI = 0;
 	public static final double CLIMBER_KD = 0;
 	public static final double CLIMBER_KS = 0;
-	public static final double CLIMBER_KV = 0.1;
+	public static final double CLIMBER_KV = 0;
 	public static final double CLIMBER_KA = 0;
 	public static final double CLIMBER_ACCELERATION = 20;
 	public static final double CLIMBER_VELOCITY = 40;

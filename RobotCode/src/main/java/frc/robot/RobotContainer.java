@@ -51,7 +51,7 @@ public class RobotContainer {
 	private final ShuffleboardTab ShuffleboardTab;
 
 	private final SwerveDriveSubsystem SwerveDrive;
-	// private final ClimberSubsystem ClimberSubsystem;
+	private final ClimberSubsystem ClimberSubsystem;
 	// private final ShooterSubsystem ShooterSubsystem;
 	// private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
@@ -77,7 +77,7 @@ public class RobotContainer {
 
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
-		// ClimberSubsystem = new ClimberSubsystem();
+		ClimberSubsystem = new ClimberSubsystem();
 		// ShooterSubsystem = new ShooterSubsystem();
 		// ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
@@ -102,7 +102,7 @@ public class RobotContainer {
 		final JoystickButton YButton = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.y);
 
-		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
+		// SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
 		// SwerveConstants.AMP_ROTATION));
@@ -132,14 +132,15 @@ public class RobotContainer {
 				LogitechControllerButtons.down);
 
 		// ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
-		// () -> SecondaryController.getY(), () -> SecondaryController.getThrottle()));
+		// () -> (SecondaryController.getY() * 100), () ->
+		// (SecondaryController.getThrottle()) * 100));
 		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
 		// IndexerSubsystem,
 		// ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		// RightTrigger.whileTrue(new
 		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 		// ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
-		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
+		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		// AButton.whileTrue(new
 		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 		// ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));

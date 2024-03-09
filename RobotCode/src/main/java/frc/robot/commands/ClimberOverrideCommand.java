@@ -14,11 +14,11 @@ public class ClimberOverrideCommand extends Command {
 	// forgot what this does but renato said its important
 	@Override
 	public void initialize() {
-		climber.setOverride(true);
+		// climber.setOverride(true);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		climber.setOverride(false);
+		// climber.setOverride(false);
 	}
 }
