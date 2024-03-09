@@ -31,18 +31,16 @@ public class ClimberSubsystem extends SubsystemBase {
 		// sets extension of left and right motors to given extension length
 		climberMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
 				Ports.CLIMBER_MOTOR_LEFT, "Default Name");
-		// climberMotorLeft = new TalonFX(Ports.CLIMBER_MOTOR_LEFT, "Default Name");
 		climberMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
-				1, "Default Name");
+				Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
 
-		// climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
+		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
-		climberMotorLeft.setInverted(true);
 
 		targetPosition = ClimberConstants.MIN_EXTENSION;
 
 		// create configurator
-		// TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
+		TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
 
 		// set pid profiles configs
 		// Slot0Configs pidSlot0Configs = motorConfigs.Slot0;
@@ -89,25 +87,26 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		// if (climberMotorLeft.hasResetOccurred()
-		// || climberMotorRight.hasResetOccurred()) {
-		// climberMotorLeft.optimizeBusUtilization();
-		// climberMotorRight.optimizeBusUtilization();
-		// climberMotorLeft.getRotorPosition().setUpdateFrequency(20);
-		// climberMotorRight.getRotorPosition().setUpdateFrequency(20);
-		// }
+		if (climberMotorLeft.hasResetOccurred()
+				|| climberMotorRight.hasResetOccurred()) {
+			climberMotorLeft.optimizeBusUtilization();
+			climberMotorRight.optimizeBusUtilization();
+			climberMotorLeft.getRotorPosition().setUpdateFrequency(20);
+			climberMotorRight.getRotorPosition().setUpdateFrequency(20);
+		}
 	}
 
 	public void setPowers(double leftPower, double rightPower, String reason) {
-		if (override) {
+		if (true) {
 			System.out.println("Right Climber Power: " + rightPower);
 			// climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
 			// climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(rightPower));
 
-			// climberMotorLeft.set(leftPower * 0.001);
+			climberMotorRight.set(rightPower);
+			climberMotorLeft.set(-leftPower);
 
-			// targetPosition = climberMotorLeft.getCurrentEncoderValue() -
-			// ClimberConstants.LEFT_CLIMBER_OFFSET;
+			targetPosition = climberMotorLeft.getCurrentEncoderValue() -
+			ClimberConstants.LEFT_CLIMBER_OFFSET;
 		}
 	}
 
@@ -122,15 +121,13 @@ public class ClimberSubsystem extends SubsystemBase {
 		// ClimberConstants.RIGHT_CLIMBER_OFFSET));
 	}
 
-	/*
-	 * public void setOverride(boolean override) {
-	 * System.out.println("Setting climber override to " + override);
-	 * 
-	 * this.override = override;
-	 * 
-	 * if (override == false)
-	 * setPosition(targetPosition);
-	 * }
-	 */
-
+	public void setOverride(boolean override) {
+		System.out.println("Setting climber override to " + override);
+		
+		this.override = override;
+		
+		if (override == false)
+		setPosition(targetPosition);
+	}
+	 
 }

@@ -19,5 +19,11 @@ public final class ClimberConstants {
 
 	public static final double LEFT_CLIMBER_OFFSET = -0.45;
 	public static final double RIGHT_CLIMBER_OFFSET = -0.31;
+	
+	public static final double LEFT_CLIMBER_MINIMUM = -524.32;
+	public static final double RIGHT_CLIMBER_MINIMUM = 873.01;
+
+	public static final double LEFT_CLIMBER_MAXIMUM = -26.57;
+	public static final double RIGHT_CLIMBER_MAXIMUM = 314.67;
 
 }
