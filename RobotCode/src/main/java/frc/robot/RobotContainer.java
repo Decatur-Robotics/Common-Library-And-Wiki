@@ -102,7 +102,7 @@ public class RobotContainer {
 		final JoystickButton YButton = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.y);
 
-		// SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
+		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
 		// SwerveConstants.AMP_ROTATION));
