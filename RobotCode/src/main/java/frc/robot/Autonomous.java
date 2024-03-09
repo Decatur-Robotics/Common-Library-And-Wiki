@@ -72,7 +72,7 @@ public class Autonomous implements ILogSource {
 
     private final ShuffleboardTab Gui;
     // private final SendableChooser<StartingPosition> StartingPositionChooser;
-    private final SendableChooser<AutoMode> AutoModeChooser;
+    private final SendableChooser<Boolean> AutoModeChooser;
 
     private Autonomous(RobotContainer robotContainer) {
         instance = this;
@@ -97,12 +97,9 @@ public class Autonomous implements ILogSource {
         // this.StartingPositionChooser = StartingPositionChooser;
 
         // Set up auto mode chooser
-        final SendableChooser<AutoMode> AutoModeChooser = new SendableChooser<>();
-        AutoModeChooser.setDefaultOption("Do Nothing", AutoMode.DoNothing);
-        AutoModeChooser.addOption("Do Nothing", AutoMode.DoNothing);
-        AutoModeChooser.addOption("Amp Leave", AutoMode.AmpLeave);
-        AutoModeChooser.addOption("Center Leave", AutoMode.CenterLeave);
-        AutoModeChooser.addOption("Source Leave", AutoMode.SourceLeave);
+        final SendableChooser<Boolean> AutoModeChooser = new SendableChooser<>();
+        AutoModeChooser.setDefaultOption("Run Auto", true);
+        AutoModeChooser.addOption("Run Auto", true);
         Gui.add("Auto Mode", AutoModeChooser);
         this.AutoModeChooser = AutoModeChooser;
 
@@ -114,9 +111,9 @@ public class Autonomous implements ILogSource {
         logFine("Registering named commands...");
 
         // Get subsystems
-        // final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
-        // final ShooterSubsystem Shooter = RobotContainer.getShooter();
-        // final IndexerSubsystem Indexer = RobotContainer.getIndexer();
+        final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
+        final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        final IndexerSubsystem Indexer = RobotContainer.getIndexer();
         // final IntakeSubsystem Intake = RobotContainer.getIntake();
         // final LedSubsystem Leds = RobotContainer.getLeds();
 
@@ -132,18 +129,18 @@ public class Autonomous implements ILogSource {
         // NamedCommands.registerCommand("Intake", IntakeCommand);
 
         // NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer, Leds));
-        // NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(
-        //         ShooterMount, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
-        // NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter,
-        //         Indexer, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, true));
+        NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(
+                ShooterMount, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+        NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter,
+                Indexer, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, true));
 
         // // Populate rotation commands
         // for (double rot : AutoConstants.AutoShooterMountRotations) {
-        //     NamedCommands.registerCommand("Aim to " + rot + " deg",
-        //             new RotateShooterMountToPositionCommand(ShooterMount, rot));
-        //     NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
-        //             new SequentialCommandGroup(new ShootCommand(Indexer, Leds),
-        //                     new RotateShooterMountToPositionCommand(ShooterMount, rot)));
+        // NamedCommands.registerCommand("Aim to " + rot + " deg",
+        // new RotateShooterMountToPositionCommand(ShooterMount, rot));
+        // NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
+        // new SequentialCommandGroup(new ShootCommand(Indexer, Leds),
+        // new RotateShooterMountToPositionCommand(ShooterMount, rot)));
         // }
     }
 
@@ -167,91 +164,93 @@ public class Autonomous implements ILogSource {
      * first.
      */
     private Optional<Command> buildAutoCommand() {
-        logInfo("Building auto command...");
+        return Optional.of(getPathPlannerAuto("Auto"));
 
-        // final StartingPosition StartingPosition =
-        // StartingPositionChooser.getSelected();
-        // logFine("Read starting position: " + StartingPosition);
-        final AutoMode AutoMode = AutoModeChooser.getSelected();
-        logFine("Read auto mode: " + AutoMode);
+        // logInfo("Building auto command...");
 
-        // final ShooterSubsystem Shooter = null;
+        // // final StartingPosition StartingPosition =
+        // // StartingPositionChooser.getSelected();
+        // // logFine("Read starting position: " + StartingPosition);
+        // final AutoMode AutoMode = AutoModeChooser.getSelected();
+        // logFine("Read auto mode: " + AutoMode);
 
-        logFine("Initializing command groups...");
+        // // final ShooterSubsystem Shooter = null;
 
-        // Most of our auto will go in AutoMain
-        // SequentialCommandGroup autoMain = new SequentialCommandGroup(new
-        // InstantCommand(
-        // () ->
-        // Shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY,
-        // "Start of auto")));
-        SequentialCommandGroup autoMain = new SequentialCommandGroup();
+        // logFine("Initializing command groups...");
 
-        logFine("Command groups initialized! Adding commands based on AutoMode...");
-        switch (AutoMode) {
-            case DoNothing:
-                logFiner("Not doing an auto.");
-                autoMain = null;
-                break;
+        // // Most of our auto will go in AutoMain
+        // // SequentialCommandGroup autoMain = new SequentialCommandGroup(new
+        // // InstantCommand(
+        // // () ->
+        // // Shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY,
+        // // "Start of auto")));
+        // SequentialCommandGroup autoMain = new SequentialCommandGroup();
 
-            case AmpLeave:
-                logFiner("Adding leave command...");
-                autoMain.addCommands(getPathPlannerAuto("Amp Side Leave"));
-                break;
-            case CenterLeave:
-                logFiner("Adding leave command...");
-                autoMain.addCommands(getPathPlannerAuto("Center Leave"));
-                break;
-            case SourceLeave:
-                logFiner("Adding leave command...");
-                // autoMain.addCommands(getPathPlannerAuto("Source Side Leave"));
-                return Optional.of(followPath("Leave Far"));
-            // break;
+        // logFine("Command groups initialized! Adding commands based on AutoMode...");
+        // switch (AutoMode) {
+        // case DoNothing:
+        // logFiner("Not doing an auto.");
+        // autoMain = null;
+        // break;
 
-            // case MultiNote:
-            // logFiner("Adding multi-note command based on StartingPosition...");
-            // String[] pathSequence = null;
+        // case AmpLeave:
+        // logFiner("Adding leave command...");
+        // autoMain.addCommands(getPathPlannerAuto("Amp Side Leave"));
+        // break;
+        // case CenterLeave:
+        // logFiner("Adding leave command...");
+        // autoMain.addCommands(getPathPlannerAuto("Center Leave"));
+        // break;
+        // case SourceLeave:
+        // logFiner("Adding leave command...");
+        // // autoMain.addCommands(getPathPlannerAuto("Source Side Leave"));
+        // return Optional.of(followPath("Leave Far"));
+        // break;
 
-            // switch (StartingPosition)
-            // {
-            // case Amp:
-            // case Middle:
-            // pathSequence = new String[]
-            // {
-            // StartingPosition == Autonomous.StartingPosition.Amp
-            // ? "Top Start to Top Note"
-            // : "Middle Start to Top Note",
-            // "Top to Middle Note", "Middle to Bottom Note",
-            // };
-            // break;
-            // case HumanPlayer:
-            // pathSequence = new String[]
-            // {
-            // "Bottom Start to Bottom Note", "Bottom to Middle Note",
-            // "Middle to Top Note",
-            // };
-            // break;
-            // }
+        // case MultiNote:
+        // logFiner("Adding multi-note command based on StartingPosition...");
+        // String[] pathSequence = null;
 
-            // if (pathSequence == null)
-            // break;
+        // switch (StartingPosition)
+        // {
+        // case Amp:
+        // case Middle:
+        // pathSequence = new String[]
+        // {
+        // StartingPosition == Autonomous.StartingPosition.Amp
+        // ? "Top Start to Top Note"
+        // : "Middle Start to Top Note",
+        // "Top to Middle Note", "Middle to Bottom Note",
+        // };
+        // break;
+        // case HumanPlayer:
+        // pathSequence = new String[]
+        // {
+        // "Bottom Start to Bottom Note", "Bottom to Middle Note",
+        // "Middle to Top Note",
+        // };
+        // break;
+        // }
 
-            // logFiner("Adding path sequence: " + String.join(", ", pathSequence));
-            // for (String pathName : pathSequence)
-            // {
-            // autoMain.addCommands(getPathPlannerAuto(pathName));
-            // }
+        // if (pathSequence == null)
+        // break;
 
-            // break;
-        }
+        // logFiner("Adding path sequence: " + String.join(", ", pathSequence));
+        // for (String pathName : pathSequence)
+        // {
+        // autoMain.addCommands(getPathPlannerAuto(pathName));
+        // }
 
-        // autoMain.addCommands(new InstantCommand(() -> Shooter
-        // .setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "End of
-        // auto")));
-
-        logInfo("Auto command built!");
-        return Optional.ofNullable(autoMain);
+        // break;
     }
+
+    // autoMain.addCommands(new InstantCommand(() -> Shooter
+    // .setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "End of
+    // auto")));
+
+    // logInfo("Auto command built!");
+    // return Optional.ofNullable(autoMain);
+    // }
 
     /**
      * Calls {@link #buildAutoCommand()}. {@link #init(RobotContainer)} must be

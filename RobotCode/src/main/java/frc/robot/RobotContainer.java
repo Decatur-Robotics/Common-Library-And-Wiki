@@ -52,10 +52,10 @@ public class RobotContainer {
 
 	private final SwerveDriveSubsystem SwerveDrive;
 	private final ClimberSubsystem ClimberSubsystem;
-	// private final ShooterSubsystem ShooterSubsystem;
-	// private final ShooterMountSubsystem ShooterMountSubsystem;
+	private final ShooterSubsystem ShooterSubsystem;
+	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
-	// private final IndexerSubsystem IndexerSubsystem;
+	private final IndexerSubsystem IndexerSubsystem;
 	// private final IntakeSubsystem IntakeSubsystem;
 	// private final LedSubsystem LedSubsystem;
 
@@ -78,10 +78,10 @@ public class RobotContainer {
 		// Instantiate subsystems
 		SwerveDrive = new SwerveDriveSubsystem();
 		ClimberSubsystem = new ClimberSubsystem();
-		// ShooterSubsystem = new ShooterSubsystem();
-		// ShooterMountSubsystem = new ShooterMountSubsystem();
+		ShooterSubsystem = new ShooterSubsystem();
+		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
-		// IndexerSubsystem = new IndexerSubsystem();
+		IndexerSubsystem = new IndexerSubsystem();
 		// IntakeSubsystem = new IntakeSubsystem();
 		// LedSubsystem = new LedSubsystem();
 
@@ -132,8 +132,7 @@ public class RobotContainer {
 				LogitechControllerButtons.down);
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
-				() -> (SecondaryController.getY() * 2), () ->
-				(SecondaryController.getThrottle()) * 2));
+				() -> (SecondaryController.getY() * 2), () -> (SecondaryController.getThrottle()) * 2));
 		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
 		// IndexerSubsystem,
 		// ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
@@ -179,22 +178,22 @@ public class RobotContainer {
 		return SwerveDrive;
 	}
 
-	// public ShooterSubsystem getShooter() {
-	// return ShooterSubsystem;
-	// }
+	public ShooterSubsystem getShooter() {
+		return ShooterSubsystem;
+	}
 
-	// public ShooterMountSubsystem getShooterMount() {
-	// return ShooterMountSubsystem;
-	// }
+	public ShooterMountSubsystem getShooterMount() {
+		return ShooterMountSubsystem;
+	}
 
 	// public VisionSubsystem getVision()
 	// {
 	// return VisionSubsystem;
 	// }
 
-	// public IndexerSubsystem getIndexer() {
-	// return IndexerSubsystem;
-	// }
+	public IndexerSubsystem getIndexer() {
+		return IndexerSubsystem;
+	}
 
 	// public IntakeSubsystem getIntake() {
 	// return IntakeSubsystem;
