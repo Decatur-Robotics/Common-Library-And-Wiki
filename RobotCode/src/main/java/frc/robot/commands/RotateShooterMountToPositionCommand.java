@@ -17,7 +17,7 @@ public class RotateShooterMountToPositionCommand extends Command
     /**
      * This constructor is the version that uses a constant target
      * 
-     * @param position in degrees
+     * @param position in encoder ticks
      */
     public RotateShooterMountToPositionCommand(ShooterMountSubsystem shooterMount,
             double targetPosition)
