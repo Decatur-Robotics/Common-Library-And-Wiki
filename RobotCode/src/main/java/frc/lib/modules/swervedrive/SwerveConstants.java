@@ -49,7 +49,7 @@ public final class SwerveConstants
 	public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
 	// Find this for the robot!
-	public static final double DRIVE_BASE_RADIUS_METERS = 0.5;
+	public static final double DRIVE_BASE_RADIUS_METERS = 0.33;
 
 	/*
 	 * Swerve Kinematics No need to ever change this unless you are not doing a traditional
@@ -120,22 +120,22 @@ public final class SwerveConstants
 	public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;
 
 	/* Swerve Profiling Values */
-	/** Meters per Second */
-	public static final double BASE_DRIVE_SPEED = 0.5, BASE_TURN_SPEED = 1.5;
-	public static final double SLOW_SPEED = 0.5;
-	public static final double AUTO_SPEED = 0.85;
-	public static final double NORMAL_SPEED = 1;
-	public static final double FAST_SPEED = 1.5;
-	public static final double MAX_SPEED = 3.7; //TODO: This must be tuned to
+	/* Meters per Second */
+	public static final double BASE_DRIVE_SPEED = 1, BASE_TURN_SPEED = 1;
+	public static final double SLOW_SPEED = 1.5;
+	public static final double AUTO_SPEED = 3.7;
+	public static final double NORMAL_SPEED = 3.93; // 3.7;
+	public static final double FAST_SPEED = 3.93; // 3.7;
+	public static final double MAX_SPEED = 3.93; // 3.7; //TODO: This must be tuned to
 												// specific
 												// robot
 	/** Radians per Second */
-	public static final double MAX_ANGULAR_VELOCITY = 2.25; // 10.0; //TODO: This must be
+	public static final double MAX_ANGULAR_VELOCITY = 9.42478; //TODO: This must be
 															// tuned to
 															// specific robot
 
 	/** Radians per Second Squared */
-	public static final double MAX_ANGULAR_ACCELERATION = 4.5; //TODO: This must be
+	public static final double MAX_ANGULAR_ACCELERATION = 12.5664; //TODO: This must be
 															   // tuned to
 															   // specific robot
 
@@ -147,10 +147,10 @@ public final class SwerveConstants
 
 	public static final double[] ANGLE_OFFSETS = new double[]
 	{
-			114.3, // FL
-			80.2, // FR
-			61.4, // BL
-			313.4 // BR
+			151.35, // FL
+			80.68, // FR
+			27.77, // BL
+			119.44 // BR
 	};
 
 	public static final int FRONT_LEFT = 0;

@@ -2,37 +2,30 @@ package frc.lib.modules.tankdrivetrain;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamTalonFX;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class TankDrivetrainSubsystem extends SubsystemBase
 {
 
-    private TeamTalonFX rightDriveFalconMain, leftDriveFalconMain, rightDriveFalconSub,
+    private TalonFX rightDriveFalconMain, leftDriveFalconMain, rightDriveFalconSub,
             leftDriveFalconSub;
 
     private double leftPowerDesired;
     private double rightPowerDesired;
-
-    private String reason;
-
-    private SlewRateLimiter powerRamping;
 
     private double speedMod;
 
     public TankDrivetrainSubsystem(int rightMainPort, int leftMainPort, int rightSubPort,
             int leftSubPort)
     {
-        rightDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.RightMain", rightMainPort);
-        leftDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.LeftMain", leftMainPort);
-        rightDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.RightSub", rightSubPort);
-        leftDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.LeftSub", leftSubPort);
-
-        // IMPLEMENT AND TEST A SLEW RATE LIMITER ON THE SHOWBOT BEFORE WE ADD THIS TO COMMON LIB
-        powerRamping = new SlewRateLimiter(TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
+        rightDriveFalconMain = new TalonFX(rightMainPort);
+        leftDriveFalconMain = new TalonFX(leftMainPort);
+        rightDriveFalconSub = new TalonFX(rightSubPort);
+        leftDriveFalconSub = new TalonFX(leftSubPort);
 
         // create a motor config object
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -99,14 +92,11 @@ public class TankDrivetrainSubsystem extends SubsystemBase
         return powerDesired;
     }
 
-    public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason)
+    public void setMotorPowers(double leftPowerDesired, double rightPowerDesired)
     {
         // Set desired motor powers
         this.leftPowerDesired = leftPowerDesired;
         this.rightPowerDesired = rightPowerDesired;
-
-        // Set reason for desiring those motor powers
-        this.reason = reason;
     }
 
     @Override
@@ -133,8 +123,8 @@ public class TankDrivetrainSubsystem extends SubsystemBase
         finalRightPower = calculateClampedPower(finalRightPower);
 
         // Set final motor powers
-        leftDriveFalconMain.set(finalLeftPower, reason);
-        rightDriveFalconMain.set(finalRightPower, reason);
+        leftDriveFalconMain.set(finalLeftPower);
+        rightDriveFalconMain.set(finalRightPower);
     }
 
 }

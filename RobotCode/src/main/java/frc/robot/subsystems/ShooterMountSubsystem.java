@@ -5,36 +5,39 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamTalonFX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
-public class ShooterMountSubsystem extends SubsystemBase
-{
+public class ShooterMountSubsystem extends SubsystemBase {
 
-	private TeamTalonFX mainMotor, followMotor;
+	private TalonFX shooterMountMotorLeft, shooterMountMotorRight;
 
-	private final MotionMagicDutyCycle motorControlRequest;
+	private MotionMagicDutyCycle motorControlRequest;
 
-	/** Target rotation in encoder ticks (4096 encoder ticks to 1 degree) */
+	/** Target rotation in encoder ticks (2048 encoder ticks to 1 degree) */
 	private double targetRotation;
 
-	/** Key: distance to speaker in meters, Value: Rotation compensation in degrees */
+	/**
+	 * Key: distance to speaker in meters, Value: Rotation compensation in degrees
+	 */
 	private InterpolatingDoubleTreeMap shooterMountAngleTreeMap;
-	/** Key: distance to speaker in meters, Value: Note velocity in meters per second */
+	/**
+	 * Key: distance to speaker in meters, Value: Note velocity in meters per second
+	 */
 	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
 
-	public ShooterMountSubsystem()
-	{
+	public ShooterMountSubsystem() {
 
-		mainMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_LEFT", Ports.SHOOTER_MOUNT_MOTOR_LEFT);
-		followMotor = new TeamTalonFX("SHOOTER_MOUNT_MOTOR_RIGHT", Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		shooterMountMotorLeft = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_LEFT);
 
-		followMotor.setControl(new Follower(mainMotor.getDeviceID(), false));
-		followMotor.setInverted(true);
+		shooterMountMotorRight = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+
+		shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
 
 		// create configurator
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
@@ -54,29 +57,38 @@ public class ShooterMountSubsystem extends SubsystemBase
 		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
 
 		// config the main motor
-		mainMotor.getConfigurator().apply(mainMotorConfigs);
+		shooterMountMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
-		targetRotation = 0;
+		targetRotation = ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE;
 
 		// Populate tree maps
 		shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
 		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
-		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
-		{
+		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++) {
 			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
 			shooterMountAngleTreeMap.put(key,
-					ShooterMountConstants.GravityCompensationTreeMapValues[i]);
+					ShooterMountConstants.ShooterMountAngleTreeMapValues[i]);
 			noteVelocityEstimateTreeMap.put(key,
 					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
 		}
 
-		motorControlRequest = new MotionMagicDutyCycle(0);
+		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
+
+		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
+				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble()));
+		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
+				() -> targetRotation);
 	}
 
 	@Override
-	public void periodic()
-	{
-		mainMotor.setControl(motorControlRequest.withPosition(targetRotation));
+	public void periodic() {
+		if (shooterMountMotorLeft.hasResetOccurred()
+				|| shooterMountMotorRight.hasResetOccurred()) {
+			shooterMountMotorLeft.optimizeBusUtilization();
+			shooterMountMotorRight.optimizeBusUtilization();
+			shooterMountMotorLeft.getRotorPosition().setUpdateFrequency(20);
+		}
 	}
 
 	/**
@@ -84,38 +96,38 @@ public class ShooterMountSubsystem extends SubsystemBase
 	 * 
 	 * @param targetRotation the desired rotation in encoder ticks
 	 */
-	public void setTargetRotation(double targetRotation)
-	{
-		this.targetRotation = degreesToTicks(
-				Math.max(targetRotation - ShooterMountConstants.SHOOTER_MOUNT_OFFSET_DEGREES, 0));
-	}
+	public void setTargetRotation(double targetRotation) {
+		this.targetRotation = Math.max(targetRotation,
+				ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
+				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
+						+ ((this.targetRotation - ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE)
+								* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
-	private static double degreesToTicks(double degrees)
-	{
-		return degrees * ShooterMountConstants.TICKS_IN_ONE_DEGREE;
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
+				.withFeedForward(gravityFeedForward));
 	}
 
 	/**
-	 * @return A map where: Key: distance to speaker in meters, Value: Rotation compensation in
+	 * @return A map where: Key: distance to speaker in meters, Value: Rotation
+	 *         compensation in
 	 *         degrees
 	 */
-	public InterpolatingDoubleTreeMap getShooterMountAngleTreeMap()
-	{
+	public InterpolatingDoubleTreeMap getShooterMountAngleTreeMap() {
 		return shooterMountAngleTreeMap;
 	}
 
 	/**
-	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity in meters per
+	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity
+	 *         in meters per
 	 *         second
 	 */
-	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
-	{
+	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap() {
 		return noteVelocityEstimateTreeMap;
 	}
 
-	public boolean isAtTargetRotation()
-	{
-		return Math.abs(mainMotor.getCurrentEncoderValue()
+	public boolean isAtTargetRotation() {
+		return Math.abs((shooterMountMotorLeft.getRotorPosition().getValueAsDouble())
 				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 

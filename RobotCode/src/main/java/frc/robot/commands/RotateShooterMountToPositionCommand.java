@@ -40,4 +40,10 @@ public class RotateShooterMountToPositionCommand extends Command
         return shooterMount.isAtTargetRotation();
     }
 
+    @Override
+    public void end(boolean interrupted)
+    {
+        shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+    }
+
 }

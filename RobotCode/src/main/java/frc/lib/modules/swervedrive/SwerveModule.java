@@ -4,23 +4,26 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.lib.core.motors.TeamSparkMAX;
-import frc.lib.core.util.CANSparkMaxUtil;
+import frc.lib.core.ILogSource;
+import frc.lib.core.util.CANSparkBaseUtil;
 import frc.lib.core.util.CTREModuleState;
 import frc.lib.core.util.Conversions;
-import frc.lib.core.util.CANSparkMaxUtil.Usage;
+import frc.lib.core.util.CANSparkBaseUtil.Usage;
 import frc.robot.Robot;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.FaultID;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
 
-public class SwerveModule
+public class SwerveModule implements ILogSource
 {
 
 	public final int moduleNumber;
@@ -47,11 +50,14 @@ public class SwerveModule
 		angleOffset = moduleConstants.AngleOffset;
 
 		/* Angle Encoder Config */
-		angleEncoder = new CANcoder(moduleConstants.CANCODER_ID);
+		if (moduleConstants.CANCODER_ID == 9 || moduleConstants.CANCODER_ID == 10)
+				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID, "Default Name");
+		else
+				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID);
 		configAngleEncoder();
 
 		/* Angle Motor Config */
-		mAngleMotor = new TeamSparkMAX("AngleMotor", moduleConstants.ANGLE_MOTOR_ID);
+		mAngleMotor = new CANSparkMax(moduleConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
 		integratedAngleEncoder = mAngleMotor.getEncoder();
 		angleController = mAngleMotor.getPIDController();
 		configAngleMotor();
@@ -61,6 +67,32 @@ public class SwerveModule
 		configDriveMotor();
 
 		lastAngle = getState().angle;
+
+		openLoopDriveRequest = new DutyCycleOut(0);
+	}
+
+	public void periodic()
+	{
+		if (angleEncoder.hasResetOccurred() || mDriveMotor.hasResetOccurred()
+				|| mAngleMotor.getStickyFault(FaultID.kHasReset))
+		{
+			angleEncoder.optimizeBusUtilization();
+			angleEncoder.getAbsolutePosition().setUpdateFrequency(200);
+
+			mDriveMotor.optimizeBusUtilization();
+			mDriveMotor.getRotorPosition().setUpdateFrequency(200);
+			mDriveMotor.getRotorVelocity().setUpdateFrequency(200);
+			mDriveMotor.getDutyCycle().setUpdateFrequency(200);
+
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 5);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+			mAngleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
+		}
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop)
@@ -69,6 +101,7 @@ public class SwerveModule
 		 * This is a custom optimize function, since default WPILib optimize assumes continuous
 		 * controller which CTRE and Rev onboard is not
 		 */
+
 		desiredState = CTREModuleState.optimize(desiredState, getState().angle);
 		setAngle(desiredState);
 		setSpeed(desiredState, isOpenLoop);
@@ -80,7 +113,6 @@ public class SwerveModule
 		// using a PercentOutput of motor power
 		if (isOpenLoop)
 		{
-
 			double percentOutput = desiredState.speedMetersPerSecond / SwerveConstants.MAX_SPEED;
 			openLoopDriveRequest.Output = percentOutput;
 			mDriveMotor.setControl(openLoopDriveRequest);
@@ -96,24 +128,25 @@ public class SwerveModule
 
 	private void setAngle(SwerveModuleState desiredState)
 	{
-		Rotation2d angle = (Math
-				.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.01))
-						? lastAngle
-						: desiredState.angle; // Prevent rotating module if speed is less then 1%.
-												// Prevents Jittering.
+		// Prevent rotating module if speed is less then 1%. Prevents Jittering.
+		Rotation2d angle = desiredState.angle;
+		if (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.01))
+		{
+			angle = lastAngle;
+		}
 
 		angleController.setReference(angle.getDegrees(), CANSparkBase.ControlType.kPosition);
 		lastAngle = angle;
 	}
 
+	public Rotation2d getCanCoder()
+	{
+		return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValueAsDouble() * 360);
+	}
+
 	private Rotation2d getAngle()
 	{
 		return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
-	}
-
-	public Rotation2d getCanCoder()
-	{
-		return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValueAsDouble());
 	}
 
 	public void resetToAbsolute()
@@ -130,7 +163,7 @@ public class SwerveModule
 	private void configAngleMotor()
 	{
 		mAngleMotor.restoreFactoryDefaults();
-		CANSparkMaxUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kMinimal);
+		CANSparkBaseUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kMinimal);
 		mAngleMotor.setSmartCurrentLimit(SwerveConstants.ANGLE_CONTINUOUS_CURRENT_LIMIT);
 		mAngleMotor.setInverted(SwerveConstants.ANGLE_MOTOR_INVERT);
 		mAngleMotor.setIdleMode(SwerveConstants.ANGLE_NEUTRAL_MODE);

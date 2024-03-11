@@ -1,107 +1,129 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamTalonFX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Ports;
 
-public class ClimberSubsystem extends SubsystemBase
-{
-	private Pigeon2 gyro;
-	private TeamTalonFX extendMotorLeft, extendMotorRight;
-	private double targetPosition, targetPositionLeft, targetPositionRight;
-	private ProfiledPIDController pidController;
+public class ClimberSubsystem extends SubsystemBase {
+
+	private TalonFX climberMotorRight;
+	private TalonFX climberMotorLeft;
+	private double targetPosition;
+	// private MotionMagicDutyCycle motorControlRequestLeft,
+	// motorControlRequestRight;
+	private VelocityDutyCycle motorControlRequestLeftVelocity, motorControlRequestRightVelocity;
 	private boolean override;
-	private double leftPower, rightPower;
-	
-	public ClimberSubsystem()
-	{
-		gyro = new Pigeon2(Ports.PIGEON_GYRO);
+
+	public ClimberSubsystem() {
 		// sets extension of left and right motors to given extension length
-		extendMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
-				Ports.CLIMBER_RIGHT_MOTOR);
-		extendMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
+		climberMotorLeft = new TalonFX(Ports.CLIMBER_MOTOR_LEFT, "Default Name");
+		climberMotorRight = new TalonFX(Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
 
-				Ports.CLIMBER_LEFT_MOTOR);
-		extendMotorLeft.setNeutralMode(NeutralModeValue.Brake);
-		extendMotorRight.setNeutralMode(NeutralModeValue.Brake);
+		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
+		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
 
-		extendMotorLeft.setInverted(true);
-		targetPosition = ClimberConstants.MIN_EXTENSION;
-		pidController = new ProfiledPIDController(ClimberConstants.CLIMBER_KP,
-				ClimberConstants.CLIMBER_KI, ClimberConstants.CLIMBER_KD,
-				new TrapezoidProfile.Constraints(ClimberConstants.CLIMBER_VELOCITY,
-						ClimberConstants.CLIMBER_ACCELERATION));
+		targetPosition = ClimberConstants.LEFT_CLIMBER_MINIMUM;
+
+		// create configurator
+		TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
+
+		// set pid profiles configs
+		// Slot0Configs pidSlot0Configs = motorConfigs.Slot0;
+		// pidSlot0Configs.kP = ClimberConstants.CLIMBER_KP;
+		// pidSlot0Configs.kI = ClimberConstants.CLIMBER_KI;
+		// pidSlot0Configs.kD = ClimberConstants.CLIMBER_KD;
+		// pidSlot0Configs.kS = ClimberConstants.CLIMBER_KS;
+		// pidSlot0Configs.kV = ClimberConstants.CLIMBER_KV;
+		// pidSlot0Configs.kA = ClimberConstants.CLIMBER_KA;
+
+		// set motionmagic velocity configs
+		// MotionMagicConfigs motionMagicVelocityConfigs = motorConfigs.MotionMagic;
+		// motionMagicVelocityConfigs.MotionMagicCruiseVelocity =
+		// ClimberConstants.CLIMBER_VELOCITY;
+		// motionMagicVelocityConfigs.MotionMagicAcceleration =
+		// ClimberConstants.CLIMBER_ACCELERATION;
+
+		// config the main motor
+		// climberMotorLeft.getConfigurator().apply(motorConfigs);
+		// climberMotorRight.getConfigurator().apply(motorConfigs);
+
+		// motorControlRequestLeft = new MotionMagicDutyCycle(targetPosition +
+		// ClimberConstants.LEFT_CLIMBER_OFFSET);
+		// motorControlRequestRight = new MotionMagicDutyCycle(targetPosition +
+		// ClimberConstants.RIGHT_CLIMBER_OFFSET);
+
+		// motorControlRequestLeftVelocity = new VelocityDutyCycle(0);
+		// motorControlRequestRightVelocity = new VelocityDutyCycle(0);
+
 		override = false;
+
+		RobotContainer.getShuffleboardTab().addNumber("L Climber Pos",
+				() -> climberMotorLeft.getPosition().getValueAsDouble());
+		RobotContainer.getShuffleboardTab().addNumber("R Climber Pos",
+				() -> climberMotorRight.getPosition().getValueAsDouble());
+
+		// climberMotorLeft.setControl(
+		// motorControlRequestLeft.withPosition(targetPosition +
+		// ClimberConstants.LEFT_CLIMBER_OFFSET));
+		// climberMotorRight.setControl(
+		// motorControlRequestRight.withPosition(targetPosition +
+		// ClimberConstants.RIGHT_CLIMBER_OFFSET));
 	}
 
-	public void periodic()
-	{
-		if (!override)
-		{
-
-			targetPositionLeft = targetPosition;
-			targetPositionRight = targetPosition;
-			double gyroRoll = gyro.getRoll().getValueAsDouble();
-
-			// left
-			if (gyroRoll > ClimberConstants.DEADBAND_GYRO)
-			{
-				targetPositionLeft = extendMotorLeft.getCurrentEncoderValue();
-			}
-
-			// right
-			else if (gyroRoll < -ClimberConstants.DEADBAND_GYRO)
-			{
-				targetPositionRight = extendMotorRight.getCurrentEncoderValue();
-			}
-			// setting extension of climber arms
-			extendMotorLeft.set(pidController.calculate(extendMotorLeft.getCurrentEncoderValue(),
-					targetPositionLeft));
-			extendMotorRight.set(pidController.calculate(extendMotorRight.getCurrentEncoderValue(),
-					targetPositionRight));
-		}
-		else
-		{
-			extendMotorLeft.set(leftPower * ClimberConstants.MAX_OVERRIDE_SPEED);
-			extendMotorRight.set(rightPower * ClimberConstants.MAX_OVERRIDE_SPEED);
-			targetPosition = extendMotorLeft.getCurrentEncoderValue();
-			targetPosition = extendMotorRight.getCurrentEncoderValue();
+	@Override
+	public void periodic() {
+		if (climberMotorLeft.hasResetOccurred()
+				|| climberMotorRight.hasResetOccurred()) {
+			climberMotorLeft.optimizeBusUtilization();
+			climberMotorRight.optimizeBusUtilization();
+			climberMotorLeft.getRotorPosition().setUpdateFrequency(20);
+			climberMotorRight.getRotorPosition().setUpdateFrequency(20);
 		}
 	}
 
-	public void setPowers(double leftPower, double rightPower, String reason)
-	{
-		this.leftPower = leftPower;
-		this.rightPower = rightPower;
+	public void setPowers(double leftPower, double rightPower, String reason) {
+		if (true) {
+			System.out.println("Right Climber Power: " + rightPower);
+			// climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
+			// climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(rightPower));
 
+			climberMotorRight.set(rightPower);
+			climberMotorLeft.set(-leftPower);
+
+			targetPosition = climberMotorLeft.getRotorPosition().getValueAsDouble();
+		}
 	}
 
-	public void setPosition(double position)
-	{
-		targetPosition = position;
-		targetPositionLeft = position;
-		targetPositionRight = position;
+	public void setPosition(double position) {
+		// targetPosition = position;
+
+		// climberMotorLeft.setControl(
+		// motorControlRequestLeft.withPosition(targetPosition +
+		// ClimberConstants.LEFT_CLIMBER_OFFSET));
+		// climberMotorRight.setControl(
+		// motorControlRequestRight.withPosition(targetPosition +
+		// ClimberConstants.RIGHT_CLIMBER_OFFSET));
 	}
 
-	// checks if the power level is too high or low for both motors.
-	public boolean motorPowerCheck(double power)
-	{
-		return (extendMotorLeft.getCurrentEncoderValue() > ClimberConstants.MAX_EXTENSION
-				&& power >= 0)
-				|| (extendMotorLeft.getCurrentEncoderValue() < ClimberConstants.MIN_EXTENSION
-						&& power <= 0);
-	}
-
-	public void setOverride(boolean override)
-	{
+	public void setOverride(boolean override) {
+		System.out.println("Setting climber override to " + override);
+		
 		this.override = override;
+		
+		if (override == false)
+		setPosition(targetPosition);
 	}
-
+	 
 }

@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.modules.leds.Color;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 
 /**
  * <p>
@@ -16,10 +18,12 @@ public class ShootCommand extends Command
 {
 
     private final IndexerSubsystem Indexer;
+    private final LedSubsystem Leds;
 
-    public ShootCommand(IndexerSubsystem indexer)
+    public ShootCommand(IndexerSubsystem indexer, LedSubsystem leds)
     {
         Indexer = indexer;
+        Leds = leds;
 
         addRequirements(Indexer);
     }
@@ -36,6 +40,7 @@ public class ShootCommand extends Command
     {
         Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
                 "ShooterInstantCommand ended");
+        Leds.flashAllPixels(Color.Blue);
     }
 
     @Override
