@@ -148,10 +148,10 @@ public class RobotContainer {
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
-		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// ClimberConstants.MAX_EXTENSION));
-		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// ClimberConstants.MIN_EXTENSION));
+		UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
+				ClimberConstants.LEFT_CLIMBER_MAXIMUM, ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
+		DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
+				ClimberConstants.LEFT_CLIMBER_MINIMUM, ClimberConstants.RIGHT_CLIMBER_MINIMUM));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab() {
