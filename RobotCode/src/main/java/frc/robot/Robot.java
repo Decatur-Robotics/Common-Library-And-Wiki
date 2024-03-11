@@ -23,6 +23,8 @@ public class Robot extends TimedRobot implements ILogSource
 
 	private ArrayList<ModeBasedSubsystem> subsystems = new ArrayList<>();
 
+	private RobotContainer robotContainer;
+
 	/**
 	 * This function is run when the robot is first started up and should be used for any
 	 * initialization code.
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot implements ILogSource
 		instance = this;
 
 		ctreConfigs = new CTREConfigs();
+		robotContainer = new RobotContainer();
 	}
 
 	/**
@@ -85,8 +88,8 @@ public class Robot extends TimedRobot implements ILogSource
 		}
 
 		logFine("Getting and running auto command...");
-		autonomousCommand = Autonomous.getAutoCommand();
-		Autonomous.close();
+		Autonomous auto = robotContainer.getAutonomous();
+		autonomousCommand = auto.buildAutoCommand();
 		// schedule the autonomous command (example)
 		if (autonomousCommand.isPresent())
 		{

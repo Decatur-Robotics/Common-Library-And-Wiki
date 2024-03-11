@@ -41,6 +41,8 @@ public class RobotContainer
 	private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
 	private final IntakeSubsystem IntakeSubsystem;
+	
+	private final Autonomous Autonomous;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer()
@@ -57,8 +59,9 @@ public class RobotContainer
 		VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
 		IntakeSubsystem = new IntakeSubsystem();
-
-		Autonomous.init(this);
+		
+		Autonomous = new Autonomous(this);
+		
 
 		// Configure the button bindings
 		configurePrimaryBindings();
@@ -138,6 +141,11 @@ public class RobotContainer
 	public IntakeSubsystem getIntake()
 	{
 		return IntakeSubsystem;
+	}
+
+	public Autonomous getAutonomous(){
+
+		return Autonomous;
 	}
 
 }
