@@ -5,31 +5,31 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamSparkBase;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-	private TeamSparkBase intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotorTop,
+	private CANSparkMax intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotorTop,
 			intakeRollerMotorBottom;
 	private double desiredRotation, desiredVelocity;
 	private SparkPIDController intakeDeployPidController, intakeRollerPidController;
+	private RelativeEncoder intakeDeployEncoderRight;
 
 	public IntakeSubsystem() {
-		intakeDeployMotorRight = new TeamSparkBase("Intake Deploy Motor Right",
-				Ports.INTAKE_DEPLOY_MOTOR_RIGHT);
-		intakeDeployMotorLeft = new TeamSparkBase("Intake Deploy Motor Left",
-				Ports.INTAKE_DEPLOY_MOTOR_LEFT);
-		intakeRollerMotorTop = new TeamSparkBase("Intake Roller Motor Top",
-				Ports.INTAKE_ROLLER_MOTOR_TOP);
-		intakeRollerMotorBottom = new TeamSparkBase("Intake Roller Motor Bottom",
-				Ports.INTAKE_ROLLER_MOTOR_BOTTOM);
+		intakeDeployMotorRight = new CANSparkMax(Ports.INTAKE_DEPLOY_MOTOR_RIGHT, MotorType.kBrushless);
+		intakeDeployMotorLeft = new CANSparkMax(Ports.INTAKE_DEPLOY_MOTOR_LEFT, MotorType.kBrushless);
+		intakeRollerMotorTop = new CANSparkMax(Ports.INTAKE_ROLLER_MOTOR_TOP, MotorType.kBrushless);
+		intakeRollerMotorBottom = new CANSparkMax(Ports.INTAKE_ROLLER_MOTOR_BOTTOM, MotorType.kBrushless);
 
 		// Configure deployment motors
 		intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
@@ -68,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Velocity",
 				() -> desiredVelocity);
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation",
-				() -> intakeDeployMotorRight.getCurrentEncoderValue());
+				() -> intakeDeployEncoderRight.getPosition());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation",
 				() -> desiredRotation);
 	}
@@ -79,18 +79,41 @@ public class IntakeSubsystem extends SubsystemBase {
 				|| intakeDeployMotorRight.getStickyFault(FaultID.kHasReset)
 				|| intakeRollerMotorBottom.getStickyFault(FaultID.kHasReset)
 				|| intakeRollerMotorTop.getStickyFault(FaultID.kHasReset)) {
-			intakeDeployMotorRight.setAllCanPeriodicFramePeriods(10000);
-			intakeDeployMotorLeft.setAllCanPeriodicFramePeriods(10000);
-			intakeRollerMotorTop.setAllCanPeriodicFramePeriods(10000);
-			intakeRollerMotorBottom.setAllCanPeriodicFramePeriods(10000);
 			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
+			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+			intakeRollerMotorTop.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
+
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+			intakeRollerMotorBottom.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
+
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
+
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
+			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 		}
 	}
 

@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.core.ILogSource;
-import frc.lib.core.motors.TeamSparkBase;
 import frc.lib.core.util.CANSparkBaseUtil;
 import frc.lib.core.util.CTREModuleState;
 import frc.lib.core.util.Conversions;
@@ -19,8 +18,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.FaultID;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
 
 public class SwerveModule implements ILogSource
 {
@@ -30,7 +31,7 @@ public class SwerveModule implements ILogSource
 	private Rotation2d angleOffset;
 	private Rotation2d lastAngle;
 
-	private TeamSparkBase mAngleMotor;
+	private CANSparkMax mAngleMotor;
 	private TalonFX mDriveMotor;
 
 	private RelativeEncoder integratedAngleEncoder;
@@ -56,7 +57,7 @@ public class SwerveModule implements ILogSource
 		configAngleEncoder();
 
 		/* Angle Motor Config */
-		mAngleMotor = new TeamSparkBase("AngleMotor", moduleConstants.ANGLE_MOTOR_ID);
+		mAngleMotor = new CANSparkMax(moduleConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
 		integratedAngleEncoder = mAngleMotor.getEncoder();
 		angleController = mAngleMotor.getPIDController();
 		configAngleMotor();

@@ -48,7 +48,7 @@ public class TankDriveCommand extends Command
 				TankDrivetrainConstants.DRIVETRAIN_POWER_EXPONENT);
 
 		// Set the motor powers in the drivetrain subsystem
-		drivetrain.setMotorPowers(finalLeftInputY, finalRightInputY, "TankDriveCommand Joysticks");
+		drivetrain.setMotorPowers(finalLeftInputY, finalRightInputY);
 	}
 
 }

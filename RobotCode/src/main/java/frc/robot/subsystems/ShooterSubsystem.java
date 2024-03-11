@@ -4,19 +4,19 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.RobotContainer;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamTalonFX;
 
 public class ShooterSubsystem extends SubsystemBase {
 
 	private double desiredShooterVelocity;
 
-	private TeamTalonFX shooterMotorRight, shooterMotorLeft;
+	private TalonFX shooterMotorRight, shooterMotorLeft;
 
 	private MotionMagicVelocityDutyCycle motorControlRequest;
 
@@ -25,10 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorRight = new TeamTalonFX("Left Shooter Motor Main", Ports.SHOOTER_MOTOR_RIGHT,
-				"Default Name");
-		shooterMotorLeft = new TeamTalonFX("Right Shooter Motor Main", Ports.SHOOTER_MOTOR_LEFT,
-				"Default Name");
+		shooterMotorRight = new TalonFX(Ports.SHOOTER_MOTOR_RIGHT, "Default Name");
+		shooterMotorLeft = new TalonFX(Ports.SHOOTER_MOTOR_LEFT, "Default Name");
 
 		shooterMotorRight.setNeutralMode(NeutralModeValue.Brake);
 		shooterMotorLeft.setNeutralMode(NeutralModeValue.Brake);

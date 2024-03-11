@@ -12,15 +12,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.TeamTalonFX;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Ports;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-	private TeamTalonFX climberMotorRight;
-	private TeamTalonFX climberMotorLeft;
+	private TalonFX climberMotorRight;
+	private TalonFX climberMotorLeft;
 	private double targetPosition;
 	// private MotionMagicDutyCycle motorControlRequestLeft,
 	// motorControlRequestRight;
@@ -29,10 +28,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
 	public ClimberSubsystem() {
 		// sets extension of left and right motors to given extension length
-		climberMotorLeft = new TeamTalonFX("Subsystems.Climber.ExtendRight",
-				Ports.CLIMBER_MOTOR_LEFT, "Default Name");
-		climberMotorRight = new TeamTalonFX("Subsystems.Climber.ExtendLeft",
-				Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
+		climberMotorLeft = new TalonFX(Ports.CLIMBER_MOTOR_LEFT, "Default Name");
+		climberMotorRight = new TalonFX(Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
 
 		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
@@ -105,7 +102,7 @@ public class ClimberSubsystem extends SubsystemBase {
 			climberMotorRight.set(rightPower);
 			climberMotorLeft.set(-leftPower);
 
-			targetPosition = climberMotorLeft.getCurrentEncoderValue() -
+			targetPosition = climberMotorLeft.getRotorPosition().getValueAsDouble() -
 			ClimberConstants.LEFT_CLIMBER_OFFSET;
 		}
 	}
