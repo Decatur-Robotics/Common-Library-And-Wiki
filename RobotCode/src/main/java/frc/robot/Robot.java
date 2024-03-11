@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.core.ILogSource;
 import frc.lib.core.ModeBasedSubsystem;
 import frc.lib.core.util.CTREConfigs;
+import frc.robot.commands.RotateShooterMountToPositionCommand;
+import frc.robot.constants.ShooterMountConstants;
 
 public class Robot extends TimedRobot implements ILogSource {
 
@@ -121,6 +123,8 @@ public class Robot extends TimedRobot implements ILogSource {
 		for (ModeBasedSubsystem subsystem : subsystems) {
 			subsystem.teleopInit();
 		}
+
+		new RotateShooterMountToPositionCommand(robotContainer.getShooterMount(), ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 
 	/** This function is called periodically during operator control. */

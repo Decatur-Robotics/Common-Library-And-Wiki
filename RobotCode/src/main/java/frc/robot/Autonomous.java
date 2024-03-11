@@ -132,7 +132,7 @@ public class Autonomous implements ILogSource {
         NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(
                 ShooterMount, ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
         NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter,
-                Indexer, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, true));
+                Indexer, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 
         // // Populate rotation commands
         // for (double rot : AutoConstants.AutoShooterMountRotations) {

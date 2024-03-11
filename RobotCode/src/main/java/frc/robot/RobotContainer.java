@@ -132,7 +132,7 @@ public class RobotContainer {
 				LogitechControllerButtons.down);
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
-				() -> (SecondaryController.getY() * 2), () -> (SecondaryController.getThrottle()) * 2));
+				() -> (SecondaryController.getY() * 4), () -> (SecondaryController.getThrottle()) * 4));
 		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
 		// IndexerSubsystem,
 		// ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
