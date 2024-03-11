@@ -34,7 +34,7 @@ public class ClimberSubsystem extends SubsystemBase {
 		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
 
-		targetPosition = ClimberConstants.MIN_EXTENSION;
+		targetPosition = ClimberConstants.LEFT_CLIMBER_MINIMUM;
 
 		// create configurator
 		TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
@@ -102,8 +102,7 @@ public class ClimberSubsystem extends SubsystemBase {
 			climberMotorRight.set(rightPower);
 			climberMotorLeft.set(-leftPower);
 
-			targetPosition = climberMotorLeft.getRotorPosition().getValueAsDouble() -
-			ClimberConstants.LEFT_CLIMBER_OFFSET;
+			targetPosition = climberMotorLeft.getRotorPosition().getValueAsDouble();
 		}
 	}
 

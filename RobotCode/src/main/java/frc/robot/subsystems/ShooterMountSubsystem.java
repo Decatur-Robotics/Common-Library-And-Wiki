@@ -102,7 +102,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
 						+ ((this.targetRotation - ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE)
-								* ShooterMountConstants.ENCODER_TICKS_IN_RADIANS));
+								* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
 				.withFeedForward(gravityFeedForward));
