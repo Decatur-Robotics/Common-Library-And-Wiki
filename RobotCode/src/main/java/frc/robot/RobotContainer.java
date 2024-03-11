@@ -133,16 +133,16 @@ public class RobotContainer {
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY() * 4), () -> (SecondaryController.getThrottle()) * 4));
-		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
-		// IndexerSubsystem,
-		// ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		// RightTrigger.whileTrue(new
-		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-		// ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
+				IndexerSubsystem,
+				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		RightTrigger.whileTrue(new
+				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		// AButton.whileTrue(new
-		// RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-		// ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		AButton.whileTrue(new
+				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 		// LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
