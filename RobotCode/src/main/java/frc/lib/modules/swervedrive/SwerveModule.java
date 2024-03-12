@@ -10,6 +10,7 @@ import frc.lib.core.util.CTREModuleState;
 import frc.lib.core.util.Conversions;
 import frc.lib.core.util.CANSparkBaseUtil.Usage;
 import frc.robot.Robot;
+import frc.robot.constants.Constants;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -51,7 +52,7 @@ public class SwerveModule implements ILogSource
 
 		/* Angle Encoder Config */
 		if (moduleConstants.CANCODER_ID == 9 || moduleConstants.CANCODER_ID == 10)
-				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID, "Default Name");
+				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID, Constants.CANIVORE_NAME);
 		else
 				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID);
 		configAngleEncoder();
