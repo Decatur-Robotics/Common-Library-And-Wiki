@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
+import frc.lib.core.Autonomous;
 import frc.lib.core.LogitechControllerButtons;
+import frc.lib.core.SimpleAuto;
 import frc.robot.commands.AimShooterCommand;
 import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.ClimberSpeedCommand;
@@ -60,7 +62,7 @@ public class RobotContainer
 		IndexerSubsystem = new IndexerSubsystem();
 		IntakeSubsystem = new IntakeSubsystem();
 		
-		Autonomous = new Autonomous(this);
+		Autonomous = new SimpleAuto(this);
 		
 
 		// Configure the button bindings
