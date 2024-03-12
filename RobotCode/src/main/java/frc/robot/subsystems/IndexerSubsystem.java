@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.core.util.TeamMotorUtil;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IndexerConstants;
@@ -62,23 +63,12 @@ public class IndexerSubsystem extends SubsystemBase
 		if (indexerMotorLeft.getStickyFault(FaultID.kHasReset)
 				|| indexerMotorRight.getStickyFault(FaultID.kHasReset))
 		{
+			TeamMotorUtil.optimizeCANSparkBusUsage(indexerMotorRight);
 			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
-			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
-			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
-			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
-			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
-			indexerMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 
+			TeamMotorUtil.optimizeCANSparkBusUsage(indexerMotorLeft);
 			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 10000);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
-			indexerMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 		}
 	}
 

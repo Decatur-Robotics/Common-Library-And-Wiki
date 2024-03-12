@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.lib.core.util.TeamMotorUtil;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
@@ -72,32 +73,17 @@ public class IntakeSubsystem extends SubsystemBase {
 		if (intakeDeployMotorLeft.getStickyFault(FaultID.kHasReset)
 				|| intakeDeployMotorRight.getStickyFault(FaultID.kHasReset)
 				|| intakeRollerMotor.getStickyFault(FaultID.kHasReset)) {
+			TeamMotorUtil.optimizeCANSparkBusUsage(intakeRollerMotor);
 			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
-			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
-			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
-			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
-			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
-			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 
+			TeamMotorUtil.optimizeCANSparkBusUsage(intakeDeployMotorLeft);
 			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
-			intakeDeployMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 
+			TeamMotorUtil.optimizeCANSparkBusUsage(intakeDeployMotorRight);
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10000);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 10000);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 10000);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 10000);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 10000);
-			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 10000);
 		}
 	}
 
