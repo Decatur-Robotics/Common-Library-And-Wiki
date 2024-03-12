@@ -1,7 +1,6 @@
 package frc.lib.core.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.util.Scanner;
@@ -9,38 +8,38 @@ import java.util.Scanner;
 public class FileUtils {
 
 	private static final Gson Gson = new Gson();
-
-	/**
-	 * Don't do circular references.
-	 * <p>
-	 * Ex: If you do: class A { A b; } A a = new A(); a.b = a; You will get a StackOverflowError.
-	 */
-	public static String toJson(Object object) {
+	private static String toJson(Object object) {
 		return Gson.toJson(object);
 	}
 
-	public static <T> T fromJson(String json, Class<T> dataType) {
+	private static <T> T fromJson(String json, Class<T> dataType) {
 		// I'm not sure (Class<T>) Object.class what is, but I'm trusting it.
 		return Gson.fromJson(json, dataType);
 	}
 
 	/**
-	 * Reads a json file and returns it as json.
-	 * @param filePath The file to read from.
+	 * Reads a json file and returns it as an object.
+	 * Don't do circular references.
+	 * <p>
+	 * Ex: If you do: class A { A b; } A a = new A(); a.b = a; You will get a StackOverflowError.
+	 * @param filePath The file path to read from.
 	 * @return The JsonObject returned from the file.
 	 * @throws FileNotFoundException Throws an error if the file does not exist.
 	 */
-	public static <T> T readJsonFromFilePath(String filePath, Class<T> classType) throws FileNotFoundException {
-		return readJsonFromFile(new File(filePath), classType);
+	public static <T> T readObjectFromFilePath(String filePath, Class<T> classType) throws FileNotFoundException {
+		return readObjectFromFile(new File(filePath), classType);
 	}
 
 	/**
-	 * Reads a json file and returns it as json.
+	 * Reads a json file and returns it as an object.
+	 * Don't do circular references.
+	 * <p>
+	 * Ex: If you do: class A { A b; } A a = new A(); a.b = a; You will get a StackOverflowError.
 	 * @param file The file to read from.
-	 * @return The JsonObject returned from the file.
+	 * @return The Object returned from the file.
 	 * @throws FileNotFoundException Throws an error if the file does not exist.
 	 */
-	public static <T> T readJsonFromFile(File file, Class<T> classType) throws FileNotFoundException {
+	public static <T> T readObjectFromFile(File file, Class<T> classType) throws FileNotFoundException {
 		if (file.exists()) {
 
 			Scanner fileReader = new Scanner(file);
@@ -59,8 +58,15 @@ public class FileUtils {
 		}
 	}
 
-
-	public static void saveJsonToFile(String path, Object json) {
+	/**
+	 * Saves an object as a json file.
+	 * Don't do circular references.
+	 * <p>
+	 * Ex: If you do: class A { A b; } A a = new A(); a.b = a; You will get a StackOverflowError
+	 * @param path The file path to save to.
+	 * @param object The object to save to the file.
+	 */
+	public static void saveObjectToFile(String path, Object object) {
 
 		try {
 			File file = new File(path);
@@ -68,7 +74,7 @@ public class FileUtils {
 				file.createNewFile();
 
 			FileWriter fileWriter = new FileWriter(path);
-			fileWriter.write(toJson(json));
+			fileWriter.write(toJson(object));
 
 			fileWriter.close();
 
