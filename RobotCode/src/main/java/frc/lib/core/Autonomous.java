@@ -21,6 +21,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -61,14 +62,14 @@ public abstract class Autonomous implements ILogSource
         final ShooterMountSubsystem ShooterMount = RobotContainer.getShooterMount();
         final IndexerSubsystem Indexer = RobotContainer.getIndexer();
         final IntakeSubsystem Intake = RobotContainer.getIntake();
+        final LedSubsystem Leds = RobotContainer.getLeds();
 
         // Initialize commands
-        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount);
+        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount, Leds);
         NamedCommands.registerCommand("Intake", IntakeCommand);
 
-        final ShootCommand ShootCommand = new ShootCommand(Indexer);
+        final ShootCommand ShootCommand = new ShootCommand(Indexer, Leds);
         NamedCommands.registerCommand("Shoot", ShootCommand);
-
 
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)
@@ -79,13 +80,13 @@ public abstract class Autonomous implements ILogSource
             NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
                     new SequentialCommandGroup(ShootCommand, rotateCommand));
 
-            
         }
         registerAutosAsNamedCommands();
     }
 
-    private void registerAutosAsNamedCommands(){
-        for(String auto : AutoBuilder.getAllAutoNames())
+    private void registerAutosAsNamedCommands()
+    {
+        for (String auto : AutoBuilder.getAllAutoNames())
             NamedCommands.registerCommand("Auto " + auto, getPathPlannerAuto(auto));
 
     }
@@ -112,10 +113,9 @@ public abstract class Autonomous implements ILogSource
 
     public abstract Optional<Command> buildAutoCommand();
 
-    protected RobotContainer getRobotContainer(){
+    protected RobotContainer getRobotContainer()
+    {
         return RobotContainer;
     }
-
-    
 
 }
