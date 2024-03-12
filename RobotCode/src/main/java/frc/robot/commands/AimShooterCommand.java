@@ -9,7 +9,6 @@ import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * Points shooter mount at speaker Returns shooter mount to rest position when done
@@ -19,15 +18,13 @@ public class AimShooterCommand extends Command
 
 	private ShooterSubsystem shooter;
 	private ShooterMountSubsystem shooterMount;
-	private VisionSubsystem vision;
 	private SwerveDriveSubsystem swerve;
 
 	public AimShooterCommand(ShooterSubsystem shooter, ShooterMountSubsystem shooterMount,
-			VisionSubsystem vision, SwerveDriveSubsystem swerve)
+			SwerveDriveSubsystem swerve)
 	{
 		this.shooter = shooter;
 		this.shooterMount = shooterMount;
-		this.vision = vision;
 		this.swerve = swerve;
 
 		addRequirements(shooter, shooterMount);
@@ -43,14 +40,15 @@ public class AimShooterCommand extends Command
 	@Override
 	public void execute()
 	{
-		Pose2d robotPose = swerve.getPose() ;
-		Translation2d velocityAdjustedSpeakerPose = vision.getSpeakerPoseAdjustedForVelocity();
+		Pose2d robotPose = swerve.getPose();
+		Translation2d velocityAdjustedSpeakerPose = swerve
+				.getSpeakerPoseAdjustedForVelocity(shooterMount);
 
 		// Calculate ground distance adjusting for velocity
 		double velocityAdjustedGroundDistance = robotPose.getTranslation()
 				.getDistance(velocityAdjustedSpeakerPose);
 
-		// Calculate the target rotation of the shooter mount in degrees
+		// Calculate the target rotation of the shooter mount in encoder ticks
 		double targetRotation = shooterMount.getShooterMountAngleTreeMap()
 				.get(velocityAdjustedGroundDistance);
 

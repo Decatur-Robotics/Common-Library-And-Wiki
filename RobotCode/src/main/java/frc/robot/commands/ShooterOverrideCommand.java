@@ -14,9 +14,13 @@ public class ShooterOverrideCommand extends Command
 
 	private double desiredShooterVelocity;
 
-	public ShooterOverrideCommand(ShooterSubsystem shooter, IndexerSubsystem indexer, double desiredShooterVelocity)
+	private boolean endAutomatically;
+
+	public ShooterOverrideCommand(ShooterSubsystem shooter, IndexerSubsystem indexer,
+			double desiredShooterVelocity, boolean endAutomatically)
 	{
 		this.desiredShooterVelocity = desiredShooterVelocity;
+		this.endAutomatically = endAutomatically;
 
 		this.shooter = shooter;
 		this.indexer = indexer;
@@ -30,13 +34,11 @@ public class ShooterOverrideCommand extends Command
 		shooter.setShooterMotorVelocity(desiredShooterVelocity, "joystick said to shoot");
 
 		// If-statement to see if motor is spun up
-		if (Math.abs(shooter.getShooterMotorVelocityError()) <= ShooterConstants.SHOOTER_VELOCITY_TOLERANCE)
+		// if (shooter.isUpToSpeed())
+		if (shooter.getVelocity() > desiredShooterVelocity - 10)
 		{
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "motor is spun");
-		}
-		else
-		{
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "motor is not spun");
+			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
+					"motor is spun");
 		}
 	}
 
@@ -45,5 +47,11 @@ public class ShooterOverrideCommand extends Command
 	{
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "command is over");
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "command is over");
+	}
+
+	@Override
+	public boolean isFinished()
+	{
+		return endAutomatically && !indexer.hasNote();
 	}
 }
