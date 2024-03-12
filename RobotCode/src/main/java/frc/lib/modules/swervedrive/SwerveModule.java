@@ -5,10 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.core.ILogSource;
-import frc.lib.core.util.CANSparkBaseUtil;
 import frc.lib.core.util.CTREModuleState;
 import frc.lib.core.util.Conversions;
-import frc.lib.core.util.CANSparkBaseUtil.Usage;
+import frc.lib.core.util.TeamMotorUtil;
 import frc.robot.Robot;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -163,7 +162,7 @@ public class SwerveModule implements ILogSource
 	private void configAngleMotor()
 	{
 		mAngleMotor.restoreFactoryDefaults();
-		CANSparkBaseUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kMinimal);
+		TeamMotorUtil.optimizeCANSparkBusUsage(mAngleMotor);
 		mAngleMotor.setSmartCurrentLimit(SwerveConstants.ANGLE_CONTINUOUS_CURRENT_LIMIT);
 		mAngleMotor.setInverted(SwerveConstants.ANGLE_MOTOR_INVERT);
 		mAngleMotor.setIdleMode(SwerveConstants.ANGLE_NEUTRAL_MODE);
