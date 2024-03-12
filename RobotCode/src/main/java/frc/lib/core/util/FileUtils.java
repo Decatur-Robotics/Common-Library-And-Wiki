@@ -1,6 +1,10 @@
 package frc.lib.core.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import java.io.*;
+import java.util.Scanner;
 
 public class FileUtils {
 
@@ -19,5 +23,57 @@ public class FileUtils {
 		// I'm not sure (Class<T>) Object.class what is, but I'm trusting it.
 		return Gson.fromJson(json, dataType);
 	}
+
+	/**
+	 * Reads a json file and returns it as json.
+	 * @param filePath The file to read from.
+	 * @return The JsonObject returned from the file.
+	 * @throws FileNotFoundException Throws an error if the file does not exist.
+	 */
+	public static <T> T readJsonFromFilePath(String filePath, Class<T> classType) throws FileNotFoundException {
+		return readJsonFromFile(new File(filePath), classType);
+	}
+
+	/**
+	 * Reads a json file and returns it as json.
+	 * @param file The file to read from.
+	 * @return The JsonObject returned from the file.
+	 * @throws FileNotFoundException Throws an error if the file does not exist.
+	 */
+	public static <T> T readJsonFromFile(File file, Class<T> classType) throws FileNotFoundException {
+		if (file.exists()) {
+
+			Scanner fileReader = new Scanner(file);
+			StringBuilder stringBuilder = new StringBuilder();
+
+			while (fileReader.hasNextLine()) {
+				stringBuilder.append(fileReader.nextLine());
+			}
+
+			fileReader.close();
+
+			return fromJson(stringBuilder.toString(), classType);
+
+		} else {
+			throw new FileNotFoundException("File at " + file.getPath() + "does not exist.");
+		}
+	}
+
+
+	public static void saveJsonToFile(String path, Object json) {
+
+		try {
+			File file = new File(path);
+			if (!file.exists())
+				file.createNewFile();
+
+			FileWriter fileWriter = new FileWriter(path);
+			fileWriter.write(toJson(json));
+
+			fileWriter.close();
+
+		} catch (IOException ignored) {}
+	}
+
 
 }
