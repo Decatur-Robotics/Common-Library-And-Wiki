@@ -11,7 +11,6 @@ public class ClimberOverrideCommand extends Command {
 		addRequirements(climber);
 	}
 
-	// forgot what this does but renato said its important
 	@Override
 	public void initialize() {
 		climber.setOverride(true);

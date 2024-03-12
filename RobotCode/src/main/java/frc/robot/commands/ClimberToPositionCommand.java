@@ -1,24 +1,26 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class ClimberToPositionCommand extends Command
+public class ClimberToPositionCommand extends InstantCommand
 {
 
-	private double targetPosition;
+	private double leftTargetPosition, rightTargetPosition;
 	private ClimberSubsystem climber;
 
-	public ClimberToPositionCommand(ClimberSubsystem climber, double targetPosition)
+	public ClimberToPositionCommand(ClimberSubsystem climber, double leftTargetPosition, double rightTargetPosition)
 	{
 		this.climber = climber;
-		this.targetPosition = targetPosition;
+		this.leftTargetPosition = leftTargetPosition;
+		this.rightTargetPosition = rightTargetPosition;
 		addRequirements(climber);
 
 	}
 
-	public void instantiate()
+	@Override
+	public void initialize()
 	{
-		climber.setPosition(targetPosition);
+		climber.setPosition(leftTargetPosition, rightTargetPosition);
 	}
 }

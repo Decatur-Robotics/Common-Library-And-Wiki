@@ -8,8 +8,8 @@ public final class ClimberConstants {
 	public static final double CLIMBER_KS = 0;
 	public static final double CLIMBER_KV = 0;
 	public static final double CLIMBER_KA = 0;
-	public static final double CLIMBER_ACCELERATION = 20;
-	public static final double CLIMBER_CRUISE_VELOCITY = 40;
+	public static final double CLIMBER_ACCELERATION = 120;
+	public static final double CLIMBER_CRUISE_VELOCITY = 120;
 
 	public static final double DEADBAND_JOYSTICK = 0.05;
 	public static final double DEADBAND_GYRO = 5;
