@@ -13,4 +13,6 @@ public class Constants
 	public static final AprilTagFieldLayout AprilTagFieldLayout = AprilTagFields.k2024Crescendo
 			.loadAprilTagLayoutField();
 
+	public static final String CANIVORE_NAME = "CANivore 0";
+
 }

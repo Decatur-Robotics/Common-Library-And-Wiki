@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,8 +26,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorRight = new TalonFX(Ports.SHOOTER_MOTOR_RIGHT, "Default Name");
-		shooterMotorLeft = new TalonFX(Ports.SHOOTER_MOTOR_LEFT, "Default Name");
+		shooterMotorRight = new TalonFX(Ports.SHOOTER_MOTOR_RIGHT, Constants.CANIVORE_NAME);
+		shooterMotorLeft = new TalonFX(Ports.SHOOTER_MOTOR_LEFT, Constants.CANIVORE_NAME);
 
 		shooterMotorRight.setNeutralMode(NeutralModeValue.Brake);
 		shooterMotorLeft.setNeutralMode(NeutralModeValue.Brake);

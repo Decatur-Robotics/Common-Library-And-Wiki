@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 
 public class ClimberSubsystem extends SubsystemBase
@@ -28,8 +29,8 @@ public class ClimberSubsystem extends SubsystemBase
 	public ClimberSubsystem()
 	{
 		// sets extension of left and right motors to given extension length
-		climberMotorLeft = new TalonFX(Ports.CLIMBER_MOTOR_LEFT, "Default Name");
-		climberMotorRight = new TalonFX(Ports.CLIMBER_MOTOR_RIGHT, "Default Name");
+		climberMotorLeft = new TalonFX(Ports.CLIMBER_MOTOR_LEFT, Constants.CANIVORE_NAME);
+		climberMotorRight = new TalonFX(Ports.CLIMBER_MOTOR_RIGHT, Constants.CANIVORE_NAME);
 
 		climberMotorLeft.setNeutralMode(NeutralModeValue.Brake);
 		climberMotorRight.setNeutralMode(NeutralModeValue.Brake);
