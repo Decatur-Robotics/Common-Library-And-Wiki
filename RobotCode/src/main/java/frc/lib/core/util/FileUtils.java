@@ -13,7 +13,6 @@ public class FileUtils {
 	}
 
 	private static <T> T fromJson(String json, Class<T> dataType) {
-		// I'm not sure (Class<T>) Object.class what is, but I'm trusting it.
 		return Gson.fromJson(json, dataType);
 	}
 
