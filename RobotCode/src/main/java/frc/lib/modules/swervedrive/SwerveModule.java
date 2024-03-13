@@ -50,10 +50,7 @@ public class SwerveModule implements ILogSource
 		angleOffset = moduleConstants.AngleOffset;
 
 		/* Angle Encoder Config */
-		if (moduleConstants.CANCODER_ID == 9 || moduleConstants.CANCODER_ID == 10)
-				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID, Constants.CANIVORE_NAME);
-		else
-				angleEncoder = new CANcoder(moduleConstants.CANCODER_ID);
+		angleEncoder = new CANcoder(moduleConstants.CANCODER_ID, Constants.CANIVORE_NAME);
 		configAngleEncoder();
 
 		/* Angle Motor Config */
@@ -63,7 +60,7 @@ public class SwerveModule implements ILogSource
 		configAngleMotor();
 
 		/* Drive Motor Config */
-		mDriveMotor = new TalonFX(moduleConstants.DRIVE_MOTOR_ID);
+		mDriveMotor = new TalonFX(moduleConstants.DRIVE_MOTOR_ID, Constants.CANIVORE_NAME);
 		configDriveMotor();
 
 		lastAngle = getState().angle;
