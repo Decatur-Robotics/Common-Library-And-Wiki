@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
+import frc.lib.core.Autonomous;
 import frc.lib.core.LogitechControllerButtons;
+import frc.lib.core.SimpleAuto;
 import frc.robot.commands.AimShooterCommand;
 import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.ClimberSpeedCommand;
@@ -56,8 +58,10 @@ public class RobotContainer {
 	private final ShooterMountSubsystem ShooterMountSubsystem;
 	// private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
-	// private final IntakeSubsystem IntakeSubsystem;
-	// private final LedSubsystem LedSubsystem;
+	private final IntakeSubsystem IntakeSubsystem;
+	private final LedSubsystem LedSubsystem;
+	
+	private final Autonomous Autonomous;
 
 	private final Pigeon2 gyro;
 
@@ -82,10 +86,11 @@ public class RobotContainer {
 		ShooterMountSubsystem = new ShooterMountSubsystem();
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
-		// IntakeSubsystem = new IntakeSubsystem();
-		// LedSubsystem = new LedSubsystem();
+		IntakeSubsystem = new IntakeSubsystem();
+		LedSubsystem = null;
 
-		Autonomous.init(this);
+		Autonomous = new SimpleAuto(this);
+		
 
 		// Configure the button bindings
 		configurePrimaryBindings();
@@ -195,12 +200,17 @@ public class RobotContainer {
 		return IndexerSubsystem;
 	}
 
-	// public IntakeSubsystem getIntake() {
-	// return IntakeSubsystem;
-	// }
+	public IntakeSubsystem getIntake() {
+	return IntakeSubsystem;
+	}
 
-	// public LedSubsystem getLeds() {
-	// return LedSubsystem;
-	// }
+	public LedSubsystem getLeds() {
+		return LedSubsystem;
+	 }
+
+	public Autonomous getAutonomous(){
+
+		return Autonomous;
+	}
 
 }

@@ -40,7 +40,8 @@ public class ShootCommand extends Command
     {
         Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
                 "ShooterInstantCommand ended");
-        Leds.flashAllPixels(Color.Blue);
+        if(Leds != null)
+            Leds.flashAllPixels(Color.Blue);
     }
 
     @Override
