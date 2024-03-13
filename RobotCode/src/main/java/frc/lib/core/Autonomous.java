@@ -27,19 +27,11 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * <p>
- * A singleton class for handling autonomous. Puts dropdowns on Shuffleboard and then reads from
- * them to dynamically generate an autonomous. Uses
- * <a href="https://github.com/mjansen4857/pathplanner">PathPlanner</a> to follow paths and run
- * commands.
+
  * </p>
  * <p>
- * <b>Usage:</b> Call {@link #init(RobotContainer)} in RobotContainer's constructor. Then, to
+ * <b>Usage:</b> Call {@link #Autonomous} in RobotContainer's constructor. Then, to
  * actually get the autonomous command, call {@link #getAutoCommand()}.
- * </p>
- * <p>
- * <b>Autonomous Options:</b> The options are hardcoded; they are built off the enums at the top of
- * the class and then manually read into dropdowns on Shuffleboard. I would like to at some point
- * improve this system to be more easily configureable.
  * </p>
  */
 public abstract class Autonomous implements ILogSource
