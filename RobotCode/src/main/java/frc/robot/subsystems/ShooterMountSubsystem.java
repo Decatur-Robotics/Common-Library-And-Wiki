@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
@@ -33,9 +34,9 @@ public class ShooterMountSubsystem extends SubsystemBase {
 
 	public ShooterMountSubsystem() {
 
-		shooterMountMotorLeft = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_LEFT);
+		shooterMountMotorLeft = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_LEFT, Constants.CANIVORE_NAME);
 
-		shooterMountMotorRight = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
+		shooterMountMotorRight = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_RIGHT, Constants.CANIVORE_NAME);
 
 		shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
 
