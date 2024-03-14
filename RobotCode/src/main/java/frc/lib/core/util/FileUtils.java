@@ -25,7 +25,7 @@ public class FileUtils {
 	 * @return The JsonObject returned from the file.
 	 * @throws FileNotFoundException Throws an error if the file does not exist.
 	 */
-	private static <T> T readObjectFromFilePath(String filePath, Class<T> classType) throws FileNotFoundException {
+	public static <T> T readObjectFromFilePath(String filePath, Class<T> classType) throws FileNotFoundException {
 		return readObjectFromFile(new File(filePath), classType);
 	}
 
