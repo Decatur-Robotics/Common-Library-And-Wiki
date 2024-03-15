@@ -1,133 +1,126 @@
 package frc.lib.modules.tankdrivetrain;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.motors.ITeamTalon;
 import frc.lib.core.motors.TeamTalonFX;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-
-
 
 public class TankDrivetrainSubsystem extends SubsystemBase {
 
-    private ITeamTalon rightDriveFalconMain;
-    private ITeamTalon leftDriveFalconMain;
-    private ITeamTalon rightDriveFalconSub;
-    private ITeamTalon leftDriveFalconSub;
+	private TeamTalonFX RightDriveFalconMain, LeftDriveFalconMain, RightDriveFalconSub,
+			LeftDriveFalconSub;
 
-    private double leftPowerDesired;
-    private double rightPowerDesired;
+	private double leftPowerDesired;
+	private double rightPowerDesired;
+	private double speedMod;
 
-    private String reason;
+	private String reason;
 
-    private SlewRateLimiter powerRamping;
+	public TankDrivetrainSubsystem(int rightMainPort, int leftMainPort, int rightSubPort,
+			int leftSubPort) {
+		RightDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.RightMain", rightMainPort);
+		LeftDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.LeftMain", leftMainPort);
+		RightDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.RightSub", rightSubPort);
+		LeftDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.LeftSub", leftSubPort);
 
-    private double speedMod;
+		// IMPLEMENT AND TEST A SLEW RATE LIMITER ON THE SHOWBOT BEFORE WE ADD THIS TO COMMON LIB
+		// powerRamping = new SlewRateLimiter(TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
 
-    public TankDrivetrainSubsystem(int rightMainPort, int leftMainPort, int rightSubPort, int leftSubPort) {
-        rightDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.RightMain", rightMainPort);
-        leftDriveFalconMain = new TeamTalonFX("Subsystems.DriveTrain.LeftMain", leftMainPort);
-        rightDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.RightSub", rightSubPort);
-        leftDriveFalconSub = new TeamTalonFX("Subsystems.DriveTrain.LeftSub", leftSubPort);
-        
-        // IMPLEMENT AND TEST A SLEW RATE LIMITER ON THE SHOWBOT BEFORE WE ADD THIS TO COMMON LIB
-        powerRamping = new SlewRateLimiter(TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
+		// create a motor config object
+		TalonFXConfiguration config = new TalonFXConfiguration();
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration();
-        currentConfig.currentLimit = 55;
+		// This configures the falcons to limit their current
+		config.CurrentLimits.SupplyCurrentLimitEnable = true;
+		config.CurrentLimits.SupplyCurrentLimit = 55;
+		config.CurrentLimits.SupplyTimeThreshold = TankDrivetrainConstants.CURRENT_TIMEOUT_MS;
 
-        // This configures the falcons to use their internal encoders
-        rightDriveFalconMain.configBaseAllSettings(config);
-        rightDriveFalconSub.configBaseAllSettings(config);
-        leftDriveFalconMain.configBaseAllSettings(config);
-        leftDriveFalconSub.configBaseAllSettings(config);
+		// This configures the sub motors to follow the main falcons
+		LeftDriveFalconSub.setControl(new Follower(LeftDriveFalconMain.getDeviceID(), false));
+		RightDriveFalconSub.setControl(new Follower(RightDriveFalconMain.getDeviceID(), false));
 
-        // This configures the falcons to limit their current
-        rightDriveFalconMain.configSupplyCurrentLimit(currentConfig, TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
-        rightDriveFalconSub.configSupplyCurrentLimit(currentConfig, TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
-        leftDriveFalconMain.configSupplyCurrentLimit(currentConfig, TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
-        leftDriveFalconSub.configSupplyCurrentLimit(currentConfig, TankDrivetrainConstants.CURRENT_TIMEOUT_MS);
+		// This inverts the left falcons
+		RightDriveFalconMain.setInverted(false);
+		RightDriveFalconSub.setInverted(false);
+		LeftDriveFalconMain.setInverted(true);
+		LeftDriveFalconSub.setInverted(true);
 
-        // This configures the sub motors to follow the main falcons
-        leftDriveFalconSub.follow(leftDriveFalconMain);
-        rightDriveFalconSub.follow(rightDriveFalconMain);
+		// This sets the neutral mode of the falcons to brake
+		RightDriveFalconMain.setNeutralMode(NeutralModeValue.Brake);
+		RightDriveFalconSub.setNeutralMode(NeutralModeValue.Brake);
+		LeftDriveFalconMain.setNeutralMode(NeutralModeValue.Brake);
+		LeftDriveFalconSub.setNeutralMode(NeutralModeValue.Brake);
 
-        // This inverts the left falcons
-        rightDriveFalconMain.setInverted(false);
-        rightDriveFalconSub.setInverted(false);
-        leftDriveFalconMain.setInverted(true);
-        leftDriveFalconSub.setInverted(true);
+		// config the current limits
+		RightDriveFalconMain.getConfigurator().apply(config);
+		RightDriveFalconSub.getConfigurator().apply(config);
+		LeftDriveFalconMain.getConfigurator().apply(config);
+		LeftDriveFalconSub.getConfigurator().apply(config);
 
-        // This sets the neutral mode of the falcons to brake
-        rightDriveFalconMain.setNeutralMode(NeutralMode.Brake);
-        rightDriveFalconSub.setNeutralMode(NeutralMode.Brake);
-        leftDriveFalconMain.setNeutralMode(NeutralMode.Brake);
-        leftDriveFalconSub.setNeutralMode(NeutralMode.Brake);
-    }
+		speedMod = 1;
+	}
 
-    public void setSpeedMod(double speedMod) {
-        // Sets a new speed mod
-        this.speedMod = speedMod;
-    }
+	public void setSpeedMod(double speedMod) {
+		// Sets a new speed mod
+		this.speedMod = speedMod;
+	}
 
-    public double getSpeedMod() {
-        // Returns the current speed mod
-        return speedMod;
-    }
+	public double getSpeedMod() {
+		// Returns the current speed mod
+		return speedMod;
+	}
 
-    private double calculateClampedPower(double powerDesired) {
-        // Clamp given power between -1 and 1
-        return Math.max(Math.min(1, powerDesired), -1);
-    }
+	private double calculateClampedPower(double powerDesired) {
+		// Clamp given power between -1 and 1
+		return Math.max(Math.min(1, powerDesired), -1);
+	}
 
-    private double calculateRampedPower(double powerDesired, double powerCurrent) {
-        // Check if the power change exceeded the max power change, and limit the power change if so
-        if (powerDesired < powerCurrent) {
-            return Math.max(powerDesired, powerCurrent - TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
-        }
-        else if (powerDesired < powerCurrent) {
-            return Math.min(powerDesired, powerCurrent + TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
-        }
-        return powerDesired;
-    }
+	private double calculateRampedPower(double powerDesired, double powerCurrent) {
+		// Check if the power change exceeded the max power change, and limit the power change if so
+		if (powerDesired < powerCurrent) {
+			return Math.max(powerDesired,
+					powerCurrent - TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
+		} else if (powerDesired < powerCurrent) {
+			return Math.min(powerDesired,
+					powerCurrent + TankDrivetrainConstants.DRIVETRAIN_MAX_POWER_CHANGE);
+		}
+		return powerDesired;
+	}
 
-    public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) {
-        // Set desired motor powers
-        this.leftPowerDesired = leftPowerDesired;
-        this.rightPowerDesired = rightPowerDesired;
+	public void setMotorPowers(double leftPowerDesired, double rightPowerDesired, String reason) {
+		// Set desired motor powers
+		LeftDriveFalconMain.set(leftPowerDesired);
+		RightDriveFalconMain.set(rightPowerDesired);
 
-        //Set reason for desiring those motor powers
-        this.reason = reason;
-    }
+		// Set reason for desiring those motor powers
+		this.reason = reason;
+	}
 
-    @Override
-    public void periodic() {
-        // Get the current motor powers
-        double rightPowerCurrent = rightDriveFalconMain.get();
-        double leftPowerCurrent = leftDriveFalconMain.get();
+	@Override
+	public void periodic() {
+		// Get the current motor powers
+		double rightPowerCurrent = RightDriveFalconMain.get();
+		double leftPowerCurrent = LeftDriveFalconMain.get();
 
-        // Create final power variables to perform math on
-        double finalLeftPower = leftPowerDesired;
-        double finalRightPower = rightPowerDesired;
+		// Create final power variables to perform math on
+		double finalLeftPower = leftPowerDesired;
+		double finalRightPower = rightPowerDesired;
 
-        // Multiply motor powers by the speed mod
-        finalLeftPower *= speedMod;
-        finalRightPower *= speedMod;
+		// Multiply motor powers by the speed mod
+		finalLeftPower *= speedMod;
+		finalRightPower *= speedMod;
 
-        // Calculate ramped motor powers
-        finalLeftPower = calculateRampedPower(finalLeftPower, leftPowerCurrent);
-        finalRightPower = calculateRampedPower(finalRightPower, rightPowerCurrent);
+		// Calculate ramped motor powers
+		finalLeftPower = calculateRampedPower(finalLeftPower, leftPowerCurrent);
+		finalRightPower = calculateRampedPower(finalRightPower, rightPowerCurrent);
 
-        // Calculate clamped motor powers
-        finalLeftPower = calculateClampedPower(finalLeftPower);
-        finalRightPower = calculateClampedPower(finalRightPower);
+		// Calculate clamped motor powers
+		finalLeftPower = calculateClampedPower(finalLeftPower);
+		finalRightPower = calculateClampedPower(finalRightPower);
 
-        // Set final motor powers
-        leftDriveFalconMain.set(finalLeftPower, reason);
-        rightDriveFalconMain.set(finalRightPower, reason);
-    }
+		// Set final motor powers
+		LeftDriveFalconMain.set(finalLeftPower, reason);
+		RightDriveFalconMain.set(finalRightPower, reason);
+	}
 
 }
