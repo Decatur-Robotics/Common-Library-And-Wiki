@@ -24,4 +24,7 @@ public final class ClimberConstants {
 	/** Maximum rotations of right climber */
 	public static final double RIGHT_CLIMBER_MAXIMUM = 314.67;
 
+	// AutoBalance Deadband, in degrees
+	public static final double BALANCE_DEADBAND = 5;
+
 }

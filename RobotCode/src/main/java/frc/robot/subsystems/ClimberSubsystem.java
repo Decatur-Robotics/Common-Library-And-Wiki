@@ -4,12 +4,10 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ClimberConstants;
@@ -25,6 +23,7 @@ public class ClimberSubsystem extends SubsystemBase
 	private MotionMagicDutyCycle motorControlRequestLeft, motorControlRequestRight;
 	private VelocityDutyCycle motorControlRequestLeftVelocity, motorControlRequestRightVelocity;
 	private boolean override;
+	private boolean isBalanced;
 
 	public ClimberSubsystem()
 	{
@@ -71,13 +70,10 @@ public class ClimberSubsystem extends SubsystemBase
 				() -> climberMotorLeft.getPosition().getValueAsDouble());
 		RobotContainer.getShuffleboardTab().addNumber("R Climber Pos",
 				() -> climberMotorRight.getPosition().getValueAsDouble());
-		RobotContainer.getShuffleboardTab().addBoolean("Climber Override", 
-				() -> override);
+		RobotContainer.getShuffleboardTab().addBoolean("Climber Override", () -> override);
 
-		climberMotorLeft.setControl(
-				motorControlRequestLeft.withPosition(leftTargetPosition));
-		climberMotorRight.setControl(
-				motorControlRequestRight.withPosition(rightTargetPosition));
+		climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+		climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
 	}
 
 	@Override
@@ -90,6 +86,37 @@ public class ClimberSubsystem extends SubsystemBase
 			climberMotorLeft.getRotorPosition().setUpdateFrequency(20);
 			climberMotorRight.getRotorPosition().setUpdateFrequency(20);
 		}
+
+		// Climber auto-balance while climbing
+		if (isBalanced && RobotContainer.getGyro().getRoll()
+				.getValueAsDouble() > ClimberConstants.BALANCE_DEADBAND)
+		{
+			isBalanced = false;
+			climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+			climberMotorRight.setControl(motorControlRequestRight
+					.withPosition(climberMotorRight.getRotorPosition().getValueAsDouble()));
+		}
+
+		if (isBalanced && RobotContainer.getGyro().getRoll().getValueAsDouble() < -1
+				* ClimberConstants.BALANCE_DEADBAND)
+		{
+			isBalanced = false;
+			climberMotorRight
+					.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+			climberMotorLeft.setControl(motorControlRequestLeft
+					.withPosition(climberMotorLeft.getRotorPosition().getValueAsDouble()));
+		}
+
+		if (!isBalanced && RobotContainer.getGyro().getRoll().getValueAsDouble() <= -1
+				* ClimberConstants.BALANCE_DEADBAND
+				|| RobotContainer.getGyro().getRoll()
+						.getValueAsDouble() >= ClimberConstants.BALANCE_DEADBAND)
+		{
+			isBalanced = true;
+			climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+			climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+		}
+
 	}
 
 	public void setPowers(double leftPower, double rightPower, String reason)
