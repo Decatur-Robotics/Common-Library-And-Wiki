@@ -38,7 +38,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 
 		shooterMountMotorRight = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_RIGHT, Constants.CANIVORE_NAME);
 
-		shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
+		// shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
 
 		// create configurator
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
@@ -74,7 +74,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		}
 
 		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
+		// shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
 				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble()));
@@ -105,8 +105,8 @@ public class ShooterMountSubsystem extends SubsystemBase {
 						+ ((this.targetRotation - ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE)
 								* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
-				.withFeedForward(gravityFeedForward));
+		// shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
+		// 		.withFeedForward(gravityFeedForward));
 	}
 
 	/**

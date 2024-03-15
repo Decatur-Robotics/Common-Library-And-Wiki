@@ -72,8 +72,8 @@ public class ClimberSubsystem extends SubsystemBase
 				() -> climberMotorRight.getPosition().getValueAsDouble());
 		RobotContainer.getShuffleboardTab().addBoolean("Climber Override", () -> override);
 
-		climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
-		climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+		// climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+		// climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
 	}
 
 	@Override
@@ -88,36 +88,36 @@ public class ClimberSubsystem extends SubsystemBase
 		}
 
 		// Climber auto-balance while climbing
-		if (isBalanced && RobotContainer.getGyro().getRoll()
-				.getValueAsDouble() > ClimberConstants.BALANCE_DEADBAND)
-		{
-			isBalanced = false;
-			climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
-			climberMotorRight.setControl(motorControlRequestRight
-					.withPosition(climberMotorRight.getRotorPosition().getValueAsDouble()));
-		}
+		// if (isBalanced && RobotContainer.getGyro().getRoll()
+		// 		.getValueAsDouble() > ClimberConstants.BALANCE_DEADBAND)
+		// {
+		// 	isBalanced = false;
+		// 	climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+		// 	climberMotorRight.setControl(motorControlRequestRight
+		// 			.withPosition(climberMotorRight.getRotorPosition().getValueAsDouble()));
+		// }
 
-		if (isBalanced && RobotContainer.getGyro().getRoll()
-				.getValueAsDouble() < -ClimberConstants.BALANCE_DEADBAND)
-		{
-			isBalanced = false;
-			climberMotorRight
-					.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
-			climberMotorLeft.setControl(motorControlRequestLeft
-					.withPosition(climberMotorLeft.getRotorPosition().getValueAsDouble()));
-		}
+		// if (isBalanced && RobotContainer.getGyro().getRoll()
+		// 		.getValueAsDouble() < -ClimberConstants.BALANCE_DEADBAND)
+		// {
+		// 	isBalanced = false;
+		// 	climberMotorRight
+		// 			.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+		// 	climberMotorLeft.setControl(motorControlRequestLeft
+		// 			.withPosition(climberMotorLeft.getRotorPosition().getValueAsDouble()));
+		// }
 
-		if (!isBalanced
-				&& RobotContainer.getGyro().getRoll()
-						.getValueAsDouble() >= -ClimberConstants.BALANCE_DEADBAND
-				&& RobotContainer.getGyro().getRoll()
-						.getValueAsDouble() <= ClimberConstants.BALANCE_DEADBAND)
-		{
-			isBalanced = true;
-			climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
-			climberMotorRight
-					.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
-		}
+		// if (!isBalanced
+		// 		&& RobotContainer.getGyro().getRoll()
+		// 				.getValueAsDouble() >= -ClimberConstants.BALANCE_DEADBAND
+		// 		&& RobotContainer.getGyro().getRoll()
+		// 				.getValueAsDouble() <= ClimberConstants.BALANCE_DEADBAND)
+		// {
+		// 	isBalanced = true;
+		// 	climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+		// 	climberMotorRight
+		// 			.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+		// }
 
 	}
 
@@ -135,11 +135,11 @@ public class ClimberSubsystem extends SubsystemBase
 
 	public void setPosition(double leftTargetPosition, double rightTargetPosition)
 	{
-		this.leftTargetPosition = leftTargetPosition;
-		this.rightTargetPosition = rightTargetPosition;
+		// this.leftTargetPosition = leftTargetPosition;
+		// this.rightTargetPosition = rightTargetPosition;
 
-		climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
-		climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+		// climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
+		// climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
 	}
 
 	public void setOverride(boolean override)
