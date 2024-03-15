@@ -10,12 +10,20 @@ public interface IModeChangeListener
 		Robot.addSubsystem(this);
 	}
 
-	public void disabledInit();
+	public default void disabledInit(){
+		
+	}
 
-	public void teleopInit();
+	public default void teleopInit(){
+	
+	}
 
-	public void autonomousInit();
+	public default void autonomousInit(){
+		
+	}
 
-	public void testInit();
+	public default void testInit(){
+		
+	}
 
 }
