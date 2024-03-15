@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
-public final class ClimberConstants {
+public final class ClimberConstants
+{
 
 	public static final double CLIMBER_KP = 0;
 	public static final double CLIMBER_KI = 0;
@@ -12,8 +13,10 @@ public final class ClimberConstants {
 	public static final double CLIMBER_CRUISE_VELOCITY = 120;
 
 	public static final double DEADBAND_JOYSTICK = 0.05;
-	public static final double DEADBAND_GYRO = 5;
-	
+
+	/** Deadband for autobalancing, in degrees */
+	public static final double BALANCE_DEADBAND = 5;
+
 	/** Minimum rotations of left climber */
 	public static final double LEFT_CLIMBER_MINIMUM = -524.32;
 	/** Minimum rotations of right climber */
@@ -23,8 +26,5 @@ public final class ClimberConstants {
 	public static final double LEFT_CLIMBER_MAXIMUM = -26.57;
 	/** Maximum rotations of right climber */
 	public static final double RIGHT_CLIMBER_MAXIMUM = 314.67;
-
-	// AutoBalance Deadband, in degrees
-	public static final double BALANCE_DEADBAND = 5;
 
 }
