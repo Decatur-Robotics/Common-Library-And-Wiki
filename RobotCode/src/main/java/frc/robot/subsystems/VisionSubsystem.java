@@ -21,10 +21,11 @@ public class VisionSubsystem extends SubsystemBase
 	{
 		Swerve = swerve;
 
-		Camera = new PhotonCamera(VisionConstants.CameraTableName);
+		Camera = new PhotonCamera(VisionConstants.CAMERA_TABLE_NAME);
 
 		robotPoseEstimator = new PhotonPoseEstimator(Constants.AprilTagFieldLayout,
-				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera, VisionConstants.ROBOT_TO_CAMERA_OFFSET);
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera,
+				VisionConstants.ROBOT_TO_CAMERA_OFFSET);
 	}
 
 	@Override

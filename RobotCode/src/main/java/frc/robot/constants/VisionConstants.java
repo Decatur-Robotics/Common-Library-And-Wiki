@@ -1,6 +1,5 @@
 package frc.robot.constants;
 
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -8,9 +7,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 public final class VisionConstants
 {
 
-    public static final String CameraTableName = "camera_front";
-
-    public static final Pose3d CameraOffset = new Pose3d();
+    public static final String CAMERA_TABLE_NAME = "camera_front";
 
     public static final int BLUE_SPEAKER_TAG_ID = 7, RED_SPEAKER_TAG_ID = 4;
 
@@ -19,7 +16,7 @@ public final class VisionConstants
 
     public static final boolean ADJUST_SPEAKER_POSE_FOR_VELOCITY = true;
 
-	public static final Transform3d ROBOT_TO_CAMERA_OFFSET = new Transform3d(new Translation3d(0.14732, 0.0, 
-            0.24892), new Rotation3d(0, 1.02974, 1.32645));
+    public static final Transform3d ROBOT_TO_CAMERA_OFFSET = new Transform3d(
+            new Translation3d(0.14732, 0.0, 0.24892), new Rotation3d(0, 1.02974, 1.32645));
 
 }
