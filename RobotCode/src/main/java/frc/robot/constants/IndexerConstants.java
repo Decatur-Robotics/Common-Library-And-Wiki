@@ -16,7 +16,7 @@ public class IndexerConstants
 	/** Velocity for intaking in RPM */
     public static final double INDEXER_INTAKE_VELOCITY = 1000;
 	/** Velocity when reversing in RPM */
-	public static final double INDEXER_REVERSE_VELOCITY = 200;
+	public static final double INDEXER_REVERSE_VELOCITY = -200;
 	/** Velocity when not in use in RPM */
     public static final double INDEXER_REST_VELOCITY = 0;
 

@@ -26,10 +26,13 @@ import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.ClimberSpeedCommand;
 import frc.robot.commands.ClimberToPositionCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IntakeReverseCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Constants;
+import frc.robot.constants.IndexerConstants;
+import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
@@ -127,6 +130,8 @@ public class RobotContainer {
 				LogitechControllerButtons.bumperLeft);
 		final JoystickButton AButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.a);
+		final JoystickButton BButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.b);
 		final JoystickButton XButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.x);
 		final JoystickButton YButton = new JoystickButton(SecondaryController,
@@ -138,16 +143,19 @@ public class RobotContainer {
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
-		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
+		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
 				IndexerSubsystem,
 				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		// RightTrigger.whileTrue(new
-		// 		RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-		// 		ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		LeftTrigger.whileTrue(new
+				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		// AButton.whileTrue(new
-		// 		RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-		// 		ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		AButton.whileTrue(new
+				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		BButton.whileTrue(new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem,
+				IndexerConstants.INDEXER_REVERSE_VELOCITY, IntakeConstants.INTAKE_REVERSE_VELOCITY,
+				ShooterConstants.SHOOTER_REVERSE_VELOCITY));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,

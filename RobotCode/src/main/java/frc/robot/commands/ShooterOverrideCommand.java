@@ -35,7 +35,7 @@ public class ShooterOverrideCommand extends Command
 
 		// If-statement to see if motor is spun up
 		// if (shooter.isUpToSpeed())
-		if (shooter.getVelocity() > desiredShooterVelocity - 10)
+		if (shooter.isUpToSpeed())
 		{
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
 					"motor is spun");

@@ -51,7 +51,7 @@ public class IntakeSubsystem extends SubsystemBase
 
 		// Configure roller motors
 		intakeRollerMotor.setInverted(true);
-		intakeRollerMotor.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
+		intakeRollerMotor.setSmartCurrentLimit(30);
 		intakeRollerMotor.setIdleMode(IdleMode.kBrake);
 
 		// Configure roller PID
@@ -72,6 +72,8 @@ public class IntakeSubsystem extends SubsystemBase
 				() -> intakeDeployEncoderRight.getPosition());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation",
 				() -> desiredRotation);
+
+		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
 	}
 
 	@Override

@@ -81,10 +81,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	 * This is clamping the shooter motor power
 	 */
 	public void setShooterMotorVelocity(double desiredShooterVelocity, String reason) {
-		this.desiredShooterVelocity = Math.max(
-				Math.min(ShooterConstants.SHOOTER_MAX_VELOCITY, desiredShooterVelocity),
-				-ShooterConstants.SHOOTER_MAX_VELOCITY);
-		shooterMotorRight.setControl(motorControlRequest.withVelocity(-desiredShooterVelocity));
+		this.desiredShooterVelocity = desiredShooterVelocity;
+		shooterMotorRight.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 		shooterMotorLeft.setControl(motorControlRequest.withVelocity(desiredShooterVelocity));
 	}
 
