@@ -27,11 +27,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * <p>
-
  * </p>
  * <p>
- * <b>Usage:</b> Call {@link #Autonomous} in RobotContainer's constructor. Then, to
- * actually get the autonomous command, call {@link #getAutoCommand()}.
+ * <b>Usage:</b> Call {@link #Autonomous} in RobotContainer's constructor. Then, to actually get the
+ * autonomous command, call {@link #getAutoCommand()}.
  * </p>
  */
 public abstract class Autonomous implements ILogSource
@@ -57,21 +56,19 @@ public abstract class Autonomous implements ILogSource
         final LedSubsystem Leds = RobotContainer.getLeds();
 
         // Initialize commands
-        final IntakeCommand IntakeCommand = new IntakeCommand(Intake, Indexer, ShooterMount, Leds);
-        NamedCommands.registerCommand("Intake", IntakeCommand);
+        NamedCommands.registerCommand("Intake",
+                new IntakeCommand(Intake, Indexer, ShooterMount, Leds));
 
-        final ShootCommand ShootCommand = new ShootCommand(Indexer, Leds);
-        NamedCommands.registerCommand("Shoot", ShootCommand);
+        NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer, Leds));
 
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)
         {
-            RotateShooterMountToPositionCommand rotateCommand = new RotateShooterMountToPositionCommand(
-                    ShooterMount, rot);
-            NamedCommands.registerCommand("Aim to " + rot + " deg", rotateCommand);
-            // NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
-            //         new SequentialCommandGroup(ShootCommand, rotateCommand));
-
+            NamedCommands.registerCommand("Aim to " + rot + " deg",
+                    new RotateShooterMountToPositionCommand(ShooterMount, rot));
+            NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
+                    new SequentialCommandGroup(new ShootCommand(Indexer, Leds),
+                            new RotateShooterMountToPositionCommand(ShooterMount, rot)));
         }
         registerAutosAsNamedCommands();
     }
