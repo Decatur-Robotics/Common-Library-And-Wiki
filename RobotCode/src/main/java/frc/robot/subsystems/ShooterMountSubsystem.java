@@ -98,14 +98,13 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	 * @param targetRotation the desired rotation in encoder ticks
 	 */
 	public void setTargetRotation(double targetRotation) {
-		this.targetRotation = Math.max(targetRotation,
+		this.targetRotation = Math.max(Math.min(targetRotation, 
+				ShooterMountConstants.SHOOTER_MOUNT_MAX_ANGLE),
 				ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
-		// double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
-		// 		* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-		// 				+ ((this.targetRotation - ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE)
-		// 						* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
-
-		double gravityFeedForward = 0;
+		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
+				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
+						+ ((this.targetRotation - ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE)
+								* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
 				.withFeedForward(gravityFeedForward));
