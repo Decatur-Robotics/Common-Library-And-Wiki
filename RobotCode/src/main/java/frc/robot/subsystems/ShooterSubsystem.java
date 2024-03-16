@@ -26,8 +26,8 @@ public class ShooterSubsystem extends SubsystemBase {
 		desiredShooterVelocity = ShooterConstants.SHOOTER_REST_VELOCITY;
 
 		// Initializes motor object
-		shooterMotorRight = new TalonFX(Ports.SHOOTER_MOTOR_RIGHT, Constants.CANIVORE_NAME);
-		shooterMotorLeft = new TalonFX(Ports.SHOOTER_MOTOR_LEFT, Constants.CANIVORE_NAME);
+		shooterMotorRight = new TalonFX(Ports.SHOOTER_MOTOR_RIGHT);
+		shooterMotorLeft = new TalonFX(Ports.SHOOTER_MOTOR_LEFT);
 
 		shooterMotorRight.setNeutralMode(NeutralModeValue.Brake);
 		shooterMotorLeft.setNeutralMode(NeutralModeValue.Brake);
