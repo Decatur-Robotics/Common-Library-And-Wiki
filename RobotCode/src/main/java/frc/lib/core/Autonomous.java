@@ -69,8 +69,8 @@ public abstract class Autonomous implements ILogSource
             RotateShooterMountToPositionCommand rotateCommand = new RotateShooterMountToPositionCommand(
                     ShooterMount, rot);
             NamedCommands.registerCommand("Aim to " + rot + " deg", rotateCommand);
-            NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
-                    new SequentialCommandGroup(ShootCommand, rotateCommand));
+            // NamedCommands.registerCommand("Shoot then Aim to " + rot + " deg",
+            //         new SequentialCommandGroup(ShootCommand, rotateCommand));
 
         }
         registerAutosAsNamedCommands();

@@ -125,8 +125,8 @@ public class ClimberSubsystem extends SubsystemBase
 	{
 		if (true)
 		{
-			climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
-			climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(rightPower));
+			climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(-leftPower));
+			climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(-rightPower));
 
 			leftTargetPosition = climberMotorLeft.getRotorPosition().getValueAsDouble();
 			rightTargetPosition = climberMotorRight.getRotorPosition().getValueAsDouble();

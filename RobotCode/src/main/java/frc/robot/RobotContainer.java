@@ -87,7 +87,7 @@ public class RobotContainer {
 		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
 		IndexerSubsystem = new IndexerSubsystem();
 		IntakeSubsystem = new IntakeSubsystem();
-		LedSubsystem = null;
+		LedSubsystem = new LedSubsystem();
 
 		Autonomous = new SimpleAuto(this);
 		
@@ -137,26 +137,26 @@ public class RobotContainer {
 				LogitechControllerButtons.down);
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
-				() -> (SecondaryController.getY() * 4), () -> (SecondaryController.getThrottle()) * 4));
+				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
 				IndexerSubsystem,
 				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		RightTrigger.whileTrue(new
-				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		// RightTrigger.whileTrue(new
+		// 		RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		// 		ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		AButton.whileTrue(new
-				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		// XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
-		// LedSubsystem));
+		// AButton.whileTrue(new
+		// 		RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		// 		ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
+		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
+				LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
-		UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-				ClimberConstants.LEFT_CLIMBER_MAXIMUM, ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
-		DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-				ClimberConstants.LEFT_CLIMBER_MINIMUM, ClimberConstants.RIGHT_CLIMBER_MINIMUM));
+		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
+		// 		ClimberConstants.LEFT_CLIMBER_MAXIMUM, ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
+		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
+		// 		ClimberConstants.LEFT_CLIMBER_MINIMUM, ClimberConstants.RIGHT_CLIMBER_MINIMUM));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab() {

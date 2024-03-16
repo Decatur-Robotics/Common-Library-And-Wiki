@@ -6,8 +6,7 @@ public final class Ports
 	/*
 	 * Intake ports
 	 */
-	public static final int INTAKE_ROLLER_MOTOR_TOP = 15;
-	public static final int INTAKE_ROLLER_MOTOR_BOTTOM = 16;
+	public static final int INTAKE_ROLLER_MOTOR = 15;
 	public static final int INTAKE_DEPLOY_MOTOR_RIGHT = 14;
 	public static final int INTAKE_DEPLOY_MOTOR_LEFT = 13;
 
@@ -20,8 +19,8 @@ public final class Ports
 	/*
 	 * Climber ports
 	 */
-	public static final int CLIMBER_MOTOR_LEFT = 39;
-	public static final int CLIMBER_MOTOR_RIGHT = 40;
+	public static final int CLIMBER_MOTOR_LEFT = 40;
+	public static final int CLIMBER_MOTOR_RIGHT = 39;
 
 	/*
 	 * Shooter ports

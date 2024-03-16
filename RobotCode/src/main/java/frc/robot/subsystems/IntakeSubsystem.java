@@ -17,22 +17,28 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase
+{
 
 	private CANSparkMax intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotor;
 	private double desiredRotation, desiredVelocity;
 	private SparkPIDController intakeDeployPidController, intakeRollerPidController;
 	private RelativeEncoder intakeDeployEncoderRight;
 
-	public IntakeSubsystem() {
-		intakeDeployMotorRight = new CANSparkMax(Ports.INTAKE_DEPLOY_MOTOR_RIGHT, MotorType.kBrushless);
-		intakeDeployMotorLeft = new CANSparkMax(Ports.INTAKE_DEPLOY_MOTOR_LEFT, MotorType.kBrushless);
-		intakeRollerMotor = new CANSparkMax(Ports.INTAKE_ROLLER_MOTOR_TOP, MotorType.kBrushless);
+	public IntakeSubsystem()
+	{
+		intakeDeployMotorRight = new CANSparkMax(Ports.INTAKE_DEPLOY_MOTOR_RIGHT,
+				MotorType.kBrushless);
+		intakeDeployMotorLeft = new CANSparkMax(Ports.INTAKE_DEPLOY_MOTOR_LEFT,
+				MotorType.kBrushless);
+		intakeRollerMotor = new CANSparkMax(Ports.INTAKE_ROLLER_MOTOR, MotorType.kBrushless);
+
+		intakeDeployEncoderRight = intakeDeployMotorRight.getEncoder();
 
 		// Configure deployment motors
 		intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
-		intakeDeployMotorRight.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
-		intakeDeployMotorLeft.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
+		intakeDeployMotorRight.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
+		intakeDeployMotorLeft.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
 		intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
 		intakeDeployMotorLeft.setIdleMode(IdleMode.kBrake);
 
@@ -45,7 +51,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 		// Configure roller motors
 		intakeRollerMotor.setInverted(true);
-		intakeRollerMotor.setSmartCurrentLimit(Constants.NEO_550_MAX_CURRENT);
+		intakeRollerMotor.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
 		intakeRollerMotor.setIdleMode(IdleMode.kBrake);
 
 		// Configure roller PID
@@ -69,10 +75,12 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	@Override
-	public void periodic() {
+	public void periodic()
+	{
 		if (intakeDeployMotorLeft.getStickyFault(FaultID.kHasReset)
 				|| intakeDeployMotorRight.getStickyFault(FaultID.kHasReset)
-				|| intakeRollerMotor.getStickyFault(FaultID.kHasReset)) {
+				|| intakeRollerMotor.getStickyFault(FaultID.kHasReset))
+		{
 			TeamMotorUtil.optimizeCANSparkBusUsage(intakeRollerMotor);
 			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
@@ -88,13 +96,15 @@ public class IntakeSubsystem extends SubsystemBase {
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(double desiredRotation) {
+	public void setDesiredRotation(double desiredRotation)
+	{
 		this.desiredRotation = desiredRotation;
 		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
 	}
 
 	/** @param desiredVelocity Ticks per second */
-	public void setDesiredVelocity(double desiredVelocity) {
+	public void setDesiredVelocity(double desiredVelocity)
+	{
 		this.desiredVelocity = desiredVelocity;
 		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
 	}

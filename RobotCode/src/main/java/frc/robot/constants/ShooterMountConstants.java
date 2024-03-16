@@ -6,7 +6,7 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_GEAR_RATIO = (25 / 1) * (68 / 72);
 
 	/** Lowest position the shooter mount target position can be set to in rotations */
-	public static final double SHOOTER_MOUNT_MIN_ANGLE = 0.33; // 0.33;
+	public static final double SHOOTER_MOUNT_MIN_ANGLE = -0.25;
 
 	/** Lowest position of the shooter in radians */
 	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = 0.419;
@@ -18,11 +18,11 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_TO_SPEAKER = 1.98 + 0.05 - 0.29;
 
 	/** Angle in rotations for shooting at amp */
-	public static final double SHOOTER_MOUNT_AMP_ANGLE = 2;
+	public static final double SHOOTER_MOUNT_AMP_ANGLE = 1;
 	/** Angle in rotations for shooting at speaker */
-	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 3.5; // 3.8;
+	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED = 1.5;
 
-	public static final double SHOOTER_MOUNT_KP = 0.7; // 0.1;
+	public static final double SHOOTER_MOUNT_KP = 0.7;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0;
 	public static final double SHOOTER_MOUNT_KS = 0;

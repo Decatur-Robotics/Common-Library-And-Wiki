@@ -9,7 +9,7 @@ public class IntakeConstants {
     /** Ticks */
     public static final double INTAKE_RETRACTED_ROTATION = 0;
     /** Ticks */
-    public static final double INTAKE_DEPLOYED_ROTATION = -5.71;
+    public static final double INTAKE_DEPLOYED_ROTATION = 3.5;
 
     public static final double INTAKE_DEPLOYMENT_KP = 0;
     public static final double INTAKE_DEPLOYMENT_KI = 0;
