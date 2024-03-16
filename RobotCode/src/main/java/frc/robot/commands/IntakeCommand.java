@@ -65,7 +65,7 @@ public class IntakeCommand extends Command {
 
 			// Flash LEDs blue
 		}
-		if (!indexer.hasNote() && state == State.REVERSE) {
+		if (indexer.hasNote() && state == State.REVERSE) {
 			state = State.DONE;
 		}
 	}

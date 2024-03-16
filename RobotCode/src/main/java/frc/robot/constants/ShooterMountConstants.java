@@ -16,9 +16,6 @@ public class ShooterMountConstants
 	/** Rotations of motor to full shooter arm rotation in radians */
 	public static final double MOTOR_ROTATIONS_IN_SHOOTER_RADIANS = SHOOTER_MOUNT_GEAR_RATIO * 2 * Math.PI;
 
-	/** Speaker height plus note height minus shooter mount height (meters) */
-	public static final double SHOOTER_MOUNT_TO_SPEAKER = 1.98 + 0.05 - 0.29;
-
 	/** Angle in rotations for shooting at amp */
 	public static final double SHOOTER_MOUNT_AMP_ANGLE = 1;
 	/** Angle in rotations for shooting at speaker */
@@ -38,7 +35,7 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_ACCELERATION = 60;
 
 	/** Tolerance for determining mount is within range to shoot in rotations */
-	public static final double AIMING_DEADBAND = 100;
+	public static final double AIMING_DEADBAND = 0.1;
 
 	/** Distance to speaker in meters */
 	public static final double[] SpeakerDistanceTreeMapKeys =
@@ -48,7 +45,7 @@ public class ShooterMountConstants
 	/** Rotation for aiming in rotations */
 	public static final double[] ShooterMountAngleTreeMapValues =
 	{
-			3, 3, 3
+			0, 1, 2
 	};
 	/** Note velocity in meters per second */
 	public static final double[] NoteVelocityEstimateTreeMapValues =

@@ -24,13 +24,13 @@ public class IndexerSubsystem extends SubsystemBase
 	private SparkPIDController indexerPid;
 	private CANSparkFlex indexerMotorRight, indexerMotorLeft;
 
-	// private DigitalInput beamBreak;
+	private DigitalInput beamBreak;
 
 	public IndexerSubsystem()
 	{
 		desiredIndexerVelocity = IndexerConstants.INDEXER_REST_VELOCITY;
 
-		// beamBreak = new DigitalInput(Ports.BEAM_BREAK);
+		beamBreak = new DigitalInput(Ports.BEAM_BREAK);
 		indexerMotorRight = new CANSparkFlex(Ports.INDEXER_MOTOR_RIGHT, MotorType.kBrushless);
 		indexerMotorLeft = new CANSparkFlex(Ports.INDEXER_MOTOR_LEFT, MotorType.kBrushless);
 
@@ -55,6 +55,9 @@ public class IndexerSubsystem extends SubsystemBase
 				() -> indexerMotorRight.getEncoder().getVelocity());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Indexer Velocity",
 				() -> desiredIndexerVelocity);
+
+		RobotContainer.getShuffleboardTab().addBoolean("Beam Break", 
+				() -> beamBreak.get());
 	}
 
 	@Override
