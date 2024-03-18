@@ -128,6 +128,8 @@ public class RobotContainer {
 				LogitechControllerButtons.triggerRight);
 		final JoystickButton LeftBumper = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.bumperLeft);
+		final JoystickButton RightBumper = new JoystickButton(SecondaryController, 
+				LogitechControllerButtons.bumperRight);
 		final JoystickButton AButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.a);
 		final JoystickButton BButton = new JoystickButton(SecondaryController,
@@ -144,14 +146,16 @@ public class RobotContainer {
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
 		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
-				IndexerSubsystem,
-				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		LeftTrigger.whileTrue(new
+				IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, 
+				false));
+		RightTrigger.whileTrue(new
 				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+		RightBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
+				IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, 
+				false));
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		AButton.whileTrue(new
-				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
 		BButton.whileTrue(new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem,
 				IndexerConstants.INDEXER_REVERSE_VELOCITY, IntakeConstants.INTAKE_REVERSE_VELOCITY,
