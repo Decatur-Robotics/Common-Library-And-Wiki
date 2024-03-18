@@ -160,8 +160,8 @@ public class RobotContainer {
 		BButton.whileTrue(new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem,
 				IndexerConstants.INDEXER_REVERSE_VELOCITY, IntakeConstants.INTAKE_REVERSE_VELOCITY,
 				ShooterConstants.SHOOTER_REVERSE_VELOCITY));
-		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
-				LedSubsystem));
+		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem,
+				ShooterSubsystem, LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));

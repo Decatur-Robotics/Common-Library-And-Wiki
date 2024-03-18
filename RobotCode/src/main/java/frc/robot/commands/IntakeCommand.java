@@ -8,35 +8,28 @@ import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 
 public class IntakeCommand extends Command {
 	private IntakeSubsystem intake;
 	private IndexerSubsystem indexer;
 	private ShooterMountSubsystem shooterMount;
+	private ShooterSubsystem shooter;
 	private LedSubsystem leds;
 	private State state;
 
-	public IntakeCommand(IntakeSubsystem intake, IndexerSubsystem indexer, LedSubsystem leds) {
-		this.intake = intake;
-		this.indexer = indexer;
-		this.leds = leds;
-
-		state = State.FORWARD;
-
-		addRequirements(intake, indexer);
-	}
-
 	public IntakeCommand(IntakeSubsystem intake, IndexerSubsystem indexer,
-			ShooterMountSubsystem shooterMount, LedSubsystem leds) {
+			ShooterMountSubsystem shooterMount, ShooterSubsystem shooter, LedSubsystem leds) {
 		this.intake = intake;
 		this.indexer = indexer;
 		this.shooterMount = shooterMount;
+		this.shooter = shooter;
 		this.leds = leds;
 
 		state = State.FORWARD;
 
-		addRequirements(intake, indexer, shooterMount);
+		addRequirements(intake, indexer, shooterMount, shooter);
 	}
 
 	enum State {
@@ -48,6 +41,8 @@ public class IntakeCommand extends Command {
 		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY, "Intaking");
+		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+		shooter.setShooterMotorVelocity(0, "Intaking");
 		// shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 

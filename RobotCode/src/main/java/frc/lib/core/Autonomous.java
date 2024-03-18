@@ -17,8 +17,10 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -54,12 +56,17 @@ public abstract class Autonomous implements ILogSource
         final IndexerSubsystem Indexer = RobotContainer.getIndexer();
         final IntakeSubsystem Intake = RobotContainer.getIntake();
         final LedSubsystem Leds = RobotContainer.getLeds();
+        final ShooterSubsystem Shooter = RobotContainer.getShooter();
 
         // Initialize commands
         NamedCommands.registerCommand("Intake",
-                new IntakeCommand(Intake, Indexer, ShooterMount, Leds));
+                new IntakeCommand(Intake, Indexer, ShooterMount, Shooter, Leds));
 
-        NamedCommands.registerCommand("Shoot", new ShootCommand(Indexer, Leds));
+        NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(ShooterMount, 
+                ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
+
+        NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter, Indexer, 
+                ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)
