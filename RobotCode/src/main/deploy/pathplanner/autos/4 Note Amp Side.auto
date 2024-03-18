@@ -2,15 +2,21 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
-      "y": 5.55
+      "x": 0.75,
+      "y": 6.55
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer Amp to Subwoofer Amp Shoot Location"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -24,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer Center to Note Source"
+                  "pathName": "Subwoofer Amp Shoot Location to Note Amp"
                 }
               },
               {
@@ -39,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note Source to Subwoofer Center"
+            "pathName": "Note Amp to Subwoofer Center"
           }
         },
         {
@@ -86,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer Center to Note Amp"
+                  "pathName": "Subwoofer Center to Note Source"
                 }
               },
               {
@@ -101,7 +107,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note Amp to Subwoofer Center"
+            "pathName": "Note Source to Subwoofer Center"
           }
         },
         {
