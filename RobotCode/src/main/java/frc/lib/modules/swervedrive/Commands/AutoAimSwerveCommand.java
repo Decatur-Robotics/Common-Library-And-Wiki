@@ -11,7 +11,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.lib.core.ILogSource;
-import frc.lib.core.util.Timer;
+import frc.lib.core.util.TeamCountdown;
 
 /**
  * Rotates the chassis towards the speaker. Intended to work with PathPlanner paths. Will end once
@@ -26,7 +26,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	private final ShooterMountSubsystem ShooterMount;
 
 	/** Used to prevent ending before the note has left the shooter */
-	private Optional<Timer> timer;
+	private Optional<TeamCountdown> timer;
 
 	public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
 			IndexerSubsystem indexer, ShooterMountSubsystem shooter)
@@ -63,7 +63,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 			if (timer.isEmpty())
 			{
 				logInfo("Starting shooter...");
-				timer = Optional.of(new Timer(ShooterConstants.SHOOT_TIME));
+				timer = Optional.of(new TeamCountdown(ShooterConstants.SHOOT_TIME));
 			}
 		}
 		else if (!Indexer.hasNote())

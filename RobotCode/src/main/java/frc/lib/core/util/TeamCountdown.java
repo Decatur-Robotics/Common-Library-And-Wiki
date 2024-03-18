@@ -1,7 +1,7 @@
 package frc.lib.core.util;
 
 /** A class for doing countdowns or other forms of waiting */
-public class Timer
+public class TeamCountdown
 {
 
     /** In ms */
@@ -10,7 +10,7 @@ public class Timer
     /**
      * @param duration in ms. Starts automatically
      */
-    public Timer(long duration)
+    public TeamCountdown(long duration)
     {
         this.duration = duration;
         reset();

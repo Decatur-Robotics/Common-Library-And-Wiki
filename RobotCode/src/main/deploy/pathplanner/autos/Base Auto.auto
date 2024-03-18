@@ -12,28 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim to Speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Override Shooter"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              }
-            ]
+            "name": "Shoot from Subwoofer"
           }
         },
         {
@@ -62,28 +43,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim to Speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Override Shooter"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              }
-            ]
+            "name": "Shoot from Subwoofer"
           }
         },
         {
@@ -112,28 +74,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim to Speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Override Shooter"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.5
-                }
-              }
-            ]
+            "name": "Shoot from Subwoofer"
           }
         },
         {
@@ -162,22 +105,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim to Speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Override Shooter"
-                }
-              }
-            ]
+            "name": "Shoot from Subwoofer"
           }
         }
       ]

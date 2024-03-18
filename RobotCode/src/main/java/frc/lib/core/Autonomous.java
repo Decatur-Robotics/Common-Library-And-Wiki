@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.AutoShooterOverrideCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShootCommand;
@@ -62,11 +63,8 @@ public abstract class Autonomous implements ILogSource
         NamedCommands.registerCommand("Intake",
                 new IntakeCommand(Intake, Indexer, ShooterMount, Shooter, Leds));
 
-        NamedCommands.registerCommand("Aim to Speaker", new RotateShooterMountToPositionCommand(ShooterMount, 
-                ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
-
-        NamedCommands.registerCommand("Override Shooter", new ShooterOverrideCommand(Shooter, Indexer, 
-                ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+        NamedCommands.registerCommand("Shoot from Subwoofer", new AutoShooterOverrideCommand(ShooterMount,
+                Shooter, Indexer));
 
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)

@@ -3,7 +3,11 @@
   "robotLength": 0.70115,
   "holonomicMode": true,
   "pathFolders": [],
-  "autoFolders": [],
+  "autoFolders": [
+    "Subwoofer Amp",
+    "Subwoofer Center",
+    "Subwoofer Source"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
