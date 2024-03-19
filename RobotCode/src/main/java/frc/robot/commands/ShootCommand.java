@@ -31,15 +31,13 @@ public class ShootCommand extends Command
     @Override
     public void initialize()
     {
-        Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
-                "Shooter is up to speed");
+        Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
     }
 
     @Override
     public void end(boolean interrupted)
     {
-        Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
-                "ShooterInstantCommand ended");
+        Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
         if(Leds != null)
             Leds.flashAllPixels(Color.Blue);
     }

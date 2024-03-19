@@ -57,8 +57,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 				&& ShooterMount.isAtTargetRotation())
 		{
 			// Spin feeder motors
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
-					"Within aim threshold");
+			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
 
 			if (timer.isEmpty())
 			{
@@ -70,8 +69,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 		{
 			if (timer.isPresent())
 				logInfo("Stopping shooter...");
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
-					"No note in indexer");
+			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 		}
 	}
 

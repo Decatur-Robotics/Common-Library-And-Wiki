@@ -33,6 +33,6 @@ public class ClimberSpeedCommand extends Command
 		{
 			rightInputFinal = 0;
 		}
-		climber.setPowers(leftInputFinal, rightInputFinal, "Manual Movement Override");
+		climber.setPowers(leftInputFinal, rightInputFinal);
 	}
 }

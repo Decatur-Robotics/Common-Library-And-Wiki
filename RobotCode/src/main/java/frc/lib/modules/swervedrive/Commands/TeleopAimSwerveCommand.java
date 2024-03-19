@@ -45,13 +45,11 @@ public class TeleopAimSwerveCommand extends TeleopSwerveCommand
 				&& ShooterMount.isAtTargetRotation())
 		{
 			// Spin feeder motors
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
-					"Within aim threshold");
+			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
 		}
 		else if (!Indexer.hasNote())
 		{
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY,
-					"Not within aim threshold");
+			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 		}
 	}
 

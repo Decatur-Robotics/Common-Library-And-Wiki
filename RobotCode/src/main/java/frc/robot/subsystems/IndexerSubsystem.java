@@ -75,7 +75,7 @@ public class IndexerSubsystem extends SubsystemBase
 		}
 	}
 
-	public void setIndexerMotorVelocity(double desiredIndexerVelocity, String reason)
+	public void setIndexerMotorVelocity(double desiredIndexerVelocity)
 	{
 		this.desiredIndexerVelocity = Math.max(
 				Math.min(IndexerConstants.INDEXER_MAX_VELOCITY, desiredIndexerVelocity),

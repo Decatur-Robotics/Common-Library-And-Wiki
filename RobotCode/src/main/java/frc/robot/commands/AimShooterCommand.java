@@ -33,8 +33,7 @@ public class AimShooterCommand extends Command
 	@Override
 	public void initialize()
 	{
-		shooter.setShooterMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
-				"Auto aiming at speaker");
+		shooter.setShooterMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
 	}
 
 	@Override
@@ -58,8 +57,7 @@ public class AimShooterCommand extends Command
 	@Override
 	public void end(boolean interrupted)
 	{
-		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY,
-				"Ending auto aiming at speaker");
+		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
 		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 	}
 

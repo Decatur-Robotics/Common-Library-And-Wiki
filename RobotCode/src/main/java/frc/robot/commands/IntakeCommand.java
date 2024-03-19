@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.leds.Color;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -44,10 +45,9 @@ public class IntakeCommand extends Command
 		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION, 
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
-		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY, "Intaking");
+		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY);
 		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
-		shooter.setShooterMotorVelocity(0, "Intaking");
-		// shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
 	}
 
 	@Override
@@ -58,8 +58,7 @@ public class IntakeCommand extends Command
 			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, 
 					IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY,
-					"Reversing note");
+			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY);
 			if (leds != null)
 				leds.flashAllPixels(Color.Yellow);
 
@@ -79,7 +78,7 @@ public class IntakeCommand extends Command
 		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, 
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
-		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "Intaking done");
+		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 	}
 
 	@Override

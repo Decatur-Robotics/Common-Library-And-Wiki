@@ -31,16 +31,16 @@ public class AutoShooterOverrideCommand extends Command
     public void initialize()
     {
         shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED);
-        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY, "Shooting in auto period");
-        indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY, "Shooting in auto period");
+        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY);
+        indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
     }
 
     @Override
     public void end(boolean isFinished)
     {
         shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
-        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "Done shooting in auto period");
-        indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "Done shooting in auto period");
+        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
+        indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
     }
 
     @Override

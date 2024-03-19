@@ -121,7 +121,7 @@ public class ClimberSubsystem extends SubsystemBase
 
 	}
 
-	public void setPowers(double leftPower, double rightPower, String reason)
+	public void setPowers(double leftPower, double rightPower)
 	{
 		if (true)
 		{

@@ -31,22 +31,21 @@ public class ShooterOverrideCommand extends Command
 	public void execute()
 	{
 		// Spins up the motor
-		shooter.setShooterMotorVelocity(desiredShooterVelocity, "joystick said to shoot");
+		shooter.setShooterMotorVelocity(desiredShooterVelocity);
 
 		// If-statement to see if motor is spun up
 		// if (shooter.isUpToSpeed())
 		if (shooter.isUpToSpeed())
 		{
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY,
-					"motor is spun");
+			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
 		}
 	}
 
 	@Override
 	public void end(boolean interrupted)
 	{
-		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "command is over");
-		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "command is over");
+		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
+		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 	}
 
 	@Override
