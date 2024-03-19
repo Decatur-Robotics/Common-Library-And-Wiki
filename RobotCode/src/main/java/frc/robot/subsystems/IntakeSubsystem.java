@@ -109,10 +109,10 @@ public class IntakeSubsystem extends SubsystemBase
 	{
 		this.desiredVelocity = desiredVelocity;
 		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
-		if (desiredVelocity == 0 || intakeDeployEncoderRight.getPosition() < IntakeConstants.INTAKE_SPIN_ROTATION);
-		{
-			intakeRollerMotor.set(0);
-		}
+		// if (desiredVelocity == 0 /*|| intakeDeployEncoderRight.getPosition() < IntakeConstants.INTAKE_SPIN_ROTATION*/);
+		// {
+		// 	intakeRollerMotor.set(0);
+		// }
 	}
 
 }
