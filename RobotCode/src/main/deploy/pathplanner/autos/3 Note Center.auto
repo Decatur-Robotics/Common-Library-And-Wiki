@@ -78,37 +78,6 @@
           "data": {
             "name": "Shoot from Subwoofer"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer Center to Note Amp"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note Amp to Subwoofer Center"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot from Subwoofer"
-          }
         }
       ]
     }
