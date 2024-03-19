@@ -42,12 +42,18 @@ public class IntakeSubsystem extends SubsystemBase
 		intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
 		intakeDeployMotorLeft.setIdleMode(IdleMode.kBrake);
 
-		// Configure deployment PID
+		// Configure deployment PID, slot 0 is for upwards movement, slot 1 downwards
 		intakeDeployPidController = intakeDeployMotorRight.getPIDController();
-		intakeDeployPidController.setP(IntakeConstants.INTAKE_DEPLOYMENT_KP, 0);
-		intakeDeployPidController.setI(IntakeConstants.INTAKE_DEPLOYMENT_KI, 0);
-		intakeDeployPidController.setD(IntakeConstants.INTAKE_DEPLOYMENT_KD, 0);
-		intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_KFF, 0);
+		intakeDeployPidController.setP(IntakeConstants.INTAKE_DEPLOYMENT_UP_KP, 0);
+		intakeDeployPidController.setI(IntakeConstants.INTAKE_DEPLOYMENT_UP_KI, 0);
+		intakeDeployPidController.setD(IntakeConstants.INTAKE_DEPLOYMENT_UP_KD, 0);
+		intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_UP_KFF, 0);
+
+		intakeDeployPidController.setP(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KP, 1);
+		intakeDeployPidController.setI(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KI, 1);
+		intakeDeployPidController.setD(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KD, 1);
+		intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KFF, 1);
+		
 
 		// Configure roller motors
 		intakeRollerMotor.setInverted(true);
@@ -105,10 +111,10 @@ public class IntakeSubsystem extends SubsystemBase
 	}
 
 	/** @param desiredVelocity Ticks per second */
-	public void setDesiredVelocity(double desiredVelocity)
+	public void setDesiredVelocity(double desiredVelocity, int deploymentPIDSlot)
 	{
 		this.desiredVelocity = desiredVelocity;
-		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
+		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, deploymentPIDSlot);
 		// if (desiredVelocity == 0 /*|| intakeDeployEncoderRight.getPosition() < IntakeConstants.INTAKE_SPIN_ROTATION*/);
 		// {
 		// 	intakeRollerMotor.set(0);
