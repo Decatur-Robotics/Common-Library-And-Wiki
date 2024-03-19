@@ -26,7 +26,7 @@ public class IntakeReverseCommand extends Command {
     public void initialize()
     {
         intake.setDesiredVelocity(IntakeConstants.INTAKE_REVERSE_VELOCITY);
-		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
+		intake.setDesiredRotation(true, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
         indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY);
         shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REVERSE_VELOCITY);
     }
@@ -35,7 +35,7 @@ public class IntakeReverseCommand extends Command {
     public void end(boolean isFinished)
     {
         intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
-		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
+		intake.setDesiredRotation(false, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
         indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
         shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
     }

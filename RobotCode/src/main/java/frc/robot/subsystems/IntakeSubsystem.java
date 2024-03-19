@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.lib.core.util.TeamCountdown;
 import frc.lib.core.util.TeamMotorUtil;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -24,6 +25,11 @@ public class IntakeSubsystem extends SubsystemBase
 	private double desiredRotation, desiredVelocity;
 	private SparkPIDController intakeDeployPidController, intakeRollerPidController;
 	private RelativeEncoder intakeDeployEncoderRight;
+
+	private TeamCountdown countdown;
+	private boolean down;
+
+	private double intakeRetractedRotation;
 
 	public IntakeSubsystem()
 	{
@@ -77,9 +83,12 @@ public class IntakeSubsystem extends SubsystemBase
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation",
 				() -> intakeDeployEncoderRight.getPosition());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation",
-				() -> desiredRotation);
+				() -> intakeRetractedRotation);
 
-		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
+		intakeRetractedRotation = intakeDeployEncoderRight.getPosition();
+		intakeDeployPidController.setReference(intakeRetractedRotation, ControlType.kPosition, 0);
+	
+		down = false;
 	}
 
 	@Override
@@ -101,13 +110,27 @@ public class IntakeSubsystem extends SubsystemBase
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		}
+
+		if (countdown != null && (!down && countdown.isDone()))
+		{
+			intakeDeployMotorRight.set(0);
+			countdown = null;
+		}
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(double desiredRotation, int deploymentPIDSlot)
+	public void setDesiredRotation(boolean deployed, int deploymentPIDSlot)
 	{
-		this.desiredRotation = desiredRotation;
-		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, deploymentPIDSlot);
+		if (deployed)
+		{
+			intakeDeployMotorRight.set(0);
+			countdown = new TeamCountdown(1000);
+		}
+		else
+		{
+			intakeDeployMotorRight.set(0);
+			countdown = new TeamCountdown(1000);
+		}
 	}
 
 	/** @param desiredVelocity Ticks per second */

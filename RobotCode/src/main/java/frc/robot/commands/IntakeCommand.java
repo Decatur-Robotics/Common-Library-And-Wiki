@@ -42,7 +42,7 @@ public class IntakeCommand extends Command
 	@Override
 	public void initialize()
 	{
-		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION, 
+		intake.setDesiredRotation(true, 
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY);
@@ -55,7 +55,7 @@ public class IntakeCommand extends Command
 	{
 		if (indexer.hasNote() && state == State.FORWARD)
 		{
-			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, 
+			intake.setDesiredRotation(false, 
 					IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY);
@@ -75,7 +75,7 @@ public class IntakeCommand extends Command
 	@Override
 	public void end(boolean stop)
 	{
-		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, 
+		intake.setDesiredRotation(false, 
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);

@@ -59,7 +59,7 @@ public class RobotContainer
 	private final ClimberSubsystem ClimberSubsystem;
 	private final ShooterSubsystem ShooterSubsystem;
 	private final ShooterMountSubsystem ShooterMountSubsystem;
-	// private final VisionSubsystem VisionSubsystem;
+	private final VisionSubsystem VisionSubsystem;
 	private final IndexerSubsystem IndexerSubsystem;
 	private final IntakeSubsystem IntakeSubsystem;
 	private final LedSubsystem LedSubsystem;
@@ -88,7 +88,7 @@ public class RobotContainer
 		ClimberSubsystem = new ClimberSubsystem();
 		ShooterSubsystem = new ShooterSubsystem();
 		ShooterMountSubsystem = new ShooterMountSubsystem();
-		// VisionSubsystem = new VisionSubsystem(SwerveDrive, ShooterMountSubsystem);
+		VisionSubsystem = new VisionSubsystem(SwerveDrive);
 		IndexerSubsystem = new IndexerSubsystem();
 		IntakeSubsystem = new IntakeSubsystem();
 		LedSubsystem = new LedSubsystem();
@@ -206,10 +206,10 @@ public class RobotContainer
 		return ShooterMountSubsystem;
 	}
 
-	// public VisionSubsystem getVision()
-	// {
-	// return VisionSubsystem;
-	// }
+	public VisionSubsystem getVision()
+	{
+	return VisionSubsystem;
+	}
 
 	public IndexerSubsystem getIndexer()
 	{
