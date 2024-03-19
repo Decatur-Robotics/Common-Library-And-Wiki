@@ -46,10 +46,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 /**
- * p
- * The container for the robot. Contains subsystems, OI devices, and commands.
+ * p The container for the robot. Contains subsystems, OI devices, and commands.
  */
-public class RobotContainer {
+public class RobotContainer
+{
 
 	private static RobotContainer instance;
 
@@ -63,7 +63,7 @@ public class RobotContainer {
 	private final IndexerSubsystem IndexerSubsystem;
 	private final IntakeSubsystem IntakeSubsystem;
 	private final LedSubsystem LedSubsystem;
-	
+
 	private final Autonomous Autonomous;
 
 	private final Pigeon2 gyro;
@@ -71,7 +71,8 @@ public class RobotContainer {
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
-	public RobotContainer() {
+	public RobotContainer()
+	{
 		instance = this;
 
 		new PowerDistribution(26, ModuleType.kRev).setSwitchableChannel(true);
@@ -92,15 +93,15 @@ public class RobotContainer {
 		IntakeSubsystem = new IntakeSubsystem();
 		LedSubsystem = new LedSubsystem();
 
-		Autonomous = new SimpleAuto(this);
-		
+		Autonomous = new SideBasedAuto(this);
 
 		// Configure the button bindings
 		configurePrimaryBindings();
 		configureSecondaryBindings();
 	}
 
-	private void configurePrimaryBindings() {
+	private void configurePrimaryBindings()
+	{
 		final Joystick PrimaryController = new Joystick(0);
 
 		final JoystickButton LeftTrigger = new JoystickButton(PrimaryController,
@@ -119,7 +120,8 @@ public class RobotContainer {
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
-	private void configureSecondaryBindings() {
+	private void configureSecondaryBindings()
+	{
 		final Joystick SecondaryController = new Joystick(1);
 
 		final JoystickButton LeftTrigger = new JoystickButton(SecondaryController,
@@ -128,7 +130,7 @@ public class RobotContainer {
 				LogitechControllerButtons.triggerRight);
 		final JoystickButton LeftBumper = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.bumperLeft);
-		final JoystickButton RightBumper = new JoystickButton(SecondaryController, 
+		final JoystickButton RightBumper = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.bumperRight);
 		final JoystickButton AButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.a);
@@ -145,59 +147,62 @@ public class RobotContainer {
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
-		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
-				IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, 
-				false));
-		RightTrigger.whileTrue(new
-				RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
-		RightBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem,
-				IndexerSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, 
-				false));
+		RightBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		BButton.whileTrue(new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
-		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem,
-				ShooterSubsystem, LedSubsystem));
+		BButton.whileTrue(
+				new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
+		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
+				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// 		ClimberConstants.LEFT_CLIMBER_MAXIMUM, ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
+		// ClimberConstants.LEFT_CLIMBER_MAXIMUM, ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
 		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// 		ClimberConstants.LEFT_CLIMBER_MINIMUM, ClimberConstants.RIGHT_CLIMBER_MINIMUM));
+		// ClimberConstants.LEFT_CLIMBER_MINIMUM, ClimberConstants.RIGHT_CLIMBER_MINIMUM));
 	}
 
-	public static ShuffleboardTab getShuffleboardTab() {
+	public static ShuffleboardTab getShuffleboardTab()
+	{
 		return instance.ShuffleboardTab;
 	}
 
 	/**
-	 * @return the position of the speaker april tag for our alliance, or empty if
-	 *         the tag is not
+	 * @return the position of the speaker april tag for our alliance, or empty if the tag is not
 	 *         found
 	 */
-	public static Optional<Pose3d> getSpeakerPose() {
+	public static Optional<Pose3d> getSpeakerPose()
+	{
 		return Constants.AprilTagFieldLayout
 				.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
 						? VisionConstants.BLUE_SPEAKER_TAG_ID
 						: VisionConstants.RED_SPEAKER_TAG_ID);
 	}
 
-	public static Pigeon2 getGyro() {
+	public static Pigeon2 getGyro()
+	{
 		return instance.gyro;
 	}
 
-	public SwerveDriveSubsystem getSwerveDrive() {
+	public SwerveDriveSubsystem getSwerveDrive()
+	{
 		return SwerveDrive;
 	}
 
-	public ShooterSubsystem getShooter() {
+	public ShooterSubsystem getShooter()
+	{
 		return ShooterSubsystem;
 	}
 
-	public ShooterMountSubsystem getShooterMount() {
+	public ShooterMountSubsystem getShooterMount()
+	{
 		return ShooterMountSubsystem;
 	}
 
@@ -206,19 +211,23 @@ public class RobotContainer {
 	// return VisionSubsystem;
 	// }
 
-	public IndexerSubsystem getIndexer() {
+	public IndexerSubsystem getIndexer()
+	{
 		return IndexerSubsystem;
 	}
 
-	public IntakeSubsystem getIntake() {
-	return IntakeSubsystem;
+	public IntakeSubsystem getIntake()
+	{
+		return IntakeSubsystem;
 	}
 
-	public LedSubsystem getLeds() {
+	public LedSubsystem getLeds()
+	{
 		return LedSubsystem;
-	 }
+	}
 
-	public Autonomous getAutonomous(){
+	public Autonomous getAutonomous()
+	{
 
 		return Autonomous;
 	}
