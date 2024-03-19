@@ -19,8 +19,6 @@ public class IntakeCommand extends Command
 	private ShooterSubsystem shooter;
 	private LedSubsystem leds;
 	private State state;
-	private int deploymentPIDSlotDown = 1;
-	private int deploymentPIDSlotUp = 0;
 
 	public IntakeCommand(IntakeSubsystem intake, IndexerSubsystem indexer,
 			ShooterMountSubsystem shooterMount, ShooterSubsystem shooter, LedSubsystem leds)
@@ -43,8 +41,9 @@ public class IntakeCommand extends Command
 	@Override
 	public void initialize()
 	{
-		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION);
-		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY, deploymentPIDSlotDown);
+		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION, 
+				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
+		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY, "Intaking");
 		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
 		shooter.setShooterMotorVelocity(0, "Intaking");
@@ -56,8 +55,9 @@ public class IntakeCommand extends Command
 	{
 		if (indexer.hasNote() && state == State.FORWARD)
 		{
-			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
-			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY, deploymentPIDSlotUp);
+			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, 
+					IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
+			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY,
 					"Reversing note");
 			if (leds != null)
@@ -76,8 +76,9 @@ public class IntakeCommand extends Command
 	@Override
 	public void end(boolean stop)
 	{
-		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
-		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY, deploymentPIDSlotUp);
+		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, 
+				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
+		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "Intaking done");
 	}
 

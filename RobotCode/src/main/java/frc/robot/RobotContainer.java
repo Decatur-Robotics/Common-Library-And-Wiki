@@ -157,9 +157,7 @@ public class RobotContainer {
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE));
-		BButton.whileTrue(new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem,
-				IndexerConstants.INDEXER_REVERSE_VELOCITY, IntakeConstants.INTAKE_REVERSE_VELOCITY,
-				ShooterConstants.SHOOTER_REVERSE_VELOCITY));
+		BButton.whileTrue(new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem, ShooterMountSubsystem,
 				ShooterSubsystem, LedSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,

@@ -104,17 +104,17 @@ public class IntakeSubsystem extends SubsystemBase
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(double desiredRotation)
+	public void setDesiredRotation(double desiredRotation, int deploymentPIDSlot)
 	{
 		this.desiredRotation = desiredRotation;
-		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
+		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, deploymentPIDSlot);
 	}
 
 	/** @param desiredVelocity Ticks per second */
-	public void setDesiredVelocity(double desiredVelocity, int deploymentPIDSlot)
+	public void setDesiredVelocity(double desiredVelocity)
 	{
 		this.desiredVelocity = desiredVelocity;
-		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, deploymentPIDSlot);
+		intakeRollerPidController.setReference(desiredVelocity, ControlType.kVelocity, 0);
 		// if (desiredVelocity == 0 /*|| intakeDeployEncoderRight.getPosition() < IntakeConstants.INTAKE_SPIN_ROTATION*/);
 		// {
 		// 	intakeRollerMotor.set(0);

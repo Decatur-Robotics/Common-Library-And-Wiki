@@ -27,4 +27,7 @@ public class IntakeConstants {
     public static final double INTAKE_ROLLER_KI = 0;
     public static final double INTAKE_ROLLER_KD = 0;
     public static final double INTAKE_ROLLER_KFF = 0; // 0.05; 
+
+	public static final int INTAKE_DEPLOYMENT_SLOT_UP = 0;
+	public static final int INTAKE_DEPLOYMENT_SLOT_DOWN = 1;
 }

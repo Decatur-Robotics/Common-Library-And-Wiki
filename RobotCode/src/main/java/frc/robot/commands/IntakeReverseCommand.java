@@ -1,6 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.IndexerConstants;
+import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -11,36 +14,30 @@ public class IntakeReverseCommand extends Command {
     private IndexerSubsystem indexer;
     private ShooterSubsystem shooter;
 
-    private double desiredSpeedIndexer, desiredSpeedIntake, desiredSpeedShooter;
-    private int deploymentPIDSlotUp = 0;
-    private int deploymentPIDSlotDown = 1;
-
-    public IntakeReverseCommand(IntakeSubsystem intake, IndexerSubsystem indexer, ShooterSubsystem shooter,
-            double desiredSpeedIndexer, double desiredSpeedIntake, double desiredSpeedShooter)
+    public IntakeReverseCommand(IntakeSubsystem intake, IndexerSubsystem indexer, ShooterSubsystem shooter)
     {
         this.intake = intake;
         this.indexer = indexer;
         this.shooter = shooter;
-        this.desiredSpeedIndexer = desiredSpeedIndexer;
-        this.desiredSpeedIntake = desiredSpeedIntake;
-        this.desiredSpeedShooter = desiredSpeedShooter;
         addRequirements(intake, indexer, shooter);
     }
 
     @Override
     public void initialize()
     {
-        intake.setDesiredVelocity(desiredSpeedIntake, deploymentPIDSlotDown);
-        indexer.setIndexerMotorVelocity(desiredSpeedIndexer, "Reverse");
-        shooter.setShooterMotorVelocity(desiredSpeedShooter, "Reverse");
+        intake.setDesiredVelocity(IntakeConstants.INTAKE_REVERSE_VELOCITY);
+		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
+        indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY, "Reverse");
+        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REVERSE_VELOCITY, "Reverse");
     }
 
     @Override
     public void end(boolean isFinished)
     {
-        intake.setDesiredVelocity(0, deploymentPIDSlotUp);
-        indexer.setIndexerMotorVelocity(0, "End reverse");
-        shooter.setShooterMotorVelocity(0, "End reverse");
+        intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
+		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
+        indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY, "End reverse");
+        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY, "End reverse");
     }
 
 }
