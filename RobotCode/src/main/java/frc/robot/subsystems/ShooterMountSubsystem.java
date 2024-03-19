@@ -20,11 +20,11 @@ public class ShooterMountSubsystem extends SubsystemBase {
 
 	private MotionMagicDutyCycle motorControlRequest;
 
-	/** Target rotation in encoder ticks (2048 encoder ticks to 1 degree) */
+	/** Target rotation in rotations */
 	private double targetRotation;
 
 	/**
-	 * Key: distance to speaker in meters, Value: Rotation compensation in degrees
+	 * Key: distance to speaker in meters, Value: Rotation of shooter mount motors
 	 */
 	private InterpolatingDoubleTreeMap shooterMountAngleTreeMap;
 	/**
