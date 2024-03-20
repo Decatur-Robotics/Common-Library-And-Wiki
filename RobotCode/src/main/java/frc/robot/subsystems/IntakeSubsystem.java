@@ -27,9 +27,8 @@ public class IntakeSubsystem extends SubsystemBase
 	private RelativeEncoder intakeDeployEncoderRight;
 
 	private TeamCountdown countdown;
-	private boolean down;
 
-	private double intakeRetractedRotation;
+	private boolean deployed;
 
 	public IntakeSubsystem()
 	{
@@ -73,7 +72,7 @@ public class IntakeSubsystem extends SubsystemBase
 		intakeRollerPidController.setD(IntakeConstants.INTAKE_ROLLER_KD, 0);
 		intakeRollerPidController.setFF(IntakeConstants.INTAKE_ROLLER_KFF, 0);
 
-		desiredRotation = IntakeConstants.INTAKE_RETRACTED_ROTATION;
+		desiredRotation = intakeDeployEncoderRight.getPosition();
 		desiredVelocity = IntakeConstants.INTAKE_REST_VELOCITY;
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity",
@@ -83,12 +82,11 @@ public class IntakeSubsystem extends SubsystemBase
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation",
 				() -> intakeDeployEncoderRight.getPosition());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation",
-				() -> intakeRetractedRotation);
+				() -> desiredRotation);
 
-		intakeRetractedRotation = intakeDeployEncoderRight.getPosition();
-		intakeDeployPidController.setReference(intakeRetractedRotation, ControlType.kPosition, 0);
-	
-		down = false;
+		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
+
+		deployed = false;
 	}
 
 	@Override
@@ -111,16 +109,22 @@ public class IntakeSubsystem extends SubsystemBase
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		}
 
-		if (countdown != null && (!down && countdown.isDone()))
+		if (countdown != null && countdown.isDone())
 		{
 			intakeDeployMotorRight.set(0);
 			countdown = null;
+
+			desiredRotation = intakeDeployEncoderRight.getPosition();
+
+			if (deployed) intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 		}
 	}
 
 	/** @param desiredRotation Ticks */
 	public void setDesiredRotation(boolean deployed, int deploymentPIDSlot)
 	{
+		this.deployed = deployed;
+
 		if (deployed)
 		{
 			intakeDeployMotorRight.set(0);

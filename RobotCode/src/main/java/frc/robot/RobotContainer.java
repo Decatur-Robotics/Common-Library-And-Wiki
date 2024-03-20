@@ -25,6 +25,7 @@ import frc.robot.commands.AimShooterCommand;
 import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.ClimberSpeedCommand;
 import frc.robot.commands.ClimberToPositionCommand;
+import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeReverseCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
@@ -160,6 +161,7 @@ public class RobotContainer
 				new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
+		YButton.whileTrue(new IndexerCommand(IndexerSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
