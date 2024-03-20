@@ -46,7 +46,7 @@ public class IntakeCommand extends Command
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY);
-		shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+		shooterMount.setTargetRotation(shooterMount.SHOOTER_MOUNT_MIN_ANGLE);
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
 	}
 

@@ -37,7 +37,7 @@ public class RotateShooterMountToPositionCommand extends Command
     @Override
     public void end(boolean interrupted)
     {
-        shooterMount.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE);
+        shooterMount.setTargetRotation(shooterMount.SHOOTER_MOUNT_MIN_ANGLE);
     }
 
 }
