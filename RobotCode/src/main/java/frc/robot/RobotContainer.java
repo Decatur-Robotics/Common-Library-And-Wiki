@@ -149,7 +149,7 @@ public class RobotContainer
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
 		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		RightTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED));
 		RightBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
