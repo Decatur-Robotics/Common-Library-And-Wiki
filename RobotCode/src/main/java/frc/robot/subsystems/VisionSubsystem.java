@@ -31,7 +31,9 @@ public class VisionSubsystem extends SubsystemBase
 	@Override
 	public void periodic()
 	{
-		Swerve.updatePoseWithVision(robotPoseEstimator.update());
+		// UNCOMMENT THIS IF WE GET VISION WORKING
+
+		// Swerve.updatePoseWithVision(robotPoseEstimator.update());
 	}
 
 }

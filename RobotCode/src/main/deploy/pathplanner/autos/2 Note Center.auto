@@ -18,34 +18,28 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer Center to Note Center"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Subwoofer Center to Note Center"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Note Center to Subwoofer Center"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Shoot from Subwoofer"
+            "name": "Shoot from Note Center"
           }
         }
       ]

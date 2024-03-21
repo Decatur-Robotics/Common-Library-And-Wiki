@@ -64,10 +64,15 @@ public abstract class Autonomous implements ILogSource
                 new IntakeCommand(Intake, Indexer, ShooterMount, Shooter, Leds));
 
         NamedCommands.registerCommand("Shoot from Subwoofer",
-                new AutoShooterOverrideCommand(ShooterMount, Shooter, Indexer));
+                new AutoShooterOverrideCommand(ShooterMount, Shooter, Indexer, 
+                ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
+
+        NamedCommands.registerCommand("Shoot from Note Center",
+                new AutoShooterOverrideCommand(ShooterMount, Shooter, Indexer,
+                ShooterMountConstants.SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET));
 
         NamedCommands.registerCommand("Drop Note", new ShooterOverrideCommand(Shooter, Indexer,
-                ShooterConstants.SHOOTER_AMP_VELOCITY, false));
+                Leds, ShooterConstants.SHOOTER_AMP_VELOCITY, false));
 
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)

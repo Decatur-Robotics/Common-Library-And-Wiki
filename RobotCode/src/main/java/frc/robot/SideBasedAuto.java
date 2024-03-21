@@ -52,6 +52,9 @@ public class SideBasedAuto extends Autonomous
         AutoModeChooser.addOption(AutoMode.TwoNote.autoName, AutoMode.TwoNote);
         AutoModeChooser.addOption(AutoMode.ThreeNote.autoName, AutoMode.ThreeNote);
         AutoModeChooser.addOption(AutoMode.FourNote.autoName, AutoMode.FourNote);
+
+        RobotContainer.getShuffleboardTab().add(SideChooser);
+        RobotContainer.getShuffleboardTab().add(AutoModeChooser);
     }
 
     @Override

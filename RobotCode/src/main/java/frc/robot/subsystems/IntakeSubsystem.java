@@ -116,7 +116,7 @@ public class IntakeSubsystem extends SubsystemBase
 
 			desiredRotation = intakeDeployEncoderRight.getPosition();
 
-			if (deployed) intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
+			intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
 		}
 	}
 
@@ -127,12 +127,12 @@ public class IntakeSubsystem extends SubsystemBase
 
 		if (deployed)
 		{
-			intakeDeployMotorRight.set(0);
+			intakeDeployMotorRight.set(0.05);
 			countdown = new TeamCountdown(1000);
 		}
 		else
 		{
-			intakeDeployMotorRight.set(0);
+			intakeDeployMotorRight.set(-0.15);
 			countdown = new TeamCountdown(1000);
 		}
 	}

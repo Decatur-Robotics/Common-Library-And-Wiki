@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.modules.leds.Color;
 import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
@@ -94,6 +95,8 @@ public class RobotContainer
 		IntakeSubsystem = new IntakeSubsystem();
 		LedSubsystem = new LedSubsystem();
 
+		LedSubsystem.setAllPixels(Color.Blue);
+
 		Autonomous = new SideBasedAuto(this);
 
 		// Configure the button bindings
@@ -149,12 +152,12 @@ public class RobotContainer
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
 		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
-		RightBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-				ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
+		RightBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, 
+				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
 		BButton.whileTrue(

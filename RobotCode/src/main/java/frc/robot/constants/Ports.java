@@ -44,5 +44,6 @@ public final class Ports
 	/*
 	 * LED ports
 	 */
-	public static final int ADDRESSABLE_LED = 0;
+	public static final int ADDRESSABLE_LED = 9;
+	public static final int ADDRESSABLE_LED_2 = 8;
 }

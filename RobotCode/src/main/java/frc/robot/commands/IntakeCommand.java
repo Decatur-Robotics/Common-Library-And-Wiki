@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.core.util.TeamCountdown;
 import frc.lib.modules.leds.Color;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.constants.ShooterMountConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
@@ -20,6 +20,8 @@ public class IntakeCommand extends Command
 	private ShooterSubsystem shooter;
 	private LedSubsystem leds;
 	private State state;
+
+	private TeamCountdown countdown;
 
 	public IntakeCommand(IntakeSubsystem intake, IndexerSubsystem indexer,
 			ShooterMountSubsystem shooterMount, ShooterSubsystem shooter, LedSubsystem leds)
@@ -64,9 +66,9 @@ public class IntakeCommand extends Command
 
 			state = State.REVERSE;
 
-			// Flash LEDs blue
+			countdown = new TeamCountdown(200);
 		}
-		if (indexer.hasNote() && state == State.REVERSE)
+		if (countdown != null && countdown.isDone())
 		{
 			state = State.DONE;
 		}

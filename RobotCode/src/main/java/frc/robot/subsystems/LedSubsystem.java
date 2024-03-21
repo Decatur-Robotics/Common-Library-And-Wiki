@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 public class LedSubsystem extends SubsystemBase {
 
-	private AddressableLED led;
+	private AddressableLED led, led2;
 	private AddressableLEDBuffer buffer;
 
 	// Should be set when setAllPixels is called.
@@ -34,6 +34,11 @@ public class LedSubsystem extends SubsystemBase {
 		led.setLength(length);
 		led.setData(buffer);
 		led.start();
+
+		// led2 = new AddressableLED(Ports.ADDRESSABLE_LED_2);
+		// led2.setLength(length);
+		// led2.setData(buffer);
+		// led2.start();
 
 		numFlashes = 0;
 		timesFlashed = 0;
@@ -76,12 +81,13 @@ public class LedSubsystem extends SubsystemBase {
 	public void periodic() {
 		periodsPassed++;
 
-		if (periodsPassed == 5 || timesFlashed < numFlashes) {
+		if (periodsPassed == 5 && timesFlashed < numFlashes) {
 			if (on) {
-				setAllPixels(offColor, false);
-				on = false;
-			} else {
 				setAllPixels(lastColor, false);
+				on = false;
+			} 
+			else {
+				setAllPixels(offColor, false);
 				on = true;
 				timesFlashed++;
 			}
@@ -111,7 +117,7 @@ public class LedSubsystem extends SubsystemBase {
 
 	public void updateData() {
 		led.setData(buffer);
-		// System.out.println("Updated LED Data.");
+		// led2.setData(buffer);
 	}
 
 	public int getLength() {

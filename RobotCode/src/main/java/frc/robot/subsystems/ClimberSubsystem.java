@@ -25,6 +25,8 @@ public class ClimberSubsystem extends SubsystemBase
 	private boolean override;
 	private boolean isBalanced;
 
+	public double minimumPositionLeft, minimumPositionRight;
+
 	public ClimberSubsystem()
 	{
 		// sets extension of left and right motors to given extension length
@@ -74,6 +76,9 @@ public class ClimberSubsystem extends SubsystemBase
 
 		// climberMotorLeft.setControl(motorControlRequestLeft.withPosition(leftTargetPosition));
 		// climberMotorRight.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
+
+		minimumPositionLeft = climberMotorLeft.getPosition().getValueAsDouble();
+		minimumPositionRight = climberMotorRight.getPosition().getValueAsDouble();
 	}
 
 	@Override
@@ -118,14 +123,13 @@ public class ClimberSubsystem extends SubsystemBase
 		// 	climberMotorRight
 		// 			.setControl(motorControlRequestRight.withPosition(rightTargetPosition));
 		// }
-
 	}
 
 	public void setPowers(double leftPower, double rightPower)
 	{
 		if (true)
 		{
-			climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(-leftPower));
+			climberMotorLeft.setControl(motorControlRequestLeftVelocity.withVelocity(leftPower));
 			climberMotorRight.setControl(motorControlRequestRightVelocity.withVelocity(-rightPower));
 
 			leftTargetPosition = climberMotorLeft.getRotorPosition().getValueAsDouble();
