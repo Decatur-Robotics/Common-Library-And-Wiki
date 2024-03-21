@@ -117,8 +117,8 @@ public class RobotContainer
 
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
-		// LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
-		// SwerveConstants.AMP_ROTATION));
+		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
+				-31));
 		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController,
 		// ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
@@ -155,8 +155,8 @@ public class RobotContainer
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
-		LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		RightBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, 
+		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
+		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, 
 				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
