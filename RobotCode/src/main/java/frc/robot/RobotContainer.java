@@ -151,7 +151,9 @@ public class RobotContainer
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
-		RightTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
@@ -164,7 +166,7 @@ public class RobotContainer
 				new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
-		YButton.whileTrue(new IndexerCommand(IndexerSubsystem));
+		RightTrigger.whileTrue(new IndexerCommand(IndexerSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));

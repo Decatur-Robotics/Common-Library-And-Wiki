@@ -26,7 +26,7 @@ public class ShooterOverrideCommand extends Command {
 		this.shooter = shooter;
 		this.indexer = indexer;
 		this.leds = leds;
-		addRequirements(shooter, indexer, leds);
+		addRequirements(shooter, leds);
 	}
 
 	@Override
@@ -35,9 +35,9 @@ public class ShooterOverrideCommand extends Command {
 		shooter.setShooterMotorVelocity(desiredShooterVelocity);
 
 		// If-statement to see if motor is spun up
-		if (shooter.isUpToSpeed()) {
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
-		}
+		// if (shooter.isUpToSpeed()) {
+		// 	indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
+		// }
 
 		if (!indexer.hasNote() && leds != null) {
 			leds.flashAllPixels(Color.Blue);
@@ -47,7 +47,7 @@ public class ShooterOverrideCommand extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
-		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
+		// indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 	}
 
 	@Override
