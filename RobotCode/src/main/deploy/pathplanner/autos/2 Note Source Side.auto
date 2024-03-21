@@ -12,12 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Subwoofer Source to Subwoofer Source Shoot Location"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot from Subwoofer"
@@ -43,15 +37,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Note Source to Subwoofer Source Shoot Location"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Shoot from Subwoofer"
+            "name": "Shoot from Note Center"
           }
         }
       ]
