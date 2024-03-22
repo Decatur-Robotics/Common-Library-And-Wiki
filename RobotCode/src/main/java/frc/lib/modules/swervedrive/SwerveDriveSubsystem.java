@@ -168,8 +168,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		// This override is used by autonomous to override PathPlanner
 		if (rotationController.isPresent()) {
 			double rotation = rotationController.get().getAsDouble();
-			speeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
-					rotation);
+			speeds.omegaRadiansPerSecond = rotation;
 		}
 
 		drive(speeds, true);
