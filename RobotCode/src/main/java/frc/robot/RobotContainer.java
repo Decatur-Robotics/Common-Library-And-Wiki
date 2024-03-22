@@ -167,6 +167,8 @@ public class RobotContainer
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
 		RightTrigger.whileTrue(new IndexerCommand(IndexerSubsystem));
+		RightBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
