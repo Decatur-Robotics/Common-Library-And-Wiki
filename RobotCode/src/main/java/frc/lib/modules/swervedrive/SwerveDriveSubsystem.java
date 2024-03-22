@@ -276,7 +276,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	}
 
 	public void setRotationController(final DoubleSupplier RotationController) {
-		rotationController = Optional.of(RotationController);
+		try
+		{
+			rotationController = Optional.of(RotationController);
+		}
+		catch (NullPointerException e)
+		{
+			rotationController = Optional.empty();
+		}
 	}
 
 	/**

@@ -24,37 +24,6 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer Center to Note Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note Source to Subwoofer Center"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot from Subwoofer"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
                   "pathName": "Subwoofer Center to Note Center"
                 }
               },
@@ -68,15 +37,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Note Center to Subwoofer Center"
+            "name": "Shoot from Note Center"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note Center to Note Source"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot from Subwoofer"
+            "name": "Shoot from Note Side"
           }
         }
       ]

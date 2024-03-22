@@ -44,6 +44,8 @@ public class IntakeCommand extends Command
 	@Override
 	public void initialize()
 	{
+		state = State.FORWARD;
+
 		intake.setDesiredRotation(true, 
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
@@ -71,6 +73,7 @@ public class IntakeCommand extends Command
 		if (countdown != null && countdown.isDone())
 		{
 			state = State.DONE;
+			countdown = null;
 		}
 	}
 

@@ -236,9 +236,9 @@ public final class SwerveConstants
 	}
 
 	// Constraints for robot angle aiming PID controller
-	public static final double ANGULAR_AIMING_KP = 0.1;
+	public static final double ANGULAR_AIMING_KP = 0.02;
 	public static final double ANGULAR_AIMING_KI = 0;
-	public static final double ANGULAR_AIMING_KD = 0.1;
+	public static final double ANGULAR_AIMING_KD = 0;
 	
 	/**  */
 
