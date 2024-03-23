@@ -10,18 +10,16 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutoShooterOverrideCommand extends Command
-{
+public class AutoShooterOverrideCommand extends Command {
 
     private ShooterMountSubsystem shooterMount;
     private ShooterSubsystem shooter;
     private IndexerSubsystem indexer;
     private TeamCountdown countdown, otherCountdown;
-    private double targetRotation; 
+    private double targetRotation;
 
     public AutoShooterOverrideCommand(ShooterMountSubsystem shooterMount, ShooterSubsystem shooter,
-            IndexerSubsystem indexer, double targetRotation)
-    {
+            IndexerSubsystem indexer, double targetRotation) {
         this.shooterMount = shooterMount;
         this.shooter = shooter;
         this.indexer = indexer;
@@ -31,40 +29,37 @@ public class AutoShooterOverrideCommand extends Command
     }
 
     @Override
-    public void initialize()
-    {
+    public void initialize() {
         shooterMount
-                .setTargetRotation(shooterMount.SHOOTER_MOUNT_MIN_ANGLE + 
-                    targetRotation);
+                .setTargetRotation(shooterMount.shooterMountMinAngle +
+                        targetRotation);
         otherCountdown = new TeamCountdown(0);
 
         countdown = new TeamCountdown(1500);
     }
 
     @Override
-	public void execute() {
-		// Spins up the motor
+    public void execute() {
+        // Spins up the motor
         if (otherCountdown.isDone())
-		    shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY);
+            shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY);
 
-		// If-statement to see if motor is spun up
-		if (shooter.isUpToSpeed()) {
-			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
+        // If-statement to see if motor is spun up
+        if (shooter.isUpToSpeed()) {
+            indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
             System.out.println("UP TO SPEED UP TO SPEED UP TO SPEED");
-		}
-	}
+        }
+    }
 
     @Override
-    public void end(boolean isFinished)
-    {
-        shooterMount.setTargetRotation(shooterMount.SHOOTER_MOUNT_MIN_ANGLE);
+    public void end(boolean isFinished) {
+        shooterMount.setTargetRotation(shooterMount.shooterMountMinAngle);
         shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
         indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
     }
 
     @Override
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return countdown.isDone();
     }
 

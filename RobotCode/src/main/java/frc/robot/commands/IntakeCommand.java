@@ -12,8 +12,7 @@ import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 
-public class IntakeCommand extends Command
-{
+public class IntakeCommand extends Command {
 	private IntakeSubsystem intake;
 	private IndexerSubsystem indexer;
 	private ShooterMountSubsystem shooterMount;
@@ -24,8 +23,7 @@ public class IntakeCommand extends Command
 	private TeamCountdown countdown;
 
 	public IntakeCommand(IntakeSubsystem intake, IndexerSubsystem indexer,
-			ShooterMountSubsystem shooterMount, ShooterSubsystem shooter, LedSubsystem leds)
-	{
+			ShooterMountSubsystem shooterMount, ShooterSubsystem shooter, LedSubsystem leds) {
 		this.intake = intake;
 		this.indexer = indexer;
 		this.shooterMount = shooterMount;
@@ -36,30 +34,26 @@ public class IntakeCommand extends Command
 		addRequirements(intake, indexer, shooterMount, shooter);
 	}
 
-	enum State
-	{
+	enum State {
 		FORWARD, REVERSE, DONE
 	}
 
 	@Override
-	public void initialize()
-	{
+	public void initialize() {
 		state = State.FORWARD;
 
-		intake.setDesiredRotation(true, 
+		intake.setDesiredRotation(true,
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_DOWN);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY);
-		shooterMount.setTargetRotation(shooterMount.SHOOTER_MOUNT_MIN_ANGLE);
+		shooterMount.setTargetRotation(shooterMount.shooterMountMinAngle);
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
 	}
 
 	@Override
-	public void execute()
-	{
-		if (indexer.hasNote() && state == State.FORWARD)
-		{
-			intake.setDesiredRotation(false, 
+	public void execute() {
+		if (indexer.hasNote() && state == State.FORWARD) {
+			intake.setDesiredRotation(false,
 					IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY);
@@ -70,25 +64,22 @@ public class IntakeCommand extends Command
 
 			countdown = new TeamCountdown(200);
 		}
-		if (countdown != null && countdown.isDone())
-		{
+		if (countdown != null && countdown.isDone()) {
 			state = State.DONE;
 			countdown = null;
 		}
 	}
 
 	@Override
-	public void end(boolean stop)
-	{
-		intake.setDesiredRotation(false, 
+	public void end(boolean stop) {
+		intake.setDesiredRotation(false,
 				IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 	}
 
 	@Override
-	public boolean isFinished()
-	{
+	public boolean isFinished() {
 		return state == State.DONE;
 	}
 }

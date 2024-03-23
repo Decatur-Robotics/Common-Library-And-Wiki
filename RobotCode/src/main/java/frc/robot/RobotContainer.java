@@ -31,6 +31,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeReverseCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
+import frc.robot.commands.ZeroShooterMountCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IndexerConstants;
@@ -50,8 +51,7 @@ import frc.robot.subsystems.VisionSubsystem;
 /**
  * p The container for the robot. Contains subsystems, OI devices, and commands.
  */
-public class RobotContainer
-{
+public class RobotContainer {
 
 	private static RobotContainer instance;
 
@@ -73,8 +73,7 @@ public class RobotContainer
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
-	public RobotContainer()
-	{
+	public RobotContainer() {
 		instance = this;
 
 		new PowerDistribution(26, ModuleType.kRev).setSwitchableChannel(true);
@@ -104,8 +103,7 @@ public class RobotContainer
 		configureSecondaryBindings();
 	}
 
-	private void configurePrimaryBindings()
-	{
+	private void configurePrimaryBindings() {
 		final Joystick PrimaryController = new Joystick(0);
 
 		final JoystickButton LeftTrigger = new JoystickButton(PrimaryController,
@@ -124,8 +122,7 @@ public class RobotContainer
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
-	private void configureSecondaryBindings()
-	{
+	private void configureSecondaryBindings() {
 		final Joystick SecondaryController = new Joystick(1);
 
 		final JoystickButton LeftTrigger = new JoystickButton(SecondaryController,
@@ -156,87 +153,82 @@ public class RobotContainer
 		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
+				ShooterMountSubsystem.shooterMountMinAngle
+						+ ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
-		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem, 
-				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
+		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountSubsystem.shooterMountMinAngle
+						+ ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE + ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
+				ShooterMountSubsystem.shooterMountMinAngle + ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
 		BButton.whileTrue(
 				new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
 		RightTrigger.whileTrue(new IndexerCommand(IndexerSubsystem));
 		RightBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.SHOOTER_MOUNT_MIN_ANGLE));
+				ShooterMountSubsystem.shooterMountMinAngle));
+		YButton.whileTrue(new ZeroShooterMountCommand(ShooterMountSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,
 		// SwerveDrive));
 		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// ClimberConstants.LEFT_CLIMBER_MAXIMUM, ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
+		// ClimberConstants.LEFT_CLIMBER_MAXIMUM,
+		// ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
 		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// ClimberConstants.LEFT_CLIMBER_MINIMUM, ClimberConstants.RIGHT_CLIMBER_MINIMUM));
+		// ClimberConstants.LEFT_CLIMBER_MINIMUM,
+		// ClimberConstants.RIGHT_CLIMBER_MINIMUM));
 	}
 
-	public static ShuffleboardTab getShuffleboardTab()
-	{
+	public static ShuffleboardTab getShuffleboardTab() {
 		return instance.ShuffleboardTab;
 	}
 
 	/**
-	 * @return the position of the speaker april tag for our alliance, or empty if the tag is not
+	 * @return the position of the speaker april tag for our alliance, or empty if
+	 *         the tag is not
 	 *         found
 	 */
-	public static Optional<Pose3d> getSpeakerPose()
-	{
+	public static Optional<Pose3d> getSpeakerPose() {
 		return Constants.AprilTagFieldLayout
 				.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
 						? VisionConstants.BLUE_SPEAKER_TAG_ID
 						: VisionConstants.RED_SPEAKER_TAG_ID);
 	}
 
-	public static Pigeon2 getGyro()
-	{
+	public static Pigeon2 getGyro() {
 		return instance.gyro;
 	}
 
-	public SwerveDriveSubsystem getSwerveDrive()
-	{
+	public SwerveDriveSubsystem getSwerveDrive() {
 		return SwerveDrive;
 	}
 
-	public ShooterSubsystem getShooter()
-	{
+	public ShooterSubsystem getShooter() {
 		return ShooterSubsystem;
 	}
 
-	public ShooterMountSubsystem getShooterMount()
-	{
+	public ShooterMountSubsystem getShooterMount() {
 		return ShooterMountSubsystem;
 	}
 
-	public VisionSubsystem getVision()
-	{
+	public VisionSubsystem getVision() {
 		return VisionSubsystem;
 	}
 
-	public IndexerSubsystem getIndexer()
-	{
+	public IndexerSubsystem getIndexer() {
 		return IndexerSubsystem;
 	}
 
-	public IntakeSubsystem getIntake()
-	{
+	public IntakeSubsystem getIntake() {
 		return IntakeSubsystem;
 	}
 
-	public LedSubsystem getLeds()
-	{
+	public LedSubsystem getLeds() {
 		return LedSubsystem;
 	}
 
-	public Autonomous getAutonomous()
-	{
+	public Autonomous getAutonomous() {
 
 		return Autonomous;
 	}
