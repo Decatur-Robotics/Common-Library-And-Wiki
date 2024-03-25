@@ -63,6 +63,7 @@ public class SwerveModule implements ILogSource
 		lastAngle = getState().angle;
 
 		openLoopDriveRequest = new DutyCycleOut(0);
+		closedLoopDriveRequest = new VelocityDutyCycle(0);
 	}
 
 	public void periodic()

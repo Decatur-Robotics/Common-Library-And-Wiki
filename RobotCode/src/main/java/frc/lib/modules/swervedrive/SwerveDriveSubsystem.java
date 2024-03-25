@@ -36,6 +36,7 @@ import frc.lib.core.LogitechControllerButtons;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveToPositionCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ShooterMountConstants;
 import frc.robot.constants.VisionConstants;
@@ -93,6 +94,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		autoAimPidController = new ProfiledPIDController(SwerveConstants.ANGULAR_AIMING_KP,
 				SwerveConstants.ANGULAR_AIMING_KI, SwerveConstants.ANGULAR_AIMING_KD,
 				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
+
+		RobotContainer.getShuffleboardTab().addDouble("Chassis Angle", () -> getYaw().getRadians());
 	}
 
 	private void configureAutoBuilder() {
@@ -363,6 +366,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	 * @return the angular velocity needed to aim to the speaker in radians.
 	 */
 	public double getRotationalVelocityToSpeaker(ShooterMountSubsystem shooterMount) {
+		RobotContainer.getShuffleboardTab().addDouble("Chassis Angle Desired", () -> getRotationToSpeaker(shooterMount));
+
 		double targetAngle = getRotationToSpeaker(shooterMount);
 
 		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),

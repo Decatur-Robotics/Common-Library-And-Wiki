@@ -26,7 +26,7 @@ import edu.wpi.first.math.util.Units;
 public final class SwerveConstants
 {
 
-	public static final double JOYSTICK_DEADBAND = 0.1;
+	public static final double JOYSTICK_DEADBAND = 0.05;
 
 	public static final class CanSparkMaxPeriodicRates
 	{
@@ -120,9 +120,8 @@ public final class SwerveConstants
 
 	/* Swerve Profiling Values */
 	/* Meters per Second */
-	public static final double BASE_DRIVE_SPEED = 1, BASE_TURN_SPEED = 1;
-	public static final double SLOW_SPEED = 1.5;
-	public static final double AUTO_SPEED = 3.7;
+	public static final double SLOW_SPEED = 2;
+	public static final double AUTO_SPEED = 3.93;
 	public static final double NORMAL_SPEED = 3.93; // 3.7;
 	public static final double FAST_SPEED = 3.93; // 3.7;
 	public static final double MAX_SPEED = 3.93; // 3.7; //TODO: This must be tuned to
@@ -235,7 +234,7 @@ public final class SwerveConstants
 	}
 
 	// Constraints for robot angle aiming PID controller
-	public static final double ANGULAR_AIMING_KP = 0.02;
+	public static final double ANGULAR_AIMING_KP = 0;
 	public static final double ANGULAR_AIMING_KI = 0;
 	public static final double ANGULAR_AIMING_KD = 0;
 	

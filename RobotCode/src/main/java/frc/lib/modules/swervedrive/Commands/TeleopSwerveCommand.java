@@ -55,14 +55,14 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 		double rotationVal = Math
 				.pow(MathUtil.applyDeadband(rotationSup.getAsDouble(),
 						SwerveConstants.JOYSTICK_DEADBAND), 3)
-				* speed * SwerveConstants.BASE_TURN_SPEED;
+				* speed;
 
 		SmartDashboard.putNumber("Swerve Speed", speed);
 
 		/* Drive */
 		s_Swerve.drive(
 				new Translation2d(translationVal, strafeVal)
-						.times(speed * SwerveConstants.BASE_DRIVE_SPEED),
+						.times(speed),
 				rotationVal, true, // field relative is
 									// always on
 				true);
