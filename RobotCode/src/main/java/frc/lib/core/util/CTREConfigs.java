@@ -40,7 +40,7 @@ public final class CTREConfigs
 		swerveDriveFXConfig.Slot0.kP = SwerveConstants.DRIVE_KP;
 		swerveDriveFXConfig.Slot0.kI = SwerveConstants.DRIVE_KI;
 		swerveDriveFXConfig.Slot0.kD = SwerveConstants.DRIVE_KD;
-		swerveDriveFXConfig.Slot0.kV = SwerveConstants.DRIVE_KF;
+		swerveDriveFXConfig.Slot0.kV = SwerveConstants.DRIVE_KV;
 		swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = SwerveConstants.OPEN_LOOP_RAMP;
 		swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = SwerveConstants.CLOSED_LOOP_RAMP;
 

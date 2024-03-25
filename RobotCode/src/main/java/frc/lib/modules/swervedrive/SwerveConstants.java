@@ -100,11 +100,10 @@ public final class SwerveConstants
 	public static final double ANGLE_KF = 0.0;
 
 	/* Drive Motor PID Values */
-	public static final double DRIVE_KP = 0.05; // TODO: This must be tuned to specific
+	public static final double DRIVE_KP = 0.0; // TODO: This must be tuned to specific
 												// robot
 	public static final double DRIVE_KI = 0.0;
 	public static final double DRIVE_KD = 0.0;
-	public static final double DRIVE_KF = 0.0;
 
 	/*
 	 * Drive Motor Characterization Values Divide SYSID values by 12 to convert from volts to
