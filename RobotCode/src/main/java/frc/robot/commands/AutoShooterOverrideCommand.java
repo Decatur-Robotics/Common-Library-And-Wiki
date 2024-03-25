@@ -53,7 +53,7 @@ public class AutoShooterOverrideCommand extends Command {
 
     @Override
     public void end(boolean isFinished) {
-        shooterMount.setTargetRotation(shooterMount.shooterMountMinAngle);
+        shooterMount.homeShooterMount();
         shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
         indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
     }

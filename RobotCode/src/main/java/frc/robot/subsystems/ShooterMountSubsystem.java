@@ -6,9 +6,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -23,6 +25,10 @@ public class ShooterMountSubsystem extends SubsystemBase {
 
 	public double shooterMountMinAngle;
 
+	private AnalogPotentiometer potentiometer;
+
+	private PIDController homingController;
+
 	/** Target rotation in rotations */
 	private double targetRotation;
 
@@ -35,7 +41,15 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	 */
 	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
 
+	private boolean homing;
+
 	public ShooterMountSubsystem() {
+		potentiometer = new AnalogPotentiometer(Ports.POTENTIOMETER);
+
+		homing = false;
+
+		homingController = new PIDController(ShooterMountConstants.SHOOTER_MOUNT_HOMING_KP,
+				ShooterMountConstants.SHOOTER_MOUNT_HOMING_KI, ShooterMountConstants.SHOOTER_MOUNT_HOMING_KD);
 
 		shooterMountMotorLeft = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_LEFT,
 				Constants.CANIVORE_NAME);
@@ -96,6 +110,19 @@ public class ShooterMountSubsystem extends SubsystemBase {
 			shooterMountMotorRight.optimizeBusUtilization();
 			shooterMountMotorLeft.getRotorPosition().setUpdateFrequency(20);
 		}
+
+		if (homing)
+		{
+			shooterMountMotorLeft.set(homingController.calculate(potentiometer.get(), 
+					ShooterMountConstants.POTENTIOMETER_ZERO_POSITION));
+
+			if (Math.abs(potentiometer.get() - ShooterMountConstants.POTENTIOMETER_ZERO_POSITION) < 
+					ShooterMountConstants.HOMING_DEADBAND)
+			{
+				homing = false;
+				zeroShooterMount();
+			}
+		}
 	}
 
 	/**
@@ -104,6 +131,8 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	 * @param targetRotation the desired rotation in encoder ticks
 	 */
 	public void setTargetRotation(double targetRotation) {
+		homing = false;
+		
 		this.targetRotation = Math.max(
 				Math.min(targetRotation, ShooterMountConstants.SHOOTER_MOUNT_MAX_ANGLE_OFFSET),
 				shooterMountMinAngle);
@@ -139,13 +168,13 @@ public class ShooterMountSubsystem extends SubsystemBase {
 				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 
-	public void disableShooterMount() {
-		shooterMountMotorLeft.set(0);
-	}
-
 	public void zeroShooterMount() {
 		shooterMountMinAngle = shooterMountMotorLeft.getPosition().getValueAsDouble();
 		setTargetRotation(shooterMountMinAngle);
+	}
+
+	public void homeShooterMount() {
+		homing = true;
 	}
 
 }

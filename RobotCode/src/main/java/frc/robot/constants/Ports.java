@@ -40,6 +40,8 @@ public final class Ports
 	public static final int PIGEON_GYRO = 25;
 	/** DIO */
 	public static final int BEAM_BREAK = 9;
+	/** Analog */
+	public static final int POTENTIOMETER = 0;
 
 	/*
 	 * LED ports

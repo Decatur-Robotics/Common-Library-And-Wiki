@@ -18,13 +18,7 @@ public class ZeroShooterMountCommand extends Command
     @Override
     public void initialize()
     {
-        shooterMount.disableShooterMount();
-    }
-
-    @Override
-    public void end(boolean isFinished)
-    {
-        shooterMount.zeroShooterMount();
+        shooterMount.homeShooterMount();
     }
 
 }

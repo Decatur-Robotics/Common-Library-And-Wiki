@@ -94,8 +94,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		autoAimPidController = new ProfiledPIDController(SwerveConstants.ANGULAR_AIMING_KP,
 				SwerveConstants.ANGULAR_AIMING_KI, SwerveConstants.ANGULAR_AIMING_KD,
 				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
-
-		RobotContainer.getShuffleboardTab().addDouble("Chassis Angle", () -> getYaw().getRadians());
 	}
 
 	private void configureAutoBuilder() {
@@ -366,9 +364,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	 * @return the angular velocity needed to aim to the speaker in radians.
 	 */
 	public double getRotationalVelocityToSpeaker(ShooterMountSubsystem shooterMount) {
-		RobotContainer.getShuffleboardTab().addDouble("Chassis Angle Desired", () -> getRotationToSpeaker(shooterMount));
-
 		double targetAngle = getRotationToSpeaker(shooterMount);
+		
+		System.out.println("Desired Chassis Angle: " + targetAngle);
+		System.out.println("Current Chassis Angle: " + getYaw().getRadians());
 
 		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
 				targetAngle);

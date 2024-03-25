@@ -18,11 +18,11 @@ public class ShooterMountConstants
 	/** Angle in rotations for shooting at amp */
 	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 1.3;
 	/** Angle in rotations for shooting at speaker */
-	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 3.5;
+	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 8;
 	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 1.8;
 	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 1.6;
 
-	public static final double SHOOTER_MOUNT_KP = 1.2;
+	public static final double SHOOTER_MOUNT_KP = 3;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0;
 	public static final double SHOOTER_MOUNT_KS = 0;
@@ -30,10 +30,14 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_KA = 0;
 	public static final double SHOOTER_MOUNT_KG = 0;
 
+	public static final double SHOOTER_MOUNT_HOMING_KP = 0.1;
+	public static final double SHOOTER_MOUNT_HOMING_KI = 0;
+	public static final double SHOOTER_MOUNT_HOMING_KD = 0;
+
 	/** Rotations per second */
-	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 40;
+	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 110;
 	/** Rotations per second per second */
-	public static final double SHOOTER_MOUNT_ACCELERATION = 60;
+	public static final double SHOOTER_MOUNT_ACCELERATION = 200;
 
 	/** Tolerance for determining mount is within range to shoot in rotations */
 	public static final double AIMING_DEADBAND = 0.1;
@@ -53,5 +57,9 @@ public class ShooterMountConstants
 	{
 			1, 2, 3
 	};
+
+	public static final double POTENTIOMETER_ZERO_POSITION = 0;
+
+	public static final double HOMING_DEADBAND = 1;
 
 }

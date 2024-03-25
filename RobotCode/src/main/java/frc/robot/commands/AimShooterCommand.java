@@ -54,7 +54,7 @@ public class AimShooterCommand extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
-		shooterMount.setTargetRotation(shooterMount.shooterMountMinAngle);
+		shooterMount.homeShooterMount();
 	}
 
 }
