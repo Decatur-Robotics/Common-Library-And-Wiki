@@ -6,30 +6,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.core.Autonomous;
 
-public class SideBasedAuto extends Autonomous
-{
+public class SideBasedAuto extends Autonomous {
 
-    private enum Side
-    {
+    private enum Side {
         Amp("Amp Side"), Center("Center"), Source("Source Side");
 
         private final String autoName;
 
-        private Side(String autoName)
-        {
+        private Side(String autoName) {
             this.autoName = autoName;
         }
     }
 
-    private enum AutoMode
-    {
+    private enum AutoMode {
         DriveBackwards("Drive Backwards"), OneNote("1 Note"), TwoNote("2 Note"),
         ThreeNote("3 Note"), FourNote("4 Note");
 
         private final String autoName;
 
-        private AutoMode(String autoName)
-        {
+        private AutoMode(String autoName) {
             this.autoName = autoName;
         }
     }
@@ -37,8 +32,7 @@ public class SideBasedAuto extends Autonomous
     private final SendableChooser<Side> SideChooser;
     private final SendableChooser<AutoMode> AutoModeChooser;
 
-    public SideBasedAuto(frc.robot.RobotContainer RobotContainer)
-    {
+    public SideBasedAuto(frc.robot.RobotContainer RobotContainer) {
         super(RobotContainer);
 
         SideChooser = new SendableChooser<>();
@@ -47,7 +41,7 @@ public class SideBasedAuto extends Autonomous
         SideChooser.addOption(Side.Source.autoName, Side.Source);
 
         AutoModeChooser = new SendableChooser<>();
-        AutoModeChooser.setDefaultOption(AutoMode.DriveBackwards.autoName, AutoMode.DriveBackwards);
+        AutoModeChooser.setDefaultOption(AutoMode.OneNote.autoName, AutoMode.OneNote);
         AutoModeChooser.addOption(AutoMode.OneNote.autoName, AutoMode.OneNote);
         AutoModeChooser.addOption(AutoMode.TwoNote.autoName, AutoMode.TwoNote);
         AutoModeChooser.addOption(AutoMode.ThreeNote.autoName, AutoMode.ThreeNote);
@@ -58,8 +52,7 @@ public class SideBasedAuto extends Autonomous
     }
 
     @Override
-    public Optional<Command> buildAutoCommand()
-    {
+    public Optional<Command> buildAutoCommand() {
         final Side side = SideChooser.getSelected();
         final AutoMode autoMode = AutoModeChooser.getSelected();
 

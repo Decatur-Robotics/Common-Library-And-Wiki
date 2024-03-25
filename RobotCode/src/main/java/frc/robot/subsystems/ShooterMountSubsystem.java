@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -85,6 +86,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble() - shooterMountMinAngle));
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
 				() -> targetRotation);
+		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min", () -> shooterMountMinAngle);
 	}
 
 	@Override
