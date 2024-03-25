@@ -41,7 +41,7 @@ public final class Ports
 	/** DIO */
 	public static final int BEAM_BREAK = 9;
 	/** Analog */
-	public static final int POTENTIOMETER = 0;
+	public static final int POTENTIOMETER = 3;
 
 	/*
 	 * LED ports
