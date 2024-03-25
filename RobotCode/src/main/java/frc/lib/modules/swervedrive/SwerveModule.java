@@ -41,9 +41,6 @@ public class SwerveModule implements ILogSource
 	private DutyCycleOut openLoopDriveRequest;
 	private VelocityDutyCycle closedLoopDriveRequest;
 
-	SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(SwerveConstants.DRIVE_KS,
-			SwerveConstants.DRIVE_KV, SwerveConstants.DRIVE_KA);
-
 	public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants)
 	{
 		this.moduleNumber = moduleNumber;
@@ -118,8 +115,7 @@ public class SwerveModule implements ILogSource
 		{
 			double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond,
 					SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO);
-			mDriveMotor.setControl(closedLoopDriveRequest.withVelocity(velocity)
-					.withFeedForward(feedforward.calculate(desiredState.speedMetersPerSecond)));
+			mDriveMotor.setControl(closedLoopDriveRequest.withVelocity(velocity));
 		}
 	}
 

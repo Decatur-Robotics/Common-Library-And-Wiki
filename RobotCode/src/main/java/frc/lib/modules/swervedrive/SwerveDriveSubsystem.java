@@ -8,7 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.logging.Level;
 
 import org.photonvision.EstimatedRobotPose;
 
@@ -190,10 +189,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 	/** resets odometry (position on field) */
 	public void resetPose(Pose2d pose) {
-		// swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
 		swervePoseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
-
-		// gyroOffset = pose.getRotation().getDegrees() - gyro.getYaw().getValueAsDouble() + 0;
 	}
 
 	/** @return array of a modules' states (angle, speed) for each one */
