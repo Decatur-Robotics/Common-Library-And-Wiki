@@ -65,6 +65,6 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 						.times(speed),
 				rotationVal, true, // field relative is
 									// always on
-				true);
+				false);
 	}
 }

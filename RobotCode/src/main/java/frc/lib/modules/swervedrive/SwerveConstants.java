@@ -45,7 +45,7 @@ public final class SwerveConstants
 	public static final double WHEEL_BASE = Units.inchesToMeters(19); // will test when
 																		// testing
 																		// PID
-	public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
+	public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.75);
 	public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
 	// Find this for the robot!
@@ -100,7 +100,7 @@ public final class SwerveConstants
 	public static final double ANGLE_KF = 0.0;
 
 	/* Drive Motor PID Values */
-	public static final double DRIVE_KP = 0.0; // TODO: This must be tuned to specific
+	public static final double DRIVE_KP = 0.03; // TODO: This must be tuned to specific
 												// robot
 	public static final double DRIVE_KI = 0.0;
 	public static final double DRIVE_KD = 0.0;
@@ -109,22 +109,22 @@ public final class SwerveConstants
 	 * Drive Motor Characterization Values Divide SYSID values by 12 to convert from volts to
 	 * percent output for CTRE
 	 */
-	public static final double DRIVE_KS = (0.32 / 12); // TODO: This must be tuned to
+	public static final double DRIVE_KS = 0.026; // TODO: This must be tuned to
 														// specific
 														// robot
-	public static final double DRIVE_KV = (1.51 / 12);
-	public static final double DRIVE_KA = (0.27 / 12);
+	public static final double DRIVE_KV = 0.01;
+	public static final double DRIVE_KA = 0.02;
 
 	/* Angle Motor Conversion Factors */
 	public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;
 
 	/* Swerve Profiling Values */
 	/* Meters per Second */
-	public static final double SLOW_SPEED = 2;
-	public static final double AUTO_SPEED = 3.93;
-	public static final double NORMAL_SPEED = 3.93; // 3.7;
-	public static final double FAST_SPEED = 3.93; // 3.7;
-	public static final double MAX_SPEED = 3.93; // 3.7; //TODO: This must be tuned to
+	public static final double SLOW_SPEED = 2.5;
+	public static final double AUTO_SPEED = 4.75;
+	public static final double NORMAL_SPEED = 4.75; // 3.7;
+	public static final double FAST_SPEED = 4.75; // 3.7;
+	public static final double MAX_SPEED = 4.75; // 3.7; //TODO: This must be tuned to
 												// specific
 												// robot
 	/** Radians per Second */

@@ -6,7 +6,7 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_GEAR_RATIO = (25 / 1) * (68 / 72);
 
 	/** Highest position the shooter mount target position can be set to in rotations */
-	public static final double SHOOTER_MOUNT_MAX_ANGLE_OFFSET = 4.1;
+	public static final double SHOOTER_MOUNT_MAX_ANGLE_OFFSET = 8;
 
 	/** Lowest position of the shooter in radians */
 	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = 0.419;
@@ -30,7 +30,7 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_KA = 0;
 	public static final double SHOOTER_MOUNT_KG = 0;
 
-	public static final double SHOOTER_MOUNT_HOMING_KP = 0.1;
+	public static final double SHOOTER_MOUNT_HOMING_KP = 1;
 	public static final double SHOOTER_MOUNT_HOMING_KI = 0;
 	public static final double SHOOTER_MOUNT_HOMING_KD = 0;
 
@@ -58,8 +58,8 @@ public class ShooterMountConstants
 			1, 2, 3
 	};
 
-	public static final double POTENTIOMETER_ZERO_POSITION = 0;
+	public static final double POTENTIOMETER_ZERO_POSITION = 0.0806;
 
-	public static final double HOMING_DEADBAND = 1;
+	public static final double HOMING_DEADBAND = 0.005;
 
 }

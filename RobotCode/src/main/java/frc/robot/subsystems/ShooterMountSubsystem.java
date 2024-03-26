@@ -7,11 +7,13 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
@@ -76,8 +78,11 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
 		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
 
+		mainMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
 		// config the main motor
 		shooterMountMotorLeft.getConfigurator().apply(mainMotorConfigs);
+		shooterMountMotorRight.getConfigurator().apply(mainMotorConfigs);
 
 		shooterMountMinAngle = shooterMountMotorLeft.getRotorPosition().getValueAsDouble();
 		targetRotation = shooterMountMinAngle;
@@ -101,6 +106,7 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
 				() -> targetRotation);
 		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min", () -> shooterMountMinAngle);
+		RobotContainer.getShuffleboardTab().addDouble("Potentiometer", () -> potentiometer.get());
 	}
 
 	@Override

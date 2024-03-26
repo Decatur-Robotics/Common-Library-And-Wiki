@@ -171,7 +171,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 			speeds.omegaRadiansPerSecond = rotation;
 		}
 
-		drive(speeds, true);
+		drive(speeds, false);
 	}
 
 	/* Used by SwerveControllerCommand in Auto */
@@ -258,7 +258,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated",
 					mod.getPosition().angle.getDegrees());
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity",
-					mod.getState().speedMetersPerSecond);
+					mod.mDriveMotor.getVelocity().getValueAsDouble());
 		}
 
 		SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
