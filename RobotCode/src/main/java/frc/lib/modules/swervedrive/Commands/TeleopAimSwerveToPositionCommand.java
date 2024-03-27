@@ -17,7 +17,7 @@ public class TeleopAimSwerveToPositionCommand extends TeleopSwerveCommand
             DoubleSupplier translationSup, DoubleSupplier strafeSup,
             BooleanSupplier slowSpeedSupplier, double desiredRotation)
     {
-        super(swerve, translationSup, strafeSup, () -> desiredRotation,
+        super(swerve, translationSup, strafeSup, () -> swerve.getRotationalVelocityToPosition(desiredRotation),
                 slowSpeedSupplier);
 
         Swerve = swerve;

@@ -321,7 +321,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 				: -DesiredRotation;
 
 		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(),
-				() -> -Controller.getX(), BumperRight::getAsBoolean, desiredRotation);
+				() -> -Controller.getX(), BumperRight::getAsBoolean, DesiredRotation);
 	}
 
 	public TeleopSwerveCommand getTeleopAimToPositionCommand(final Joystick Controller,
@@ -371,6 +371,14 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
 				targetAngle);
+
+		return desiredRotationalVelocity;
+	}
+
+	public double getRotationalVelocityToPosition(double position)
+	{
+		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
+				position);
 
 		return desiredRotationalVelocity;
 	}
