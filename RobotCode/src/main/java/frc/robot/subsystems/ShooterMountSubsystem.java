@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -19,17 +20,14 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
-public class ShooterMountSubsystem extends SubsystemBase {
+public class ShooterMountSubsystem extends SubsystemBase
+{
 
 	private TalonFX shooterMountMotorLeft, shooterMountMotorRight;
 
 	private MotionMagicDutyCycle motorControlRequest;
 
-	public double shooterMountMinAngle;
-
-	private AnalogPotentiometer potentiometer;
-
-	private PIDController homingController;
+	private double shooterMountMinAngle;
 
 	/** Target rotation in rotations */
 	private double targetRotation;
@@ -43,26 +41,26 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	 */
 	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
 
-	private boolean homing;
+	private Pigeon2 gyro;
 
-	public ShooterMountSubsystem() {
-		potentiometer = new AnalogPotentiometer(Ports.POTENTIOMETER);
+	public ShooterMountSubsystem()
+	{
+		gyro = new Pigeon2(Ports.SHOOTER_MOUNT_GYRO);
 
-		homing = false;
+		shooterMountMotorLeft = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_LEFT);
 
-		homingController = new PIDController(ShooterMountConstants.SHOOTER_MOUNT_HOMING_KP,
-				ShooterMountConstants.SHOOTER_MOUNT_HOMING_KI, ShooterMountConstants.SHOOTER_MOUNT_HOMING_KD);
-
-		shooterMountMotorLeft = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_LEFT,
-				Constants.CANIVORE_NAME);
-
-		shooterMountMotorRight = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_RIGHT,
-				Constants.CANIVORE_NAME);
+		shooterMountMotorRight = new TalonFX(Ports.SHOOTER_MOUNT_MOTOR_RIGHT);
 
 		shooterMountMotorRight.setControl(new Follower(shooterMountMotorLeft.getDeviceID(), true));
 
 		// create configurator
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
+
+		mainMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+		mainMotorConfigs.CurrentLimits.StatorCurrentLimit = 60;
+
+		mainMotorConfigs.Feedback.FeedbackRemoteSensorID = gyro.getDeviceID();
+		mainMotorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Roll;
 
 		// set pid profiles configs
 		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
@@ -78,19 +76,18 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = ShooterMountConstants.SHOOTER_MOUNT_CRUISE_VELOCITY;
 		motionMagicVelocityConfigs.MotionMagicAcceleration = ShooterMountConstants.SHOOTER_MOUNT_ACCELERATION;
 
-		mainMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
 		// config the main motor
 		shooterMountMotorLeft.getConfigurator().apply(mainMotorConfigs);
 		shooterMountMotorRight.getConfigurator().apply(mainMotorConfigs);
 
 		shooterMountMinAngle = shooterMountMotorLeft.getRotorPosition().getValueAsDouble();
-		targetRotation = shooterMountMinAngle;
+		targetRotation = 8;
 
 		// Populate tree maps
 		shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
 		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
-		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++) {
+		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
+		{
 			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
 			shooterMountAngleTreeMap.put(key,
 					ShooterMountConstants.ShooterMountAngleTreeMapValues[i]);
@@ -102,32 +99,22 @@ public class ShooterMountSubsystem extends SubsystemBase {
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
-				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble() - shooterMountMinAngle));
+				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble()));
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
 				() -> targetRotation);
-		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min", () -> shooterMountMinAngle);
-		RobotContainer.getShuffleboardTab().addDouble("Potentiometer", () -> potentiometer.get());
+		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min",
+				() -> shooterMountMinAngle);
+		RobotContainer.getShuffleboardTab().addDouble("Shooter Gyro", () -> gyro.getRoll().getValueAsDouble());
 	}
 
 	@Override
-	public void periodic() {
-		if (shooterMountMotorLeft.hasResetOccurred() || shooterMountMotorRight.hasResetOccurred()) {
+	public void periodic()
+	{
+		if (shooterMountMotorLeft.hasResetOccurred() || shooterMountMotorRight.hasResetOccurred())
+		{
 			shooterMountMotorLeft.optimizeBusUtilization();
 			shooterMountMotorRight.optimizeBusUtilization();
 			shooterMountMotorLeft.getRotorPosition().setUpdateFrequency(20);
-		}
-
-		if (homing)
-		{
-			shooterMountMotorLeft.set(homingController.calculate(potentiometer.get(), 
-					ShooterMountConstants.POTENTIOMETER_ZERO_POSITION));
-
-			if (Math.abs(potentiometer.get() - ShooterMountConstants.POTENTIOMETER_ZERO_POSITION) < 
-					ShooterMountConstants.HOMING_DEADBAND)
-			{
-				homing = false;
-				zeroShooterMount();
-			}
 		}
 	}
 
@@ -136,51 +123,51 @@ public class ShooterMountSubsystem extends SubsystemBase {
 	 * 
 	 * @param targetRotation the desired rotation in encoder ticks
 	 */
-	public void setTargetRotation(double targetRotation) {
-		homing = false;
-		
+	public void setTargetRotation(double targetRotation)
+	{
 		this.targetRotation = Math.max(
 				Math.min(targetRotation, ShooterMountConstants.SHOOTER_MOUNT_MAX_ANGLE_OFFSET),
-				shooterMountMinAngle);
+				0);
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
 						+ ((this.targetRotation - shooterMountMinAngle)
 								* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
-				.withFeedForward(gravityFeedForward));
+				.withFeedForward(0));
+
+		System.out.println(
+				"-----------------------------------------Normal PID control set-----------------------------------------");
 	}
 
 	/**
-	 * @return A map where: Key: distance to speaker in meters, Value: Rotation
-	 *         compensation in
+	 * @return A map where: Key: distance to speaker in meters, Value: Rotation compensation in
 	 *         degrees
 	 */
-	public InterpolatingDoubleTreeMap getShooterMountAngleTreeMap() {
+	public InterpolatingDoubleTreeMap getShooterMountAngleTreeMap()
+	{
 		return shooterMountAngleTreeMap;
 	}
 
 	/**
-	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity
-	 *         in meters per
+	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity in meters per
 	 *         second
 	 */
-	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap() {
+	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
+	{
 		return noteVelocityEstimateTreeMap;
 	}
 
-	public boolean isAtTargetRotation() {
+	public boolean isAtTargetRotation()
+	{
 		return Math.abs((shooterMountMotorLeft.getRotorPosition().getValueAsDouble())
 				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 
-	public void zeroShooterMount() {
+	public void zeroShooterMount()
+	{
 		shooterMountMinAngle = shooterMountMotorLeft.getPosition().getValueAsDouble();
-		setTargetRotation(shooterMountMinAngle);
-	}
-
-	public void homeShooterMount() {
-		homing = true;
+		setTargetRotation(0);
 	}
 
 }

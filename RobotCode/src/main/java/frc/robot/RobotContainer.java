@@ -148,26 +148,24 @@ public class RobotContainer {
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
-		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+		// 		LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.shooterMountMinAngle
-						+ ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
+				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
 		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
 		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.shooterMountMinAngle
-						+ ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
+				ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
 		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.shooterMountMinAngle + ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
+				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
 		BButton.whileTrue(
 				new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
 		RightTrigger.whileTrue(new IndexerCommand(IndexerSubsystem));
 		RightBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountSubsystem.shooterMountMinAngle));
+				0));
 		YButton.onTrue(new ZeroShooterMountCommand(ShooterMountSubsystem));
 		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
 		// ShooterMountSubsystem,

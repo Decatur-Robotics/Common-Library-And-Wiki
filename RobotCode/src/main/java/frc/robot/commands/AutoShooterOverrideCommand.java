@@ -31,8 +31,7 @@ public class AutoShooterOverrideCommand extends Command {
     @Override
     public void initialize() {
         shooterMount
-                .setTargetRotation(shooterMount.shooterMountMinAngle +
-                        targetRotation);
+                .setTargetRotation(targetRotation);
         otherCountdown = new TeamCountdown(0);
 
         countdown = new TeamCountdown(1500);
@@ -53,7 +52,7 @@ public class AutoShooterOverrideCommand extends Command {
 
     @Override
     public void end(boolean isFinished) {
-        shooterMount.homeShooterMount();
+        shooterMount.setTargetRotation(0);
         shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
         indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
     }

@@ -34,6 +34,9 @@ public class ShooterSubsystem extends SubsystemBase {
 		// create configurator
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
 
+		mainMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+		mainMotorConfigs.CurrentLimits.StatorCurrentLimit = 60;
+
 		// set pid profiles configs
 		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
 		pidSlot0Configs.kP = ShooterConstants.SHOOTER_KP;

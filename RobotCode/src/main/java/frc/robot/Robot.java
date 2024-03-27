@@ -125,8 +125,7 @@ public class Robot extends TimedRobot implements ILogSource {
 			subsystem.teleopInit();
 		}
 
-		new RotateShooterMountToPositionCommand(robotContainer.getShooterMount(),
-				robotContainer.getShooterMount().shooterMountMinAngle);
+		new RotateShooterMountToPositionCommand(robotContainer.getShooterMount(), 0);
 	}
 
 	/** This function is called periodically during operator control. */

@@ -15,6 +15,7 @@ public final class Ports
 	 */
 	public static final int SHOOTER_MOUNT_MOTOR_LEFT = 17;
 	public static final int SHOOTER_MOUNT_MOTOR_RIGHT = 18;
+	public static final int SHOOTER_MOUNT_GYRO = 60;
 
 	/*
 	 * Climber ports

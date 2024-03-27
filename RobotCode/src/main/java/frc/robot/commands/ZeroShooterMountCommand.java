@@ -18,7 +18,7 @@ public class ZeroShooterMountCommand extends Command
     @Override
     public void initialize()
     {
-        shooterMount.homeShooterMount();
+        shooterMount.zeroShooterMount();
     }
 
 }

@@ -117,7 +117,6 @@ public class SwerveModule implements ILogSource
 			double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond,
 					SwerveConstants.WHEEL_CIRCUMFERENCE, SwerveConstants.DRIVE_GEAR_RATIO);
 			mDriveMotor.setControl(closedLoopDriveRequest.withVelocity(velocity));
-			System.out.println(velocity);
 		}
 	}
 
