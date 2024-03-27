@@ -9,6 +9,7 @@ import frc.robot.constants.Ports;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.FaultID;
@@ -16,6 +17,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase
@@ -23,12 +26,11 @@ public class IntakeSubsystem extends SubsystemBase
 
 	private CANSparkMax intakeDeployMotorLeft, intakeDeployMotorRight, intakeRollerMotor;
 	private double desiredRotation, desiredVelocity;
-	private SparkPIDController intakeDeployPidController, intakeRollerPidController;
-	private RelativeEncoder intakeDeployEncoderRight;
+	private SparkPIDController intakeRollerPidController;
 
-	private TeamCountdown countdown;
+	private Encoder encoder;
 
-	private boolean deployed;
+	private PIDController deployController;
 
 	public IntakeSubsystem()
 	{
@@ -38,8 +40,8 @@ public class IntakeSubsystem extends SubsystemBase
 				MotorType.kBrushless);
 		intakeRollerMotor = new CANSparkMax(Ports.INTAKE_ROLLER_MOTOR, MotorType.kBrushless);
 
-		intakeDeployEncoderRight = intakeDeployMotorRight.getEncoder();
-
+		encoder = new Encoder(6, 7);
+		
 		// Configure deployment motors
 		intakeDeployMotorLeft.follow(intakeDeployMotorRight, true);
 		intakeDeployMotorRight.setSmartCurrentLimit(Constants.NEO_MAX_CURRENT);
@@ -47,18 +49,8 @@ public class IntakeSubsystem extends SubsystemBase
 		intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
 		intakeDeployMotorLeft.setIdleMode(IdleMode.kBrake);
 
-		// Configure deployment PID, slot 0 is for upwards movement, slot 1 downwards
-		intakeDeployPidController = intakeDeployMotorRight.getPIDController();
-		intakeDeployPidController.setP(IntakeConstants.INTAKE_DEPLOYMENT_UP_KP, 0);
-		intakeDeployPidController.setI(IntakeConstants.INTAKE_DEPLOYMENT_UP_KI, 0);
-		intakeDeployPidController.setD(IntakeConstants.INTAKE_DEPLOYMENT_UP_KD, 0);
-		intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_UP_KFF, 0);
-
-		intakeDeployPidController.setP(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KP, 1);
-		intakeDeployPidController.setI(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KI, 1);
-		intakeDeployPidController.setD(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KD, 1);
-		intakeDeployPidController.setFF(IntakeConstants.INTAKE_DEPLOYMENT_DOWN_KFF, 1);
-		
+		deployController = new PIDController(IntakeConstants.INTAKE_DEPLOYMENT_KP, 
+				IntakeConstants.INTAKE_DEPLOYMENT_KI, IntakeConstants.INTAKE_DEPLOYMENT_KD);
 
 		// Configure roller motors
 		intakeRollerMotor.setInverted(true);
@@ -72,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase
 		intakeRollerPidController.setD(IntakeConstants.INTAKE_ROLLER_KD, 0);
 		intakeRollerPidController.setFF(IntakeConstants.INTAKE_ROLLER_KFF, 0);
 
-		desiredRotation = intakeDeployEncoderRight.getPosition();
+		desiredRotation = IntakeConstants.INTAKE_RETRACTED_ROTATION;
 		desiredVelocity = IntakeConstants.INTAKE_REST_VELOCITY;
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity",
@@ -80,13 +72,9 @@ public class IntakeSubsystem extends SubsystemBase
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Velocity",
 				() -> desiredVelocity);
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Rotation",
-				() -> intakeDeployEncoderRight.getPosition());
+				() -> encoder.getRaw());
 		RobotContainer.getShuffleboardTab().addDouble("Desired Intake Rotation",
 				() -> desiredRotation);
-
-		intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, IntakeConstants.INTAKE_DEPLOYMENT_SLOT_UP);
-
-		deployed = false;
 	}
 
 	@Override
@@ -109,32 +97,13 @@ public class IntakeSubsystem extends SubsystemBase
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		}
 
-		if (countdown != null && countdown.isDone())
-		{
-			intakeDeployMotorRight.set(0);
-			countdown = null;
-
-			desiredRotation = intakeDeployEncoderRight.getPosition();
-
-			intakeDeployPidController.setReference(desiredRotation, ControlType.kPosition, 0);
-		}
+		intakeDeployMotorRight.set(deployController.calculate(encoder.getRaw(), desiredRotation));
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(boolean deployed, int deploymentPIDSlot)
+	public void setDesiredRotation(double desiredRotation)
 	{
-		this.deployed = deployed;
-
-		if (deployed)
-		{
-			intakeDeployMotorRight.set(0.05);
-			countdown = new TeamCountdown(1000);
-		}
-		else
-		{
-			intakeDeployMotorRight.set(-0.15);
-			countdown = new TeamCountdown(1000);
-		}
+		this.desiredRotation = desiredRotation;
 	}
 
 	/** @param desiredVelocity Ticks per second */

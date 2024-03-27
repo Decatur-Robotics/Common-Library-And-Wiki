@@ -8,22 +8,16 @@ public class IntakeConstants {
 
     public static final double INTAKE_REVERSE_VELOCITY = -5000;
 
-    public static final double INTAKE_RETRACTED_ROTATION = -3.2;
+    public static final double INTAKE_RETRACTED_ROTATION = 360;
     /** Position intake must pass to allow spinning */
-    public static final double INTAKE_SPIN_ROTATION = 0.3;
-    public static final double INTAKE_DEPLOYED_ROTATION = 0;
+    public static final double INTAKE_SPIN_ROTATION = 1000;
+    public static final double INTAKE_DEPLOYED_ROTATION = 2898;
 
-    public static final double INTAKE_DEPLOYMENT_UP_KP = 0.2;
-    public static final double INTAKE_DEPLOYMENT_UP_KI = 0;
-    public static final double INTAKE_DEPLOYMENT_UP_KD = 0;
-    public static final double INTAKE_DEPLOYMENT_UP_KFF = 0;
+    public static final double INTAKE_DEPLOYMENT_KP = 0;
+    public static final double INTAKE_DEPLOYMENT_KI = 0;
+    public static final double INTAKE_DEPLOYMENT_KD = 0;
 
-    public static final double INTAKE_DEPLOYMENT_DOWN_KP = 0;
-    public static final double INTAKE_DEPLOYMENT_DOWN_KI = 0;
-    public static final double INTAKE_DEPLOYMENT_DOWN_KD = 0;
-    public static final double INTAKE_DEPLOYMENT_DOWN_KFF = 0;
-
-    public static final double INTAKE_ROLLER_KP = 0;
+    public static final double INTAKE_ROLLER_KP = 0.01;
     public static final double INTAKE_ROLLER_KI = 0;
     public static final double INTAKE_ROLLER_KD = 0;
     public static final double INTAKE_ROLLER_KFF = 0.05; 
