@@ -43,7 +43,8 @@ import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 
-public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
+public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
+{
 
 	private SwerveDriveOdometry swerveOdometry;
 	private SwerveDrivePoseEstimator swervePoseEstimator;
@@ -56,7 +57,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 	private ProfiledPIDController autoAimPidController;
 
-	public SwerveDriveSubsystem() {
+	public SwerveDriveSubsystem()
+	{
 		gyro = RobotContainer.getGyro();
 
 		zeroGyro();
@@ -64,7 +66,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		setAngleOffsets(false);
 
 		// swerve module initialization
-		swerveMods = new SwerveModule[] {
+		swerveMods = new SwerveModule[]
+		{
 				new SwerveModule(SwerveConstants.FRONT_LEFT, SwerveConstants.ModFL.Constants),
 				new SwerveModule(SwerveConstants.FRONT_RIGHT, SwerveConstants.ModFR.constants),
 				new SwerveModule(SwerveConstants.BACK_LEFT, SwerveConstants.ModBL.Constants),
@@ -72,10 +75,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		};
 
 		/*
-		 * By pausing init for a second before setting module offsets, we avoid a bug
-		 * with inverting
-		 * motors. See https://github.com/Team364/BaseFalconSwerve/issues/8 for more
-		 * info.
+		 * By pausing init for a second before setting module offsets, we avoid a bug with inverting
+		 * motors. See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
 		 */
 		Timer.delay(1.0);
 		resetModulesToAbsolute();
@@ -96,7 +97,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
 	}
 
-	private void configureAutoBuilder() {
+	private void configureAutoBuilder()
+	{
 		HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
 				new PIDConstants(SwerveConstants.DRIVE_KP, SwerveConstants.DRIVE_KI,
 						SwerveConstants.DRIVE_KD),
@@ -105,7 +107,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 				SwerveConstants.MAX_SPEED, SwerveConstants.DRIVE_BASE_RADIUS_METERS,
 				new ReplanningConfig());
 
-		BooleanSupplier isRedAlliance = () -> {
+		BooleanSupplier isRedAlliance = () ->
+		{
 			Optional<Alliance> alliance = DriverStation.getAlliance();
 			return alliance.isPresent() && alliance.get() == Alliance.Red;
 		};
@@ -116,7 +119,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 				this::drive, pathFollowerConfig, isRedAlliance, this);
 	}
 
-	public void setAngleOffsets(boolean invert) {
+	public void setAngleOffsets(boolean invert)
+	{
 		System.out.println("Setting angle offsets...");
 
 		double[] offsets = SwerveConstants.ANGLE_OFFSETS;
@@ -133,7 +137,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 	/** main driving method. translation is change in every direction */
 	public void drive(Translation2d translation, double rotation, boolean fieldRelative,
-			boolean isOpenLoop) {
+			boolean isOpenLoop)
+	{
 		drive(fieldRelative
 				? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(),
 						rotation, getYaw())
@@ -141,7 +146,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 	}
 
-	private void drive(ChassisSpeeds speeds, boolean isOpenLoop) {
+	private void drive(ChassisSpeeds speeds, boolean isOpenLoop)
+	{
 		SwerveModuleState[] swerveModuleStates = SwerveConstants.SwerveKinematics
 				.toSwerveModuleStates(speeds);
 
@@ -149,7 +155,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.MAX_SPEED);
 
 		// Log module state
-		for (int i = 0; i < swerveModuleStates.length; i++) {
+		for (int i = 0; i < swerveModuleStates.length; i++)
+		{
 			SwerveModuleState mod = swerveModuleStates[i];
 			SmartDashboard.putNumber("Mod " + i + " Target Angle", mod.angle.getDegrees());
 			SmartDashboard.putNumber("Mod " + i + " Target - CANCoder",
@@ -158,15 +165,18 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		}
 
 		// sets modules to desired state (angle, speed)
-		for (SwerveModule mod : swerveMods) {
+		for (SwerveModule mod : swerveMods)
+		{
 			mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
 		}
 	}
 
-	private void drive(ChassisSpeeds speeds) {
+	private void drive(ChassisSpeeds speeds)
+	{
 		// Override rotation if a controller is present
 		// This override is used by autonomous to override PathPlanner
-		if (rotationController.isPresent()) {
+		if (rotationController.isPresent())
+		{
 			double rotation = rotationController.get().getAsDouble();
 			speeds.omegaRadiansPerSecond = rotation;
 		}
@@ -175,82 +185,99 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	}
 
 	/* Used by SwerveControllerCommand in Auto */
-	public void setModuleStates(SwerveModuleState[] desiredStates) {
+	public void setModuleStates(SwerveModuleState[] desiredStates)
+	{
 		SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.MAX_SPEED);
 
-		for (SwerveModule mod : swerveMods) {
+		for (SwerveModule mod : swerveMods)
+		{
 			mod.setDesiredState(desiredStates[mod.moduleNumber], false);
 		}
 	}
 
 	/** @return position of robot on the field (odometry) in meters */
-	public Pose2d getPose() {
+	public Pose2d getPose()
+	{
 		return swervePoseEstimator.getEstimatedPosition();
 	}
 
 	/** resets odometry (position on field) */
-	public void resetPose(Pose2d pose) {
+	public void resetPose(Pose2d pose)
+	{
 		swervePoseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
 	}
 
 	/** @return array of a modules' states (angle, speed) for each one */
-	public SwerveModuleState[] getModuleStates() {
+	public SwerveModuleState[] getModuleStates()
+	{
 		SwerveModuleState[] states = new SwerveModuleState[4];
-		for (SwerveModule mod : swerveMods) {
+		for (SwerveModule mod : swerveMods)
+		{
 			states[mod.moduleNumber] = mod.getState();
 		}
 		return states;
 	}
 
 	/** @return module positions(for each individual module) */
-	public SwerveModulePosition[] getModulePositions() {
+	public SwerveModulePosition[] getModulePositions()
+	{
 		SwerveModulePosition[] positions = new SwerveModulePosition[4];
-		for (SwerveModule mod : swerveMods) {
+		for (SwerveModule mod : swerveMods)
+		{
 			positions[mod.moduleNumber] = mod.getPosition();
 		}
 		return positions;
 	}
 
-	public SwerveModule[] getSwerveMods() {
+	public SwerveModule[] getSwerveMods()
+	{
 		return swerveMods;
 	}
 
-	public void setGyro(double degrees) {
+	public void setGyro(double degrees)
+	{
 		System.out.println("Setting gyro to " + degrees + "...");
 		gyroOffset = degrees - gyro.getYaw().getValueAsDouble();
 		zeroGyro();
 	}
 
-	public void zeroGyro() {
+	public void zeroGyro()
+	{
 		System.out.println("Zeroing gyro");
 
 		gyro.setYaw(0); // Used to setYaw(0);
 	}
 
-	public void setGyroOffset(double offset) {
+	public void setGyroOffset(double offset)
+	{
 		gyroOffset = offset;
 	}
 
 	/** Returns angle around vertical axis */
-	public Rotation2d getYaw() {
+	public Rotation2d getYaw()
+	{
 		return (SwerveConstants.INVERT_GYRO)
 				? Rotation2d.fromDegrees(360 - gyro.getYaw().getValueAsDouble() + gyroOffset)
 				: Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble() + gyroOffset);
 	}
 
-	public void resetModulesToAbsolute() {
-		for (SwerveModule mod : swerveMods) {
+	public void resetModulesToAbsolute()
+	{
+		for (SwerveModule mod : swerveMods)
+		{
 			mod.resetToAbsolute();
 		}
 	}
 
 	@Override
-	public void periodic() {
+	public void periodic()
+	{
 		swerveOdometry.update(getYaw(), getModulePositions());
 		swervePoseEstimator.update(getYaw(), getModulePositions());
 
 		// smartdashboard logging per module
-		for (SwerveModule mod : swerveMods) {
+		for (SwerveModule mod : swerveMods)
+		{
 			mod.periodic();
 
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder",
@@ -264,17 +291,21 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 		SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());
 	}
 
-	public void resetEncoders() {
-		for (SwerveModule mod : swerveMods) {
+	public void resetEncoders()
+	{
+		for (SwerveModule mod : swerveMods)
+		{
 			mod.resetToAbsolute();
 		}
 	}
 
-	public ChassisSpeeds getCurrentSpeeds() {
+	public ChassisSpeeds getCurrentSpeeds()
+	{
 		return SwerveConstants.SwerveKinematics.toChassisSpeeds(getModuleStates());
 	}
 
-	public void setRotationController(final DoubleSupplier RotationController) {
+	public void setRotationController(final DoubleSupplier RotationController)
+	{
 		try
 		{
 			rotationController = Optional.of(RotationController);
@@ -287,23 +318,22 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 	/**
 	 * @param Controller that controls the swerve drive
-	 * @return the default command for the swerve drive that allows full driver
-	 *         control
+	 * @return the default command for the swerve drive that allows full driver control
 	 */
-	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller) {
+	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller)
+	{
 		return getTeleopControlledRotationCommand(Controller, Controller::getTwist);
 	}
 
 	/**
 	 * @param Controller that controls the swerve drive
-	 * @return a command for the swerve drive that allow driver control of
-	 *         translation and strafe,
-	 *         but rotates towards the speaker and automatically spins the feeder
-	 *         motors when in
+	 * @return a command for the swerve drive that allow driver control of translation and strafe,
+	 *         but rotates towards the speaker and automatically spins the feeder motors when in
 	 *         target
 	 */
 	public TeleopSwerveCommand getTeleopAimCommand(final Joystick Controller,
-			final ShooterMountSubsystem ShooterMount, final IndexerSubsystem Indexer) {
+			final ShooterMountSubsystem ShooterMount, final IndexerSubsystem Indexer)
+	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
 
@@ -312,20 +342,21 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	}
 
 	public TeleopSwerveCommand getTeleopAimToPositionAllianceRelativeCommand(
-			final Joystick Controller, final double DesiredRotation) {
+			final Joystick Controller, double desiredRotation)
+	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
 
-		double desiredRotation = DriverStation.getAlliance().get() == Alliance.Blue
-				? DesiredRotation
-				: -DesiredRotation;
+		desiredRotation = DriverStation.getAlliance().get() == Alliance.Blue ? desiredRotation
+				: -desiredRotation;
 
 		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(),
-				() -> -Controller.getX(), BumperRight::getAsBoolean, DesiredRotation);
+				() -> -Controller.getX(), BumperRight::getAsBoolean, desiredRotation);
 	}
 
 	public TeleopSwerveCommand getTeleopAimToPositionCommand(final Joystick Controller,
-			final double DesiredRotation) {
+			final double DesiredRotation)
+	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
 
@@ -336,12 +367,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	/**
 	 * @param Controller that controls the swerve drive
 	 * @param Rotation   supplier for the rotation of the swerve drive
-	 * @return the default command for the swerve drive that allows driver control
-	 *         except for
+	 * @return the default command for the swerve drive that allows driver control except for
 	 *         rotation
 	 */
 	public TeleopSwerveCommand getTeleopControlledRotationCommand(final Joystick Controller,
-			final DoubleSupplier Rotation) {
+			final DoubleSupplier Rotation)
+	{
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
 
@@ -350,10 +381,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	}
 
 	/**
-	 * @return the angle to the speaker in radians. Counterclockwise rotation is
-	 *         negative.
+	 * @return the angle to the speaker in radians. Counterclockwise rotation is negative.
 	 */
-	public double getRotationToSpeaker(ShooterMountSubsystem shooterMount) {
+	public double getRotationToSpeaker(ShooterMountSubsystem shooterMount)
+	{
 		double angle = getAngleToSpeaker(shooterMount);
 		double currentAngle = getYaw().getRadians();
 
@@ -363,30 +394,49 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	/**
 	 * @return the angular velocity needed to aim to the speaker in radians.
 	 */
-	public double getRotationalVelocityToSpeaker(ShooterMountSubsystem shooterMount) {
+	public double getRotationalVelocityToSpeaker(ShooterMountSubsystem shooterMount)
+	{
 		double targetAngle = getRotationToSpeaker(shooterMount);
-		
+
 		System.out.println("Desired Chassis Angle: " + targetAngle);
 		System.out.println("Current Chassis Angle: " + getYaw().getRadians());
 
-		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-				targetAngle);
+		double desiredRotationalVelocity = getRotationalVelocityToAngle(targetAngle);
 
 		return desiredRotationalVelocity;
 	}
 
-	public double getRotationalVelocityToPosition(double position)
+	public double getRotationalVelocityToAngle(double angle)
 	{
+		double optimizedAngle = optimizeAngle(getYaw().getRadians(), angle);
+
 		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-				position);
+				optimizedAngle);
 
 		return desiredRotationalVelocity;
+	}
+
+	public double optimizeAngle(double referenceAngle, double newAngle)
+	{
+		double delta = newAngle-referenceAngle;
+
+		if (delta > Math.PI)
+		{
+			newAngle -= 2*Math.PI;
+		}
+		else if (delta < -Math.PI)
+		{
+			newAngle += 2*Math.PI;
+		}
+
+		return newAngle;
 	}
 
 	/**
 	 * @return the velocity of the robot in meters per second
 	 */
-	public Pose2d getVelocity() {
+	public Pose2d getVelocity()
+	{
 		ChassisSpeeds chassisSpeed = SwerveConstants.SwerveKinematics
 				.toChassisSpeeds(getModuleStates());
 
@@ -395,8 +445,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	}
 
 	/** @param estimatedRobotPose estimated robot pose from vision */
-	public void updatePoseWithVision(Optional<EstimatedRobotPose> estimatedRobotPose) {
-		if (estimatedRobotPose.isPresent()) {
+	public void updatePoseWithVision(Optional<EstimatedRobotPose> estimatedRobotPose)
+	{
+		if (estimatedRobotPose.isPresent())
+		{
 			swervePoseEstimator.addVisionMeasurement(
 					estimatedRobotPose.get().estimatedPose.toPose2d(),
 					estimatedRobotPose.get().timestampSeconds);
@@ -405,15 +457,13 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 
 	/**
 	 * NOTE: Velocity adjustment can be toggled with
-	 * {@link VisionConstants#ADJUST_SPEAKER_POSE_FOR_VELOCITY}. Takes our current
-	 * position. Then,
-	 * calculates how long it will take for the note to reach the speaker and uses
-	 * that time to find
-	 * how far the note will move due to the robot's velocity. Finally, offsets the
-	 * speaker's
+	 * {@link VisionConstants#ADJUST_SPEAKER_POSE_FOR_VELOCITY}. Takes our current position. Then,
+	 * calculates how long it will take for the note to reach the speaker and uses that time to find
+	 * how far the note will move due to the robot's velocity. Finally, offsets the speaker's
 	 * position by that amount.
 	 */
-	public Translation2d getSpeakerPoseAdjustedForVelocity(final ShooterMountSubsystem ShooterMount) {
+	public Translation2d getSpeakerPoseAdjustedForVelocity(final ShooterMountSubsystem ShooterMount)
+	{
 		// Get speaker pose
 		Optional<Pose3d> speakerPoseOptional = RobotContainer.getSpeakerPose();
 		Translation2d speakerPose = !speakerPoseOptional.isEmpty() ? new Translation2d(
@@ -447,7 +497,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	/**
 	 * @return boolean indicating whether robot is within shooting range of speaker
 	 */
-	public boolean isInShooterRange() {
+	public boolean isInShooterRange()
+	{
 		double max = ShooterMountConstants.SpeakerDistanceTreeMapKeys[ShooterMountConstants.SpeakerDistanceTreeMapKeys.length
 				- 1];
 		double distance = RobotContainer.getSpeakerPose().get().getTranslation().toTranslation2d()
@@ -457,7 +508,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource {
 	}
 
 	/** @return What angle to turn to to face the speaker. Adjusts for velocity */
-	public double getAngleToSpeaker(final ShooterMountSubsystem ShooterMount) {
+	public double getAngleToSpeaker(final ShooterMountSubsystem ShooterMount)
+	{
 		Pose2d targetPose = new Pose2d(getSpeakerPoseAdjustedForVelocity(ShooterMount),
 				new Rotation2d());
 

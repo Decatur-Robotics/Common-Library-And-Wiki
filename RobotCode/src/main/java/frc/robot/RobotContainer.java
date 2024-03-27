@@ -116,7 +116,7 @@ public class RobotContainer {
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
-				-31));
+				-0.541));
 		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController,
 		// ShooterMountSubsystem, IndexerSubsystem));
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
