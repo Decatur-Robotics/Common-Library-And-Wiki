@@ -80,8 +80,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 		shooterMountMotorLeft.getConfigurator().apply(mainMotorConfigs);
 		shooterMountMotorRight.getConfigurator().apply(mainMotorConfigs);
 
-		shooterMountMinAngle = shooterMountMotorLeft.getRotorPosition().getValueAsDouble();
-		targetRotation = 8;
+		shooterMountMinAngle = 1/360;
+		targetRotation = 1/360;
 
 		// Populate tree maps
 		shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
@@ -125,19 +125,17 @@ public class ShooterMountSubsystem extends SubsystemBase
 	 */
 	public void setTargetRotation(double targetRotation)
 	{
+		System.out.println(targetRotation);
+		
 		this.targetRotation = Math.max(
 				Math.min(targetRotation, ShooterMountConstants.SHOOTER_MOUNT_MAX_ANGLE_OFFSET),
-				0);
+				shooterMountMinAngle);
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-						+ ((this.targetRotation - shooterMountMinAngle)
-								* ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
+						+ (this.targetRotation * ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
 				.withFeedForward(0));
-
-		System.out.println(
-				"-----------------------------------------Normal PID control set-----------------------------------------");
 	}
 
 	/**

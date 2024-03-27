@@ -1,28 +1,30 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.MathUtil;
+
 public class ShooterMountConstants
 {
 
 	public static final double SHOOTER_MOUNT_GEAR_RATIO = (75 / 1) * (68 / 72);
 
 	/** Highest position the shooter mount target position can be set to in rotations */
-	public static final double SHOOTER_MOUNT_MAX_ANGLE_OFFSET = 171;
+	public static final double SHOOTER_MOUNT_MAX_ANGLE_OFFSET = 90;
 
 	/** Lowest position of the shooter in radians */
-	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = 0.24;
+	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = Math.toRadians(9.57);
 
 	/** Rotations of motor to full shooter arm rotation in radians */
 	public static final double MOTOR_ROTATIONS_IN_SHOOTER_RADIANS = SHOOTER_MOUNT_GEAR_RATIO * 2
 			* Math.PI;
 
 	/** Angle in rotations for shooting at amp */
-	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 160;
+	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 0.125;
 	/** Angle in rotations for shooting at speaker */
-	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 120;
-	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 120;
-	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 120;
+	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 0.125; 
+	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 0.125;
+	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 0.125;
 
-	public static final double SHOOTER_MOUNT_KP = 0.01;
+	public static final double SHOOTER_MOUNT_KP = 5;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0;
 	public static final double SHOOTER_MOUNT_KS = 0;
@@ -35,9 +37,9 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_HOMING_KD = 0;
 
 	/** Rotations per second */
-	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 110;
+	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 1;
 	/** Rotations per second per second */
-	public static final double SHOOTER_MOUNT_ACCELERATION = 200;
+	public static final double SHOOTER_MOUNT_ACCELERATION = 1;
 
 	/** Tolerance for determining mount is within range to shoot in rotations */
 	public static final double AIMING_DEADBAND = 0.1;
