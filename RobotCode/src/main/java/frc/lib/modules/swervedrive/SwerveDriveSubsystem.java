@@ -419,25 +419,44 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 
 	public double getRotationalVelocityToAngle(double angle)
 	{
-		double optimizedAngle = optimizeAngle(getYaw().getRadians(), angle);
+		angle = optimizeAngle(getYaw().getRadians(), angle);
 
 		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-				optimizedAngle);
+				angle);
 
 		return desiredRotationalVelocity;
 	}
 
 	public double optimizeAngle(double referenceAngle, double newAngle)
 	{
-		double delta = newAngle-referenceAngle;
-
-		if (delta > Math.PI)
+		double lowerBound;
+		double upperBound;
+		double lowerOffset = referenceAngle % (2*Math.PI);
+		if (lowerOffset >= 0)
 		{
-			newAngle -= 2*Math.PI;
+			lowerBound = referenceAngle - lowerOffset;
+			upperBound = referenceAngle + ((2*Math.PI) - lowerOffset);
 		}
-		else if (delta < -Math.PI)
+		else
 		{
-			newAngle += 2*Math.PI;
+			upperBound = referenceAngle - lowerOffset;
+			lowerBound = referenceAngle - ((2*Math.PI) + lowerOffset);
+		}
+		while (newAngle < lowerBound)
+		{
+			newAngle += (2*Math.PI);
+		}
+		while (newAngle > upperBound)
+		{
+			newAngle -= (2*Math.PI);
+		}
+		if (newAngle - referenceAngle > Math.PI)
+		{
+			newAngle -= (2*Math.PI);
+		}
+		else if (newAngle - referenceAngle < -2*Math.PI)
+		{
+			newAngle += (2*Math.PI);
 		}
 
 		return newAngle;
