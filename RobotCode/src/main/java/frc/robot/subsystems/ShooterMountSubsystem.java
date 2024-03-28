@@ -43,6 +43,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 
 	private Pigeon2 gyro;
 
+	private double offset;
+
 	public ShooterMountSubsystem()
 	{
 		gyro = new Pigeon2(Ports.SHOOTER_MOUNT_GYRO);
@@ -95,8 +97,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
 		}
 
-		motorControlRequest = new MotionMagicDutyCycle(targetRotation);
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(targetRotation));
+		offset = gyro.getRoll().getValueAsDouble() / 360;
+
+		motorControlRequest = new MotionMagicDutyCycle(offset);
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(offset));
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
 				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble()));
@@ -134,8 +138,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
 						+ (this.targetRotation * ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
 
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation)
-				.withFeedForward(0));
+		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation
+				+ offset).withFeedForward(0));
 	}
 
 	/**

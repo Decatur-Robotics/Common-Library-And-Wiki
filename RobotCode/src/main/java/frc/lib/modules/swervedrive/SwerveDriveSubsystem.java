@@ -24,6 +24,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -56,6 +58,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	private Optional<DoubleSupplier> rotationController;
 
 	private ProfiledPIDController autoAimPidController;
+
+	private StructPublisher<Pose2d> publisher;
 
 	public SwerveDriveSubsystem()
 	{
@@ -95,6 +99,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		autoAimPidController = new ProfiledPIDController(SwerveConstants.ANGULAR_AIMING_KP,
 				SwerveConstants.ANGULAR_AIMING_KI, SwerveConstants.ANGULAR_AIMING_KD,
 				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
+
+		publisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", getPose().struct).publish();
+		publisher.set(getPose());
 	}
 
 	private void configureAutoBuilder()
@@ -272,6 +279,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	@Override
 	public void periodic()
 	{
+		publisher.set(getPose());
+
+		// System.out.println(getPose().getX() + " " + getPose().getY());
+
 		swerveOdometry.update(getYaw(), getModulePositions());
 		swervePoseEstimator.update(getYaw(), getModulePositions());
 

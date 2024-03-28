@@ -30,7 +30,9 @@ public class IntakeSubsystem extends SubsystemBase
 
 	private Encoder encoder;
 
-	private PIDController deployController;
+	private PIDController deployController, retractController;
+
+	private boolean deploy;
 
 	public IntakeSubsystem()
 	{
@@ -52,7 +54,10 @@ public class IntakeSubsystem extends SubsystemBase
 		deployController = new PIDController(IntakeConstants.INTAKE_DEPLOYMENT_KP, 
 				IntakeConstants.INTAKE_DEPLOYMENT_KI, IntakeConstants.INTAKE_DEPLOYMENT_KD);
 
-		// Configure roller motors
+		retractController = new PIDController(IntakeConstants.INTAKE_RETRACT_KP, 
+				IntakeConstants.INTAKE_RETRACT_KI, IntakeConstants.INTAKE_RETRACT_KD);
+		
+				// Configure roller motors
 		intakeRollerMotor.setInverted(true);
 		intakeRollerMotor.setSmartCurrentLimit(30);
 		intakeRollerMotor.setIdleMode(IdleMode.kBrake);
@@ -66,6 +71,8 @@ public class IntakeSubsystem extends SubsystemBase
 
 		desiredRotation = IntakeConstants.INTAKE_RETRACTED_ROTATION;
 		desiredVelocity = IntakeConstants.INTAKE_REST_VELOCITY;
+
+		deploy = false;
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity",
 				() -> intakeRollerMotor.getEncoder().getVelocity());
@@ -97,13 +104,17 @@ public class IntakeSubsystem extends SubsystemBase
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		}
 
-		intakeDeployMotorRight.set(deployController.calculate(encoder.getRaw(), desiredRotation));
+		if (deploy)
+			intakeDeployMotorRight.set(deployController.calculate(encoder.getRaw(), desiredRotation));
+		else
+			intakeDeployMotorRight.set(retractController.calculate(encoder.getRaw(), desiredRotation));
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(double desiredRotation)
+	public void setDesiredRotation(double desiredRotation, boolean deploy)
 	{
 		this.desiredRotation = desiredRotation;
+		this.deploy = deploy;
 	}
 
 	/** @param desiredVelocity Ticks per second */

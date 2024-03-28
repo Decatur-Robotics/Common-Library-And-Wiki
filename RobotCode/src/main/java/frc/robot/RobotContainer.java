@@ -148,8 +148,8 @@ public class RobotContainer {
 
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
-		// LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-		// 		LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
