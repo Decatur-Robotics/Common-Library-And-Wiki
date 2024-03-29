@@ -1,7 +1,5 @@
 package frc.robot.constants;
 
-import edu.wpi.first.math.MathUtil;
-
 public class ShooterMountConstants
 {
 
@@ -18,28 +16,24 @@ public class ShooterMountConstants
 			* Math.PI;
 
 	/** Angle in rotations for shooting at amp */
-	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 0.125;
+	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 0.1;
 	/** Angle in rotations for shooting at speaker */
 	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 0.125; 
 	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 0.125;
 	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 0.125;
 
-	public static final double SHOOTER_MOUNT_KP = 0;
+	public static final double SHOOTER_MOUNT_KP = 0.38;
 	public static final double SHOOTER_MOUNT_KI = 0;
-	public static final double SHOOTER_MOUNT_KD = 0;
+	public static final double SHOOTER_MOUNT_KD = 0.1;
 	public static final double SHOOTER_MOUNT_KS = 0;
-	public static final double SHOOTER_MOUNT_KV = 0;
+	public static final double SHOOTER_MOUNT_KV = 0.71;
 	public static final double SHOOTER_MOUNT_KA = 0;
-	public static final double SHOOTER_MOUNT_KG = 0.02;
-
-	public static final double SHOOTER_MOUNT_HOMING_KP = 3;
-	public static final double SHOOTER_MOUNT_HOMING_KI = 0;
-	public static final double SHOOTER_MOUNT_HOMING_KD = 0;
+	public static final double SHOOTER_MOUNT_KG = 0.0225;
 
 	/** Rotations per second */
-	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 1;
+	public static final double SHOOTER_MOUNT_CRUISE_VELOCITY = 3;
 	/** Rotations per second per second */
-	public static final double SHOOTER_MOUNT_ACCELERATION = 1;
+	public static final double SHOOTER_MOUNT_ACCELERATION = 2;
 
 	/** Tolerance for determining mount is within range to shoot in rotations */
 	public static final double AIMING_DEADBAND = 0.1;

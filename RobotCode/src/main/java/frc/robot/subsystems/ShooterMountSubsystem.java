@@ -97,7 +97,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
 		}
 
-		offset = gyro.getRoll().getValueAsDouble() / 360;
+		offset = gyro.getRoll().getValueAsDouble()/360;
 
 		motorControlRequest = new MotionMagicDutyCycle(offset);
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(offset));
@@ -108,7 +108,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 				() -> targetRotation);
 		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min",
 				() -> shooterMountMinAngle);
-		RobotContainer.getShuffleboardTab().addDouble("Shooter Gyro", () -> gyro.getRoll().getValueAsDouble());
+		RobotContainer.getShuffleboardTab().addDouble("Shooter Gyro", () -> (gyro.getRoll().getValueAsDouble()/360));
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 				shooterMountMinAngle);
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-						+ Math.toRadians(this.targetRotation));
+						+ Math.toRadians(this.targetRotation*360));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation
 				+ offset).withFeedForward(gravityFeedForward));

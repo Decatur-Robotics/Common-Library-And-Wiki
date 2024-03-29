@@ -90,16 +90,16 @@ public class Robot extends TimedRobot implements ILogSource {
 	public void autonomousInit() {
 		logInfo("Autonomous intializing...");
 
-		for (ModeBasedSubsystem subsystem : subsystems) {
-			subsystem.autonomousInit();
-		}
-
 		logFine("Getting and running auto command...");
 		Autonomous auto = robotContainer.getAutonomous();
 		autonomousCommand = auto.buildAutoCommand();
 		// schedule the autonomous command (example)
 		if (autonomousCommand.isPresent()) {
 			autonomousCommand.get().schedule();
+		}
+
+		for (ModeBasedSubsystem subsystem : subsystems) {
+			subsystem.autonomousInit();
 		}
 	}
 
