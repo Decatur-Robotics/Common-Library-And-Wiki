@@ -109,7 +109,7 @@ public final class SwerveConstants
 	 * Drive Motor Characterization Values Divide SYSID values by 12 to convert from volts to
 	 * percent output for CTRE
 	 */
-	public static final double DRIVE_KS = 0.036; // TODO: This must be tuned to
+	public static final double DRIVE_KS = 0.026; // TODO: This must be tuned to
 														// specific
 														// robot
 	public static final double DRIVE_KV = 0.01;
