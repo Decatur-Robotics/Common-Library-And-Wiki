@@ -291,12 +291,16 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		{
 			mod.periodic();
 
-			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder",
-					mod.getCanCoder().getDegrees());
-			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated",
-					mod.getPosition().angle.getDegrees());
+			// SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder",
+			// 		mod.getCanCoder().getDegrees());
+			// SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated",
+			// 		mod.getPosition().angle.getDegrees());
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity",
 					mod.mDriveMotor.getVelocity().getValueAsDouble());
+			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Current",
+					mod.mDriveMotor.getSupplyCurrent().getValueAsDouble());
+			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Voltage",
+					mod.mDriveMotor.getSupplyVoltage().getValueAsDouble());
 		}
 
 		SmartDashboard.putNumber("Gyro Angle", getYaw().getDegrees());

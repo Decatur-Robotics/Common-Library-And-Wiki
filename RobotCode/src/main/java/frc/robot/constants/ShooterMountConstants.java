@@ -24,13 +24,13 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 0.125;
 	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 0.125;
 
-	public static final double SHOOTER_MOUNT_KP = 5;
+	public static final double SHOOTER_MOUNT_KP = 0;
 	public static final double SHOOTER_MOUNT_KI = 0;
 	public static final double SHOOTER_MOUNT_KD = 0;
 	public static final double SHOOTER_MOUNT_KS = 0;
 	public static final double SHOOTER_MOUNT_KV = 0;
 	public static final double SHOOTER_MOUNT_KA = 0;
-	public static final double SHOOTER_MOUNT_KG = 0.018;
+	public static final double SHOOTER_MOUNT_KG = 0.02;
 
 	public static final double SHOOTER_MOUNT_HOMING_KP = 3;
 	public static final double SHOOTER_MOUNT_HOMING_KI = 0;

@@ -90,13 +90,13 @@ public final class SwerveConstants
 	 * found a small open loop ramp (0.25) helps with tread wear, tipping, etc
 	 */
 	public static final double OPEN_LOOP_RAMP = 0.25;
-	public static final double CLOSED_LOOP_RAMP = 0.0;
+	public static final double CLOSED_LOOP_RAMP = 0.25;
 
 	/* Angle Motor PID Values */
-	public static final double ANGLE_KP = 0.025; // must find/double check all of these
+	public static final double ANGLE_KP = 0.05; // must find/double check all of these
 													// in sysid
 	public static final double ANGLE_KI = 0.0;
-	public static final double ANGLE_KD = 0.0;
+	public static final double ANGLE_KD = 0.1;
 	public static final double ANGLE_KF = 0.0;
 
 	/* Drive Motor PID Values */
@@ -109,22 +109,22 @@ public final class SwerveConstants
 	 * Drive Motor Characterization Values Divide SYSID values by 12 to convert from volts to
 	 * percent output for CTRE
 	 */
-	public static final double DRIVE_KS = 0.026; // TODO: This must be tuned to
+	public static final double DRIVE_KS = 0.036; // TODO: This must be tuned to
 														// specific
 														// robot
 	public static final double DRIVE_KV = 0.01;
-	public static final double DRIVE_KA = 0.02;
+	public static final double DRIVE_KA = 0.0;
 
 	/* Angle Motor Conversion Factors */
 	public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;
 
 	/* Swerve Profiling Values */
 	/* Meters per Second */
-	public static final double SLOW_SPEED = 2.5;
-	public static final double AUTO_SPEED = 4.75;
-	public static final double NORMAL_SPEED = 4.75; // 3.7;
-	public static final double FAST_SPEED = 4.75; // 3.7;
-	public static final double MAX_SPEED = 4.75; // 3.7; //TODO: This must be tuned to
+	public static final double SLOW_SPEED = 1.5;
+	public static final double AUTO_SPEED = 3.7;
+	public static final double NORMAL_SPEED = 3.7;
+	public static final double FAST_SPEED = 3.7;
+	public static final double MAX_SPEED = 3.7; //TODO: This must be tuned to
 												// specific
 												// robot
 	/** Radians per Second */

@@ -36,6 +36,8 @@ public final class CTREConfigs
 		swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimit = SwerveConstants.DRIVE_CONTINUOUS_CURRENT_LIMIT;
 		swerveDriveFXConfig.CurrentLimits.SupplyCurrentThreshold = SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
 		swerveDriveFXConfig.CurrentLimits.SupplyTimeThreshold = SwerveConstants.DRIVE_PEAK_CURRENT_DURATION;
+		swerveDriveFXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+		swerveDriveFXConfig.CurrentLimits.StatorCurrentLimit = 60;
 
 		swerveDriveFXConfig.Slot0.kP = SwerveConstants.DRIVE_KP;
 		swerveDriveFXConfig.Slot0.kI = SwerveConstants.DRIVE_KI;

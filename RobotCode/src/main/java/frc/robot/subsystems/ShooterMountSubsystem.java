@@ -136,10 +136,10 @@ public class ShooterMountSubsystem extends SubsystemBase
 				shooterMountMinAngle);
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-						+ (this.targetRotation * ShooterMountConstants.MOTOR_ROTATIONS_IN_SHOOTER_RADIANS));
+						+ Math.toRadians(this.targetRotation));
 
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation
-				+ offset).withFeedForward(0));
+				+ offset).withFeedForward(gravityFeedForward));
 	}
 
 	/**
