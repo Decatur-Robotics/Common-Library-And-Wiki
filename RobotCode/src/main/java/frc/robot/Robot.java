@@ -6,6 +6,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -46,7 +48,6 @@ public class Robot extends TimedRobot implements ILogSource {
 		/* Initialize robot container last */
 		robotContainer = new RobotContainer();
 		RobotContainer.getShuffleboardTab().add(CommandScheduler.getInstance());
-
 	}
 
 	/**
@@ -75,6 +76,10 @@ public class Robot extends TimedRobot implements ILogSource {
 	public void disabledInit() {
 		for (ModeBasedSubsystem subsystem : subsystems) {
 			subsystem.disabledInit();
+		}
+
+		if (autonomousCommand.isPresent()) {
+			autonomousCommand.get().cancel();
 		}
 	}
 

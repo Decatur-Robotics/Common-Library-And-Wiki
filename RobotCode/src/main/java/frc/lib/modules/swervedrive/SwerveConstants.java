@@ -213,11 +213,11 @@ public final class SwerveConstants
 	{
 		// TODO: The below constants are used in the example auto, and must be
 		// tuned to specific robot
-		public static final double MAX_SPEED = 3; // In meters per second
+		public static final double MAX_SPEED = 3.7; // In meters per second
 		public static final double MAX_ACCELERATION = 3; // In meters per second squared
-		public static final double MAX_ANGULAR_SPEED = Math.PI; // In radians per
+		public static final double MAX_ANGULAR_SPEED = 1.5*Math.PI; // In radians per
 																// second
-		public static final double MAX_ANGULAR_ACCELERATION = Math.PI; // In radians
+		public static final double MAX_ANGULAR_ACCELERATION = 2*Math.PI; // In radians
 																		// per
 																		// second
 																		// squared

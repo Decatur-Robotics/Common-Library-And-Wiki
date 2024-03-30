@@ -107,11 +107,10 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	private void configureAutoBuilder()
 	{
 		HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-				new PIDConstants(SwerveConstants.DRIVE_KP, SwerveConstants.DRIVE_KI,
-						SwerveConstants.DRIVE_KD),
-				new PIDConstants(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI,
-						SwerveConstants.ANGLE_KD),
-				SwerveConstants.MAX_SPEED, SwerveConstants.DRIVE_BASE_RADIUS_METERS,
+				new PIDConstants(SwerveConstants.DRIVE_KP, SwerveConstants.DRIVE_KI, SwerveConstants.DRIVE_KD),
+				new PIDConstants(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI, SwerveConstants.ANGLE_KD),
+				SwerveConstants.MAX_SPEED, 
+				SwerveConstants.DRIVE_BASE_RADIUS_METERS,
 				new ReplanningConfig());
 
 		BooleanSupplier isRedAlliance = () ->
