@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.modules.swervedrive.SwerveConstants;
+import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.RobotContainer;
 import frc.robot.commands.AutoShooterOverrideCommand;
 import frc.robot.commands.IntakeCommand;
@@ -58,6 +59,7 @@ public abstract class Autonomous implements ILogSource
         final IntakeSubsystem Intake = RobotContainer.getIntake();
         final LedSubsystem Leds = RobotContainer.getLeds();
         final ShooterSubsystem Shooter = RobotContainer.getShooter();
+        final SwerveDriveSubsystem Swerve = RobotContainer.getSwerveDrive();
 
         // Initialize commands
         NamedCommands.registerCommand("Intake",
@@ -77,6 +79,10 @@ public abstract class Autonomous implements ILogSource
         NamedCommands.registerCommand("Shoot from Note Side",
                 new AutoShooterOverrideCommand(ShooterMount, Shooter, Indexer,
                 ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
+
+        NamedCommands.registerCommand("Aim from Note Center", Swerve.getAutoAimSwerveCommand(0));
+
+        NamedCommands.registerCommand("Aim from Note Side", Swerve.getAutoAimSwerveCommand(-0.541));
 
         // Populate rotation commands
         for (double rot : AutoConstants.AutoShooterMountRotations)

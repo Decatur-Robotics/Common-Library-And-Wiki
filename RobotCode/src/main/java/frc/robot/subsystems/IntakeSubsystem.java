@@ -17,7 +17,10 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,7 +33,8 @@ public class IntakeSubsystem extends SubsystemBase
 
 	private Encoder encoder;
 
-	private PIDController deployController, retractController;
+	private ProfiledPIDController intakeController;
+	private ArmFeedforward intakeFeedforward;
 
 	private boolean deploy;
 
@@ -51,11 +55,12 @@ public class IntakeSubsystem extends SubsystemBase
 		intakeDeployMotorRight.setIdleMode(IdleMode.kBrake);
 		intakeDeployMotorLeft.setIdleMode(IdleMode.kBrake);
 
-		deployController = new PIDController(IntakeConstants.INTAKE_DEPLOYMENT_KP, 
-				IntakeConstants.INTAKE_DEPLOYMENT_KI, IntakeConstants.INTAKE_DEPLOYMENT_KD);
+		intakeController = new ProfiledPIDController(IntakeConstants.INTAKE_RETRACT_KP, 
+				IntakeConstants.INTAKE_RETRACT_KI, IntakeConstants.INTAKE_RETRACT_KD,
+				new TrapezoidProfile.Constraints(IntakeConstants.INTAKE_RETRACT_CRUISE_VELOCITY,
+						IntakeConstants.INTAKE_RETRACT_MAX_ACCELERATION));
 
-		retractController = new PIDController(IntakeConstants.INTAKE_RETRACT_KP, 
-				IntakeConstants.INTAKE_RETRACT_KI, IntakeConstants.INTAKE_RETRACT_KD);
+		intakeFeedforward = new ArmFeedforward(0, IntakeConstants.INTAKE_RETRACT_KG, IntakeConstants.INTAKE_RETRACT_KV);
 		
 				// Configure roller motors
 		intakeRollerMotor.setInverted(true);
@@ -104,10 +109,15 @@ public class IntakeSubsystem extends SubsystemBase
 			intakeDeployMotorRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		}
 
-		if (deploy)
-			intakeDeployMotorRight.set(deployController.calculate(encoder.getRaw(), desiredRotation));
-		else
-			intakeDeployMotorRight.set(retractController.calculate(encoder.getRaw(), desiredRotation));
+		intakeDeployMotorRight.set(intakeController.calculate(encoder.getRaw(), desiredRotation) + 
+				intakeFeedforward.calculate(encoderToRadians(), intakeController.getSetpoint().velocity));
+	}
+
+	// 90 degrees -> 180 ticks
+	// 0 degrees -> 2128 ticks
+	public double encoderToRadians()
+	{
+		return (Math.PI / 2) - ((2 * Math.PI) * ((desiredRotation - 180) / 8192));
 	}
 
 	/** @param desiredRotation Ticks */

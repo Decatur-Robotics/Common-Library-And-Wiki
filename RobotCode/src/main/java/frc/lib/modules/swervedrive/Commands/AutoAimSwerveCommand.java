@@ -2,6 +2,8 @@ package frc.lib.modules.swervedrive.Commands;
 
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.robot.constants.IndexerConstants;
@@ -21,69 +23,35 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 {
 
 	private final SwerveDriveSubsystem Swerve;
-	private final VisionSubsystem Vision;
-	private final IndexerSubsystem Indexer;
-	private final ShooterMountSubsystem ShooterMount;
+	private double angle;
 
-	/** Used to prevent ending before the note has left the shooter */
-	private Optional<TeamCountdown> timer;
-
-	public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, VisionSubsystem vision,
-			IndexerSubsystem indexer, ShooterMountSubsystem shooter)
+	public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, double angle)
 	{
 		Swerve = swerve;
-		Vision = vision;
-		Indexer = indexer;
-		ShooterMount = shooter;
-
-		timer = Optional.empty();
-
-		addRequirements(Indexer);
+		this.angle = angle;
 	}
 
 	@Override
 	public void initialize()
 	{
 		logInfo("Starting AutoAimSwerveCommand");
-		Swerve.setRotationController(() -> Swerve.getRotationalVelocityToSpeaker(ShooterMount));
 	}
 
 	@Override
 	public void execute()
 	{
-		// Spin feeder motors if in target
-		if (Swerve.isInShooterRange()
-				&& Math.abs(Swerve.getRotationToSpeaker(ShooterMount)) < VisionConstants.CHASSIS_AIM_THRESHOLD
-				&& ShooterMount.isAtTargetRotation())
-		{
-			// Spin feeder motors
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
-
-			if (timer.isEmpty())
-			{
-				logInfo("Starting shooter...");
-				timer = Optional.of(new TeamCountdown(ShooterConstants.SHOOT_TIME));
-			}
-		}
-		else if (!Indexer.hasNote())
-		{
-			if (timer.isPresent())
-				logInfo("Stopping shooter...");
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
-		}
+		Swerve.drive(new Translation2d(), Swerve.getRotationalVelocityToAngle(-angle), true, false);
 	}
 
 	@Override
 	public void end(boolean interrupted)
 	{
 		logInfo("Ending AutoAimSwerveCommand");
-		Swerve.setRotationController(null);
-		timer = Optional.empty(); // We need to reset timer so we can reuse this instance
 	}
 
 	@Override
 	public boolean isFinished()
 	{
-		return timer.isPresent() && timer.get().isDone();
+		return Swerve.atRotation(-angle);
 	}
 }

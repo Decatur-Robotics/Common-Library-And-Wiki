@@ -17,6 +17,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.core.ILogSource;
 import frc.lib.core.LogitechControllerButtons;
+import frc.lib.modules.swervedrive.Commands.AutoAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopAimSwerveToPositionCommand;
 import frc.lib.modules.swervedrive.Commands.TeleopSwerveCommand;
@@ -148,7 +150,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		drive(fieldRelative
 				? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(),
 						rotation, getYaw())
-				: new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+				: new ChassisSpeeds(translation.getX(), translation.getY(), rotation), isOpenLoop);
 
 	}
 
@@ -186,6 +188,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 			double rotation = rotationController.get().getAsDouble();
 			speeds.omegaRadiansPerSecond = rotation;
 		}
+
+		speeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond);
 
 		drive(speeds, false);
 	}
@@ -336,7 +340,13 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	 */
 	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller)
 	{
-		return getTeleopControlledRotationCommand(Controller, Controller::getTwist);
+		return getTeleopControlledRotationCommand(Controller, 
+			() -> Math.pow(MathUtil.applyDeadband(Controller.getTwist(), SwerveConstants.JOYSTICK_DEADBAND), 3));
+	}
+
+	public AutoAimSwerveCommand getAutoAimSwerveCommand(final double angle)
+	{
+		return new AutoAimSwerveCommand(this, angle);
 	}
 
 	/**
@@ -390,7 +400,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
 
-		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
+		return new TeleopSwerveCommand(this, 
+				() -> -Controller.getY(), 
+				() -> -Controller.getX(),
 				Rotation, BumperRight::getAsBoolean);
 	}
 
@@ -422,47 +434,29 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 
 	public double getRotationalVelocityToAngle(double angle)
 	{
-		angle = optimizeAngle(getYaw().getRadians(), angle);
+		double referenceAngle = optimizeAngle(getYaw().getRadians(), angle);
+		
+		double desiredRotationalVelocity = -autoAimPidController.calculate(referenceAngle,
+			angle);
 
-		double desiredRotationalVelocity = autoAimPidController.calculate(getYaw().getRadians(),
-				angle);
+		SmartDashboard.putNumber("Yaw", referenceAngle);
+		SmartDashboard.putNumber("Target Rotation", angle);
 
 		return desiredRotationalVelocity;
 	}
 
 	public double optimizeAngle(double referenceAngle, double newAngle)
 	{
-		double lowerBound;
-		double upperBound;
-		double lowerOffset = referenceAngle % (2*Math.PI);
-		if (lowerOffset >= 0)
+		while (referenceAngle > newAngle + Math.PI)
 		{
-			lowerBound = referenceAngle - lowerOffset;
-			upperBound = referenceAngle + ((2*Math.PI) - lowerOffset);
+			referenceAngle -= 2*Math.PI;
 		}
-		else
+		while (referenceAngle < newAngle - Math.PI)
 		{
-			upperBound = referenceAngle - lowerOffset;
-			lowerBound = referenceAngle - ((2*Math.PI) + lowerOffset);
-		}
-		while (newAngle < lowerBound)
-		{
-			newAngle += (2*Math.PI);
-		}
-		while (newAngle > upperBound)
-		{
-			newAngle -= (2*Math.PI);
-		}
-		if (newAngle - referenceAngle > Math.PI)
-		{
-			newAngle -= (2*Math.PI);
-		}
-		else if (newAngle - referenceAngle < -2*Math.PI)
-		{
-			newAngle += (2*Math.PI);
+			referenceAngle += 2*Math.PI;
 		}
 
-		return newAngle;
+		return referenceAngle;
 	}
 
 	/**
@@ -538,6 +532,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 				.getDistance(getPose().getTranslation());
 
 		return distance <= max;
+	}
+
+	public boolean atRotation(double angle)
+	{
+		return Math.abs(getYaw().getRadians() - angle) < SwerveConstants.ANGULER_AIMING_DEADBAND;
 	}
 
 	/** @return What angle to turn to to face the speaker. Adjusts for velocity */

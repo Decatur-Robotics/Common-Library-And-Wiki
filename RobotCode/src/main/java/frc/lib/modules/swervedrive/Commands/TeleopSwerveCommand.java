@@ -47,15 +47,9 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 		double speed = getSpeed();
 
 		/* Get Values, Deadband */
-		double translationVal = Math.pow(MathUtil.applyDeadband(translationSup.getAsDouble(),
-				SwerveConstants.JOYSTICK_DEADBAND), 3);
-		double strafeVal = Math.pow(
-				MathUtil.applyDeadband(strafeSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND),
-				3);
-		double rotationVal = Math
-				.pow(MathUtil.applyDeadband(rotationSup.getAsDouble(),
-						SwerveConstants.JOYSTICK_DEADBAND), 3)
-				* speed;
+		double translationVal = Math.pow(MathUtil.applyDeadband(translationSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
+		double strafeVal = Math.pow(MathUtil.applyDeadband(strafeSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
+		double rotationVal = rotationSup.getAsDouble() * speed;
 
 		SmartDashboard.putNumber("Swerve Speed", speed);
 

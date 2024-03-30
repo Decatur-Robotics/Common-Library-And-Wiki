@@ -64,7 +64,7 @@ public final class SwerveConstants
 	public static final double VOLTAGE_COMP_TARGET = 12.0;
 
 	/* Module Gear Ratios */
-	public static final double DRIVE_GEAR_RATIO = 6.75;
+	public static final double DRIVE_GEAR_RATIO = 8.14;
 	public static final double ANGLE_GEAR_RATIO = 150.0 / 7.0;
 
 	/* Motor Inverts */
@@ -234,9 +234,11 @@ public final class SwerveConstants
 	}
 
 	// Constraints for robot angle aiming PID controller
-	public static final double ANGULAR_AIMING_KP = 0;
+	public static final double ANGULAR_AIMING_KP = 1;
 	public static final double ANGULAR_AIMING_KI = 0;
-	public static final double ANGULAR_AIMING_KD = 0;
+	public static final double ANGULAR_AIMING_KD = 0.01;
+
+	public static final double ANGULER_AIMING_DEADBAND = 0.02;
 	
 	/**  */
 
