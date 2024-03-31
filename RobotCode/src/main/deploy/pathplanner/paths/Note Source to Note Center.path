@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.57,
-        "y": 4.31
+        "y": 4.25
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5699999999999998,
-        "y": 4.31
+        "x": 2.07,
+        "y": 4.250000000000003
       },
       "isLocked": false,
       "linkedName": null
@@ -20,7 +20,7 @@
         "y": 5.55
       },
       "prevControl": {
-        "x": 0.5499999999999998,
+        "x": 0.7999999999999998,
         "y": 5.55
       },
       "nextControl": null,
@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Notes",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

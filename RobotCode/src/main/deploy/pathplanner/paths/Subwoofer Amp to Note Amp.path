@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.07,
-        "y": 4.55
+        "x": 0.75,
+        "y": 6.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.07,
-        "y": 0.5499999999999998
+        "x": 1.75,
+        "y": 6.55
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 0.5
+        "x": 2.5662746820989137,
+        "y": 6.85
       },
       "prevControl": {
-        "x": 2.3499999999999996,
-        "y": 0.5
-      },
-      "nextControl": {
-        "x": 3.8,
-        "y": 0.5
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.310379467605782,
-        "y": 0.4992139714009166
-      },
-      "prevControl": {
-        "x": 5.310379467605782,
-        "y": 0.4992139714009166
+        "x": 1.700249278314475,
+        "y": 6.35
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "rotationDegrees": 30.0,
       "rotateFast": false
     }
   ],
@@ -61,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 30.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Subwoofer Amp",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 57.972290488807616,
     "velocity": 0
   },
   "useDefaultConstraints": true

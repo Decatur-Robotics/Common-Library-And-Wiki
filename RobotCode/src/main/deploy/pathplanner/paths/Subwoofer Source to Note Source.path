@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 0.75,
-        "y": 6.5518375217273
+        "y": 4.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.85,
-        "y": 6.5518375217273
+        "x": 1.7499999999999998,
+        "y": 4.55
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0749349764732798,
-        "y": 6.5518375217273
+        "x": 2.57,
+        "y": 4.25
       },
       "prevControl": {
-        "x": 0.9749349764732799,
-        "y": 6.5518375217273
+        "x": 1.703974596215561,
+        "y": 4.75
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 40.0,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -30.0,
       "rotateFast": false
     }
   ],
@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 39.09385888622958,
+    "rotation": -30.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Subwoofer Source",
   "previewStartingState": {
-    "rotation": 59.68321975239605,
+    "rotation": -59.80617508541573,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -3,32 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.45,
-        "y": 2.0
+        "x": 0.75,
+        "y": 6.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4090740987960622,
-        "y": 1.7168447898792585
+        "x": 0.75,
+        "y": 7.55
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.291890061257599,
-        "y": 0.508458674575007
+        "x": 2.2149759614834545,
+        "y": 7.75
       },
       "prevControl": {
-        "x": 5.291890061257599,
-        "y": 0.508458674575007
+        "x": 1.2149759614834545,
+        "y": 7.75
+      },
+      "nextControl": {
+        "x": 3.1678981530899586,
+        "y": 7.75
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.328868873953963,
+        "y": 7.75
+      },
+      "prevControl": {
+        "x": 5.328868873953963,
+        "y": 7.75
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -43,9 +65,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Subwoofer Amp",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 60.50546837018959,
     "velocity": 0
   },
   "useDefaultConstraints": true

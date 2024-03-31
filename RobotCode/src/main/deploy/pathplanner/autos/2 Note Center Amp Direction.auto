@@ -12,28 +12,40 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 5.0
+            "name": "Shoot from Subwoofer"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Drive Backwards Center"
+                  "name": "Intake"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Drop Note"
+                  "pathName": "Subwoofer Center to Note Center"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim from Note Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot from Note Center"
           }
         }
       ]

@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer Amp Shoot Location to Note Amp"
+                  "pathName": "Subwoofer Amp to Note Amp"
                 }
               },
               {
@@ -34,6 +34,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim from Note Amp"
           }
         },
         {
@@ -64,6 +70,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Aim from Note Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot from Note Center"
           }
         },
@@ -84,6 +96,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim from Note Source"
           }
         },
         {

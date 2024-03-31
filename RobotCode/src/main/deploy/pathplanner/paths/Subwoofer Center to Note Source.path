@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.57,
-        "y": 4.31
+        "y": 4.25
       },
       "prevControl": {
         "x": 1.6731272584673116,
-        "y": 4.752288690219001
+        "y": 4.6922886902190015
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -26.25,
+      "rotationDegrees": -30.0,
       "rotateFast": false
     }
   ],
@@ -45,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -30.570501495513085,
+    "rotation": -30.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Subwoofer Center",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

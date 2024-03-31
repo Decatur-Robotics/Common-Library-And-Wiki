@@ -2,7 +2,12 @@
   "robotWidth": 0.7,
   "robotLength": 0.70115,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Notes",
+    "Subwoofer Amp",
+    "Subwoofer Center",
+    "Subwoofer Source"
+  ],
   "autoFolders": [
     "Amp",
     "Center",

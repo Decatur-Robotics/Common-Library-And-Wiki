@@ -427,13 +427,18 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		System.out.println("Desired Chassis Angle: " + targetAngle);
 		System.out.println("Current Chassis Angle: " + getYaw().getRadians());
 
-		double desiredRotationalVelocity = getRotationalVelocityToAngle(targetAngle);
+		double referenceAngle = optimizeAngle(getYaw().getRadians(), targetAngle);
+		
+		double desiredRotationalVelocity = -autoAimPidController.calculate(referenceAngle,
+			targetAngle);
 
 		return desiredRotationalVelocity;
 	}
 
 	public double getRotationalVelocityToAngle(double angle)
 	{
+		angle = DriverStation.getAlliance().get() == Alliance.Blue ? angle : -angle;
+
 		double referenceAngle = optimizeAngle(getYaw().getRadians(), angle);
 		
 		double desiredRotationalVelocity = -autoAimPidController.calculate(referenceAngle,

@@ -35,12 +35,14 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	public void initialize()
 	{
 		logInfo("Starting AutoAimSwerveCommand");
+
+		
 	}
 
 	@Override
 	public void execute()
 	{
-		Swerve.drive(new Translation2d(), Swerve.getRotationalVelocityToAngle(-angle), true, false);
+		Swerve.drive(new Translation2d(), Swerve.getRotationalVelocityToAngle(angle), true, false);
 	}
 
 	@Override
@@ -52,6 +54,6 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	@Override
 	public boolean isFinished()
 	{
-		return Swerve.atRotation(-angle);
+		return Swerve.atRotation(angle);
 	}
 }

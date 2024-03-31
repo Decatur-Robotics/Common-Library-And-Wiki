@@ -39,6 +39,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Aim from Note Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot from Note Side"
           }
         },
@@ -64,6 +70,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Aim from Note Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot from Note Center"
           }
         },
@@ -84,6 +96,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim from Note Amp"
           }
         },
         {

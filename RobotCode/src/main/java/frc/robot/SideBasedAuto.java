@@ -29,14 +29,26 @@ public class SideBasedAuto extends Autonomous {
         }
     }
 
+	private enum AutoDirection {
+		SourceDirection("Source Direction"), AmpDirection("Amp Direction");
+
+		private final String autoName;
+
+		private AutoDirection(String autoName) {
+            this.autoName = autoName;
+        }
+	}
+
     private final SendableChooser<Side> SideChooser;
     private final SendableChooser<AutoMode> AutoModeChooser;
+	private final SendableChooser<AutoDirection> AutoDirectionChooser;
 
     public SideBasedAuto(frc.robot.RobotContainer RobotContainer) {
         super(RobotContainer);
 
         SideChooser = new SendableChooser<>();
         SideChooser.setDefaultOption(Side.Amp.autoName, Side.Amp);
+        SideChooser.addOption(Side.Amp.autoName, Side.Amp);
         SideChooser.addOption(Side.Center.autoName, Side.Center);
         SideChooser.addOption(Side.Source.autoName, Side.Source);
 
@@ -47,16 +59,28 @@ public class SideBasedAuto extends Autonomous {
         AutoModeChooser.addOption(AutoMode.ThreeNote.autoName, AutoMode.ThreeNote);
         AutoModeChooser.addOption(AutoMode.FourNote.autoName, AutoMode.FourNote);
 
+		AutoDirectionChooser = new SendableChooser<>();
+		AutoDirectionChooser.setDefaultOption(AutoDirection.AmpDirection.autoName, AutoDirection.AmpDirection);
+        AutoDirectionChooser.addOption(AutoDirection.AmpDirection.autoName, AutoDirection.AmpDirection);
+        AutoDirectionChooser.addOption(AutoDirection.SourceDirection.autoName, AutoDirection.SourceDirection);
+
         RobotContainer.getShuffleboardTab().add(SideChooser);
         RobotContainer.getShuffleboardTab().add(AutoModeChooser);
+		RobotContainer.getShuffleboardTab().add(AutoDirectionChooser);
     }
 
     @Override
     public Optional<Command> buildAutoCommand() {
         final Side side = SideChooser.getSelected();
         final AutoMode autoMode = AutoModeChooser.getSelected();
+		final AutoDirection autoDirection = AutoDirectionChooser.getSelected();
 
         String autoName = autoMode.autoName + " " + side.autoName;
+
+		if (side.autoName.equals("Center"))
+		{
+			autoName += " " + autoDirection.autoName;
+		}
 
         return Optional.of(getPathPlannerAuto(autoName));
     }

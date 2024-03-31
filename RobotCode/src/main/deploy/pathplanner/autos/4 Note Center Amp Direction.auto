@@ -24,7 +24,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer Center to Note Center"
+                  "pathName": "Subwoofer Center to Note Amp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim from Note Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot from Note Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note Amp to Note Center"
                 }
               },
               {
@@ -70,7 +101,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Aim from Note Side"
+            "name": "Aim from Note Source"
           }
         },
         {

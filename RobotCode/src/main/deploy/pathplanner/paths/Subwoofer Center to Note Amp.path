@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.451353445831073,
-        "y": 6.169702185387803
+        "x": 1.7799192642332047,
+        "y": 6.398048096156426
       },
       "isLocked": false,
       "linkedName": null
@@ -17,18 +17,24 @@
     {
       "anchor": {
         "x": 2.547148467218551,
-        "y": 7.0
+        "y": 6.85
       },
       "prevControl": {
-        "x": 1.047148467218551,
-        "y": 7.0
+        "x": 1.6502757256858627,
+        "y": 6.407711309780998
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 30.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 30.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Subwoofer Center",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
