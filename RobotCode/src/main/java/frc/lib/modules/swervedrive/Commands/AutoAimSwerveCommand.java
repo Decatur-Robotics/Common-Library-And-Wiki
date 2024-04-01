@@ -42,7 +42,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	@Override
 	public void execute()
 	{
-		Swerve.drive(new Translation2d(), Swerve.getRotationalVelocityToAngle(angle), true, false);
+		Swerve.drive(new Translation2d(), Swerve.getRotationalVelocityToAngle(angle) * 3.7 * 3.7, true, false);
 	}
 
 	@Override
