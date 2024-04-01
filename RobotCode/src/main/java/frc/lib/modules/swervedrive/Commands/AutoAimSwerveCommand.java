@@ -49,6 +49,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	public void end(boolean interrupted)
 	{
 		logInfo("Ending AutoAimSwerveCommand");
+		Swerve.drive(new Translation2d(), 0, true, false);
 	}
 
 	@Override

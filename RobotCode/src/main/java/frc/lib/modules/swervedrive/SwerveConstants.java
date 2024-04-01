@@ -109,7 +109,7 @@ public final class SwerveConstants
 	 * Drive Motor Characterization Values Divide SYSID values by 12 to convert from volts to
 	 * percent output for CTRE
 	 */
-	public static final double DRIVE_KS = 0.026; // TODO: This must be tuned to
+	public static final double DRIVE_KS = 0.045; // TODO: This must be tuned to
 														// specific
 														// robot
 	public static final double DRIVE_KV = 0.01;
@@ -234,17 +234,17 @@ public final class SwerveConstants
 	}
 
 	// Constraints for robot angle aiming PID controller
-	public static final double ANGULAR_AIMING_KP = 1;
+	public static final double ANGULAR_AIMING_KP = 0.3;
 	public static final double ANGULAR_AIMING_KI = 0;
-	public static final double ANGULAR_AIMING_KD = 0.01;
+	public static final double ANGULAR_AIMING_KD = 0.02;
 
-	public static final double ANGULER_AIMING_DEADBAND = 0.02;
+	public static final double ANGULER_AIMING_DEADBAND = 0.05;
 	
 	/**  */
 
 	/* Constraint for the motion profilied robot angle controller */
 	public static final TrapezoidProfile.Constraints ANGULAR_VELOCITY_CONSTRAINTS = new TrapezoidProfile.Constraints(
-			MAX_ANGULAR_VELOCITY, MAX_ANGULAR_ACCELERATION);
+			3.7, 7.4);
 
 	/** Rotation to face blue amp when on the blue alliance in radians */
 	public static final double AMP_ROTATION = -Math.PI;

@@ -14,7 +14,7 @@ public class IndexerConstants
 	/** Velocity for ejecting in RPM */
     public static final double INDEXER_SHOOT_VELOCITY = 1000;
 	/** Velocity for intaking in RPM */
-    public static final double INDEXER_INTAKE_VELOCITY = 400;
+    public static final double INDEXER_INTAKE_VELOCITY = 600;
 	/** Velocity when reversing in RPM */
 	public static final double INDEXER_REVERSE_VELOCITY = -200;
 	/** Velocity when not in use in RPM */

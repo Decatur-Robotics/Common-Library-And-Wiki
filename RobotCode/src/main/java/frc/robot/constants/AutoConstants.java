@@ -15,7 +15,7 @@ public final class AutoConstants
     };
 
 	public static final double CHASSIS_ROTATION_NOTE_CENTER = 0;
-	public static final double CHASSIS_ROTATION_NOTE_SOURCE = 0.53;
-	public static final double CHASSIS_ROTATION_NOTE_AMP = -0.53;
+	public static final double CHASSIS_ROTATION_NOTE_SOURCE = -0.5;
+	public static final double CHASSIS_ROTATION_NOTE_AMP = 0.5;
 
 }

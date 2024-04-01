@@ -49,7 +49,7 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 		/* Get Values, Deadband */
 		double translationVal = Math.pow(MathUtil.applyDeadband(translationSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
 		double strafeVal = Math.pow(MathUtil.applyDeadband(strafeSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
-		double rotationVal = rotationSup.getAsDouble() * speed;
+		double rotationVal = rotationSup.getAsDouble();
 
 		SmartDashboard.putNumber("Swerve Speed", speed);
 
@@ -57,7 +57,7 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 		s_Swerve.drive(
 				new Translation2d(translationVal, strafeVal)
 						.times(speed),
-				rotationVal, true, // field relative is
+				rotationVal * speed * speed, true, // field relative is
 									// always on
 				false);
 	}
