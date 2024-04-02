@@ -102,17 +102,19 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 				SwerveConstants.ANGULAR_AIMING_KI, SwerveConstants.ANGULAR_AIMING_KD,
 				SwerveConstants.ANGULAR_VELOCITY_CONSTRAINTS);
 
-		publisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", getPose().struct).publish();
+		publisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", getPose().struct)
+				.publish();
 		publisher.set(getPose());
 	}
 
 	private void configureAutoBuilder()
 	{
 		HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-				new PIDConstants(SwerveConstants.DRIVE_KP, SwerveConstants.DRIVE_KI, SwerveConstants.DRIVE_KD),
-				new PIDConstants(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI, SwerveConstants.ANGLE_KD),
-				SwerveConstants.MAX_SPEED, 
-				SwerveConstants.DRIVE_BASE_RADIUS_METERS,
+				new PIDConstants(SwerveConstants.DRIVE_KP, SwerveConstants.DRIVE_KI,
+						SwerveConstants.DRIVE_KD),
+				new PIDConstants(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI,
+						SwerveConstants.ANGLE_KD),
+				SwerveConstants.MAX_SPEED, SwerveConstants.DRIVE_BASE_RADIUS_METERS,
 				new ReplanningConfig());
 
 		BooleanSupplier isRedAlliance = () ->
@@ -189,7 +191,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 			speeds.omegaRadiansPerSecond = rotation;
 		}
 
-		speeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond);
+		speeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
+				-speeds.omegaRadiansPerSecond);
 
 		drive(speeds, false);
 	}
@@ -297,9 +300,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 			mod.periodic();
 
 			// SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder",
-			// 		mod.getCanCoder().getDegrees());
+			// mod.getCanCoder().getDegrees());
 			// SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated",
-			// 		mod.getPosition().angle.getDegrees());
+			// mod.getPosition().angle.getDegrees());
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity",
 					mod.mDriveMotor.getVelocity().getValueAsDouble());
 			SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Current",
@@ -342,8 +345,9 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	 */
 	public TeleopSwerveCommand getDefaultCommand(final Joystick Controller)
 	{
-		return getTeleopControlledRotationCommand(Controller, 
-			() -> Math.pow(MathUtil.applyDeadband(Controller.getTwist(), SwerveConstants.JOYSTICK_DEADBAND), 3));
+		return getTeleopControlledRotationCommand(Controller, () -> Math.pow(
+				MathUtil.applyDeadband(Controller.getTwist(), SwerveConstants.JOYSTICK_DEADBAND),
+				3));
 	}
 
 	public AutoAimSwerveCommand getAutoAimSwerveCommand(final double angle)
@@ -402,9 +406,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		final JoystickButton BumperRight = new JoystickButton(Controller,
 				LogitechControllerButtons.bumperRight);
 
-		return new TeleopSwerveCommand(this, 
-				() -> -Controller.getY(), 
-				() -> -Controller.getX(),
+		return new TeleopSwerveCommand(this, () -> -Controller.getY(), () -> -Controller.getX(),
 				Rotation, BumperRight::getAsBoolean);
 	}
 
@@ -430,21 +432,18 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		System.out.println("Current Chassis Angle: " + getYaw().getRadians());
 
 		double referenceAngle = optimizeAngle(getYaw().getRadians(), targetAngle);
-		
+
 		double desiredRotationalVelocity = -autoAimPidController.calculate(referenceAngle,
-			targetAngle);
+				targetAngle);
 
 		return desiredRotationalVelocity;
 	}
 
 	public double getRotationalVelocityToAngle(double angle)
 	{
-		angle = DriverStation.getAlliance().get() == Alliance.Blue ? angle : -angle;
-
 		double referenceAngle = optimizeAngle(getYaw().getRadians(), angle);
-		
-		double desiredRotationalVelocity = -autoAimPidController.calculate(referenceAngle,
-			angle);
+
+		double desiredRotationalVelocity = -autoAimPidController.calculate(referenceAngle, angle);
 
 		SmartDashboard.putNumber("Yaw", referenceAngle);
 		SmartDashboard.putNumber("Target Rotation", angle);
@@ -456,11 +455,11 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	{
 		while (referenceAngle > newAngle + Math.PI)
 		{
-			referenceAngle -= 2*Math.PI;
+			referenceAngle -= 2 * Math.PI;
 		}
 		while (referenceAngle < newAngle - Math.PI)
 		{
-			referenceAngle += 2*Math.PI;
+			referenceAngle += 2 * Math.PI;
 		}
 
 		return referenceAngle;
@@ -517,7 +516,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		Translation2d chassisVelocity = getVelocity().getTranslation();
 
 		// Calculate the estimated time for the note to reach the speaker
-		double noteFlightTime = ShooterMount.getNoteVelocityEstimateTreeMap().get(groundDistance);
+		double noteFlightTime = ShooterMount.getNoteFlightTimeEstimateTreeMap().get(groundDistance);
 
 		// Calculate shooter mount pose adjusted by velocity and time for note to reach
 		// speaker

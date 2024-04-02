@@ -8,15 +8,10 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterMountConstants;
 
@@ -39,7 +34,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 	/**
 	 * Key: distance to speaker in meters, Value: Note velocity in meters per second
 	 */
-	private InterpolatingDoubleTreeMap noteVelocityEstimateTreeMap;
+	private InterpolatingDoubleTreeMap noteFlightTimeEstimateTreeMap;
 
 	private Pigeon2 gyro;
 
@@ -82,22 +77,22 @@ public class ShooterMountSubsystem extends SubsystemBase
 		shooterMountMotorLeft.getConfigurator().apply(mainMotorConfigs);
 		shooterMountMotorRight.getConfigurator().apply(mainMotorConfigs);
 
-		shooterMountMinAngle = 1/360;
-		targetRotation = 1/360;
+		shooterMountMinAngle = 1 / 360;
+		targetRotation = 1 / 360;
 
 		// Populate tree maps
 		shooterMountAngleTreeMap = new InterpolatingDoubleTreeMap();
-		noteVelocityEstimateTreeMap = new InterpolatingDoubleTreeMap();
+		noteFlightTimeEstimateTreeMap = new InterpolatingDoubleTreeMap();
 		for (int i = 0; i < ShooterMountConstants.SpeakerDistanceTreeMapKeys.length; i++)
 		{
 			double key = ShooterMountConstants.SpeakerDistanceTreeMapKeys[i];
 			shooterMountAngleTreeMap.put(key,
 					ShooterMountConstants.ShooterMountAngleTreeMapValues[i]);
-			noteVelocityEstimateTreeMap.put(key,
-					ShooterMountConstants.NoteVelocityEstimateTreeMapValues[i]);
+			noteFlightTimeEstimateTreeMap.put(key,
+					ShooterMountConstants.NoteFlightTimeEstimateTreeMapValues[i]);
 		}
 
-		offset = gyro.getRoll().getValueAsDouble()/360;
+		offset = gyro.getRoll().getValueAsDouble() / 360;
 
 		motorControlRequest = new MotionMagicDutyCycle(offset);
 		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(offset));
@@ -108,7 +103,8 @@ public class ShooterMountSubsystem extends SubsystemBase
 				() -> targetRotation);
 		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min",
 				() -> shooterMountMinAngle);
-		RobotContainer.getShuffleboardTab().addDouble("Shooter Gyro", () -> (gyro.getRoll().getValueAsDouble()/360));
+		RobotContainer.getShuffleboardTab().addDouble("Shooter Gyro",
+				() -> (gyro.getRoll().getValueAsDouble() / 360));
 	}
 
 	@Override
@@ -130,16 +126,16 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public void setTargetRotation(double targetRotation)
 	{
 		System.out.println(targetRotation);
-		
+
 		this.targetRotation = Math.max(
 				Math.min(targetRotation, ShooterMountConstants.SHOOTER_MOUNT_MAX_ANGLE_OFFSET),
 				shooterMountMinAngle);
 		double gravityFeedForward = ShooterMountConstants.SHOOTER_MOUNT_KG
 				* Math.cos(ShooterMountConstants.SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS
-						+ Math.toRadians(this.targetRotation*360));
+						+ Math.toRadians(this.targetRotation * 360));
 
-		shooterMountMotorLeft.setControl(motorControlRequest.withPosition(this.targetRotation
-				+ offset).withFeedForward(gravityFeedForward));
+		shooterMountMotorLeft.setControl(motorControlRequest
+				.withPosition(this.targetRotation + offset).withFeedForward(gravityFeedForward));
 	}
 
 	/**
@@ -155,9 +151,9 @@ public class ShooterMountSubsystem extends SubsystemBase
 	 * @return A map where: Key: distance to speaker in meters, Value: Note velocity in meters per
 	 *         second
 	 */
-	public InterpolatingDoubleTreeMap getNoteVelocityEstimateTreeMap()
+	public InterpolatingDoubleTreeMap getNoteFlightTimeEstimateTreeMap()
 	{
-		return noteVelocityEstimateTreeMap;
+		return noteFlightTimeEstimateTreeMap;
 	}
 
 	public boolean isAtTargetRotation()

@@ -20,17 +20,19 @@ public class ShooterConstants
 
 	// Velocity in RPM
 	/**
-	 * Velocity for shooting at speaker in RPM
+	 * Velocity for shooting at speaker in RPS
 	 */
 	public static final double SHOOTER_SPEAKER_VELOCITY = -96;
 	/**
-	 * Velocity for shooting at amp in RPM
+	 * Velocity for shooting at amp in RPS
 	 */
 	public static final double SHOOTER_AMP_VELOCITY = -20;
 	/**
-	 * Velocity when not in use in RPM
+	 * Velocity when not in use in RPS
 	 */
 	public static final double SHOOTER_REST_VELOCITY = 0;
+
+	public static final double SHOOTER_PASSING_VELOCITY = -25;
 
 	public static final double SHOOTER_REVERSE_VELOCITY = 20;
 

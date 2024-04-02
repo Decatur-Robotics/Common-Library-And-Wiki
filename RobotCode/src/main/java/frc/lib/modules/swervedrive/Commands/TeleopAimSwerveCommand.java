@@ -8,7 +8,6 @@ import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * Rotates the chassis towards the speaker but allows the driver to control translation and strafe
@@ -47,16 +46,13 @@ public class TeleopAimSwerveCommand extends TeleopSwerveCommand
 			// Spin feeder motors
 			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
 		}
-		else if (!Indexer.hasNote())
-		{
-			Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
-		}
 	}
 
 	@Override
 	public void end(boolean interrupted)
 	{
 		Swerve.setRotationController(null);
+		Indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 	}
 
 }

@@ -23,6 +23,7 @@ import frc.lib.core.Autonomous;
 import frc.lib.core.LogitechControllerButtons;
 import frc.lib.core.SimpleAuto;
 import frc.robot.commands.AimShooterCommand;
+import frc.robot.commands.AmpCommand;
 import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.ClimberSpeedCommand;
 import frc.robot.commands.ClimberToPositionCommand;
@@ -113,13 +114,19 @@ public class RobotContainer {
 		final JoystickButton YButton = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.y);
 
+		// Swerve
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
+		// Aim to amp
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
-				-0.541));
+				-(Math.PI / 2.0)));
+		
+		// Aim to speaker
 		RightTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, 0));
 		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController,
 		// ShooterMountSubsystem, IndexerSubsystem));
+
+		// Zero chassis rotation
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
@@ -134,49 +141,46 @@ public class RobotContainer {
 				LogitechControllerButtons.bumperLeft);
 		final JoystickButton RightBumper = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.bumperRight);
-		final JoystickButton AButton = new JoystickButton(SecondaryController,
-				LogitechControllerButtons.a);
 		final JoystickButton BButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.b);
 		final JoystickButton XButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.x);
 		final JoystickButton YButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.y);
-		final JoystickButton UpButton = new JoystickButton(SecondaryController,
-				LogitechControllerButtons.up);
-		final JoystickButton DownButton = new JoystickButton(SecondaryController,
-				LogitechControllerButtons.down);
 
+		// Climb
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
+
+		// Shoot
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
-		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
-		// LeftBumper.whileTrue(new ClimberOverrideCommand(ClimberSubsystem));
+		// LeftTrigger.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
+
+		// Passing
+		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
-		AButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				ShooterMountConstants.SHOOTER_MOUNT_AMP_ANGLE_OFFSET));
+				ShooterMountConstants.SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET));
+
+		// Amp
+		RightBumper.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem, IndexerSubsystem));
+
+		// Outtake
 		BButton.whileTrue(
 				new IntakeReverseCommand(IntakeSubsystem, IndexerSubsystem, ShooterSubsystem));
+
+		// Intake
 		XButton.whileTrue(new IntakeCommand(IntakeSubsystem, IndexerSubsystem,
 				ShooterMountSubsystem, ShooterSubsystem, LedSubsystem));
+
+		// Override indexer
 		RightTrigger.whileTrue(new IndexerCommand(IndexerSubsystem));
-		RightBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
-				0));
+
+		// Zero shooter rotation
 		YButton.onTrue(new ZeroShooterMountCommand(ShooterMountSubsystem));
-		// YButton.whileTrue(new AimShooterCommand(ShooterSubsystem,
-		// ShooterMountSubsystem,
-		// SwerveDrive));
-		// UpButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// ClimberConstants.LEFT_CLIMBER_MAXIMUM,
-		// ClimberConstants.RIGHT_CLIMBER_MAXIMUM));
-		// DownButton.onTrue(new ClimberToPositionCommand(ClimberSubsystem,
-		// ClimberConstants.LEFT_CLIMBER_MINIMUM,
-		// ClimberConstants.RIGHT_CLIMBER_MINIMUM));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab() {

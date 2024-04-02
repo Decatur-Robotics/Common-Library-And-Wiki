@@ -1,19 +1,12 @@
 package frc.lib.modules.swervedrive.Commands;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
-import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.constants.VisionConstants;
-import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.ShooterMountSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.lib.core.ILogSource;
-import frc.lib.core.util.TeamCountdown;
 
 /**
  * Rotates the chassis towards the speaker. Intended to work with PathPlanner paths. Will end once
@@ -28,15 +21,13 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, double angle)
 	{
 		Swerve = swerve;
-		this.angle = angle;
+		this.angle = DriverStation.getAlliance().get() == Alliance.Blue ? angle : -angle;
 	}
 
 	@Override
 	public void initialize()
 	{
 		logInfo("Starting AutoAimSwerveCommand");
-
-		
 	}
 
 	@Override

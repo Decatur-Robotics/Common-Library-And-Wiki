@@ -3,24 +3,20 @@ package frc.robot.constants;
 public class ShooterMountConstants
 {
 
-	public static final double SHOOTER_MOUNT_GEAR_RATIO = (75 / 1) * (68 / 72);
-
 	/** Highest position the shooter mount target position can be set to in rotations */
-	public static final double SHOOTER_MOUNT_MAX_ANGLE_OFFSET = 90;
+	public static final double SHOOTER_MOUNT_MAX_ANGLE_OFFSET = 0.3;
 
 	/** Lowest position of the shooter in radians */
 	public static final double SHOOTER_MOUNT_MIN_ANGLE_IN_RADIANS = Math.toRadians(9.57);
 
-	/** Rotations of motor to full shooter arm rotation in radians */
-	public static final double MOTOR_ROTATIONS_IN_SHOOTER_RADIANS = SHOOTER_MOUNT_GEAR_RATIO * 2
-			* Math.PI;
-
 	/** Angle in rotations for shooting at amp */
-	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 0.1;
+	public static final double SHOOTER_MOUNT_INITIAL_AMP_ANGLE_OFFSET = 0.15;
+	public static final double SHOOTER_MOUNT_ENDING_AMP_ANGLE_OFFSET = 0.12;
 	/** Angle in rotations for shooting at speaker */
-	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 0.125; 
+	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 0.125;
 	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 0.066;
 	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 0.061;
+	public static final double SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET = 0.15;
 
 	public static final double SHOOTER_MOUNT_KP = 0.38;
 	public static final double SHOOTER_MOUNT_KI = 0;
@@ -36,7 +32,7 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_ACCELERATION = 2;
 
 	/** Tolerance for determining mount is within range to shoot in rotations */
-	public static final double AIMING_DEADBAND = 0.1;
+	public static final double AIMING_DEADBAND = 0.01;
 
 	/** Distance to speaker in meters */
 	public static final double[] SpeakerDistanceTreeMapKeys =
@@ -46,12 +42,12 @@ public class ShooterMountConstants
 	/** Rotation for aiming in rotations */
 	public static final double[] ShooterMountAngleTreeMapValues =
 	{
-			0, 1, 2
+			0.1, 0.1, 0.1
 	};
-	/** Note velocity in meters per second */
-	public static final double[] NoteVelocityEstimateTreeMapValues =
+	/** Note flight time in seconds */
+	public static final double[] NoteFlightTimeEstimateTreeMapValues =
 	{
-			1, 2, 3
+			0, 0, 0
 	};
 
 	public static final double POTENTIOMETER_ZERO_POSITION = 0.0806;
