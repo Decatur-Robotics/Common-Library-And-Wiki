@@ -1,7 +1,6 @@
 import frc.lib.core.ILogSource;
 
 import java.util.logging.Level;
-import org.junit.jupiter.api.Test;
 
 class LogTest implements ILogSource
 {

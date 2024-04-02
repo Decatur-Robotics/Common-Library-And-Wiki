@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 public class LedSubsystem extends SubsystemBase {
 
-	private AddressableLED led, led2;
+	private AddressableLED led;
 	private AddressableLEDBuffer buffer;
 
 	// Should be set when setAllPixels is called.

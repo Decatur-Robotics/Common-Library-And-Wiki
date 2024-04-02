@@ -26,8 +26,6 @@ public class IndexerSubsystem extends SubsystemBase
 
 	private DigitalInput beamBreak;
 
-	private boolean hasNote;
-
 	public IndexerSubsystem()
 	{
 		desiredIndexerVelocity = IndexerConstants.INDEXER_REST_VELOCITY;
@@ -60,8 +58,6 @@ public class IndexerSubsystem extends SubsystemBase
 
 		RobotContainer.getShuffleboardTab().addBoolean("Beam Break", 
 				() -> beamBreak.get());
-
-		hasNote = true;
 	}
 
 	@Override

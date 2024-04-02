@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.lib.core.util.TeamCountdown;
 import frc.lib.core.util.TeamMotorUtil;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -8,8 +7,6 @@ import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.FaultID;
@@ -18,7 +15,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
@@ -35,8 +31,6 @@ public class IntakeSubsystem extends SubsystemBase
 
 	private ProfiledPIDController intakeController;
 	private ArmFeedforward intakeFeedforward;
-
-	private boolean deploy;
 
 	public IntakeSubsystem()
 	{
@@ -76,8 +70,6 @@ public class IntakeSubsystem extends SubsystemBase
 
 		desiredRotation = IntakeConstants.INTAKE_RETRACTED_ROTATION;
 		desiredVelocity = IntakeConstants.INTAKE_REST_VELOCITY;
-
-		deploy = false;
 
 		RobotContainer.getShuffleboardTab().addDouble("Actual Intake Velocity",
 				() -> intakeRollerMotor.getEncoder().getVelocity());
@@ -121,10 +113,9 @@ public class IntakeSubsystem extends SubsystemBase
 	}
 
 	/** @param desiredRotation Ticks */
-	public void setDesiredRotation(double desiredRotation, boolean deploy)
+	public void setDesiredRotation(double desiredRotation)
 	{
 		this.desiredRotation = desiredRotation;
-		this.deploy = deploy;
 	}
 
 	/** @param desiredVelocity Ticks per second */

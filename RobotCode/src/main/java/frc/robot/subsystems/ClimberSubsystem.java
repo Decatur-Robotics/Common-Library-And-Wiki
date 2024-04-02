@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -20,10 +19,8 @@ public class ClimberSubsystem extends SubsystemBase
 	private TalonFX climberMotorRight;
 	private TalonFX climberMotorLeft;
 	private double leftTargetPosition, rightTargetPosition;
-	private MotionMagicDutyCycle motorControlRequestLeft, motorControlRequestRight;
 	private VelocityDutyCycle motorControlRequestLeftVelocity, motorControlRequestRightVelocity;
 	private boolean override;
-	private boolean isBalanced;
 
 	public double minimumPositionLeft, minimumPositionRight;
 
@@ -59,9 +56,6 @@ public class ClimberSubsystem extends SubsystemBase
 		// config the main motor
 		climberMotorLeft.getConfigurator().apply(motorConfigs);
 		climberMotorRight.getConfigurator().apply(motorConfigs);
-
-		motorControlRequestLeft = new MotionMagicDutyCycle(leftTargetPosition);
-		motorControlRequestRight = new MotionMagicDutyCycle(rightTargetPosition);
 
 		motorControlRequestLeftVelocity = new VelocityDutyCycle(0);
 		motorControlRequestRightVelocity = new VelocityDutyCycle(0);

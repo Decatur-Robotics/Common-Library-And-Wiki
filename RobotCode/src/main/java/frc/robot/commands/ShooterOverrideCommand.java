@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.lib.modules.leds.Color;
 import frc.robot.subsystems.LedSubsystem;
-import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;

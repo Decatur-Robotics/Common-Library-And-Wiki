@@ -6,7 +6,6 @@ import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.logging.Level;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;

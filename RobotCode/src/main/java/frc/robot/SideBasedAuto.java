@@ -43,8 +43,8 @@ public class SideBasedAuto extends Autonomous {
     private final SendableChooser<AutoMode> AutoModeChooser;
 	private final SendableChooser<AutoDirection> AutoDirectionChooser;
 
-    public SideBasedAuto(frc.robot.RobotContainer RobotContainer) {
-        super(RobotContainer);
+    public SideBasedAuto(frc.robot.RobotContainer robotContainer) {
+        super(robotContainer);
 
         SideChooser = new SendableChooser<>();
         SideChooser.setDefaultOption(Side.Amp.autoName, Side.Amp);

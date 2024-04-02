@@ -6,8 +6,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.pathplanner.lib.commands.FollowPathCommand;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,7 +14,6 @@ import frc.lib.core.ILogSource;
 import frc.lib.core.ModeBasedSubsystem;
 import frc.lib.core.util.CTREConfigs;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
-import frc.robot.constants.ShooterMountConstants;
 
 public class Robot extends TimedRobot implements ILogSource {
 

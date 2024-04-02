@@ -42,7 +42,7 @@ public class IntakeCommand extends Command {
 	public void initialize() {
 		state = State.FORWARD;
 
-		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION, true);
+		intake.setDesiredRotation(IntakeConstants.INTAKE_DEPLOYED_ROTATION);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_DEPLOYED_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_INTAKE_VELOCITY);
 		shooterMount.setTargetRotation(0);
@@ -52,7 +52,7 @@ public class IntakeCommand extends Command {
 	@Override
 	public void execute() {
 		if (indexer.hasNote() && state == State.FORWARD) {
-			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, false);
+			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
 			intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REVERSE_VELOCITY);
 			if (leds != null)
@@ -70,7 +70,7 @@ public class IntakeCommand extends Command {
 
 	@Override
 	public void end(boolean stop) {
-		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION, false);
+		intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
 		intake.setDesiredVelocity(IntakeConstants.INTAKE_REST_VELOCITY);
 		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
 	}

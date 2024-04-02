@@ -4,8 +4,6 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -16,27 +14,19 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.lib.modules.leds.Color;
-import frc.lib.modules.swervedrive.SwerveConstants;
 import frc.lib.modules.swervedrive.SwerveDriveSubsystem;
 import frc.lib.modules.swervedrive.Commands.ZeroGyroCommand;
 import frc.lib.core.Autonomous;
 import frc.lib.core.LogitechControllerButtons;
-import frc.lib.core.SimpleAuto;
-import frc.robot.commands.AimShooterCommand;
 import frc.robot.commands.AmpCommand;
-import frc.robot.commands.ClimberOverrideCommand;
 import frc.robot.commands.ClimberSpeedCommand;
-import frc.robot.commands.ClimberToPositionCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeReverseCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
 import frc.robot.commands.ZeroShooterMountCommand;
-import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.Constants;
-import frc.robot.constants.IndexerConstants;
-import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.ShooterMountConstants;
@@ -71,13 +61,16 @@ public class RobotContainer {
 
 	private final Pigeon2 gyro;
 
+	private final PowerDistribution pdh;
+
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
 		instance = this;
 
-		new PowerDistribution(26, ModuleType.kRev).setSwitchableChannel(true);
+		pdh = new PowerDistribution(26, ModuleType.kRev);
+		pdh.setSwitchableChannel(true);
 
 		ShuffleboardTab = Shuffleboard.getTab("Tab 1");
 
