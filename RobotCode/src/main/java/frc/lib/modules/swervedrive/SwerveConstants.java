@@ -26,7 +26,7 @@ import edu.wpi.first.math.util.Units;
 public final class SwerveConstants
 {
 
-	public static final double JOYSTICK_DEADBAND = 0.05;
+	public static final double JOYSTICK_DEADBAND = 0.1;
 
 	public static final class CanSparkMaxPeriodicRates
 	{
@@ -93,17 +93,17 @@ public final class SwerveConstants
 	public static final double CLOSED_LOOP_RAMP = 0.25;
 
 	/* Angle Motor PID Values */
-	public static final double ANGLE_KP = 0.05; // must find/double check all of these
+	public static final double ANGLE_KP = 0.15; // must find/double check all of these
 													// in sysid
 	public static final double ANGLE_KI = 0.0;
-	public static final double ANGLE_KD = 0.1;
+	public static final double ANGLE_KD = 0.05;
 	public static final double ANGLE_KF = 0.0;
 
 	/* Drive Motor PID Values */
-	public static final double DRIVE_KP = 0.03; //0.05; // TODO: This must be tuned to specific
+	public static final double DRIVE_KP = 0.03; // TODO: This must be tuned to specific
 												// robot
 	public static final double DRIVE_KI = 0.0;
-	public static final double DRIVE_KD = 0; //0.001;
+	public static final double DRIVE_KD = 0.001;
 
 	/*
 	 * Drive Motor Characterization Values Divide SYSID values by 12 to convert from volts to
@@ -113,7 +113,7 @@ public final class SwerveConstants
 														// specific
 														// robot
 	public static final double DRIVE_KV = 0.01;
-	public static final double DRIVE_KA = 0; //0.005;
+	public static final double DRIVE_KA = 0.0025;
 
 	/* Angle Motor Conversion Factors */
 	public static final double ANGLE_CONVERSION_FACTOR = 360.0 / ANGLE_GEAR_RATIO;

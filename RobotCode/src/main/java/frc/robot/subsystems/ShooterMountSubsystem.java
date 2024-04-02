@@ -100,7 +100,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 		RobotContainer.getShuffleboardTab().addDouble("Actual Shooter Mount Rotation",
 				() -> (shooterMountMotorLeft.getRotorPosition().getValueAsDouble()));
 		RobotContainer.getShuffleboardTab().addDouble("Desired Shooter Mount Rotation",
-				() -> targetRotation);
+				() -> targetRotation + offset);
 		RobotContainer.getShuffleboardTab().addDouble("Shooter Mount Min",
 				() -> shooterMountMinAngle);
 		RobotContainer.getShuffleboardTab().addDouble("Shooter Gyro",
@@ -159,7 +159,7 @@ public class ShooterMountSubsystem extends SubsystemBase
 	public boolean isAtTargetRotation()
 	{
 		return Math.abs((shooterMountMotorLeft.getRotorPosition().getValueAsDouble())
-				- targetRotation) < ShooterMountConstants.AIMING_DEADBAND;
+				- (targetRotation + offset)) < ShooterMountConstants.AIMING_DEADBAND;
 	}
 
 	public void zeroShooterMount()

@@ -255,6 +255,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 		System.out.println("Zeroing gyro");
 
 		gyro.setYaw(0); // Used to setYaw(0);
+		gyroOffset = 0;
 	}
 
 	public void setGyroOffset(double offset)
@@ -281,8 +282,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	@Override
 	public void periodic()
 	{
-		publisher.set(getPose());
-
 		// System.out.println(getPose().getX() + " " + getPose().getY());
 
 		swerveOdometry.update(getYaw(), getModulePositions());

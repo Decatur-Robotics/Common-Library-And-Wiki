@@ -160,7 +160,7 @@ public class RobotContainer
 
 		// Passing
 		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
+				LedSubsystem, ShooterConstants.SHOOTER_PASSING_VELOCITY, false));
 		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET));
 

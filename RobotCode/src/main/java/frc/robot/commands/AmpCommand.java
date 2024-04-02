@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.core.util.TeamCountdown;
 import frc.lib.modules.leds.Color;
 import frc.robot.constants.IndexerConstants;
 import frc.robot.constants.ShooterConstants;
@@ -20,6 +21,8 @@ public class AmpCommand extends Command
 
 	private boolean adjustReady;
 
+	private TeamCountdown startCountdown, finishCountdown;
+
 	public AmpCommand(ShooterMountSubsystem shooterMount, ShooterSubsystem shooter,
 			IndexerSubsystem indexer, LedSubsystem leds)
 	{
@@ -37,23 +40,32 @@ public class AmpCommand extends Command
 		shooterMount
 				.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_INITIAL_AMP_ANGLE_OFFSET);
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_AMP_VELOCITY);
-		indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_AMP_VELOCITY);
 
 		adjustReady = false;
+
+		startCountdown = new TeamCountdown(500);
+		finishCountdown = null;
 	}
 
 	@Override
 	public void execute()
 	{
-		if (!indexer.hasNote())
+		if (startCountdown != null && startCountdown.isDone())
 		{
-			adjustReady = true;
+			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_AMP_VELOCITY);
+			startCountdown = null;
 		}
 
-		if (indexer.hasNote() && adjustReady)
+		if (!indexer.hasNote())
+		{
+			finishCountdown = new TeamCountdown(0);
+		}
+
+		if (finishCountdown != null && finishCountdown.isDone())
 		{
 			shooterMount
 					.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_ENDING_AMP_ANGLE_OFFSET);
+			finishCountdown = null;
 		}
 	}
 

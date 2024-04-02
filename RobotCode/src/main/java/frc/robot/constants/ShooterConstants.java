@@ -6,14 +6,14 @@ package frc.robot.constants;
 public class ShooterConstants
 {
 
-	public static final double SHOOTER_KP = 0;
+	public static final double SHOOTER_KP = 0.02;
 	public static final double SHOOTER_KI = 0;
-	public static final double SHOOTER_KD = 0;
+	public static final double SHOOTER_KD = 0.0;
 	public static final double SHOOTER_KS = 0;
-	public static final double SHOOTER_KV = 0.0105;
+	public static final double SHOOTER_KV = 0.01;
 	public static final double SHOOTER_KA = 0;
 
-	public static final double SHOOTER_CRUISE_VELOCITY = 96;
+	public static final double SHOOTER_CRUISE_VELOCITY = 100;
 	public static final double SHOOTER_ACCELERATION = 200;
 
 	public static final double SHOOTER_VELOCITY_TOLERANCE = 20;
@@ -22,17 +22,17 @@ public class ShooterConstants
 	/**
 	 * Velocity for shooting at speaker in RPS
 	 */
-	public static final double SHOOTER_SPEAKER_VELOCITY = -96;
+	public static final double SHOOTER_SPEAKER_VELOCITY = -100;
 	/**
 	 * Velocity for shooting at amp in RPS
 	 */
-	public static final double SHOOTER_AMP_VELOCITY = -20;
+	public static final double SHOOTER_AMP_VELOCITY = -10;
 	/**
 	 * Velocity when not in use in RPS
 	 */
 	public static final double SHOOTER_REST_VELOCITY = 0;
 
-	public static final double SHOOTER_PASSING_VELOCITY = -25;
+	public static final double SHOOTER_PASSING_VELOCITY = -58;
 
 	public static final double SHOOTER_REVERSE_VELOCITY = 20;
 
