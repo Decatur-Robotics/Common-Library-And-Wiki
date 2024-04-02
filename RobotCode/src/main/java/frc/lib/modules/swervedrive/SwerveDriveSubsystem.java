@@ -211,9 +211,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	/** resets odometry (position on field) */
 	public void resetPose(Pose2d pose)
 	{
-		setGyro(pose.getRotation().getDegrees());
+		setGyro(DriverStation.getAlliance().get() == Alliance.Blue ? pose.getRotation().getDegrees() : 
+				-pose.getRotation().getDegrees() / 2);
 
 		swervePoseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
+
+		
 	}
 
 	/** @return array of a modules' states (angle, speed) for each one */
@@ -246,8 +249,8 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	public void setGyro(double degrees)
 	{
 		System.out.println("Setting gyro to " + degrees + "...");
-		gyroOffset = degrees - gyro.getYaw().getValueAsDouble();
-		zeroGyro();
+		gyroOffset = 0;
+		gyro.setYaw(degrees);
 	}
 
 	public void zeroGyro()
