@@ -19,8 +19,8 @@ public class ShooterMountConstants
 	public static final double SHOOTER_MOUNT_AMP_ANGLE_OFFSET = 0.1;
 	/** Angle in rotations for shooting at speaker */
 	public static final double SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET = 0.125; 
-	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 0.072;
-	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 0.063;
+	public static final double SHOOTER_MOUNT_NOTE_CENTER_ANGLE_FIXED_OFFSET = 0.066;
+	public static final double SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET = 0.061;
 
 	public static final double SHOOTER_MOUNT_KP = 0.38;
 	public static final double SHOOTER_MOUNT_KI = 0;

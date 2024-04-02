@@ -122,9 +122,9 @@ public class SwerveModule implements ILogSource
 
 	private void setAngle(SwerveModuleState desiredState)
 	{
-		// Prevent rotating module if speed is less then 1%. Prevents Jittering.
+		// Prevent rotating module if speed is less then 0.1%. Prevents Jittering.
 		Rotation2d angle = desiredState.angle;
-		if (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.01))
+		if (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.MAX_SPEED * 0.001))
 		{
 			angle = lastAngle;
 		}
