@@ -42,7 +42,8 @@ import frc.robot.subsystems.VisionSubsystem;
 /**
  * p The container for the robot. Contains subsystems, OI devices, and commands.
  */
-public class RobotContainer {
+public class RobotContainer
+{
 
 	private static RobotContainer instance;
 
@@ -66,7 +67,8 @@ public class RobotContainer {
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
-	public RobotContainer() {
+	public RobotContainer()
+	{
 		instance = this;
 
 		pdh = new PowerDistribution(26, ModuleType.kRev);
@@ -97,7 +99,8 @@ public class RobotContainer {
 		configureSecondaryBindings();
 	}
 
-	private void configurePrimaryBindings() {
+	private void configurePrimaryBindings()
+	{
 		final Joystick PrimaryController = new Joystick(0);
 
 		final JoystickButton LeftTrigger = new JoystickButton(PrimaryController,
@@ -111,11 +114,12 @@ public class RobotContainer {
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		// Aim to amp
-		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController,
-				-(Math.PI / 2.0)));
-		
+		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(
+				PrimaryController, -(Math.PI / 2.0)));
+
 		// Aim to speaker
-		RightTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, 0));
+		RightTrigger.whileTrue(
+				SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, 0));
 		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController,
 		// ShooterMountSubsystem, IndexerSubsystem));
 
@@ -123,7 +127,8 @@ public class RobotContainer {
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
 	}
 
-	private void configureSecondaryBindings() {
+	private void configureSecondaryBindings()
+	{
 		final Joystick SecondaryController = new Joystick(1);
 
 		final JoystickButton LeftTrigger = new JoystickButton(SecondaryController,
@@ -150,7 +155,8 @@ public class RobotContainer {
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_SPEAKER_ANGLE_FIXED_OFFSET));
-		// LeftTrigger.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem, SwerveDrive));
+		// LeftTrigger.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem,
+		// SwerveDrive));
 
 		// Passing
 		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
@@ -159,7 +165,8 @@ public class RobotContainer {
 				ShooterMountConstants.SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET));
 
 		// Amp
-		RightBumper.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem, IndexerSubsystem));
+		RightBumper.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem,
+				IndexerSubsystem, LedSubsystem));
 
 		// Outtake
 		BButton.whileTrue(
@@ -176,55 +183,65 @@ public class RobotContainer {
 		YButton.onTrue(new ZeroShooterMountCommand(ShooterMountSubsystem));
 	}
 
-	public static ShuffleboardTab getShuffleboardTab() {
+	public static ShuffleboardTab getShuffleboardTab()
+	{
 		return instance.ShuffleboardTab;
 	}
 
 	/**
-	 * @return the position of the speaker april tag for our alliance, or empty if
-	 *         the tag is not
+	 * @return the position of the speaker april tag for our alliance, or empty if the tag is not
 	 *         found
 	 */
-	public static Optional<Pose3d> getSpeakerPose() {
+	public static Optional<Pose3d> getSpeakerPose()
+	{
 		return Constants.AprilTagFieldLayout
 				.getTagPose(DriverStation.getAlliance().get() == Alliance.Blue
 						? VisionConstants.BLUE_SPEAKER_TAG_ID
 						: VisionConstants.RED_SPEAKER_TAG_ID);
 	}
 
-	public static Pigeon2 getGyro() {
+	public static Pigeon2 getGyro()
+	{
 		return instance.gyro;
 	}
 
-	public SwerveDriveSubsystem getSwerveDrive() {
+	public SwerveDriveSubsystem getSwerveDrive()
+	{
 		return SwerveDrive;
 	}
 
-	public ShooterSubsystem getShooter() {
+	public ShooterSubsystem getShooter()
+	{
 		return ShooterSubsystem;
 	}
 
-	public ShooterMountSubsystem getShooterMount() {
+	public ShooterMountSubsystem getShooterMount()
+	{
 		return ShooterMountSubsystem;
 	}
 
-	public VisionSubsystem getVision() {
+	public VisionSubsystem getVision()
+	{
 		return VisionSubsystem;
 	}
 
-	public IndexerSubsystem getIndexer() {
+	public IndexerSubsystem getIndexer()
+	{
 		return IndexerSubsystem;
 	}
 
-	public IntakeSubsystem getIntake() {
+	public IntakeSubsystem getIntake()
+	{
 		return IntakeSubsystem;
 	}
 
-	public LedSubsystem getLeds() {
+	public LedSubsystem getLeds()
+	{
 		return LedSubsystem;
 	}
 
-	public Autonomous getAutonomous() {
+	public Autonomous getAutonomous()
+	{
 
 		return Autonomous;
 	}

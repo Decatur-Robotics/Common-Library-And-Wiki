@@ -16,7 +16,7 @@ public class AutoShooterOverrideCommand extends Command {
     private ShooterSubsystem shooter;
     private IndexerSubsystem indexer;
     private LedSubsystem led;
-    private TeamCountdown countdown, otherCountdown;
+    private TeamCountdown countdown;
     private double targetRotation;
 
     public AutoShooterOverrideCommand(ShooterMountSubsystem shooterMount, ShooterSubsystem shooter,
@@ -34,7 +34,6 @@ public class AutoShooterOverrideCommand extends Command {
     public void initialize() {
         shooterMount
                 .setTargetRotation(targetRotation);
-        otherCountdown = new TeamCountdown(0);
 
         countdown = new TeamCountdown(1500);
     }
@@ -42,14 +41,11 @@ public class AutoShooterOverrideCommand extends Command {
     @Override
     public void execute() {
         // Spins up the motor
-        if (otherCountdown.isDone())
-            shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY);
+        shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_SPEAKER_VELOCITY);
 
         // If-statement to see if motor is spun up
         if (shooter.isUpToSpeed()) {
             indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_SHOOT_VELOCITY);
-            System.out.println("UP TO SPEED UP TO SPEED UP TO SPEED");
-            led.flashAllPixels(Color.Blue);
         }
     }
 
@@ -58,6 +54,7 @@ public class AutoShooterOverrideCommand extends Command {
         shooterMount.setTargetRotation(0);
         shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_REST_VELOCITY);
         indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_REST_VELOCITY);
+		led.flashAllPixels(Color.Blue);
     }
 
     @Override
