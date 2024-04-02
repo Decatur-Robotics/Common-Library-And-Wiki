@@ -12,8 +12,8 @@ import frc.robot.constants.VisionConstants;
 public class VisionSubsystem extends SubsystemBase
 {
 
-	// private final PhotonCamera Camera;
-	// private PhotonPoseEstimator robotPoseEstimator;
+	private final PhotonCamera Camera;
+	private PhotonPoseEstimator robotPoseEstimator;
 
 	private final SwerveDriveSubsystem Swerve;
 
@@ -21,19 +21,17 @@ public class VisionSubsystem extends SubsystemBase
 	{
 		Swerve = swerve;
 
-		// Camera = new PhotonCamera(VisionConstants.CAMERA_TABLE_NAME);
+		Camera = new PhotonCamera(VisionConstants.CAMERA_TABLE_NAME);
 
-		// robotPoseEstimator = new PhotonPoseEstimator(Constants.AprilTagFieldLayout,
-		// 		PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Camera,
-		// 		VisionConstants.ROBOT_TO_CAMERA_OFFSET);
+		robotPoseEstimator = new PhotonPoseEstimator(Constants.AprilTagFieldLayout,
+				PoseStrategy.LOWEST_AMBIGUITY, Camera,
+				VisionConstants.ROBOT_TO_CAMERA_OFFSET);
 	}
 
 	@Override
 	public void periodic()
 	{
-		// UNCOMMENT THIS IF WE GET VISION WORKING
-
-		// Swerve.updatePoseWithVision(robotPoseEstimator.update());
+		Swerve.updatePoseWithVision(robotPoseEstimator.update());
 	}
 
 }
