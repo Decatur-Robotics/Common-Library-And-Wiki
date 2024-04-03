@@ -19,8 +19,6 @@ public class AmpCommand extends Command
 	private ShooterMountSubsystem shooterMount;
 	private LedSubsystem leds;
 
-	private boolean adjustReady;
-
 	private TeamCountdown startCountdown, finishCountdown;
 
 	public AmpCommand(ShooterMountSubsystem shooterMount, ShooterSubsystem shooter,
@@ -40,8 +38,6 @@ public class AmpCommand extends Command
 		shooterMount
 				.setTargetRotation(ShooterMountConstants.SHOOTER_MOUNT_INITIAL_AMP_ANGLE_OFFSET);
 		shooter.setShooterMotorVelocity(ShooterConstants.SHOOTER_AMP_VELOCITY);
-
-		adjustReady = false;
 
 		startCountdown = new TeamCountdown(500);
 		finishCountdown = null;
