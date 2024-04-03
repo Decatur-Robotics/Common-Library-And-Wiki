@@ -25,7 +25,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -58,8 +57,6 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	private Optional<DoubleSupplier> rotationController;
 
 	private ProfiledPIDController autoAimPidController;
-
-	private StructPublisher<Pose2d> publisher;
 
 	public SwerveDriveSubsystem()
 	{
