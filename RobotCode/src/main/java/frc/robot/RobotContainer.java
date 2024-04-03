@@ -137,20 +137,22 @@ public class RobotContainer
 				LogitechControllerButtons.triggerRight);
 		final JoystickButton LeftBumper = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.bumperLeft);
-		final JoystickButton RightBumper = new JoystickButton(SecondaryController,
-				LogitechControllerButtons.bumperRight);
+		final JoystickButton AButton = new JoystickButton(SecondaryController, 
+				LogitechControllerButtons.a);
 		final JoystickButton BButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.b);
 		final JoystickButton XButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.x);
 		final JoystickButton YButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.y);
+		final JoystickButton LeftButton = new JoystickButton(SecondaryController,
+				LogitechControllerButtons.left);
 
 		// Climb
 		ClimberSubsystem.setDefaultCommand(new ClimberSpeedCommand(ClimberSubsystem,
 				() -> (SecondaryController.getY()), () -> (SecondaryController.getThrottle())));
 
-		// Shoot
+		// Shoot subwoofer
 		LeftTrigger.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftTrigger.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
@@ -158,14 +160,20 @@ public class RobotContainer
 		// LeftTrigger.whileTrue(new AimShooterCommand(ShooterSubsystem, ShooterMountSubsystem,
 		// SwerveDrive));
 
-		// Passing
+		// Shoot podium
 		LeftBumper.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
-				LedSubsystem, ShooterConstants.SHOOTER_PASSING_VELOCITY, false));
+				LedSubsystem, ShooterConstants.SHOOTER_SPEAKER_VELOCITY, false));
 		LeftBumper.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+				ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
+
+		// Passing
+		LeftButton.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+				LedSubsystem, ShooterConstants.SHOOTER_PASSING_VELOCITY, false));
+		LeftButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET));
 
 		// Amp
-		RightBumper.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem,
+		AButton.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem,
 				IndexerSubsystem, LedSubsystem));
 
 		// Outtake
