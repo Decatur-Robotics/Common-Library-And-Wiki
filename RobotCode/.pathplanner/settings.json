@@ -3,6 +3,7 @@
   "robotLength": 0.70115,
   "holonomicMode": true,
   "pathFolders": [
+    "Disrupt",
     "Notes",
     "Subwoofer Amp",
     "Subwoofer Center",

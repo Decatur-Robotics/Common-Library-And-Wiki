@@ -26,7 +26,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Disrupt"
+            "pathName": "Disrupt 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Disrupt 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Disrupt 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Disrupt 4"
           }
         }
       ]
