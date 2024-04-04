@@ -50,11 +50,7 @@ public class AmpCommand extends Command
 		{
 			indexer.setIndexerMotorVelocity(IndexerConstants.INDEXER_AMP_VELOCITY);
 			startCountdown = null;
-		}
-
-		if (!indexer.hasNote())
-		{
-			finishCountdown = new TeamCountdown(0);
+			finishCountdown = new TeamCountdown(60);
 		}
 
 		if (finishCountdown != null && finishCountdown.isDone())
