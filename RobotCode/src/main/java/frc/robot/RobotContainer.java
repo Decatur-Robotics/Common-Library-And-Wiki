@@ -25,7 +25,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeReverseCommand;
 import frc.robot.commands.RotateShooterMountToPositionCommand;
 import frc.robot.commands.ShooterOverrideCommand;
-import frc.robot.commands.ZeroShooterMountCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.ShooterConstants;
@@ -149,8 +148,6 @@ public class RobotContainer
 				LogitechControllerButtons.b);
 		final JoystickButton XButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.x);
-		final JoystickButton YButton = new JoystickButton(SecondaryController,
-				LogitechControllerButtons.y);
 		final JoystickButton LeftButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.left);
 
@@ -192,9 +189,6 @@ public class RobotContainer
 
 		// Override indexer
 		RightTrigger.whileTrue(new IndexerCommand(IndexerSubsystem));
-
-		// Zero shooter rotation
-		YButton.onTrue(new ZeroShooterMountCommand(ShooterMountSubsystem));
 	}
 
 	public static ShuffleboardTab getShuffleboardTab()
