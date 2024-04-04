@@ -59,6 +59,8 @@ public class SideBasedAuto extends Autonomous {
         AutoModeChooser.addOption(AutoMode.TwoNote.autoName, AutoMode.TwoNote);
         AutoModeChooser.addOption(AutoMode.ThreeNote.autoName, AutoMode.ThreeNote);
         AutoModeChooser.addOption(AutoMode.FourNote.autoName, AutoMode.FourNote);
+        AutoModeChooser.addOption(AutoMode.SubwooferDisrupt.autoName, AutoMode.SubwooferDisrupt);
+        AutoModeChooser.addOption(AutoMode.SourceDisrupt.autoName, AutoMode.SourceDisrupt);
 
 		AutoDirectionChooser = new SendableChooser<>();
 		AutoDirectionChooser.setDefaultOption(AutoDirection.AmpDirection.autoName, AutoDirection.AmpDirection);
