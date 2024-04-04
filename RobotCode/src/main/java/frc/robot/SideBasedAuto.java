@@ -20,7 +20,8 @@ public class SideBasedAuto extends Autonomous {
 
     private enum AutoMode {
         DriveBackwards("Drive Backwards"), OneNote("1 Note"), TwoNote("2 Note"),
-        ThreeNote("3 Note"), FourNote("4 Note");
+        ThreeNote("3 Note"), FourNote("4 Note"), SubwooferDisrupt("Subwoofer Disrupt"),
+        SourceDisrupt("Source Disrupt");
 
         private final String autoName;
 
@@ -81,6 +82,11 @@ public class SideBasedAuto extends Autonomous {
 		{
 			autoName += " " + autoDirection.autoName;
 		}
+
+        if (autoMode.autoName.equals("Subwoofer Disrupt") || autoMode.autoName.equals("Source Disrupt"))
+        {
+            autoName = autoMode.autoName;
+        }
 
         return Optional.of(getPathPlannerAuto(autoName));
     }
