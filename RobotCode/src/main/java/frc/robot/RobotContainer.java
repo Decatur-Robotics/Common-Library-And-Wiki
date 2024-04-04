@@ -107,6 +107,8 @@ public class RobotContainer
 				LogitechControllerButtons.triggerLeft);
 		final JoystickButton RightTrigger = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.triggerRight);
+		final JoystickButton RightBumper = new JoystickButton(PrimaryController,
+				LogitechControllerButtons.bumperRight);
 		final JoystickButton YButton = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.y);
 
@@ -117,11 +119,15 @@ public class RobotContainer
 		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(
 				PrimaryController, -(Math.PI / 2.0)));
 
-		// Aim to speaker
+		// Aim to speaker subwoofer
 		RightTrigger.whileTrue(
 				SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, 0));
 		// RightTrigger.whileTrue(SwerveDrive.getTeleopAimCommand(PrimaryController,
-		// ShooterMountSubsystem, IndexerSubsystem));
+		// ShooterMountSubsystem, IndexerSubsystem))
+
+		// Aim to speaker podium
+		RightBumper.whileTrue(
+				SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, -0.5));
 
 		// Zero chassis rotation
 		YButton.onTrue(new ZeroGyroCommand(SwerveDrive));
@@ -137,7 +143,7 @@ public class RobotContainer
 				LogitechControllerButtons.triggerRight);
 		final JoystickButton LeftBumper = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.bumperLeft);
-		final JoystickButton AButton = new JoystickButton(SecondaryController, 
+		final JoystickButton AButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.a);
 		final JoystickButton BButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.b);
@@ -173,8 +179,8 @@ public class RobotContainer
 				ShooterMountConstants.SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET));
 
 		// Amp
-		AButton.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem,
-				IndexerSubsystem, LedSubsystem));
+		AButton.whileTrue(new AmpCommand(ShooterMountSubsystem, ShooterSubsystem, IndexerSubsystem,
+				LedSubsystem));
 
 		// Outtake
 		BButton.whileTrue(
