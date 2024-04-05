@@ -9,6 +9,8 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -49,6 +51,12 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 		double translationVal = Math.pow(MathUtil.applyDeadband(translationSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
 		double strafeVal = Math.pow(MathUtil.applyDeadband(strafeSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
 		double rotationVal = rotationSup.getAsDouble();
+
+		if (DriverStation.getAlliance().get() == Alliance.Red)
+		{
+			translationVal *= -1;
+			strafeVal *= -1;
+		}
 
 		SmartDashboard.putNumber("Swerve Speed", speed);
 

@@ -148,6 +148,8 @@ public class RobotContainer
 				LogitechControllerButtons.b);
 		final JoystickButton XButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.x);
+		final JoystickButton YButton = new JoystickButton(SecondaryController, 
+				LogitechControllerButtons.y);
 		final JoystickButton LeftButton = new JoystickButton(SecondaryController,
 				LogitechControllerButtons.left);
 
@@ -170,9 +172,9 @@ public class RobotContainer
 				ShooterMountConstants.SHOOTER_MOUNT_PODIUM_ANGLE_FIXED_OFFSET));
 
 		// Passing
-		LeftButton.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
+		YButton.whileTrue(new ShooterOverrideCommand(ShooterSubsystem, IndexerSubsystem,
 				LedSubsystem, ShooterConstants.SHOOTER_PASSING_VELOCITY, false));
-		LeftButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
+		YButton.whileTrue(new RotateShooterMountToPositionCommand(ShooterMountSubsystem,
 				ShooterMountConstants.SHOOTER_MOUNT_PASSING_ANGLE_FIXED_OFFSET));
 
 		// Amp
