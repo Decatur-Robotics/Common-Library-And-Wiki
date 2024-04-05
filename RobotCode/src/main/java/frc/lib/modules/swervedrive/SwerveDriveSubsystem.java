@@ -210,7 +210,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 	{
 		setGyro(pose.getRotation().getDegrees());
 
-		swervePoseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
+		swervePoseEstimator.resetPosition(pose.getRotation(), getModulePositions(), pose);
 	}
 
 	/** @return array of a modules' states (angle, speed) for each one */
@@ -368,7 +368,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 				LogitechControllerButtons.bumperRight);
 
 		desiredRotation = DriverStation.getAlliance().get() == Alliance.Blue ? desiredRotation
-				: -desiredRotation;
+				: (Math.PI / 2) + ((Math.PI / 2) - desiredRotation);
 
 		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(),
 				() -> -Controller.getX(), BumperRight::getAsBoolean, desiredRotation);

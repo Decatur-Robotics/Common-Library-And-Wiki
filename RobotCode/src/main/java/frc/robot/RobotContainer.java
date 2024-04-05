@@ -106,8 +106,8 @@ public class RobotContainer
 				LogitechControllerButtons.triggerLeft);
 		final JoystickButton RightTrigger = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.triggerRight);
-		final JoystickButton RightBumper = new JoystickButton(PrimaryController,
-				LogitechControllerButtons.bumperRight);
+		final JoystickButton LeftBumper = new JoystickButton(PrimaryController,
+				LogitechControllerButtons.bumperLeft);
 		final JoystickButton YButton = new JoystickButton(PrimaryController,
 				LogitechControllerButtons.y);
 
@@ -115,7 +115,7 @@ public class RobotContainer
 		SwerveDrive.setDefaultCommand(SwerveDrive.getDefaultCommand(PrimaryController));
 
 		// Aim to amp
-		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(
+		LeftTrigger.whileTrue(SwerveDrive.getTeleopAimToPositionCommand(
 				PrimaryController, -(Math.PI / 2.0)));
 
 		// Aim to speaker subwoofer
@@ -125,7 +125,7 @@ public class RobotContainer
 		// ShooterMountSubsystem, IndexerSubsystem))
 
 		// Aim to speaker podium
-		RightBumper.whileTrue(
+		LeftBumper.whileTrue(
 				SwerveDrive.getTeleopAimToPositionAllianceRelativeCommand(PrimaryController, -0.5));
 
 		// Zero chassis rotation

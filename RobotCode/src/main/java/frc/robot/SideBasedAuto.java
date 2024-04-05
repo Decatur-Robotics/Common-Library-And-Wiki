@@ -19,6 +19,7 @@ public class SideBasedAuto extends Autonomous {
     }
 
     private enum AutoMode {
+        OnlyShoot("Only Shoot"),
         DriveBackwards("Drive Backwards"), OneNote("1 Note"), TwoNote("2 Note"),
         ThreeNote("3 Note"), FourNote("4 Note"), SubwooferDisrupt("Subwoofer Disrupt"),
         SourceDisrupt("Source Disrupt");
@@ -55,6 +56,7 @@ public class SideBasedAuto extends Autonomous {
 
         AutoModeChooser = new SendableChooser<>();
         AutoModeChooser.setDefaultOption(AutoMode.OneNote.autoName, AutoMode.OneNote);
+        AutoModeChooser.addOption(AutoMode.OnlyShoot.autoName, AutoMode.OnlyShoot);
         AutoModeChooser.addOption(AutoMode.OneNote.autoName, AutoMode.OneNote);
         AutoModeChooser.addOption(AutoMode.TwoNote.autoName, AutoMode.TwoNote);
         AutoModeChooser.addOption(AutoMode.ThreeNote.autoName, AutoMode.ThreeNote);
