@@ -32,7 +32,7 @@ public class ShooterConstants
 	 */
 	public static final double SHOOTER_REST_VELOCITY = 0;
 
-	public static final double SHOOTER_PASSING_VELOCITY = -58;
+	public static final double SHOOTER_PASSING_VELOCITY = -60; //-58;
 
 	public static final double SHOOTER_REVERSE_VELOCITY = 20;
 
