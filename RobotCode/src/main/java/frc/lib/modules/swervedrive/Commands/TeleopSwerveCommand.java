@@ -48,8 +48,12 @@ public class TeleopSwerveCommand extends Command implements ILogSource
 		double speed = getSpeed();
 
 		/* Get Values, Deadband */
-		double translationVal = Math.pow(MathUtil.applyDeadband(translationSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
-		double strafeVal = Math.pow(MathUtil.applyDeadband(strafeSup.getAsDouble(), SwerveConstants.JOYSTICK_DEADBAND), 3);
+		double translationVal = Math.pow(MathUtil.applyDeadband(
+				translationSup.getAsDouble() / Math.sqrt(Math.pow(translationSup.getAsDouble(), 2) + Math.pow(strafeSup.getAsDouble(), 2)), 
+				SwerveConstants.JOYSTICK_DEADBAND), 3);
+		double strafeVal = Math.pow(MathUtil.applyDeadband(
+				strafeSup.getAsDouble() / Math.sqrt(Math.pow(translationSup.getAsDouble(), 2) + Math.pow(strafeSup.getAsDouble(), 2)), 
+				SwerveConstants.JOYSTICK_DEADBAND), 3);
 		double rotationVal = rotationSup.getAsDouble();
 
 		if (DriverStation.getAlliance().get() == Alliance.Red)
