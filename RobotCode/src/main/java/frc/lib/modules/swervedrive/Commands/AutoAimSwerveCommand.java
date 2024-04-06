@@ -21,7 +21,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	public AutoAimSwerveCommand(SwerveDriveSubsystem swerve, double angle)
 	{
 		Swerve = swerve;
-		this.angle = DriverStation.getAlliance().get() == Alliance.Blue ? angle : -angle;
+		this.angle = angle;
 	}
 
 	@Override
@@ -33,6 +33,7 @@ public class AutoAimSwerveCommand extends Command implements ILogSource
 	@Override
 	public void execute()
 	{
+		System.out.println(angle);
 		Swerve.drive(new Translation2d(), Swerve.getRotationalVelocityToAngle(angle) * 3.7 * 3.7, true, false);
 	}
 

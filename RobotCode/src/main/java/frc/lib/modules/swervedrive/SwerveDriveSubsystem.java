@@ -340,9 +340,12 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 				3));
 	}
 
-	public AutoAimSwerveCommand getAutoAimSwerveCommand(final double angle)
+	public AutoAimSwerveCommand getAutoAimSwerveCommand(double angle)
 	{
-		return new AutoAimSwerveCommand(this, angle);
+		double newAngle = DriverStation.getAlliance().get() == Alliance.Blue ? angle
+				: 3.14 - angle;
+
+		return new AutoAimSwerveCommand(this, newAngle);
 	}
 
 	/**
@@ -368,7 +371,7 @@ public class SwerveDriveSubsystem extends SubsystemBase implements ILogSource
 				LogitechControllerButtons.bumperRight);
 
 		desiredRotation = DriverStation.getAlliance().get() == Alliance.Blue ? desiredRotation
-				: (Math.PI / 2) + ((Math.PI / 2) - desiredRotation);
+				: Math.PI - desiredRotation;
 
 		return new TeleopAimSwerveToPositionCommand(this, () -> -Controller.getY(),
 				() -> -Controller.getX(), BumperRight::getAsBoolean, desiredRotation);
