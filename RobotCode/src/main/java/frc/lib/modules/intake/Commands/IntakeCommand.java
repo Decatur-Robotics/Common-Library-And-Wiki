@@ -1,12 +1,12 @@
-package frc.robot.commands;
+package frc.lib.modules.intake.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.core.util.TeamCountdown;
 import frc.lib.modules.leds.Color;
 import frc.robot.constants.IndexerConstants;
-import frc.robot.constants.IntakeConstants;
+import frc.lib.modules.intake.IntakeConstants;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.lib.modules.intake.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterMountSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -50,6 +50,7 @@ public class IntakeCommand extends Command {
 	}
 
 	@Override
+	//notes were the game pieces of 2024 season
 	public void execute() {
 		if (indexer.hasNote() && state == State.FORWARD) {
 			intake.setDesiredRotation(IntakeConstants.INTAKE_RETRACTED_ROTATION);
