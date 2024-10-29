@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.opencv.core.Mat;
-
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
@@ -9,14 +7,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamTalonFX;
+import frc.robot.RobotContainer;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Ports;
 
-public class ArmSubsytem extends SubsystemBase
-{
+public class ArmSubsytem extends SubsystemBase {
 	private TalonFX armMotorLower, armMotorUpper;
 	private double armLowerMinAngle, armUpperMinAngle;
 	private double targetAngleLower, targetAngleUpper;
+
 
 	private double offset = 0;
 
@@ -27,6 +26,8 @@ public class ArmSubsytem extends SubsystemBase
 
 		armMotorLower = new TalonFX(Ports.ARM_LOWER_MOTOR);
 		armMotorUpper = new TalonFX(Ports.ARM_UPPER_MOTOR);
+
+	
 
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
 
@@ -62,6 +63,22 @@ public class ArmSubsytem extends SubsystemBase
 
 		motorControlRequest = new MotionMagicDutyCycle(offset);
 
+		RobotContainer.getShuffleboardTab().add("Actual Arm Mount Lower Rotation", armMotorLower.getRotorPosition().getValueAsDouble());
+		RobotContainer.getShuffleboardTab().add("ActualArm Mount Upper Rotation", armMotorUpper.getRotorPosition().getValueAsDouble());
+		RobotContainer.getShuffleboardTab().add("Target Arm Mount Lower Rotation", targetAngleLower + offset);
+		RobotContainer.getShuffleboardTab().add("Target Arm Mount Upper Rotation", targetAngleUpper + offset);
+		
+
+	}
+
+	public void periodic(){
+		if(armMotorLower.hasResetOccurred()||armMotorUpper.hasResetOccurred()){
+			armMotorLower.optimizeBusUtilization();
+			armMotorUpper.optimizeBusUtilization();
+			
+			armMotorLower.getRotorPosition().setUpdateFrequency(20);
+			armMotorUpper.getRotorPosition().setUpdateFrequency(20);
+		}
 	}
 
 	public void setLowerTargetRotation(double targetAngleLower)
@@ -71,7 +88,7 @@ public class ArmSubsytem extends SubsystemBase
 				armLowerMinAngle);
 
 		double gravityFeedForward = Math
-				.cos(ArmConstants.ARM_MIN_ANGLE_RADIANS + Math.toRadians(targetAngleLower * 360))
+				.cos(ArmConstants.ARM_LOWER_MIN_ANGLE_RADIANS + Math.toRadians(targetAngleLower * 360))
 				* ArmConstants.ARM_LOWER_KG;
 
 		armMotorLower.setControl(motorControlRequest.withPosition(targetAngleLower + offset)
@@ -86,11 +103,29 @@ public class ArmSubsytem extends SubsystemBase
 				armUpperMinAngle);
 
 		double gravityFeedForward = Math
-				.cos(ArmConstants.ARM_MIN_ANGLE_RADIANS + Math.toRadians(targetAngleUpper * 360))
+				.cos(ArmConstants.ARM_UPPER_MIN_ANGLE_RADIANS + Math.toRadians(targetAngleUpper * 360))
 				* ArmConstants.ARM_UPPER_KG;
 
 		armMotorUpper.setControl(motorControlRequest.withPosition(targetAngleUpper + offset)
 				.withFeedForward(gravityFeedForward));
 
+	}
+
+	public boolean isLowerAtTarget()
+	{
+		if (Math.abs(armMotorLower.getRotorPosition().getValueAsDouble() - (targetAngleLower + offset)) < ArmConstants.ARM_DEADBAND)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isUpperAtTarget()
+	{
+		if (Math.abs(armMotorUpper.getRotorPosition().getValueAsDouble() - (targetAngleUpper + offset)) < ArmConstants.ARM_DEADBAND)
+		{
+			return true;
+		}
+		return false;
 	}
 }
