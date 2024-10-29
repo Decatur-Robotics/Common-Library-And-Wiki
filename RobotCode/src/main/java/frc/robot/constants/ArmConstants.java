@@ -34,5 +34,6 @@ public class ArmConstants
     public static final double ARM_LOWER_SHELF_POSITION_MIDDLE = 0;
     public static final double ARM_UPPER_SHELF_POSITION_LOWER = 6;
     public static final double ARM_LOWER_SHELF_POSITION_LOWER = 0;
+	public static final String ARM_INITAL_POSITION = null;
 	
 }
