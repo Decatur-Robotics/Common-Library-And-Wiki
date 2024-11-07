@@ -35,13 +35,13 @@ public class ArmSubsytem extends SubsystemBase {
 
 		// PIDs
 		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
-		pidSlot0Configs.kP = ArmConstants.ARM_LOWER_KP;
-		pidSlot0Configs.kI = ArmConstants.ARM_LOWER_KI;
-		pidSlot0Configs.kD = ArmConstants.ARM_LOWER_KD;
-		pidSlot0Configs.kS = ArmConstants.ARM_LOWER_KS;
-		pidSlot0Configs.kV = ArmConstants.ARM_LOWER_KV;
-		pidSlot0Configs.kA = ArmConstants.ARM_LOWER_KA;
-		pidSlot0Configs.kG = ArmConstants.ARM_LOWER_KG;
+		pidSlot0Configs.kP = ArmConstants.ARM_KP;
+		pidSlot0Configs.kI = ArmConstants.ARM_KI;
+		pidSlot0Configs.kD = ArmConstants.ARM_KD;
+		pidSlot0Configs.kS = ArmConstants.ARM_KS;
+		pidSlot0Configs.kV = ArmConstants.ARM_KV;
+		pidSlot0Configs.kA = ArmConstants.ARM_KA;
+		pidSlot0Configs.kG = ArmConstants.ARM_KG;
 
 		armMotorRight.getConfigurator().apply(mainMotorConfigs);
 		armMotorLeft.getConfigurator().apply(mainMotorConfigs);
@@ -75,8 +75,8 @@ public class ArmSubsytem extends SubsystemBase {
 				armLeftMinAngle);
 
 		double gravityFeedForward = Math
-				.cos(ArmConstants.ARM_LOWER_MIN_ANGLE_RADIANS + Math.toRadians(targetAngle * 360))
-				* ArmConstants.ARM_LOWER_KG;
+				.cos(ArmConstants.ARM_MIN_ANGLE_RADIANS + Math.toRadians(targetAngle * 360))
+				* ArmConstants.ARM_KG;
 
 		armMotorLeft.setControl(motorControlRequest.withPosition(targetAngle)
 				.withFeedForward(gravityFeedForward));
