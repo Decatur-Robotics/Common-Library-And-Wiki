@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import org.w3c.dom.views.DocumentView;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsytem;
@@ -19,7 +17,7 @@ public class ArmCommand extends Command
 		addRequirements(armLeft);
 	
 	}
-	
+
 	public void initialize(ArmSubsytem arm, double targetAngleLower, double targetAngleUpper){
 		armLeft.setTargetRotation(targetAngleLower);
 	}
