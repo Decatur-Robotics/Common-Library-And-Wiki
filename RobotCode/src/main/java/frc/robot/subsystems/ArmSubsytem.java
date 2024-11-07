@@ -17,9 +17,6 @@ public class ArmSubsytem extends SubsystemBase {
 	private double armRightMinAngle, armLeftMinAngle;
 	private double targetAngleLower, targetAngle;
 
-
-	private double offset = 0;
-
 	private MotionMagicDutyCycle motorControlRequest;
 
 	public ArmSubsytem()
@@ -61,12 +58,12 @@ public class ArmSubsytem extends SubsystemBase {
 
 		targetAngle = 1;
 
-		motorControlRequest = new MotionMagicDutyCycle(offset);
+	
 
 		RobotContainer.getShuffleboardTab().add("Actual Arm Mount Lower Rotation", armMotorRight.getRotorPosition().getValueAsDouble());
 		RobotContainer.getShuffleboardTab().add("ActualArm Mount Upper Rotation", armMotorLeft.getRotorPosition().getValueAsDouble());
-		RobotContainer.getShuffleboardTab().add("Target Arm Mount Lower Rotation", targetAngleLower + offset);
-		RobotContainer.getShuffleboardTab().add("Target Arm Mount Upper Rotation", targetAngle + offset);
+		RobotContainer.getShuffleboardTab().add("Target Arm Mount Lower Rotation", targetAngleLower);
+		RobotContainer.getShuffleboardTab().add("Target Arm Mount Upper Rotation", targetAngle);
 		
 
 	}
@@ -83,21 +80,21 @@ public class ArmSubsytem extends SubsystemBase {
 	public void setTargetRotation(double targetAngle)
 	{
 		targetAngle = Math.max(
-				Math.min(targetAngle, ArmConstants.ARM_LOWER_MAX_ANGLE_OFFSET),
+				Math.min(targetAngle, 0),
 				armRightMinAngle);
 
 		double gravityFeedForward = Math
 				.cos(ArmConstants.ARM_LOWER_MIN_ANGLE_RADIANS + Math.toRadians(targetAngle * 360))
 				* ArmConstants.ARM_LOWER_KG;
 
-		armMotorLeft.setControl(motorControlRequest.withPosition(targetAngle + offset)
+		armMotorLeft.setControl(motorControlRequest.withPosition(targetAngle)
 				.withFeedForward(gravityFeedForward));
 
 	}
 
 	public boolean isAtTarget()
 	{
-		if (Math.abs(armMotorLeft.getRotorPosition().getValueAsDouble() - (targetAngleLower + offset)) < ArmConstants.ARM_DEADBAND)
+		if (Math.abs(armMotorLeft.getRotorPosition().getValueAsDouble() - (targetAngleLower)) < ArmConstants.ARM_DEADBAND)
 		{
 			return true;
 		}
