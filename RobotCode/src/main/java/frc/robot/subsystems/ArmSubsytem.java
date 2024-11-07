@@ -26,7 +26,7 @@ public class ArmSubsytem extends SubsystemBase {
 		armMotorLeft = new TalonFX(Ports.ARM_UPPER_MOTOR);
 
 		armMotorRight.setControl(new Follower(armMotorLeft.getDeviceID(), true));
-		armMotorRight.setInverted(true);
+
 
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
 
