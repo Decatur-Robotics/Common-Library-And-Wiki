@@ -14,8 +14,8 @@ import frc.robot.constants.Ports;
 
 public class ArmSubsytem extends SubsystemBase {
 	private TalonFX armMotorRight, armMotorLeft;
-	private double armRightMinAngle, armLeftMinAngle;
-	private double targetAngleLower, targetAngle;
+	private double armLeftMinAngle;
+	private double targetAngle;
 
 	private MotionMagicDutyCycle motorControlRequest;
 
@@ -43,14 +43,6 @@ public class ArmSubsytem extends SubsystemBase {
 		pidSlot0Configs.kA = ArmConstants.ARM_LOWER_KA;
 		pidSlot0Configs.kG = ArmConstants.ARM_LOWER_KG;
 
-		pidSlot0Configs.kP = ArmConstants.ARM_UPPER_KP;
-		pidSlot0Configs.kI = ArmConstants.ARM_UPPER_KI;
-		pidSlot0Configs.kD = ArmConstants.ARM_UPPER_KD;
-		pidSlot0Configs.kS = ArmConstants.ARM_UPPER_KS;
-		pidSlot0Configs.kV = ArmConstants.ARM_UPPER_KV;
-		pidSlot0Configs.kA = ArmConstants.ARM_UPPER_KA;
-		pidSlot0Configs.kG = ArmConstants.ARM_UPPER_KG;
-
 		armMotorRight.getConfigurator().apply(mainMotorConfigs);
 		armMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
@@ -60,10 +52,9 @@ public class ArmSubsytem extends SubsystemBase {
 
 	
 
-		RobotContainer.getShuffleboardTab().add("Actual Arm Mount Lower Rotation", armMotorRight.getRotorPosition().getValueAsDouble());
-		RobotContainer.getShuffleboardTab().add("ActualArm Mount Upper Rotation", armMotorLeft.getRotorPosition().getValueAsDouble());
-		RobotContainer.getShuffleboardTab().add("Target Arm Mount Lower Rotation", targetAngleLower);
-		RobotContainer.getShuffleboardTab().add("Target Arm Mount Upper Rotation", targetAngle);
+		RobotContainer.getShuffleboardTab().add("Actual Arm Mount Rotation", armMotorRight.getRotorPosition().getValueAsDouble());
+		RobotContainer.getShuffleboardTab().add("Target Arm Mount Rotation", targetAngle);
+
 		
 
 	}
@@ -81,7 +72,7 @@ public class ArmSubsytem extends SubsystemBase {
 	{
 		targetAngle = Math.max(
 				Math.min(targetAngle, 0),
-				armRightMinAngle);
+				armLeftMinAngle);
 
 		double gravityFeedForward = Math
 				.cos(ArmConstants.ARM_LOWER_MIN_ANGLE_RADIANS + Math.toRadians(targetAngle * 360))
@@ -94,7 +85,7 @@ public class ArmSubsytem extends SubsystemBase {
 
 	public boolean isAtTarget()
 	{
-		if (Math.abs(armMotorLeft.getRotorPosition().getValueAsDouble() - (targetAngleLower)) < ArmConstants.ARM_DEADBAND)
+		if (Math.abs(armMotorLeft.getRotorPosition().getValueAsDouble() - (targetAngle)) < ArmConstants.ARM_DEADBAND)
 		{
 			return true;
 		}
