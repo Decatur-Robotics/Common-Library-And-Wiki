@@ -6,19 +6,19 @@ import frc.robot.subsystems.ArmSubsytem;
 
 public class ArmCommand extends Command
 {
-	public ArmSubsytem armLeft;
-
+	public ArmSubsytem arm;
+	public double targetAngle;
 
 	public ArmCommand()
 	{
-		this.armLeft = armLeft;
+		this.arm = arm;
 
 
-		addRequirements(armLeft);
+		addRequirements(arm);
 	
 	}
 
-	public void initialize(ArmSubsytem arm, double targetAngleLower, double targetAngleUpper){
-		armLeft.setTargetRotation(targetAngleLower);
+	public void initialize(){
+		arm.setTargetRotation(targetAngle);
 	}
 }

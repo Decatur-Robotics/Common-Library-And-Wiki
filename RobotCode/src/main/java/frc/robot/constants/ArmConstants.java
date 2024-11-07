@@ -18,5 +18,6 @@ public class ArmConstants
 
 	public static final String ARM_INITAL_POSITION = null;
     public static final double ARM_DEADBAND = 0;
+    public static final double ARM_CURRENT_LIMIT = 0;
 	
 }

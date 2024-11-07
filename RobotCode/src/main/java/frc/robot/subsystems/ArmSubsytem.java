@@ -15,15 +15,15 @@ import frc.robot.constants.Ports;
 public class ArmSubsytem extends SubsystemBase {
 	private TalonFX armMotorRight, armMotorLeft;
 	private double armLeftMinAngle;
-	private double targetAngle;
+	public double targetAngle;
 
 	private MotionMagicDutyCycle motorControlRequest;
 
 	public ArmSubsytem()
 	{
 
-		armMotorRight = new TalonFX(Ports.ARM_LOWER_MOTOR);
-		armMotorLeft = new TalonFX(Ports.ARM_UPPER_MOTOR);
+		armMotorRight = new TalonFX(Ports.ARM_RIGHT_MOTOR);
+		armMotorLeft = new TalonFX(Ports.ARM_LEFT_MOTOR);
 
 		armMotorRight.setControl(new Follower(armMotorLeft.getDeviceID(), true));
 
@@ -31,7 +31,7 @@ public class ArmSubsytem extends SubsystemBase {
 		TalonFXConfiguration mainMotorConfigs = new TalonFXConfiguration();
 
 		mainMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-		mainMotorConfigs.CurrentLimits.StatorCurrentLimit = 60;
+		mainMotorConfigs.CurrentLimits.StatorCurrentLimit = ArmConstants.ARM_CURRENT_LIMIT;
 
 		// PIDs
 		Slot0Configs pidSlot0Configs = mainMotorConfigs.Slot0;
@@ -45,8 +45,6 @@ public class ArmSubsytem extends SubsystemBase {
 
 		armMotorRight.getConfigurator().apply(mainMotorConfigs);
 		armMotorLeft.getConfigurator().apply(mainMotorConfigs);
-
-		armLeftMinAngle = 1 / 360.0;
 
 		targetAngle = 1;
 
