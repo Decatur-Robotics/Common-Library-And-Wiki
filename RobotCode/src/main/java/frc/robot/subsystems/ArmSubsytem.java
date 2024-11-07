@@ -14,7 +14,7 @@ import frc.robot.constants.Ports;
 
 public class ArmSubsytem extends SubsystemBase {
 	private TalonFX armMotorRight, armMotorLeft;
-	private double armLowerMinAngle, armMinAngle;
+	private double armRightMinAngle, armLeftMinAngle;
 	private double targetAngleLower, targetAngle;
 
 
@@ -57,7 +57,7 @@ public class ArmSubsytem extends SubsystemBase {
 		armMotorRight.getConfigurator().apply(mainMotorConfigs);
 		armMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
-		armMinAngle = 1 / 360.0;
+		armLeftMinAngle = 1 / 360.0;
 
 		targetAngle = 1;
 
@@ -84,7 +84,7 @@ public class ArmSubsytem extends SubsystemBase {
 	{
 		targetAngle = Math.max(
 				Math.min(targetAngle, ArmConstants.ARM_LOWER_MAX_ANGLE_OFFSET),
-				armLowerMinAngle);
+				armRightMinAngle);
 
 		double gravityFeedForward = Math
 				.cos(ArmConstants.ARM_LOWER_MIN_ANGLE_RADIANS + Math.toRadians(targetAngle * 360))

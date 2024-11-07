@@ -8,46 +8,46 @@ import frc.robot.subsystems.ArmSubsytem;
 
 public class ArmCommand extends Command
 {
-	public ArmSubsytem armLower;
-	public ArmSubsytem armUpper;
+	public ArmSubsytem armLeft;
+	public ArmSubsytem armRight;
 
 	public ArmCommand()
 	{
-		this.armLower = armLower;
-		this.armUpper = armUpper;
+		this.armLeft = armLeft;
+		this.armRight = armRight;
 
-		addRequirements(armLower);
-		addRequirements(armUpper);
+		addRequirements(armLeft);
+		addRequirements(armRight);
 	}
 
 	
 	public void initialize(ArmSubsytem arm, double targetAngleLower, double targetAngleUpper){
-		armLower.setTargetRotation(targetAngleLower);
+		armLeft.setTargetRotation(targetAngleLower);
 	}
 
 	
 	public void stop(boolean interrupt){
-		armLower.setTargetRotation(0);
+		armLeft.setTargetRotation(0);
 
 	}
 
 	public void intakePosition(){
-		armLower.setTargetRotation(ArmConstants.ARM_LOWER_INTAKE_POSITION);
+		armLeft.setTargetRotation(ArmConstants.ARM_LOWER_INTAKE_POSITION);
 
 	}
 
 	public void lowerShelfPosition(){
-		armLower.setTargetRotation(ArmConstants.ARM_LOWER_SHELF_POSITION_LOWER);
+		armLeft.setTargetRotation(ArmConstants.ARM_LOWER_SHELF_POSITION_LOWER);
 
 	}
 
 	public void middleShelfPosition(){
-		armLower.setTargetRotation(ArmConstants.ARM_LOWER_SHELF_POSITION_MIDDLE);
+		armLeft.setTargetRotation(ArmConstants.ARM_LOWER_SHELF_POSITION_MIDDLE);
 	
 	}
 
 	public void upperShelfPosition(){
-		armLower.setTargetRotation(ArmConstants.ARM_LOWER_SHELF_POSITION_UPPER);
+		armLeft.setTargetRotation(ArmConstants.ARM_LOWER_SHELF_POSITION_UPPER);
 	
 	}
 
