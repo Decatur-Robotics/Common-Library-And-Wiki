@@ -11,8 +11,9 @@ public class ArmConstants
 	public static final double ARM_KA = 0;
 	public static final double ARM_KG = 0;
 
-	public static final double ARM_MIN_ANGLE_RADIANS = 0;
+	public static final double ARM_MIN_ANGLE = 0;
 
+	public static final double TARGET_ANGLE = 0;
 	
 	public static final double ARM_INTAKE_POSITION = 0;
 

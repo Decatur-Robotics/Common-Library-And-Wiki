@@ -46,7 +46,7 @@ public class ArmSubsytem extends SubsystemBase {
 		armMotorRight.getConfigurator().apply(mainMotorConfigs);
 		armMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
-		targetAngle = 1;
+		targetAngle = ArmConstants.TARGET_ANGLE;
 
 	
 
@@ -68,12 +68,10 @@ public class ArmSubsytem extends SubsystemBase {
 
 	public void setTargetRotation(double targetAngle)
 	{
-		targetAngle = Math.max(
-				Math.min(targetAngle, 0),
-				armLeftMinAngle);
+		targetAngle = Math.min(targetAngle, 0);
 
 		double gravityFeedForward = Math
-				.cos(ArmConstants.ARM_MIN_ANGLE_RADIANS + Math.toRadians(targetAngle * 360))
+				.cos(ArmConstants.ARM_MIN_ANGLE + Math.toDegrees(targetAngle))
 				* ArmConstants.ARM_KG;
 
 		armMotorLeft.setControl(motorControlRequest.withPosition(targetAngle)

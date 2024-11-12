@@ -12,7 +12,8 @@ public class ArmCommand extends Command
 	public ArmCommand()
 	{
 		this.arm = arm;
-
+		
+		targetAngle = ArmConstants.TARGET_ANGLE;
 
 		addRequirements(arm);
 	
