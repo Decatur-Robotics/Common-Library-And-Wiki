@@ -10,10 +10,8 @@ public class ArmCommand extends Command
 	public double targetAngle;
 
 	public ArmCommand()
-	{
-		this.arm = arm;
-		
-		targetAngle = ArmConstants.TARGET_ANGLE;
+	{		
+		targetAngle = ArmConstants.ARM_INITIAL_POSITION;
 
 		addRequirements(arm);
 	
