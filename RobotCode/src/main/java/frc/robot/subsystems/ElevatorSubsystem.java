@@ -73,5 +73,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 	}
 
+	/**
+	 * @return Returns whether the motor's position is within an acceptable amount of the target position.
+	 */
+	public boolean isFinished() {
+		return getMotorPosition() - ElevatorConstants.ELEVATOR_POSITIONS[elevatorPosition] < ElevatorConstants.ACCEPTABLE_TARGET_DIFFERENCE;
+	}
+
 
 }

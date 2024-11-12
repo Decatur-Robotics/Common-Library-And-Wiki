@@ -10,6 +10,8 @@ public class ElevatorConstants {
 
 	};
 
+	public static final double ACCEPTABLE_TARGET_DIFFERENCE = 2;
+
 	public static final double ELEVATOR_MOTOR_KP = 0.0;
 	public static final double ELEVATOR_MOTOR_KI = 0.0;
 	public static final double ELEVATOR_MOTOR_KD = 0.0;
