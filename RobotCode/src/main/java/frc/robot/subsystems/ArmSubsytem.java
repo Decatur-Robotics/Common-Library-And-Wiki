@@ -46,7 +46,7 @@ public class ArmSubsytem extends SubsystemBase {
 		armMotorRight.getConfigurator().apply(mainMotorConfigs);
 		armMotorLeft.getConfigurator().apply(mainMotorConfigs);
 
-		targetAngle = ArmConstants.ARM_INITIAL_POSITION;
+		double targetAngle = ArmConstants.ARM_INITIAL_POSITION;
 
 	
 

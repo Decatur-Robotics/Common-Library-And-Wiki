@@ -9,14 +9,16 @@ public class ArmCommand extends Command
 	public ArmSubsytem arm;
 	public double targetAngle;
 
-	public ArmCommand()
+	public ArmCommand(ArmSubsytem arm, double targetAngle)
 	{		
-		targetAngle = ArmConstants.ARM_INITIAL_POSITION;
+		this.targetAngle = targetAngle;
 
+		this.arm = arm;
 		addRequirements(arm);
 	
 	}
 
+	@Override
 	public void initialize(){
 		arm.setTargetRotation(targetAngle);
 	}
