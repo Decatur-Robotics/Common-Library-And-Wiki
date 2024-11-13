@@ -13,13 +13,13 @@ public class IntakeCommand extends Command
 	}
 	@Override
 	public void initialize(){
-		intake.setDesiredVelocity(IntakeConstants.INTAKING_VELOCITY);
-		intake.setDesiredRotation(IntakeConstants.INTAKE_OUT_ROTATION);
+		intake.setVelocity(IntakeConstants.INTAKING_VELOCITY);
+		intake.setRotation(IntakeConstants.INTAKE_OUT_ROTATION);
 	}
 	
 	public void end(){
-		intake.setDesiredRotation(IntakeConstants.INTAKE_OUT_ROTATION);
-		intake.setDesiredVelocity(IntakeConstants.REST_VELOCITY);
+		intake.setRotation(IntakeConstants.INTAKE_OUT_ROTATION);
+		intake.setVelocity(IntakeConstants.REST_VELOCITY);
 	}
 }
 

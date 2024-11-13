@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -25,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
 	private TalonFX intakeMotorLeft, intakeMotorRight;
 	private CANSparkMax intakeFeedMotor;
 	private double desiredRotation, desiredVelocity;
-
+	private MotionMagicDutyCycle motorControlRequest;
 	
 
 	public IntakeSubsystem() {
@@ -34,6 +35,8 @@ public class IntakeSubsystem extends SubsystemBase {
 		intakeMotorRight = new TalonFX(Ports.INTAKE_RIGHT_MOTOR);
 		intakeFeedMotor = new CANSparkMax(Ports.INTAKE_FEED, MotorType.kBrushless);
 
+		desiredRotation = 0;
+		
 		intakeMotorLeft.setControl(new Follower(intakeMotorRight.getDeviceID(), true));
 		
 		TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
@@ -48,10 +51,12 @@ public class IntakeSubsystem extends SubsystemBase {
 		MotionMagicConfigs motionMagicVelocityConfigs = motorConfigs.MotionMagic;
 		motionMagicVelocityConfigs.MotionMagicCruiseVelocity = IntakeConstants.INTAKE_CRUISE_VELOCITY;
 		motionMagicVelocityConfigs.MotionMagicAcceleration = IntakeConstants.INTAKE_ACCELERATION;
-
+		
+		motorControlRequest = new MotionMagicDutyCycle(desiredRotation);
+		intakeMotorRight.setControl(motorControlRequest.withPosition(desiredRotation));
 		intakeMotorRight.getConfigurator().apply(motorConfigs);
 
-
+		
 	}	
 	public void periodic(){
 		if(intakeMotorLeft.hasResetOccurred()||intakeMotorRight.hasResetOccurred()){
@@ -66,10 +71,11 @@ public class IntakeSubsystem extends SubsystemBase {
 		}
 		
 	}
-	public void setDesiredRotation(double desiredRotation){
+	public void setRotation(double desiredRotation){
 		this.desiredRotation = desiredRotation;
+		intakeMotorRight.setControl(motorControlRequest.withPosition(desiredRotation));
 	}
-	public void setDesiredVelocity(double desiredVelocity)
+	public void setVelocity(double desiredVelocity)
 	{
 		this.desiredVelocity = desiredVelocity;
 		intakeFeedMotor.set(IntakeConstants.INTAKE_KV + desiredVelocity);
