@@ -3,18 +3,22 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ElevatorConstants;
+import frc.robot.constants.ElevatorPosition;
 import frc.robot.constants.Ports;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
 
 	private TalonFX leftMotor, rightMotor;
-	private int elevatorPosition = 0;
+	private ElevatorPosition elevatorPosition = ElevatorPosition.LOWER;
+
+	private MotionMagicDutyCycle motorControlRequest;
 
 	public ElevatorSubsystem() {
 
@@ -40,13 +44,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 		leftMotor.getConfigurator().apply(mainMotorConfigs);
 
+		motorControlRequest = new MotionMagicDutyCycle(elevatorPosition.getRotation());
+		leftMotor.setControl(motorControlRequest.withPosition(elevatorPosition.getRotation()));
+
 	}
 
 	@Override
 	public void periodic() {
 		
 		double position = getMotorPosition();
-		double target = ElevatorConstants.ELEVATOR_POSITIONS[elevatorPosition];
+		double target = elevatorPosition.getRotation();
 
 		leftMotor.set(Math.signum(target - position));
 
@@ -55,11 +62,20 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
 	/**
-	 * Sets the elevator's target to a preset position defined in ElevatorSubsystem#elevatorPositions.
+	 * Sets the elevator's target to a preset position.
 	 * @param position The preset position to set the robot to.
 	 */
-	public void setElevatorPosition(int position) {
+	public void setTargetPosition(ElevatorPosition position) {
+
 		this.elevatorPosition = position;
+
+		// I totally copied all of tihs from last year's shooter mount subsystem.
+		double gravityFeedForward = ElevatorConstants.ELEVATOR_MOTOR_KG 
+				* Math.cos(ElevatorConstants.MIN_ANGLE_RAD 
+				+ ((this.elevatorPosition.getRotation() - ElevatorConstants.MIN_ANGLE) * ElevatorConstants.MOTOR_ROTATIONS_IN_RADIANS));
+
+		leftMotor.setControl(motorControlRequest.withPosition(this.elevatorPosition.getRotation()).withFeedForward(gravityFeedForward) );
+		
 	}
 
 
@@ -71,13 +87,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 		
 		return leftMotor.getRotorPosition().getValueAsDouble();
 
-	}
-
-	/**
-	 * @return Returns whether the motor's position is within an acceptable amount of the target position.
-	 */
-	public boolean isFinished() {
-		return getMotorPosition() - ElevatorConstants.ELEVATOR_POSITIONS[elevatorPosition] < ElevatorConstants.ACCEPTABLE_TARGET_DIFFERENCE;
 	}
 
 
