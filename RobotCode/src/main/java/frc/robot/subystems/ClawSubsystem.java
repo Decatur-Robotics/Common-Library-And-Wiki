@@ -8,12 +8,13 @@ import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ClawConstants;
 import frc.robot.constants.Ports;
 
-public class ClawSubsystem
+public class ClawSubsystem extends SubsystemBase
 {
 	private SparkPIDController clawPidController;
 	private CANSparkMax clawMotorLeft, clawMotorRight;

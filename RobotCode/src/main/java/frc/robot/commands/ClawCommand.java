@@ -7,23 +7,25 @@ import frc.robot.subystems.ClawSubsystem;
 public class ClawCommand extends Command
 {
 	private ClawSubsystem claw;
+	private double desiredSpeed;
 
-	public ClawCommand(ClawSubsystem claw)
+	public ClawCommand(ClawSubsystem claw, double desiredVelocity)
 	{
 		this.claw = claw;
+		this.desiredSpeed = desiredVelocity;
 		addRequirements(claw);
 	}
 
 	@Override
 	public void initialize()
 	{
-		claw.desiredVelocity(ClawConstants.CLAW_DESIRED_VELOCITY);
+		claw.setClawSpeed(desiredSpeed);
 	}
 
 	@Override
 	public void end(boolean stop)
 	{
-		claw.desiredVelocity(ClawConstants.CLAW_REST_VELOCITY);
+		claw.setClawSpeed(ClawConstants.CLAW_REST_VELOCITY);
 
 	}
 }
