@@ -1,14 +1,6 @@
 package frc.robot.constants;
 
 public class ElevatorConstants {
-	
-	public static final double[] ELEVATOR_POSITIONS = { // In TalonFX rotations
-		
-		25*2048,
-		50*2048,
-		70*2048 // Purely hypothetical values. Not real.
-
-	};
 
 	public static final double ACCEPTABLE_TARGET_DIFFERENCE = 2;
 

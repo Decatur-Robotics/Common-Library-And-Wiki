@@ -1,15 +1,9 @@
 package frc.robot.constants;
 
-public enum ElevatorPosition {
-	UPPER,
-	MIDDLE,
-	LOWER;
+public class ElevatorPosition {
 
-	public double getRotation() {
-		return switch(this) { // Hypothetical values
-			case UPPER ->  25.0;
-			case MIDDLE -> 50.0;
-			case LOWER ->  75.0;
-		};
-	}
+	public static final double UPPER  = 25.0;
+	public static final double MIDDLE = 50.0;
+	public static final double LOWER  = 75.0;
+
 }

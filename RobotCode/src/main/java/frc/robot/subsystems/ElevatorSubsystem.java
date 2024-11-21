@@ -16,7 +16,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
 	private TalonFX leftMotor, rightMotor;
-	private ElevatorPosition elevatorPosition = ElevatorPosition.LOWER;
+	private double elevatorPosition = ElevatorPosition.LOWER;
 
 	private MotionMagicDutyCycle motorControlRequest;
 
@@ -44,8 +44,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 		leftMotor.getConfigurator().apply(mainMotorConfigs);
 
-		motorControlRequest = new MotionMagicDutyCycle(elevatorPosition.getRotation());
-		leftMotor.setControl(motorControlRequest.withPosition(elevatorPosition.getRotation()));
+		motorControlRequest = new MotionMagicDutyCycle(elevatorPosition);
+		leftMotor.setControl(motorControlRequest.withPosition(elevatorPosition));
 
 	}
 
@@ -53,7 +53,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	public void periodic() {
 		
 		double position = getMotorPosition();
-		double target = elevatorPosition.getRotation();
+		double target = elevatorPosition;
 
 		leftMotor.set(Math.signum(target - position));
 
@@ -65,17 +65,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 	 * Sets the elevator's target to a preset position.
 	 * @param position The preset position to set the robot to.
 	 */
-	public void setTargetPosition(ElevatorPosition position) {
+	public void setTargetPosition(double position) {
 
 		this.elevatorPosition = position;
+		leftMotor.setControl(motorControlRequest.withPosition(this.elevatorPosition) );
 
-		// I totally copied all of tihs from last year's shooter mount subsystem.
-		double gravityFeedForward = ElevatorConstants.ELEVATOR_MOTOR_KG 
-				* Math.cos(ElevatorConstants.MIN_ANGLE_RAD 
-				+ ((this.elevatorPosition.getRotation() - ElevatorConstants.MIN_ANGLE) * ElevatorConstants.MOTOR_ROTATIONS_IN_RADIANS));
-
-		leftMotor.setControl(motorControlRequest.withPosition(this.elevatorPosition.getRotation()).withFeedForward(gravityFeedForward) );
-		
 	}
 
 
