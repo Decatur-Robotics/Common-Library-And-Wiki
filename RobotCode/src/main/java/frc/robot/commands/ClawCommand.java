@@ -19,7 +19,7 @@ public class ClawCommand extends Command
 	@Override
 	public void initialize()
 	{
-		claw.setClawSpeed(desiredSpeed);
+		claw.setClawSpeed(desiredVelocity);
 	}
 
 	@Override
