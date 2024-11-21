@@ -10,6 +10,6 @@ public class ClawConstants
 	public static final double CLAW_REST_VELOCITY = 0;
 	public static final double CLAW_DESIRED_VELOCITY = 0;
 
-	public static final int CLAW_MOTOR_CURRENT_LIMIT = 12;
+	public static final int CLAW_MOTOR_CURRENT_LIMIT = 0;
 
 }
