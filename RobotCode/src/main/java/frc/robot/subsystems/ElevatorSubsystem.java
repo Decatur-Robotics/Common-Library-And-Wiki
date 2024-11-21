@@ -49,16 +49,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 	}
 
-	@Override
-	public void periodic() {
-		
-		double position = getMotorPosition();
-		double target = elevatorPosition;
-
-		leftMotor.set(Math.signum(target - position));
-
-	}
-
 
 
 	/**
