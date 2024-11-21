@@ -7,12 +7,12 @@ import frc.robot.subystems.ClawSubsystem;
 public class ClawCommand extends Command
 {
 	private ClawSubsystem claw;
-	private double desiredSpeed;
+	private double desiredVelocity;
 
 	public ClawCommand(ClawSubsystem claw, double desiredVelocity)
 	{
 		this.claw = claw;
-		this.desiredSpeed = desiredVelocity;
+		this.desiredVelocity = desiredVelocity;
 		addRequirements(claw);
 	}
 
