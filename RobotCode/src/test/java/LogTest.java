@@ -1,6 +1,6 @@
-import frc.lib.core.ILogSource;
-
 import java.util.logging.Level;
+
+import frc.robot.core.ILogSource;
 
 class LogTest implements ILogSource {
 

@@ -1,4 +1,4 @@
-package frc.lib.core;
+package frc.robot.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;

@@ -1,4 +1,4 @@
-package frc.lib.core.util;
+package frc.lib.util;
 
 /** A class for doing countdowns or other forms of waiting */
 public class Timer
