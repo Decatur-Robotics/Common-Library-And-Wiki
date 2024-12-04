@@ -1,4 +1,4 @@
-package frc.lib.modules.leds;
+package frc.lib.examples.leds;
 
 public final class NamedColor
 {
