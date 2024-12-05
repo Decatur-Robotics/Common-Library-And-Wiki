@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.core.util.TeamMotorUtil;
 import frc.robot.RobotContainer;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.Ports;
@@ -65,7 +64,6 @@ public class IntakeSubsystem extends SubsystemBase {
 			intakeMotorRight.getRotorPosition().setUpdateFrequency(20);
 		}
 		if(intakeFeedMotor.getStickyFault(FaultID.kHasReset)){
-			TeamMotorUtil.optimizeCANSparkBusUsage(intakeFeedMotor);
 			intakeFeedMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			intakeFeedMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 		}

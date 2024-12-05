@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.core.motors.TeamSparkMAX;
 import frc.robot.RobotContainer;
@@ -19,6 +20,7 @@ public class ClawSubsystem extends SubsystemBase
 	private SparkPIDController clawPidController;
 	private CANSparkMax clawMotorLeft, clawMotorRight;
 	private double desiredSpeed;
+	private DigitalInput limitSwitch;
 
 	public ClawSubsystem()
 	{
@@ -43,8 +45,7 @@ public class ClawSubsystem extends SubsystemBase
 		if (clawMotorLeft.getStickyFault(FaultID.kHasReset)
 				|| clawMotorRight.getStickyFault(FaultID.kHasReset))
 		{
-			TeamMotorUtil.optimizeCANSparkBusUsage(clawMotorLeft);
-			TeamMotorUtil.optimizeCANSparkBusUsage(clawMotorRight);
+			
 			clawMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
 			clawMotorLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
 
@@ -65,5 +66,17 @@ public class ClawSubsystem extends SubsystemBase
 	{
 		this.desiredSpeed = desiredSpeed;
 		clawPidController.setReference(desiredSpeed, ControlType.kVelocity);
+	}
+
+	public boolean getLimitSwitch()
+	{
+		if (limitSwitch.get())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

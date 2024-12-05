@@ -23,6 +23,8 @@ public class ElevatorConstants {
 
 	public static final double MOTOR_ROTATIONS_IN_RADIANS = 0.0;
 
+	public static final double INTAKE_HEIGHT = 0.0;
+
 
 
 
