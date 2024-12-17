@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TankDriveSubsystem extends SubsystemBase {
 
     private TalonFX motorRightFront, motorRightBack, motorLeftFront, motorLeftBack;
+    
     private MotionMagicVelocityDutyCycle leftControlRequest, rightControlRequest;
     
     public TankDriveSubsystem() {
-
         motorRightFront = new TalonFX(0);
         motorRightBack = new TalonFX(0);
         motorLeftFront = new TalonFX(0);
@@ -48,7 +48,6 @@ public class TankDriveSubsystem extends SubsystemBase {
 
         leftControlRequest = new MotionMagicVelocityDutyCycle(0);
         rightControlRequest = new MotionMagicVelocityDutyCycle(0);
-
     }
 
     public void setChassisSpeeds(double leftSpeed, double rightSpeed) {
