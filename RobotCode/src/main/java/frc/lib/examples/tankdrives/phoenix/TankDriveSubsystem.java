@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class TankDriveSubsystem extends SubsystemBase {
 
     private TalonFX motorRightFront, motorRightBack, motorLeftFront, motorLeftBack;
-    
+
     private MotionMagicVelocityDutyCycle leftControlRequest, rightControlRequest;
     
     public TankDriveSubsystem() {

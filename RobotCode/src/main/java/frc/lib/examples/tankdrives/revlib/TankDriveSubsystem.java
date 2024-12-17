@@ -6,7 +6,9 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-public class TankDriveSubsystem {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class TankDriveSubsystem extends SubsystemBase {
     
     private CANSparkMax motorRightFront, motorRightBack, motorLeftFront, motorLeftBack;
     private SparkPIDController rightPIDController, leftPIDController;
