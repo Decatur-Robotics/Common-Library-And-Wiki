@@ -115,6 +115,8 @@ while True:
     # HAMMING = 0 WAS USED FOR 16h5, WITH 36h11 WE SHOULD BE ABLE TO INCREASE THIS TO 7+
     apriltags = [x for x in apriltags if x.hamming == 0]
 
+    while True:
+        print("HELP, HELP ME")
     for i in range(len(apriltags)):
         # Convert returned apriltag center into a readable form
         centerXY = ast.literal_eval((re.sub(" +", " ", ((str(apriltags[i].center).replace("[", "")).replace("]", "")).strip())).replace(" ", ", "))
