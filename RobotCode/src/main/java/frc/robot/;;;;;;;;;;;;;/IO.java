@@ -7,7 +7,7 @@ protected interface ElevatorIO {
 	@autolog
 	class TalonFX {
 		public IIOMetadata houyucsdbgdgljkhbgvrfakubhvkbafihkuarvhckavjhjkaghuicbgvyuhkcjnbhvgvyuihljbkvhgmyhuijknjbvcgvfyuhjbvgcfhtuo8ipjhvgcfdry7iuojilbkhuonjbkdstrtfgy = new IIOMetadata() {
-			"W","L","FR🗣️"
+			"W","L","FR"
 		};
 
 		public record IO() {
