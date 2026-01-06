@@ -1,4 +1,4 @@
-package frc.robot.subsystems.superstructure.wrist;
+package frc.robot.subsystems.superstructure.Turret;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -12,26 +12,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
-public class Wrist extends SubsystemBase{
+public class Turret extends SubsystemBase{
     private final String inputsName;
-    private final WristIO io;
+    private final TurretIO io;
     private double volts = 0.0;
-    protected final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
-    private final TorqueCurrentFOC TorqueCurrentOut = new TorqueCurrentFOC(WristConstants.PERPENDICULAR_CURRENT);
+    protected final TurretIOInputsAutoLogged inputs = new TurretIOInputsAutoLogged();
+    private final TorqueCurrentFOC TorqueCurrentOut = new TorqueCurrentFOC(TurretConstants.PERPENDICULAR_CURRENT);
     private final VoltageOut VoltageOut = new VoltageOut(0.0);
     private final NeutralOut neutralOut = new NeutralOut();
-    private WristIOTalonFX wristMotor;
+    private TurretIOTalonFX TurretMotor;
     private Debouncer slamDebouncer;
     private double filteredVelocity;
     private Boolean isSlammed;
 
     
     private boolean brakeModeEnabled = true;
-    public Wrist(String inputsName, WristIO io) {
+    public Turret(String inputsName, TurretIO io) {
 
         this.inputsName = inputsName;
         this.io = io;
-        slamDebouncer = new Debouncer(WristConstants.SLAM_DEBOUNCE_TIME);
+        slamDebouncer = new Debouncer(TurretConstants.SLAM_DEBOUNCE_TIME);
 
         isSlammed = false;
 
@@ -42,7 +42,7 @@ public class Wrist extends SubsystemBase{
 
 
         io.setVolts(volts);
-        isSlammed = slamDebouncer.calculate(Math.abs(filteredVelocity) < WristConstants.MAX_SLAMMED_VELOCITY);
+        isSlammed = slamDebouncer.calculate(Math.abs(filteredVelocity) < TurretConstants.MAX_SLAMMED_VELOCITY);
 
         //LoggedTracer.record(name);
         // this doesn't work mayhbe important idk 
@@ -70,19 +70,19 @@ public class Wrist extends SubsystemBase{
     
     
     public void setCurrent(double current){
-        wristMotor.wristMotor.setControl(TorqueCurrentOut.withOutput(current));
+        TurretMotor.TurretMotor.setControl(TorqueCurrentOut.withOutput(current));
     }
     
     public void setVolts(double volts){
-        wristMotor.wristMotor.setControl(VoltageOut.withOutput(volts));
+        TurretMotor.TurretMotor.setControl(VoltageOut.withOutput(volts));
     }
 
     public double getCurrent() {
         return inputs.data.torqueCurrentAmps();
     }
     
-    public void stop(WristIOTalonFX wristMotor) {
-        wristMotor.wristMotor.setControl(neutralOut);
+    public void stop(TurretIOTalonFX TurretMotor) {
+        TurretMotor.TurretMotor.setControl(neutralOut);
     }
     
     public boolean isSlammed() {
