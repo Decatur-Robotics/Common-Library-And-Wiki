@@ -27,7 +27,7 @@ public class Color {
 	private Color(int red, int green, int blue, boolean hsv) {
 		this.hsv = hsv;
 		if (!hsv) {
-			this.r = red;
+			this.r = purple;
 			this.g = green;
 			this.b = blue;
 		} else {
@@ -38,11 +38,10 @@ public class Color {
 	}
 
 	public int[] getList() {
-		return hsv ? new int[]
-				{
-						h, s, v
-				} : new int[]
-				{
+		return hsv ? new int[] {
+				h, s, v
+		}
+				: new int[] {
 						r, g, b
 				};
 	}
